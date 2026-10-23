@@ -1,0 +1,48 @@
+# Official Umami 3.4.0 + PostgreSQL for collection fixture validation.
+# Run with: docker compose -f tools/collection-harness/compose.yaml up -d --wait
+name: holocron-m01-collect
+
+services:
+  umami:
+    # ghcr.io/umami-software/umami:3.4.0
+    image: ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367
+    ports:
+      - "127.0.0.1:33400:3000"
+    environment:
+      DATABASE_URL: postgresql://umami:umami@db:5432/umami
+      APP_SECRET: holocron-m01-collect-fixture-secret
+      TWO_FACTOR_ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+      # Script aliases served by docker/proxy.ts. Does not rewrite script.js.
+      TRACKER_SCRIPT_NAME: analytics.js, /stats/a.js
+      # IP block list used by the ignored-ip fixtures (TEST-NET-3 address).
+      IGNORE_IP: 203.0.113.7
+      # Empty by default. Set for the alias pass only: it rewrites the served script.js
+      # (scripts/update-tracker.js), so script captures must not run in that pass.
+      COLLECT_API_ENDPOINT: ${UMAMI_COLLECT_API_ENDPOINT:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    init: true
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:3000/api/heartbeat"]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+
+  db:
+    # postgres:15-alpine, as in upstream docker-compose.yml
+    image: postgres@sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  db-data:

@@ -1,0 +1,130 @@
+{
+  "id": "capture-bot-user-agent",
+  "description": "Default headless Chromium UA (\"HeadlessChrome\") is flagged by isbot. Upstream answers {beep:\"boop\"}, the tracker keeps no token, and the recorder never starts because it waits for a token.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:142-145",
+    "src/tracker/index.ts:411-415",
+    "src/recorder/index.js:636-645"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "recorder_sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6",
+    "served_by": "official Umami 3.4.0 container (tools/collection-harness/compose.yaml)"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "recorder_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "body": "<p>bot</p>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Playwright default (contains HeadlessChrome)",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForTimeout(500);",
+    "await page.evaluate(() => window.umami.track('after-bot'));",
+    "await page.waitForTimeout(6000);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/api/websites/5e1a0000-0000-4000-8000-000000000002/recorder",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 200,
+        "body": {
+          "enabled": true,
+          "replayEnabled": true,
+          "heatmapEnabled": true,
+          "sampleRate": 1,
+          "heatmapSampleRate": 1,
+          "maskLevel": "strict",
+          "maxDuration": 300000,
+          "blockSelector": ""
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000002",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "beep": "boop"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000002",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "name": "after-bot"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "beep": "boop"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "upstream answered beep boop",
+      "passed": true
+    },
+    {
+      "description": "second send has no cache header",
+      "passed": true
+    },
+    {
+      "description": "recorder fetched configuration",
+      "passed": true
+    },
+    {
+      "description": "recorder sent nothing",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": true,
+  "validation_reason": "Captured from the real scripts talking to the official Umami 3.4.0 container; responses are upstream responses."
+}

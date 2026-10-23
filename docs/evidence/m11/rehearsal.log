@@ -1,0 +1,82 @@
+
+== postgresql-3.4.0: start Umami; its start applies the upstream migrations
+source events after the sample data: 4
+
+== postgresql-3.4.0: the live source collects
+Umami /api/send: 200
+source events: 5
+
+== postgresql-3.4.0: cutover 1, stop collection for the final snapshot
+Umami stopped; source events: 5
+
+== postgresql-3.4.0: cutover 2, a read-only database user for the importer
+
+== postgresql-3.4.0: cutover 3, inspect
+{"outcome":"accept","source":"umami-3.4.0-postgresql","credentials":"read_only","events":{"total":5,"outside_retention":0,"retention_cutoff":1759615200000,"first":1769940000000,"last":1791234022243}}
+
+== postgresql-3.4.0: cutover 4, import into a new data directory and reconcile
+initialized <work>/pg
+{"status":"reconciled","differences":[]}
+{"id":"00000000-0000-4000-8000-000000000201","events":{"pageview":{"source":2,"destination":2,"source_range":[1769940000000,1791234022243],"destination_range":[1769940000000,1791234022243]},"custom_event":{"source":1,"destination":1,"source_range":[1769940060000,1769940060000],"destination_range":[1769940060000,1769940060000]},"performance":{"source":1,"destination":1,"source_range":[1769940090000,1769940090000],"destination_range":[1769940090000,1769940090000]}},"outside_retention":0,"sessions":2,"revenue":[{"currency":"EUR","source_revenue_table_minor":4990,"destination_minor":4990}]}
+{"id":"00000000-0000-4000-8000-000000000202","events":{"pageview":{"source":1,"destination":1,"source_range":[1769943600000,1769943600000],"destination_range":[1769943600000,1769943600000]}},"outside_retention":0,"sessions":1,"revenue":[]}
+[{"username":"admin","email":"admin@umami.invalid","password":"kept","two_factor":"none"},{"username":"member","email":"member@umami.invalid","password":"kept","two_factor":"enrollment_required"},{"username":"umami-admin","email":"umami-admin@umami.invalid","password":"kept","two_factor":"none"}]
+["api_key/api_key_reissue_required=1","app_setting/setting_not_supported=1","board/partially_mapped=1","report/partially_mapped=1","report/visible_to_owner_only=1","session_link/identity_link_not_imported=1","session_replay/replay_unreadable=1","session_replay_saved/replay_not_imported=1","share/share_slug_guessable=1","team/access_code_not_supported=1","team_user/member_loses_site_delete=1","two_factor_auth/two_factor_reenrollment_required=1","two_factor_backup_code/recovery_codes_not_convertible=1","user/install_admin_reads_no_analytics=2"]
+
+== postgresql-3.4.0: the source is unchanged
+table checksums equal before and after
+source events: 5
+
+== postgresql-3.4.0: cutover 5, verify the destination
+fresh admin login: signed_in
+converted Umami login umami-admin@umami.invalid with its Umami password: signed_in
+old share URL /share/sample-share: 200
+share points at site: 00000000-0000-4000-8000-000000000201
+
+== postgresql-3.4.0: cutover 6, redirect the tracker and test collection
+Holocron /api/send for the same website ID: 200
+
+== postgresql-3.4.0: rollback, stop Holocron and start Umami on the untouched source
+Umami /api/send after rollback: 200
+source events: 6
+
+== mysql-2.20.2: start Umami; its start applies the upstream migrations
+source events after the sample data: 3
+
+== mysql-2.20.2: the live source collects
+Umami /api/send: 200
+source events: 4
+
+== mysql-2.20.2: cutover 1, stop collection for the final snapshot
+Umami stopped; source events: 4
+
+== mysql-2.20.2: cutover 2, a read-only database user for the importer
+
+== mysql-2.20.2: cutover 3, inspect
+{"outcome":"accept","source":"umami-2.20.2-mysql","credentials":"read_only","events":{"total":4,"outside_retention":3,"retention_cutoff":1759615200000,"first":1706781600000,"last":1791234066000}}
+
+== mysql-2.20.2: cutover 4, import into a new data directory and reconcile
+initialized <work>/my
+{"status":"reconciled","differences":[]}
+{"id":"00000000-0000-4000-8000-000000000201","events":{"pageview":{"source":1,"destination":1,"source_range":[1791234066000,1791234066000],"destination_range":[1791234066000,1791234066000]}},"outside_retention":2,"sessions":1,"revenue":[]}
+{"id":"00000000-0000-4000-8000-000000000202","events":{},"outside_retention":1,"sessions":0,"revenue":[]}
+[{"username":"admin","email":"admin@umami.invalid","password":"kept","two_factor":"none"},{"username":"member","email":"member@umami.invalid","password":"kept","two_factor":"none"},{"username":"umami-admin","email":"umami-admin@umami.invalid","password":"kept","two_factor":"none"}]
+["report/partially_mapped=1","report/visible_to_owner_only=1","team/access_code_not_supported=1","team_user/member_loses_site_delete=1","user/install_admin_reads_no_analytics=2","website/partially_mapped=1","website/share_slug_guessable=1"]
+
+== mysql-2.20.2: the source is unchanged
+table checksums equal before and after
+source events: 4
+
+== mysql-2.20.2: cutover 5, verify the destination
+fresh admin login: signed_in
+converted Umami login umami-admin@umami.invalid with its Umami password: signed_in
+old share URL /share/sample-share: 200
+share points at site: 00000000-0000-4000-8000-000000000201
+
+== mysql-2.20.2: cutover 6, redirect the tracker and test collection
+Holocron /api/send for the same website ID: 200
+
+== mysql-2.20.2: rollback, stop Holocron and start Umami on the untouched source
+Umami /api/send after rollback: 200
+source events: 5
+
+== both rehearsals passed

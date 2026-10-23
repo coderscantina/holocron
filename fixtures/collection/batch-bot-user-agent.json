@@ -1,0 +1,62 @@
+{
+  "id": "batch-bot-user-agent",
+  "surface": "batch",
+  "polarity": "negative",
+  "description": "Batch from a bot UA. Each item returns {beep:\"boop\"} with 200, so all count as processed and cache becomes undefined, which drops the key.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:39-43",
+    "src/app/api/send/route.ts:142-145"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "headers": {
+      "user-agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+    },
+    "body": [
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "/batch",
+          "referrer": "https://referrer.example/article"
+        }
+      },
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "/batch",
+          "referrer": "https://referrer.example/article"
+        }
+      }
+    ]
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "size": 2,
+      "processed": 2,
+      "errors": 0,
+      "details": [],
+      "cache": "<absent>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "suppressed",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Same counts for compatibility; suppressed items are counted separately in Holocron metrics, not as stored events."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

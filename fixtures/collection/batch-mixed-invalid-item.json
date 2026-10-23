@@ -1,0 +1,65 @@
+{
+  "id": "batch-mixed-invalid-item",
+  "surface": "batch",
+  "polarity": "negative",
+  "description": "Second item fails validation. The batch is still 200; the failure is reported by index with the item response.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:36-46"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": [
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "/batch",
+          "referrer": "https://referrer.example/article"
+        }
+      },
+      {
+        "type": "event",
+        "payload": {
+          "url": "/no-source"
+        }
+      }
+    ]
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "size": 2,
+      "processed": 1,
+      "errors": 1,
+      "details": [
+        {
+          "index": 1,
+          "response": {
+            "error": {
+              "message": "Bad request",
+              "code": "bad-request",
+              "status": 400,
+              "errors": "<array>",
+              "properties": "<object>"
+            }
+          }
+        }
+      ],
+      "cache": "<jwt>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "Item 0 accepted, item 1 refused. One invalid item never refuses its neighbours (docs/decisions/0005, batch commit)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

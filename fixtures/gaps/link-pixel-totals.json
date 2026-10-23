@@ -1,0 +1,233 @@
+{
+ "status": "adopted (decisions/0003-metric-formulas.md, Links and pixels)",
+ "capabilities": [
+  "CAP-TRAFFIC-13",
+  "CAP-TRAFFIC-15"
+ ],
+ "grounding": [
+  "decisions/0003-metric-formulas.md, Links and pixels (hits, visitors, visitor_days, dimensions from the hit's own request, lost_hits)",
+  "decisions/0004-exploration-state-and-limits.md, Sources",
+  "decisions/0002-sessions-and-events.md, Eligible event kinds and Client event-ID deduplication",
+  "decisions/0001-identity-and-consent.md (identity days are UTC days for links and pixels)"
+ ],
+ "base_time": "2026-10-01T10:00:00.000Z",
+ "sources": {
+  "link_launch": "link",
+  "pixel_news": "pixel",
+  "site_x": "site"
+ },
+ "hits": [
+  {
+   "id": "h01",
+   "source": "link_launch",
+   "at": "+0m",
+   "identity": "A",
+   "eventId": "a1",
+   "payload": "v1",
+   "referrer_domain": "news.example.org",
+   "outcome": "accepted"
+  },
+  {
+   "id": "h02",
+   "source": "link_launch",
+   "at": "+10m",
+   "identity": "A",
+   "eventId": "a1",
+   "payload": "v2, differs",
+   "referrer_domain": "news.example.org",
+   "outcome": "duplicate",
+   "counter": "dedup_conflict +1"
+  },
+  {
+   "id": "h03",
+   "source": "link_launch",
+   "at": "+11m",
+   "identity": "B",
+   "eventId": "a2",
+   "referrer_domain": "news.example.org",
+   "outcome": "accepted"
+  },
+  {
+   "id": "h04",
+   "source": "link_launch",
+   "at": "+12m",
+   "identity": "A",
+   "referrer_domain": null,
+   "outcome": "accepted"
+  },
+  {
+   "id": "h05",
+   "source": "link_launch",
+   "at": "+13m",
+   "identity": "C",
+   "referrer_domain": "news.example.org",
+   "outcome": "accepted",
+   "note": "no eventId: a retry would be a separate stored event"
+  },
+  {
+   "id": "h06",
+   "source": "link_launch",
+   "at": "+49h",
+   "identity": "A2",
+   "eventId": "a1",
+   "referrer_domain": "other.example",
+   "outcome": "accepted",
+   "note": "outside the 48 hour window, so accepted; a new UTC day gives identity A a new pseudonym A2"
+  },
+  {
+   "id": "h07",
+   "source": "pixel_news",
+   "at": "+0m",
+   "identity": "X",
+   "eventId": "a1",
+   "outcome": "accepted",
+   "note": "same eventId, different source: scope is (source_id, eventId)"
+  },
+  {
+   "id": "h08",
+   "source": "pixel_news",
+   "at": "+1m",
+   "identity": "X",
+   "outcome": "accepted"
+  },
+  {
+   "id": "h09",
+   "source": "pixel_news",
+   "at": "+2m",
+   "identity": "Y",
+   "outcome": "accepted"
+  }
+ ],
+ "lost_hits": [
+  {
+   "source": "link_launch",
+   "count": 2,
+   "note": "hits refused during a storage outage in the range (decision 0005)"
+  }
+ ],
+ "website_events": [
+  {
+   "identity": "d1",
+   "kind": "pageview",
+   "at": "+0m"
+  },
+  {
+   "identity": "d1",
+   "kind": "pageview",
+   "at": "+5m"
+  },
+  {
+   "identity": "d1",
+   "kind": "pageview",
+   "at": "+11m",
+   "note": "lands between link hits; hits neither extend nor split sessions"
+  },
+  {
+   "identity": "d2",
+   "kind": "pageview",
+   "at": "+3m"
+  },
+  {
+   "identity": "d2",
+   "kind": "pageview",
+   "at": "+4m"
+  }
+ ],
+ "exploration_state_link": {
+  "v": 1,
+  "site": "link_launch",
+  "source": "link",
+  "measures": [
+   "hits",
+   "visitors"
+  ],
+  "dimensions": [
+   "referrer_domain"
+  ],
+  "filter": null,
+  "range": {
+   "kind": "days",
+   "start": "2026-10-01",
+   "end": "2026-10-03"
+  },
+  "timezone": "UTC",
+  "granularity": "day",
+  "compare": "none",
+  "metric_version": 1,
+  "sort": [
+   {
+    "by": "hits",
+    "dir": "desc"
+   }
+  ],
+  "page": {
+   "size": 50,
+   "index": 0
+  },
+  "visualization": "table"
+ },
+ "expected": {
+  "link_launch": {
+   "hits": 5,
+   "visitors": 4,
+   "visitor_days": 4,
+   "sessions": 0,
+   "outcomes": {
+    "accepted": 5,
+    "duplicate": 1
+   },
+   "lost_hits": 2,
+   "by_referrer_domain": [
+    {
+     "referrer_domain": "news.example.org",
+     "hits": 3,
+     "visitors": 3
+    },
+    {
+     "referrer_domain": {
+      "t": "not_set"
+     },
+     "hits": 1,
+     "visitors": 1
+    },
+    {
+     "referrer_domain": "other.example",
+     "hits": 1,
+     "visitors": 1
+    }
+   ],
+   "note": "range spans three UTC days, so the label is visitor-days; visitors 4 = A, B, C on day 1 plus A2 on day 3. Cell order for equal counts follows 0004 and is not asserted."
+  },
+  "pixel_news": {
+   "hits": 3,
+   "visitors": 2,
+   "sessions": 0
+  },
+  "site_x": {
+   "pageviews": 5,
+   "events": 0,
+   "sessions": 2,
+   "note": "link and pixel hits are excluded from website reports"
+  }
+ },
+ "refusals": [
+  {
+   "id": "link_report",
+   "state": "exploration_state_link plus a report part of kind funnel",
+   "expect": "refused; report is not valid for link or pixel sources (0004 Sources); no error code is named"
+  },
+  {
+   "id": "link_bad_measure",
+   "state": "exploration_state_link with measures [pageviews]",
+   "expect": "refused; only hits, visitors and visitor_days are valid (0003 Links and pixels)"
+  },
+  {
+   "id": "link_bad_dimension",
+   "state": "exploration_state_link with dimensions [path]",
+   "expect": "refused; hits have only referrer_domain, referrer_path and audience dimensions"
+  }
+ ],
+ "open": [
+  "Error codes for the refusals are not named in 0004."
+ ]
+}

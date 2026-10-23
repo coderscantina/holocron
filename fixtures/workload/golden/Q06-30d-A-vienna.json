@@ -1,0 +1,30 @@
+{
+  "case": "Q06-30d-A-vienna",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "window_seconds": 600,
+  "scope": "daily",
+  "steps_reached": [
+    111550,
+    38377,
+    87
+  ],
+  "step_drop": [
+    73173,
+    38290
+  ],
+  "conversion": {
+    "value": 0.0008,
+    "numerator": 87,
+    "denominator": 111550
+  },
+  "limitation": "daily scope cannot cross local midnight",
+  "identity_coverage": {
+    "with_identity": 4750000,
+    "eligible_events": 4750000,
+    "rate": 1.0
+  }
+}

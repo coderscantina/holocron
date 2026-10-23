@@ -1,0 +1,26 @@
+{
+  "Q06-12m-A-utc": {
+    "abandoned": 2,
+    "next_wait_ms": 0.34041699999999997
+  },
+  "Q06-12m-A-utc-worst-person": {
+    "abandoned": 2,
+    "next_wait_ms": 0.219958
+  },
+  "Q06-12m-D-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.35104199999999997
+  },
+  "Q06-30d-A-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.195041
+  },
+  "Q06-30d-A-vienna-worst": {
+    "abandoned": 2,
+    "next_wait_ms": 0.190583
+  },
+  "Q06-30d-D-utc": {
+    "abandoned": 2,
+    "next_wait_ms": 0.367
+  }
+}

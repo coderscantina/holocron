@@ -1,0 +1,16 @@
+.sources/
+.harness/
+node_modules/
+target/
+.bench/
+apps/web/node_modules/
+apps/web/dist/
+apps/web/e2e/.auth/
+
+.claude/worktrees/
+.demo/
+
+# Milestone evidence screenshots stay local; they show older demo data.
+docs/evidence/**/*.png
+docs/evidence/**/*.gif
+docs/evidence/**/*.jpg

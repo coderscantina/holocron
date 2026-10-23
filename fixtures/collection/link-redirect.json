@@ -1,0 +1,30 @@
+{
+  "id": "link-redirect",
+  "surface": "link",
+  "polarity": "positive",
+  "description": "GET /q/{slug} records a link event and redirects to the link URL.",
+  "upstream_ref": [
+    "src/app/(collect)/q/[slug]/route.ts:10-63"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/q/holocron-link",
+    "headers": {
+      "referer": "https://newsletter.example/issue-1"
+    }
+  },
+  "expected_upstream": {
+    "status": 307,
+    "headers": {
+      "location": "https://example.com/landing?from=holocron"
+    }
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 307,
+    "decision": "adopted",
+    "notes": "Preserve route and 307 (briefing, transport surfaces). During a storage outage the redirect is still sent, the hit is not stored and increments lost_hits (docs/decisions/0005, links and pixels during a storage outage)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,86 @@
+{
+  "format_version": 1,
+  "id": "Q07-12m-A-utc-length-7",
+  "family": "Q07",
+  "title": "Seven-step pageview journeys over the long path tail, top 100",
+  "operation": "analytics.journey",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": false,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": {
+      "kind": "journey",
+      "v": 1
+    }
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "journey",
+    "report": {
+      "kind": "journey",
+      "v": 1,
+      "value": "path",
+      "length": 7,
+      "scope": "session"
+    }
+  },
+  "parameters": {
+    "length": "7, the longest allowed",
+    "cardinality": "path has a zipf tail of generated paths, so most sequences are distinct"
+  },
+  "sort": {
+    "order": [],
+    "ties": "session count desc, then sequence ascending in UTF-8 byte order (0003, 0004)"
+  },
+  "output_bound": {
+    "max_rows": 100,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "added by milestone 07 as a worst supported case; latency only, no golden result"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

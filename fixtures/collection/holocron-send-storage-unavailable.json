@@ -1,0 +1,38 @@
+{
+  "id": "holocron-send-storage-unavailable",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Durable storage cannot commit (disk full, inbox write failure).",
+  "upstream_ref": [
+    "src/lib/kafka.ts:90-144",
+    "src/app/api/send/route.ts:384-386"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 500,
+    "notes": "Relational path: the save throws and serverError returns 500. Kafka path: sendMessage logs and returns [], so the handler answers 200 for an event that was not stored."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 503,
+    "decision": "adopted",
+    "notes": "503 with Retry-After and the serviceUnavailable envelope (src/lib/response.ts:57-64) (docs/decisions/0005, backpressure and lost client events). The unchanged tracker and recorder never retry, so the event is lost on the client; refusals count in refused_backpressure{route, reason} and show as lost client events. Retry-After helps only server integrations. One such refusal during the agreed 500 events/s burst fails the capacity gate."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Needs a fault injected into Holocron storage. Upstream behaviour is from source reading only; the harness does not run Kafka or break PostgreSQL."
+}

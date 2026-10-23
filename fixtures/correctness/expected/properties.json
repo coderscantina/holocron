@@ -1,0 +1,63 @@
+{
+  "metric_version": 1,
+  "site": "A",
+  "range": { "timezone": "Europe/Vienna", "days": ["2026-06-10", "2026-06-10"], "start": "2026-06-09T22:00:00.000Z", "end": "2026-06-10T22:00:00.000Z" },
+  "base_filter": { "event_name": "configure" },
+  "measure": "events",
+  "base_count": 5,
+  "filters": [
+    { "id": "qty-eq-string-1", "field": "qty", "cmp": "eq", "value": { "t": "string", "v": "1" }, "events": 1, "matches": ["prop-03"] },
+    { "id": "qty-eq-integer-1", "field": "qty", "cmp": "eq", "value": { "t": "integer", "v": 1 }, "events": 2, "matches": ["prop-02", "prop-06"] },
+    { "id": "qty-neq-integer-1", "field": "qty", "cmp": "neq", "value": { "t": "integer", "v": 1 }, "events": 3, "matches": ["prop-03", "prop-04", "prop-05"] },
+    { "id": "qty-gt-integer-1", "field": "qty", "cmp": "gt", "value": { "t": "integer", "v": 1 }, "events": 2, "matches": ["prop-04", "prop-05"] },
+    { "id": "qty-gte-integer-1", "field": "qty", "cmp": "gte", "value": { "t": "integer", "v": 1 }, "events": 4, "matches": ["prop-02", "prop-04", "prop-05", "prop-06"] },
+    { "id": "color-eq-red", "field": "color", "cmp": "eq", "value": { "t": "string", "v": "red" }, "events": 2, "matches": ["prop-02", "prop-05"] },
+    { "id": "color-neq-red", "field": "color", "cmp": "neq", "value": { "t": "string", "v": "red" }, "events": 3, "matches": ["prop-03", "prop-04", "prop-06"] },
+    { "id": "gift-eq-true", "field": "gift", "cmp": "eq", "value": { "t": "bool", "v": true }, "events": 1, "matches": ["prop-02"] },
+    { "id": "ratio-gt-decimal-1", "field": "ratio", "cmp": "gt", "value": { "t": "decimal", "v": "1.0000" }, "events": 1, "matches": ["prop-02"] },
+    { "id": "delivery-gt-date", "field": "delivery", "cmp": "gt", "value": { "t": "date", "v": "2026-06-15T00:00:00.000Z" }, "events": 1, "matches": ["prop-02"] },
+    { "id": "tags-contains-a", "field": "tags", "cmp": "contains", "value": { "t": "string", "v": "a" }, "events": 1, "matches": ["prop-02"] },
+    { "id": "tags-contains-b", "field": "tags", "cmp": "contains", "value": { "t": "string", "v": "b" }, "events": 2, "matches": ["prop-02", "prop-03"] },
+    { "id": "tags-not-contains-b", "field": "tags", "cmp": "not_contains", "value": { "t": "string", "v": "b" }, "events": 3, "matches": ["prop-04", "prop-05", "prop-06"] },
+    { "id": "coupon-is-null", "field": "coupon", "cmp": "is_null", "events": 1, "matches": ["prop-02"] },
+    { "id": "coupon-is-set", "field": "coupon", "cmp": "is_set", "events": 2, "matches": ["prop-02", "prop-03"] },
+    { "id": "coupon-is-not-set", "field": "coupon", "cmp": "is_not_set", "events": 3, "matches": ["prop-04", "prop-05", "prop-06"] },
+    { "id": "nested-level-eq-x", "field": "nested.level", "cmp": "eq", "value": { "t": "string", "v": "x" }, "events": 1, "matches": ["prop-05"] }
+  ],
+  "group_by": {
+    "note": "cells are (type, value); a present null is its own cell and a missing key is the not-set cell (0003 Common terms). Cells add up to base_count. Cell order is not asserted.",
+    "qty": [
+      { "key": { "t": "integer", "v": 1 }, "events": 2 },
+      { "key": { "t": "string", "v": "1" }, "events": 1 },
+      { "key": { "t": "decimal", "v": "2.5000" }, "events": 1 },
+      { "key": { "t": "integer", "v": 3 }, "events": 1 }
+    ],
+    "color": [
+      { "key": { "t": "string", "v": "red" }, "events": 2 },
+      { "key": { "t": "string", "v": "blue" }, "events": 1 },
+      { "key": { "t": "not_set" }, "events": 2 }
+    ],
+    "coupon": [
+      { "key": { "t": "string", "v": "SUMMER" }, "events": 1 },
+      { "key": { "t": "null" }, "events": 1 },
+      { "key": { "t": "not_set" }, "events": 3 }
+    ]
+  },
+  "stored_values": {
+    "prop-02": { "color": ["string", "red"], "qty": ["integer", 1], "ratio": ["decimal", "2.7183"], "gift": ["bool", true], "delivery": ["date", "2026-06-20T00:00:00.000Z"], "tags": ["array", ["a", "b"]], "coupon": ["null", null] },
+    "prop-03": { "color": ["string", "blue"], "qty": ["string", "1"], "ratio": ["decimal", "0.5000"], "gift": ["bool", false], "tags": ["array", ["b"]], "coupon": ["string", "SUMMER"] },
+    "prop-04": { "qty": ["decimal", "2.5000"] },
+    "prop-05": { "color": ["string", "red"], "qty": ["integer", 3], "nested.level": ["string", "x"] },
+    "prop-06": { "qty": ["integer", 1], "ratio": ["decimal", "0.1234"] }
+  },
+  "catalog": {
+    "color": { "string": 3 },
+    "coupon": { "null": 1, "string": 1 },
+    "delivery": { "date": 1 },
+    "gift": { "bool": 2 },
+    "nested.level": { "string": 1 },
+    "qty": { "decimal": 1, "integer": 3, "string": 1 },
+    "ratio": { "decimal": 3 },
+    "tags": { "array": 2 }
+  }
+}

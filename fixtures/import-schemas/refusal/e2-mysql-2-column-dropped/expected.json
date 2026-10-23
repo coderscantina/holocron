@@ -1,0 +1,16 @@
+{
+  "case": "e2",
+  "code": "column_missing",
+  "details": {
+    "migrationTableValid": true,
+    "missing": [
+      {
+        "column": "visit_id",
+        "table": "website_event"
+      }
+    ]
+  },
+  "engine": "mysql",
+  "message": "Table website_event has no column visit_id, although all 13 migrations are recorded. The schema was changed by hand after migration. Restore a backup of the source, or re-add the column as VARCHAR(36) NOT NULL, and run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

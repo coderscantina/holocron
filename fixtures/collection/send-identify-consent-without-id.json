@@ -1,0 +1,47 @@
+{
+  "id": "send-identify-consent-without-id",
+  "surface": "send.identify",
+  "polarity": "negative",
+  "description": "consent:\"persistent\" without an id.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73",
+    "src/tracker/index.ts:384-395"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "identify",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "consent": "persistent",
+        "data": {
+          "plan": "pro"
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "consent is honored only with an id; here it is ignored and counted in consent_ignored, and the data attaches to the anonymous pseudonym (docs/decisions/0001)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

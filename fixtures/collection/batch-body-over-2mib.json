@@ -1,0 +1,53 @@
+{
+  "id": "batch-body-over-2mib",
+  "surface": "batch",
+  "polarity": "negative",
+  "description": "500 items of about 4.4 KiB each, about 2.2 MiB in total, above the 2 MiB batch cap but within the 500-item limit.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:7",
+    "src/app/api/batch/route.ts:17-54"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": {
+      "$repeat": 500,
+      "item": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "http://localhost/fixture?utm_source=newsletter",
+          "referrer": "https://referrer.example/article",
+          "name": "big",
+          "data": {
+            "blob": "{{FILL:4200}}"
+          }
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "size": 500,
+      "processed": 500,
+      "errors": 0,
+      "details": [],
+      "cache": "<jwt>"
+    },
+    "body_match": "exact",
+    "notes": "Upstream has no body cap on /api/batch."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 413,
+    "decision": "adopted",
+    "notes": "Over the provisional 2 MiB /api/batch cap: the whole request is refused with 413 payloadTooLarge (maxBytes 2097152, size) before parsing; no item stored (docs/decisions/0005, request body caps)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

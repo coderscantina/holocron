@@ -1,0 +1,113 @@
+{
+ "id": "meta-refresh-and-base",
+ "description": "A meta refresh that would navigate the frame and a base element that would redirect relative URLs.",
+ "events": [
+  {
+   "type": 4,
+   "timestamp": 1790000000000,
+   "data": {
+    "href": "https://shop.test/hostile",
+    "width": 1280,
+    "height": 720
+   }
+  },
+  {
+   "type": 2,
+   "timestamp": 1790000000010,
+   "data": {
+    "node": {
+     "type": 0,
+     "childNodes": [
+      {
+       "type": 1,
+       "name": "html",
+       "publicId": "",
+       "systemId": "",
+       "id": 2
+      },
+      {
+       "type": 2,
+       "tagName": "html",
+       "attributes": {},
+       "childNodes": [
+        {
+         "type": 2,
+         "tagName": "head",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "meta",
+           "attributes": {
+            "http-equiv": "refresh",
+            "content": "0"
+           },
+           "childNodes": [],
+           "id": 13
+          },
+          {
+           "type": 2,
+           "tagName": "base",
+           "attributes": {
+            "href": "https://beacon.hostile.test/"
+           },
+           "childNodes": [],
+           "id": 14
+          }
+         ],
+         "id": 4
+        },
+        {
+         "type": 2,
+         "tagName": "body",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "p",
+           "attributes": {},
+           "childNodes": [
+            {
+             "type": 3,
+             "textContent": "***",
+             "id": 11
+            }
+           ],
+           "id": 12
+          }
+         ],
+         "id": 5
+        }
+       ],
+       "id": 3
+      }
+     ],
+     "id": 1
+    },
+    "initialOffset": {
+     "left": 0,
+     "top": 0
+    }
+   }
+  },
+  {
+   "type": 3,
+   "timestamp": 1790000002000,
+   "data": {
+    "source": 1,
+    "positions": [
+     {
+      "x": 10,
+      "y": 10,
+      "id": 5,
+      "timeOffset": 0
+     }
+    ]
+   }
+  }
+ ],
+ "must_not_contain": [
+  "http-equiv",
+  "beacon.hostile.test"
+ ]
+}

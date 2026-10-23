@@ -1,0 +1,64 @@
+{
+  "id": "record-heatmap-disabled",
+  "surface": "record.heatmap",
+  "polarity": "negative",
+  "description": "Recorder enabled for replay only; heatmap payload is declined.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:216-218"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000004}}"
+    },
+    "body": {
+      "type": "heatmap",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000004",
+        "events": [
+          {
+            "type": "click",
+            "url": "http://localhost:8080/pricing?x=1",
+            "x": 100,
+            "y": 200,
+            "pageX": 100,
+            "pageY": 900,
+            "pageW": 1280,
+            "pageH": 3000,
+            "viewportW": 1280,
+            "viewportH": 720,
+            "timestamp": 1790000000000
+          },
+          {
+            "type": "scroll",
+            "url": "http://localhost:8080/pricing",
+            "scrollPct": 64,
+            "pageW": 1280,
+            "pageH": 3000,
+            "viewportW": 1280,
+            "viewportH": 720,
+            "timestamp": 1790000001000
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "ok": false,
+      "reason": "heatmap_disabled"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "suppressed",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Distinct policy outcome."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

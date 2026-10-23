@@ -1,0 +1,202 @@
+[
+  {
+    "applied_steps_count": 1,
+    "checksum": "65f0f9ee4a3b432e7fa917795033254887497a849d95acf7d9cb4ff24b45f98f",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "01_init",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "4cc3c14482cb8700574cbdbdb478a93ccd1cabb0aeed37dfffb77a80278ce575",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "02_report_schema_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "baf86a7adc077bc46ea646d86aabc5f613aeb311e63894366979a18f6a9ca48c",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "03_metric_performance_index",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "eb0e4ae2ef5204bc67ddb248358a402cd3bd88567d710f808f16c5124e5fd9cb",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "04_team_redesign",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "12e5b277e41da871b0768118937cef221c4d4f9c3206b719fffba86324df7a11",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "05_add_visit_id",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "fcd8585d077229bb2a16ae4705a79a5bc31cf6cbca089de99f4b1c19cb0a0a17",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "06_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "c38c9605d759b3b00f94076c929b6081d7dbd01a25d2955909fc8d1a6e3276b4",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "07_add_tag",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "ad640f709cd22434c088d577a2cf124c275fe3dc53ca249a542ae05af66b07b6",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "08_add_utm_clid",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "e94d9993b17ac5c330ae3f872fd5869fb8095a3f3a7d31d2aaade73dc45fbe9c",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "09_update_hostname_region",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "6ece5066ccec715ca8a07b65eafde7f96d110c0638b2d2187398fd1a79770ff6",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "10_add_distinct_id",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "e7421573e8b15f8a5c3e0928f1564ab43b3855d7c6634a36d87ece68196900e5",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "11_add_segment",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "f74b307b6e62c8457f32c4bae0beb99e26eb384467755912714abdfeae9e09af",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "12_update_report_parameter",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "53180616f450ac033a60143ff9b7c3656205947809c7979a51991922e7f326ad",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "13_add_revenue",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "2017fc23cad1365fa62fe1c18b70c631eb6a119a902f88672ffad63f90d80f3d",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "14_add_link_and_pixel",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "11e97bd1bd36611c473ca7f518a8c8c1e66fba5b2798e72db224f7e20477eb74",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "15_add_share",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "5cef1484333ad14bcbbc3e1b2262601d3274a072d9656fb422530d112f98b447",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "16_boards",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "19ef24e157ab33d7a34b13d06c5ffc2eca95ae4f668c1ccbbe219e48a09d13b1",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "17_remove_duplicate_key",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "4ab4d1d954adfd3e65a327797b8fa2a528aa4377cbe03e2bd79b1d1c33c3b6ae",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "18_add_performance",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "d0b6047a369c8aa04813fb06ac012c731777a9f3d602d491119f47e57aa2ec09",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "19_add_session_replay",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "a52c3ae18fcfd73a49e5eaf445f701f0a6978abc96b8a0009aa27b100501663b",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "20_add_heatmap",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "10b4a7ba0b04bc14703b85787f66dfc6a83cd70abf80bcd528c83966c1effa7c",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "21_add_session_link",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "e1e8a160496540e0b2fd28610a92f8b0a1b3e4fc1c857ca1d7f890e3667571b4",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "22_add_2fa",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "5fc778b82bb34c3c04d78061e66d7036c3c51d0c506f5279f3c1cfc99f24f694",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "23_update_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "857c15672654ed5691a104aa1197e761718cbe75de0024c54d813ea19737bdba",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "24_lowercase_username",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "6da67237e4d1516853a84997ebe9ecfd65fc38187d0561d98a836c437085187d",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "25_add_annotation",
+    "rolled_back_at": null
+  }
+]

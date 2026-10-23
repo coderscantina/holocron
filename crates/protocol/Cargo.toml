@@ -1,0 +1,19 @@
+[package]
+name = "holocron-protocol"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+schemars.workspace = true
+serde.workspace = true
+serde_html_form = "0.2"
+# preserve_order keeps generated documents in schema order, whatever else the build enables.
+serde_json = { workspace = true, features = ["preserve_order"] }
+ts-rs.workspace = true
+
+[[bin]]
+name = "export-types"
+path = "src/bin/export-types.rs"

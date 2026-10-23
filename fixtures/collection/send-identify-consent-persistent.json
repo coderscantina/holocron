@@ -1,0 +1,46 @@
+{
+  "id": "send-identify-consent-persistent",
+  "surface": "send.identify",
+  "polarity": "positive",
+  "description": "identify carrying the Holocron extension key consent:\"persistent\" next to id, as a data-before-send callback adds it. Upstream strips the unknown key.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73",
+    "src/tracker/index.ts:384-395"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "identify",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "id": "user-123",
+        "consent": "persistent"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact",
+    "notes": "consent is not in the upstream schema and is ignored."
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Client-asserted consent is accepted without a server-signed token: Confirmed (Mike, 2026-10-03) (docs/decisions/0001, Persistent consent transport). Honored only when the site has persistent_identity_enabled and the payload has an id; creates or refreshes the consent row; events link to the profile when granted_at <= event_time < revoked_at, no backfill. If persistent identity is not enabled the key is ignored and counted in consent_ignored."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

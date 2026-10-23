@@ -1,0 +1,116 @@
+{
+ "id": "framed-documents",
+ "description": "iframes with srcdoc and a remote src, object and embed loading remote documents.",
+ "events": [
+  {
+   "type": 4,
+   "timestamp": 1790000000000,
+   "data": {
+    "href": "https://shop.test/hostile",
+    "width": 1280,
+    "height": 720
+   }
+  },
+  {
+   "type": 2,
+   "timestamp": 1790000000010,
+   "data": {
+    "node": {
+     "type": 0,
+     "childNodes": [
+      {
+       "type": 1,
+       "name": "html",
+       "publicId": "",
+       "systemId": "",
+       "id": 2
+      },
+      {
+       "type": 2,
+       "tagName": "html",
+       "attributes": {},
+       "childNodes": [
+        {
+         "type": 2,
+         "tagName": "head",
+         "attributes": {},
+         "childNodes": [],
+         "id": 4
+        },
+        {
+         "type": 2,
+         "tagName": "body",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "iframe",
+           "attributes": {
+            "srcdoc": "<script>fetch('https://beacon.hostile.test/srcdoc')</script>"
+           },
+           "childNodes": [],
+           "id": 11
+          },
+          {
+           "type": 2,
+           "tagName": "iframe",
+           "attributes": {
+            "src": "https://beacon.hostile.test/frame"
+           },
+           "childNodes": [],
+           "id": 12
+          },
+          {
+           "type": 2,
+           "tagName": "object",
+           "attributes": {
+            "data": "https://beacon.hostile.test/object"
+           },
+           "childNodes": [],
+           "id": 13
+          },
+          {
+           "type": 2,
+           "tagName": "embed",
+           "attributes": {
+            "src": "https://beacon.hostile.test/embed"
+           },
+           "childNodes": [],
+           "id": 14
+          }
+         ],
+         "id": 5
+        }
+       ],
+       "id": 3
+      }
+     ],
+     "id": 1
+    },
+    "initialOffset": {
+     "left": 0,
+     "top": 0
+    }
+   }
+  },
+  {
+   "type": 3,
+   "timestamp": 1790000002000,
+   "data": {
+    "source": 1,
+    "positions": [
+     {
+      "x": 10,
+      "y": 10,
+      "id": 5,
+      "timeOffset": 0
+     }
+    ]
+   }
+  }
+ ],
+ "must_not_contain": [
+  "srcdoc",
+  "beacon.hostile.test"
+ ]
+}

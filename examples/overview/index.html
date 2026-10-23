@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Roadhouse · Holocron</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <svg class="icon-definitions" aria-hidden="true">
+      <defs>
+        <symbol id="i-grid" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24">
+          <path d="M4 3v17h17M8 15v-4m5 4V7m5 8V4" />
+        </symbol>
+        <symbol id="i-activity" viewBox="0 0 24 24"><path d="M2 12h5l3-8 4 16 3-8h5" /></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3" />
+          <path d="M3 21v-3a6 6 0 0 1 12 0v3m1-17a3 3 0 0 1 0 6m2 5a5 5 0 0 1 3 4v2" />
+        </symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-13h-7z" /></symbol>
+        <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z" /></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 5 5" />
+        </symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" /></symbol>
+        <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-switch" viewBox="0 0 24 24"><path d="m9 8 3-3 3 3m-6 8 3 3 3-3" /></symbol>
+        <symbol id="i-bookmark" viewBox="0 0 24 24">
+          <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16l-6-4z" />
+        </symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M7 3v4m10-4v4M3 11h18" />
+        </symbol>
+        <symbol id="i-compare" viewBox="0 0 24 24">
+          <path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4" />
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4" />
+        </symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24">
+          <path d="m9 3-1 3-3 1 1 3-2 2 2 2-1 3 3 1 1 3h6l1-3 3-1-1-3 2-2-2-2 1-3-3-1-1-3z" />
+          <circle cx="12" cy="12" r="3" />
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="16" rx="3" />
+          <path d="m10 8 6 4-6 4z" />
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <ellipse cx="12" cy="12" rx="4" ry="9" />
+          <path d="M3 12h18" />
+        </symbol>
+        <symbol id="i-target" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <circle cx="12" cy="12" r="5" />
+          <circle cx="12" cy="12" r="1" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+          <path d="M20 14A9 9 0 0 1 10 4a9 9 0 1 0 10 10z" />
+        </symbol>
+        <symbol id="i-panel" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M9 4v16m7-12-3 4 3 4" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6" /></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v6m0-10v.01" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" /></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="13" rx="2" />
+          <path d="M12 16v5m-5 0h10" />
+        </symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24">
+          <rect x="6" y="2" width="12" height="20" rx="2" />
+          <path d="M11 18h2" />
+        </symbol>
+      </defs>
+    </svg>
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand" href="?" aria-label="Holocron home"
+        ><span class="brand-mark"
+          ><svg class="icon"><use href="#i-chart" /></svg></span
+        ><span>Holocron</span></a
+      >
+      <nav>
+        <span class="nav-label">Workspace</span>
+        <a href="?view=boards" data-nav="boards"
+          ><svg class="icon"><use href="#i-grid" /></svg><span>Boards</span></a
+        >
+        <a href="?view=explore" data-nav="explore"
+          ><svg class="icon"><use href="#i-search" /></svg><span>Explore</span
+          ><span class="nav-key">E</span></a
+        >
+        <span class="nav-label site-label">Roadhouse</span>
+        <a href="?" class="active" aria-current="page" data-nav="overview"
+          ><svg class="icon"><use href="#i-chart" /></svg><span>Overview</span></a
+        >
+        <a href="?view=events" data-nav="events"
+          ><svg class="icon"><use href="#i-bolt" /></svg><span>Events</span></a
+        >
+        <a href="?view=sessions" data-nav="sessions"
+          ><svg class="icon"><use href="#i-users" /></svg><span>Sessions</span></a
+        >
+        <a href="?view=realtime" data-nav="realtime"
+          ><svg class="icon"><use href="#i-activity" /></svg><span>Realtime</span
+          ><span class="live-count">14</span></a
+        >
+        <a href="?view=funnels" data-nav="funnels"
+          ><svg class="icon"><use href="#i-filter" /></svg><span>Funnels & goals</span></a
+        >
+        <a href="?view=retention" data-nav="retention"
+          ><svg class="icon"><use href="#i-target" /></svg><span>Retention</span></a
+        >
+        <a href="?view=revenue" data-nav="revenue"
+          ><span class="text-icon">€</span><span>Revenue</span></a
+        >
+        <a href="?view=replays" data-nav="replays"
+          ><svg class="icon"><use href="#i-play" /></svg><span>Replays</span></a
+        >
+        <a href="?view=heatmaps" data-nav="heatmaps"
+          ><svg class="icon"><use href="#i-target" /></svg><span>Heatmaps</span></a
+        >
+        <a href="?view=performance" data-nav="performance"
+          ><svg class="icon"><use href="#i-activity" /></svg><span>Performance</span></a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <button id="settings" class="nav-button">
+          <svg class="icon"><use href="#i-settings" /></svg><span>Website settings</span>
+        </button>
+      </div>
+    </aside>
+    <div class="app-shell">
+      <header class="app-header">
+        <button
+          class="icon-button"
+          id="sidebar-toggle"
+          aria-label="Collapse navigation"
+          aria-controls="sidebar"
+          aria-expanded="true"
+        >
+          <svg class="icon"><use href="#i-panel" /></svg>
+        </button>
+        <nav class="context-navigation" aria-label="Workspace, website, and environment">
+          <button
+            class="context-trigger workspace-trigger"
+            id="workspace-trigger"
+            popovertarget="workspace-menu"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-label="Workspace: Roadhouse"
+          >
+            <span class="context-mark" aria-hidden="true">R</span
+            ><span class="workspace-name">Roadhouse</span
+            ><span class="context-badge">Self-hosted</span
+            ><svg class="icon switch-icon" aria-hidden="true"><use href="#i-switch" /></svg>
+          </button>
+          <span class="context-separator" aria-hidden="true">/</span>
+          <button
+            class="context-trigger website-trigger"
+            id="website-trigger"
+            popovertarget="website-menu"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-label="Website: roadhouse.test"
+          >
+            <span class="website-name">roadhouse.test</span
+            ><svg class="icon switch-icon" aria-hidden="true"><use href="#i-switch" /></svg>
+          </button>
+          <span class="context-separator" aria-hidden="true">/</span>
+          <button
+            class="context-trigger environment-trigger"
+            id="environment-trigger"
+            popovertarget="environment-menu"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-label="Environment: Production"
+          >
+            <span class="environment-dot" aria-hidden="true"></span
+            ><span class="environment-name">Production</span
+            ><svg class="icon switch-icon" aria-hidden="true"><use href="#i-switch" /></svg>
+          </button>
+        </nav>
+        <div class="header-actions">
+          <button id="command-open" class="button search-button" aria-label="Search anything">
+            <svg class="icon"><use href="#i-search" /></svg><span>Search anything</span
+            ><kbd>⌘ K</kbd></button
+          ><button
+            id="user-trigger"
+            class="user-trigger"
+            popovertarget="user-menu"
+            aria-label="User menu"
+            aria-haspopup="menu"
+            aria-expanded="false"
+          >
+            <span class="avatar small" aria-hidden="true">MW</span
+            ><svg class="icon small" aria-hidden="true"><use href="#i-down" /></svg>
+          </button>
+        </div>
+      </header>
+      <main id="main-content" tabindex="-1">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">
+              <span class="status-dot"></span><span>14 visitors online</span
+              ><span class="separator">·</span><span>Example data</span>
+            </div>
+            <h1>Roadhouse</h1>
+            <p>Traffic overview <span class="separator">/</span> roadhouse.test</p>
+          </div>
+          <div class="heading-actions">
+            <button class="button" id="save-open">
+              <svg class="icon"><use href="#i-bookmark" /></svg
+              ><span id="saved-label">Save view</span></button
+            ><button class="button primary" id="explore">
+              <svg class="icon"><use href="#i-search" /></svg>Explore data
+            </button>
+          </div>
+        </div>
+        <section class="toolbar" aria-label="Exploration controls">
+          <div class="toolbar-left">
+            <button id="filter-open" class="button">
+              <svg class="icon"><use href="#i-filter" /></svg>Filter<svg class="icon small">
+                <use href="#i-plus" />
+              </svg>
+            </button>
+            <div id="filter-chips" class="filter-chips"></div>
+            <button id="clear-filters" class="text-button" hidden>Clear filters</button>
+          </div>
+          <div class="toolbar-right">
+            <label class="date-control"
+              ><svg class="icon"><use href="#i-calendar" /></svg
+              ><span class="sr-only">Date range</span
+              ><select id="date-range">
+                <option value="24h">Last 24 hours</option>
+                <option value="7d">Last 7 days</option>
+                <option value="30d">Last 30 days</option></select
+              ><svg class="icon small"><use href="#i-down" /></svg></label
+            ><button class="button compare-button" id="compare" aria-pressed="true">
+              <svg class="icon"><use href="#i-compare" /></svg><span>Previous period</span></button
+            ><button
+              class="icon-button outlined"
+              id="export"
+              aria-label="Export current overview as CSV"
+            >
+              <svg class="icon"><use href="#i-download" /></svg>
+            </button>
+          </div>
+        </section>
+        <section class="metrics" aria-label="Traffic summary">
+          <button class="metric card selected" data-metric="views" aria-pressed="true">
+            <span class="metric-label">Views</span><strong data-value="views">3.63k</strong
+            ><span class="metric-bottom"
+              ><span class="change">↗ 3%</span><span>vs. previous period</span></span
+            >
+          </button>
+          <button class="metric card" data-metric="sessions" aria-pressed="false">
+            <span class="metric-label">Sessions</span><strong data-value="sessions">1.23k</strong
+            ><span class="metric-bottom"
+              ><span class="change">↗ 3%</span><span>vs. previous period</span></span
+            >
+          </button>
+          <button
+            class="metric card"
+            data-metric="visitors"
+            aria-pressed="false"
+            title="Daily anonymous identities. Multi-day totals are visitor-days, not unique people."
+          >
+            <span class="metric-label"
+              ><span id="visitor-label">Visitor-days</span
+              ><svg class="icon small"><use href="#i-info" /></svg></span
+            ><strong data-value="visitors">1.11k</strong
+            ><span class="metric-bottom"
+              ><span class="change">↗ 4%</span><span>daily identity estimate</span></span
+            >
+          </button>
+          <button class="metric card" data-metric="bounce" aria-pressed="false">
+            <span class="metric-label">Bounce rate</span><strong data-value="bounce">49%</strong
+            ><span class="metric-bottom"
+              ><span class="change">↘ 7%</span><span>vs. previous period</span></span
+            >
+          </button>
+          <button class="metric card" data-metric="duration" aria-pressed="false">
+            <span class="metric-label">Observed duration</span
+            ><strong data-value="duration">2m 3s</strong
+            ><span class="metric-bottom"
+              ><span class="change">↗ 6%</span><span>recorded event span</span></span
+            >
+          </button>
+        </section>
+        <section class="chart-card card" aria-labelledby="chart-title">
+          <div class="card-heading">
+            <div>
+              <h2 id="chart-title">Traffic over time</h2>
+              <p id="chart-subtitle">Hourly views and daily-scoped visitor identities</p>
+            </div>
+            <div class="chart-controls">
+              <span class="legend"
+                ><span class="legend-dot views-dot"></span
+                ><span id="chart-legend">Views</span></span
+              ><span class="legend secondary-legend"
+                ><span class="legend-dot visitors-dot"></span>Visitor-days</span
+              ><span class="chart-divider"></span
+              ><label class="granularity"
+                ><span class="sr-only">Chart interval</span
+                ><select id="granularity">
+                  <option>Hourly</option>
+                  <option>Daily</option></select
+                ><svg class="icon small"><use href="#i-down" /></svg
+              ></label>
+            </div>
+          </div>
+          <div
+            id="chart"
+            class="chart"
+            role="img"
+            aria-label="Hourly traffic chart based on the supplied Roadhouse screenshot"
+          ></div>
+          <div class="chart-footer">
+            <span><span class="status-dot small-dot"></span>Updated just now</span
+            ><span>Europe/Vienna <span class="separator">·</span> Exact event counts</span>
+          </div>
+        </section>
+        <section class="breakdown-grid" aria-label="Traffic breakdowns">
+          <article class="card breakdown">
+            <div class="card-heading">
+              <div>
+                <h2>Pages</h2>
+                <p>Where your visitors spend time</p>
+              </div>
+              <button class="icon-button" data-more="page" aria-label="Explore pages">
+                <svg class="icon"><use href="#i-arrow" /></svg>
+              </button>
+            </div>
+            <div id="pages-table"></div>
+            <button class="table-footer" data-more="page">
+              View all pages<svg class="icon"><use href="#i-arrow" /></svg>
+            </button>
+          </article>
+          <article class="card breakdown">
+            <div class="card-heading">
+              <div>
+                <h2>Referrers</h2>
+                <p>How visitors find Roadhouse</p>
+              </div>
+              <button class="icon-button" data-more="referrer" aria-label="Explore referrers">
+                <svg class="icon"><use href="#i-arrow" /></svg>
+              </button>
+            </div>
+            <div id="referrers-table"></div>
+            <button class="table-footer" data-more="referrer">
+              View all referrers<svg class="icon"><use href="#i-arrow" /></svg>
+            </button>
+          </article>
+        </section>
+        <section class="audience-grid" aria-label="Audience breakdowns">
+          <article class="card breakdown compact-card">
+            <div class="card-heading">
+              <h2>Browsers</h2>
+              <svg class="icon muted"><use href="#i-globe" /></svg>
+            </div>
+            <div id="browsers-table"></div>
+          </article>
+          <article class="card breakdown compact-card">
+            <div class="card-heading">
+              <h2>Operating systems</h2>
+              <svg class="icon muted"><use href="#i-monitor" /></svg>
+            </div>
+            <div id="os-table"></div>
+          </article>
+          <article class="card breakdown compact-card">
+            <div class="card-heading">
+              <h2>Devices</h2>
+              <svg class="icon muted"><use href="#i-phone" /></svg>
+            </div>
+            <div id="devices-table"></div>
+          </article>
+        </section>
+        <footer class="page-footer">
+          <span
+            >Anonymous visitor figures use daily identities.
+            <button class="text-button" id="definitions">Metric definitions</button></span
+          ><span>Sample values from the supplied overview</span>
+        </footer>
+      </main>
+    </div>
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button id="mobile-menu">
+        <svg class="icon"><use href="#i-panel" /></svg>Menu</button
+      ><a href="?" aria-current="page"
+        ><svg class="icon"><use href="#i-chart" /></svg>Overview</a
+      ><button id="mobile-explore">
+        <svg class="icon"><use href="#i-search" /></svg>Explore</button
+      ><button id="mobile-save">
+        <svg class="icon"><use href="#i-bookmark" /></svg>Save
+      </button>
+    </nav>
+    <div
+      id="workspace-menu"
+      class="header-popover"
+      popover
+      role="menu"
+      aria-labelledby="workspace-trigger"
+    >
+      <p class="menu-label">Workspace</p>
+      <button class="menu-item selected" role="menuitemradio" aria-checked="true" data-menu-close>
+        <span class="context-mark">R</span><span>Roadhouse</span
+        ><svg class="icon menu-check"><use href="#i-check" /></svg>
+      </button>
+      <hr class="menu-separator" />
+      <button class="menu-item" role="menuitem" data-example-action="Workspace settings">
+        <svg class="icon"><use href="#i-settings" /></svg>Workspace settings
+      </button>
+    </div>
+    <div
+      id="website-menu"
+      class="header-popover"
+      popover
+      role="menu"
+      aria-labelledby="website-trigger"
+    >
+      <p class="menu-label">Website</p>
+      <button class="menu-item selected" role="menuitemradio" aria-checked="true" data-menu-close>
+        <svg class="icon"><use href="#i-globe" /></svg
+        ><span class="menu-description"><strong>Roadhouse</strong><span>roadhouse.test</span></span
+        ><svg class="icon menu-check"><use href="#i-check" /></svg>
+      </button>
+      <hr class="menu-separator" />
+      <button class="menu-item" role="menuitem" data-example-action="Website settings">
+        <svg class="icon"><use href="#i-settings" /></svg>Website settings
+      </button>
+    </div>
+    <div
+      id="environment-menu"
+      class="header-popover"
+      popover
+      role="menu"
+      aria-labelledby="environment-trigger"
+    >
+      <p class="menu-label">Environment</p>
+      <button class="menu-item selected" role="menuitemradio" aria-checked="true" data-menu-close>
+        <span class="environment-dot"></span><span>Production</span
+        ><svg class="icon menu-check"><use href="#i-check" /></svg>
+      </button>
+    </div>
+    <div
+      id="user-menu"
+      class="header-popover user-menu"
+      popover
+      role="menu"
+      aria-labelledby="user-trigger"
+    >
+      <div class="menu-profile">
+        <span class="avatar">MW</span>
+        <div><strong>Mike Wallner</strong><span>Roadhouse workspace</span></div>
+      </div>
+      <hr class="menu-separator" />
+      <button class="menu-item" role="menuitem" data-example-action="My profile">
+        <svg class="icon"><use href="#i-users" /></svg>My profile
+      </button>
+      <button class="menu-item" role="menuitem" data-example-action="Account settings">
+        <svg class="icon"><use href="#i-settings" /></svg>Account settings
+      </button>
+      <button class="menu-item" role="menuitem" data-example-action="API keys">
+        <svg class="icon"><use href="#i-bolt" /></svg>API keys
+      </button>
+      <hr class="menu-separator" />
+      <p class="menu-label">Appearance</p>
+      <div class="theme-options" role="group" aria-label="Appearance">
+        <button class="menu-item" role="menuitemradio" aria-checked="false" data-theme="light">
+          Light
+        </button>
+        <button class="menu-item" role="menuitemradio" aria-checked="true" data-theme="dark">
+          Dark
+        </button>
+        <button class="menu-item" role="menuitemradio" aria-checked="false" data-theme="system">
+          System
+        </button>
+      </div>
+      <button class="menu-item" role="menuitem" data-example-action="Keyboard shortcuts">
+        <svg class="icon"><use href="#i-info" /></svg>Keyboard shortcuts<kbd>?</kbd>
+      </button>
+      <hr class="menu-separator" />
+      <button class="menu-item" role="menuitem" data-example-action="Sign out">
+        <svg class="icon"><use href="#i-arrow" /></svg>Sign out
+      </button>
+    </div>
+    <dialog id="filter-dialog">
+      <form id="filter-form">
+        <div class="dialog-heading">
+          <h2>Add a filter</h2>
+          <button class="icon-button" type="button" data-close aria-label="Close filter dialog">
+            <svg class="icon"><use href="#i-x" /></svg>
+          </button>
+        </div>
+        <label
+          >Field<select name="field">
+            <option value="device">Device</option>
+            <option value="page">Page</option>
+            <option value="referrer">Referrer</option>
+            <option value="browser">Browser</option>
+          </select></label
+        ><label
+          >Operator<select name="operator">
+            <option value="eq">is</option>
+            <option value="neq">is not</option>
+            <option value="contains">contains</option>
+          </select></label
+        ><label>Value<input name="value" value="Mobile" required autocomplete="off" /></label>
+        <p class="dialog-note">
+          The screen demonstrates filter state. Sample figures are not recalculated.
+        </p>
+        <div class="dialog-actions">
+          <button type="button" class="button" data-close>Cancel</button
+          ><button class="button primary">Apply filter</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="save-dialog">
+      <form id="save-form">
+        <div class="dialog-heading">
+          <h2>Save this exploration</h2>
+          <button type="button" class="icon-button" data-close aria-label="Close saved view dialog">
+            <svg class="icon"><use href="#i-x" /></svg>
+          </button>
+        </div>
+        <label
+          >Name<input
+            id="view-name"
+            name="name"
+            value="Roadhouse traffic overview"
+            required
+            maxlength="80"
+        /></label>
+        <p class="dialog-note">
+          Keep the date range, filters, selected measure, and comparison together. This example
+          saves in this browser.
+        </p>
+        <div id="saved-views"></div>
+        <div class="dialog-actions">
+          <button type="button" class="button" data-close>Cancel</button
+          ><button class="button primary">Save view</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="command-dialog">
+      <div class="dialog-heading">
+        <h2>Search</h2>
+        <button class="icon-button" data-close aria-label="Close search">
+          <svg class="icon"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <label class="sr-only" for="command-input">Search pages and referrers</label
+      ><input
+        id="command-input"
+        placeholder="Search pages, referrers, or views…"
+        autocomplete="off"
+      />
+      <div id="command-results" class="command-results"></div>
+    </dialog>
+    <dialog id="detail-dialog">
+      <div class="dialog-heading">
+        <h2 id="detail-title">Explore</h2>
+        <button class="icon-button" data-close aria-label="Close details">
+          <svg class="icon"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <div id="detail-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

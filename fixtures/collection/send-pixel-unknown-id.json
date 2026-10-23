@@ -1,0 +1,37 @@
+{
+  "id": "send-pixel-unknown-id",
+  "surface": "send.pixel",
+  "polarity": "negative",
+  "description": "payload.pixel is a UUID that is not a pixel.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:112-131"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "pixel": "5e1a0000-0000-4000-8000-0000000000fe",
+        "url": "/p/x"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "adopted",
+    "notes": "Refused with message \"Pixel not found.\" (docs/decisions/0005, unknown link and pixel IDs)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

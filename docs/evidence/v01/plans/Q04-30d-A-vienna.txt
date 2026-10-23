@@ -1,0 +1,343 @@
+-- Q04-30d-A-vienna, filtered (country, device and property conditions), compared with
+-- typical_weekday: `holocron-gate explore --plans --compare typical_weekday` on the 10% load.
+-- The range 2026-09-01 to 09-30 lies before the clock, so it has no projection. 5 planned
+-- statements: the range, the baseline window 2026-07-07 to 09-23 (79 days) from events in three
+-- statements of at most 31 days (CREATE and two INSERT INTO zb_ev, the existing chunking), the
+-- range's rows and one grouped read of the page rows over every baseline day (`g` from the view
+-- zs_ev over zb_ev). Kept: the first window chunk and the grouped read; the other chunks are the
+-- same statement over their own days. Totals are one grouped read and are not recorded by
+-- --plans. Before this change the window was 79 statements, one per day, and 79 row reads.
+
+CREATE OR REPLACE TEMP TABLE zb_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.path, CASE WHEN m.session_id IS NULL THEN e.country ELSE s.country END AS country, CASE WHEN m.session_id IS NULL THEN e.device ELSE s.device END AS device, CASE WHEN m.session_id IS NULL THEN e.browser ELSE s.browser END AS browser FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq LEFT JOIN (SELECT * FROM sessions WHERE site = ? AND start_time <= epoch_ms(?) AND last_time >= epoch_ms(?)) s ON s.session_id = m.session_id WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, f1 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.country AS f0, r.device AS f1, r.browser AS f2, p3.t AS f3_t, p3.s AS f3_s, p3.i AS f3_i, p3.d AS f3_d, p3.b AS f3_b, p3.dt AS f3_dt, p3.a AS f3_a, r.path AS f4, p5.t AS f5_t, p5.s AS f5_s, p5.i AS f5_i, p5.d AS f5_d, p5.b AS f5_b, p5.dt AS f5_dt, p5.a AS f5_a FROM r LEFT JOIN (SELECT * FROM (SELECT seq AS id, type AS t, v_string AS s, v_integer AS i, v_decimal AS d, v_bool AS b,
+                            epoch_ms(v_date) AS dt, v_array AS a
+                     FROM event_properties_8 WHERE site = ? AND key = ? AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) WHERE (t = 5 AND s = ?)) p3 ON p3.id = r.seq LEFT JOIN (SELECT * FROM (SELECT seq AS id, type AS t, v_string AS s, v_integer AS i, v_decimal AS d, v_bool AS b,
+                            epoch_ms(v_date) AS dt, v_array AS a
+                     FROM event_properties_5 WHERE site = ? AND key = ? AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) WHERE (t IS NOT NULL)) p5 ON p5.id = r.seq) WHERE (((f0 = ?) OR (f0 = ?) OR (f0 = ?)) AND ((f1 = ?) OR ((f2 = ?) AND (f3_t = 5 AND f3_s = ?))) AND NOT coalesce((f4 = ?), false) AND NOT coalesce((contains(f4, ?)), false) AND NOT coalesce((f5_t IS NOT NULL), false))
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│             f1            │
+│                           │
+│        ~9,712 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #5            │
+│                           │
+│        ~9,712 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ (NOT COALESCE((f5_t IS NOT│
+│       NULL), false))      │
+│                           │
+│        ~9,712 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│    Conditions: seq = id   ├─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                           │                                                                                                     │
+│        ~48,564 rows       │                                                                                                     │
+└─────────────┬─────────────┘                                                                                                     │
+┌─────────────┴─────────────┐                                                                                       ┌─────────────┴─────────────┐
+│         PROJECTION        │                                                                                       │          SEQ_SCAN         │
+│    ────────────────────   │                                                                                       │    ────────────────────   │
+│             #0            │                                                                                       │           Table:          │
+│             #1            │                                                                                       │       analytics.main      │
+│             #2            │                                                                                       │    .event_properties_5    │
+│             #3            │                                                                                       │                           │
+│             #4            │                                                                                       │   Type: Sequential Scan   │
+│             #5            │                                                                                       │                           │
+│                           │                                                                                       │        Projections:       │
+│                           │                                                                                       │            seq            │
+│                           │                                                                                       │            type           │
+│                           │                                                                                       │                           │
+│                           │                                                                                       │          Filters:         │
+│                           │                                                                                       │site=1198808858014540920149│
+│                           │                                                                                       │     39663769085192113     │
+│                           │                                                                                       │       key='variant'       │
+│                           │                                                                                       │ event_time>='2026-07-06 22│
+│                           │                                                                                       │   :00:00'::TIMESTAMP AND  │
+│                           │                                                                                       │   event_time<='2026-08-06 │
+│                           │                                                                                       │  21:59:59.999'::TIMESTAMP │
+│                           │                                                                                       │                           │
+│        ~38,154 rows       │                                                                                       │        ~48,564 rows       │
+└─────────────┬─────────────┘                                                                                       └───────────────────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ ((f1 = 'mobile') OR ((f3_t│
+│  = 5) AND (f2 = 'chrome') │
+│    AND (f3_s = 'pro')))   │
+│                           │
+│        ~38,154 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│    Conditions: seq = id   ├────────────────────────────────────────────────────────────────────────┐
+│                           │                                                                        │
+│       ~190,771 rows       │                                                                        │
+└─────────────┬─────────────┘                                                                        │
+┌─────────────┴─────────────┐                                                          ┌─────────────┴─────────────┐
+│         PROJECTION        │                                                          │          SEQ_SCAN         │
+│    ────────────────────   │                                                          │    ────────────────────   │
+│            seq            │                                                          │           Table:          │
+│            kind           │                                                          │       analytics.main      │
+│         event_time        │                                                          │    .event_properties_8    │
+│          daily_id         │                                                          │                           │
+│         profile_id        │                                                          │   Type: Sequential Scan   │
+│           device          │                                                          │                           │
+│          browser          │                                                          │        Projections:       │
+│                           │                                                          │            seq            │
+│                           │                                                          │            type           │
+│                           │                                                          │          v_string         │
+│                           │                                                          │                           │
+│                           │                                                          │          Filters:         │
+│                           │                                                          │site=1198808858014540920149│
+│                           │                                                          │     39663769085192113     │
+│                           │                                                          │         key='plan'        │
+│                           │                                                          │ event_time>='2026-07-06 22│
+│                           │                                                          │   :00:00'::TIMESTAMP AND  │
+│                           │                                                          │   event_time<='2026-08-06 │
+│                           │                                                          │  21:59:59.999'::TIMESTAMP │
+│                           │                                                          │           type=5          │
+│                           │                                                          │       v_string='pro'      │
+│                           │                                                          │                           │
+│       ~190,771 rows       │                                                          │       ~181,955 rows       │
+└─────────────┬─────────────┘                                                          └───────────────────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│    (session_id IS NULL)   │
+│           device          │
+│           device          │
+│          browser          │
+│          browser          │
+│                           │
+│       ~190,771 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #6            │
+│             #7            │
+│             #8            │
+│            #10            │
+│            #11            │
+│                           │
+│       ~190,771 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ ((CASE  WHEN ((session_id │
+│  IS NULL)) THEN (country) │
+│  ELSE country END = 'US') │
+│      OR (CASE  WHEN (     │
+│ (session_id IS NULL)) THEN│
+│   (country) ELSE country  │
+│    END = 'DE') OR (CASE   │
+│  WHEN ((session_id IS NULL│
+│   )) THEN (country) ELSE  │
+│    country END = 'FR'))   │
+│                           │
+│       ~190,771 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│                           │
+│        Conditions:        ├───────────────────────────────────────────┐
+│  session_id = session_id  │                                           │
+│                           │                                           │
+│       ~953,858 rows       │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │          SEQ_SCAN         │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: LEFT      │                             │           Table:          │
+│   Conditions: seq = seq   │                             │  analytics.main.sessions  │
+│                           │                             │                           │
+│                           │                             │   Type: Sequential Scan   │
+│                           │                             │                           │
+│                           │                             │        Projections:       │
+│                           │                             │         session_id        │
+│                           │                             │          country          │
+│                           │                             │          browser          │
+│                           ├──────────────┐              │           device          │
+│                           │              │              │                           │
+│                           │              │              │          Filters:         │
+│                           │              │              │site=1198808858014540920149│
+│                           │              │              │     39663769085192113     │
+│                           │              │              │ start_time<='2026-08-06 21│
+│                           │              │              │   :59:59.999'::TIMESTAMP  │
+│                           │              │              │ last_time>='2026-07-06 22 │
+│                           │              │              │     :00:00'::TIMESTAMP    │
+│                           │              │              │                           │
+│       ~953,858 rows       │              │              │        ~92,308 rows       │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│          country          ││site=1198808858014540920149│
+│           device          ││     39663769085192113     │
+│          browser          ││           role=1          │
+│                           ││ event_time>='2026-07-06 22│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-08-06 │
+│     39663769085192113     ││  21:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-07-06 22││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-08-06 ││                           │
+│  21:59:59.999'::TIMESTAMP ││                           │
+│ (NOT COALESCE((path = '/')││                           │
+│     , false)) AND (NOT    ││                           │
+│  COALESCE(contains(path, '││                           │
+│     /legal'), false))     ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+WITH ea AS (SELECT g, f1, count(*) FILTER (WHERE kind = 2) AS a0, count(*) FILTER (WHERE kind = 1) AS a1, count(DISTINCT daily_id) AS a2 FROM zs_ev GROUP BY g, f1), j AS (SELECT * FROM ea) SELECT g, f1, a0, a1, a2, count(*) OVER () AS n FROM j WHERE (f1 IS NOT DISTINCT FROM ?) OR (f1 IS NOT DISTINCT FROM ?) OR (f1 IS NOT DISTINCT FROM ?) ORDER BY a1 DESC NULLS LAST, f1 ASC NULLS LAST
+
+┌───────────────────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│         j.a1 DESC         │
+│          j.f1 ASC         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #5            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│      count() OVER ()      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│                           │
+│        Aggregates:        │
+│ count_star() FILTER (WHERE│
+│       #1) Filter: #1      │
+│ count_star() FILTER (WHERE│
+│       #2) Filter: #2      │
+│     count(DISTINCT #4)    │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             g             │
+│             f1            │
+│         (kind = 2)        │
+│         (kind = 1)        │
+│          daily_id         │
+│                           │
+│           ~1 row          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            kind           │
+│          daily_id         │
+│             f1            │
+│             g             │
+│                           │
+│           ~1 row          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ ((f1 IS NOT DISTINCT FROM │
+│  'mobile') OR (f1 IS NOT  │
+│  DISTINCT FROM 'desktop') │
+│   OR (f1 IS NOT DISTINCT  │
+│       FROM 'tablet'))     │
+│                           │
+│           ~1 row          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│     "temp".main.zb_ev     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│             t             │
+│          daily_id         │
+│             f1            │
+│                           │
+│          Filters:         │
+│     optional: f1IS NOT    │
+│  DISTINCT FROM'mobile' OR │
+│   f1IS NOT DISTINCT FROM  │
+│   'desktop' OR f1IS NOT   │
+│    DISTINCT FROM'tablet'  │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘

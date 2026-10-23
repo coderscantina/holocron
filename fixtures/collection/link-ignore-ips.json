@@ -1,0 +1,33 @@
+{
+  "id": "link-ignore-ips",
+  "surface": "link",
+  "polarity": "negative",
+  "description": "Link followed from a blocked IP. The internal send returns 403, the route ignores it and redirects.",
+  "upstream_ref": [
+    "src/lib/ip.ts:75-88",
+    "src/lib/detect.ts:150-179",
+    "src/app/(collect)/q/[slug]/route.ts:54-62"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/q/holocron-link",
+    "headers": {
+      "x-forwarded-for": "203.0.113.7"
+    }
+  },
+  "expected_upstream": {
+    "status": 307,
+    "headers": {
+      "location": "https://example.com/landing?from=holocron"
+    }
+  },
+  "expected_holocron": {
+    "outcome": "suppressed",
+    "status": 307,
+    "reason": "ip_blocked",
+    "decision": "adopted",
+    "notes": "Holocron fixture config: collect.trusted_proxies contains the harness peer and collect.ignore_ips = [\"203.0.113.7\"]. The resolved client IP matches collect.ignore_ips: the redirect is still sent, like bots, outcome suppressed, reason ip_blocked, not stored, counted, IP not logged (docs/decisions/0005, operator IP block list)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

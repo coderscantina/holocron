@@ -1,0 +1,12 @@
+*
+!Cargo.toml
+!Cargo.lock
+!apps/server
+!apps/web
+!crates
+!sources
+!fixtures/import-schemas
+apps/web/node_modules
+apps/web/dist
+apps/web/e2e
+**/.DS_Store

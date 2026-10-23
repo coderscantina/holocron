@@ -1,0 +1,33 @@
+{
+  "id": "script-tracker-get",
+  "surface": "script.asset",
+  "polarity": "positive",
+  "description": "GET /script.js serves the pinned 3.4.0 tracker with public cache headers.",
+  "upstream_ref": [
+    "next.config.ts:54-63",
+    "next.config.ts:99-108",
+    "docker/proxy.ts:66-75",
+    "rollup.tracker.config.js:6-22"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/script.js"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "public, max-age=86400, must-revalidate",
+      "content-type": "application/javascript; charset=UTF-8"
+    },
+    "body_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Serve the pinned unchanged script bytes (briefing, transport surfaces). Header values preserved (proposed)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

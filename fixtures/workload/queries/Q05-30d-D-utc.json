@@ -1,0 +1,97 @@
+{
+  "format_version": 1,
+  "id": "Q05-30d-D-utc",
+  "family": "Q05",
+  "title": "Paginated session list, page index 0",
+  "operation": "sessions.list",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": false,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": {
+      "kind": "session_list",
+      "v": 1
+    }
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table",
+    "report": {
+      "kind": "session_list",
+      "v": 1,
+      "columns": [
+        "session_id",
+        "identity_kind",
+        "start",
+        "end",
+        "span",
+        "pageviews",
+        "custom_events",
+        "entry_path",
+        "exit_path",
+        "country",
+        "device"
+      ],
+      "order": "start_desc"
+    }
+  },
+  "parameters": {
+    "policy": "inactivity window 30 min, gap >= window starts a session; anonymous and daily sessions close at local midnight (0002)",
+    "span": "integer milliseconds (0003, 0004 SessionList)"
+  },
+  "sort": {
+    "order": [],
+    "ties": "report order start_desc, ties by session ID ascending (0004)"
+  },
+  "output_bound": {
+    "max_rows": 50,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "to be fixed after first generation by milestone 02"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

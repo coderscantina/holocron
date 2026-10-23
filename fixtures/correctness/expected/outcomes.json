@@ -1,0 +1,175 @@
+{
+  "metric_version": 1,
+  "records": 166,
+  "accepted": 163,
+  "duplicate": [
+    "dup-02",
+    "dup-03"
+  ],
+  "notable": {
+    "dup-01": {
+      "outcome": "accepted",
+      "reason": "first (website A, evt-0001)"
+    },
+    "dup-02": {
+      "outcome": "duplicate",
+      "status": 200,
+      "first": "dup-01",
+      "dedup_conflict": false
+    },
+    "b-01": {
+      "outcome": "accepted",
+      "reason": "eventId scope is (source, eventId); site B is another source"
+    },
+    "dup-03": {
+      "outcome": "duplicate",
+      "status": 200,
+      "first": "dup-01",
+      "dedup_conflict": true,
+      "stored_payload": "dup-01 (sku A1), not merged"
+    },
+    "dup-05": {
+      "outcome": "accepted",
+      "reason": "no eventId, retry is a separate stored event"
+    },
+    "dup-06": {
+      "outcome": "accepted",
+      "reason": "49 h after the first receive of evt-0001, outside the 48 h dedup window"
+    },
+    "late-01": {
+      "outcome": "accepted",
+      "status": 200,
+      "event_minus_receive_ms": 301000,
+      "event_time_ahead": true
+    },
+    "late-02": {
+      "outcome": "accepted",
+      "event_minus_receive_ms": 300000,
+      "event_time_ahead": false
+    },
+    "late-03": {
+      "outcome": "accepted",
+      "event_minus_receive_ms": -86400000
+    },
+    "late-04": {
+      "outcome": "accepted",
+      "status": 200,
+      "event_minus_receive_ms": -86401000,
+      "reason": "day key for 2026-06-03 exists until 2026-06-04T23:00Z"
+    },
+    "con-01": {
+      "outcome": "accepted",
+      "consent": "granted",
+      "profile": "dora",
+      "granted_at": "2026-08-11T09:00:00.000Z"
+    },
+    "con-03": {
+      "outcome": "accepted",
+      "consent": "revoked",
+      "profile": "dora",
+      "revoked_at": "2026-08-11T09:05:00.000Z"
+    },
+    "con-06": {
+      "outcome": "accepted",
+      "consent": "granted",
+      "profile": "anna",
+      "granted_at": "2026-09-15T08:01:00.000Z"
+    },
+    "con-09": {
+      "outcome": "accepted",
+      "consent": "granted",
+      "profile": "ben",
+      "granted_at": "2026-09-16T10:00:00.000Z"
+    },
+    "con-14": {
+      "outcome": "accepted",
+      "consent": "granted",
+      "profile": "cleo",
+      "granted_at": "2026-09-23T12:00:00.000Z"
+    },
+    "b-06": {
+      "outcome": "accepted",
+      "consent": "ignored",
+      "reason": "site B has persistent_identity_enabled = false"
+    },
+    "rev-04": {
+      "outcome": "accepted",
+      "revenue": "invalid",
+      "reason": "revenue is a JSON string, not a number"
+    },
+    "rev-05": {
+      "outcome": "accepted",
+      "revenue": "invalid",
+      "reason": "ZZZ is not an ISO 4217 code"
+    },
+    "rev-06": {
+      "outcome": "accepted",
+      "revenue": "none",
+      "reason": "zero is valid and is not a revenue record; revenue_invalid unchanged"
+    },
+    "rt-07": {
+      "outcome": "accepted",
+      "event_minus_receive_ms": 240000
+    },
+    "key-01": {
+      "outcome": "accepted",
+      "status": 200,
+      "keyless": true,
+      "reason": "received after end(2026-06-02) + 25h = 2026-06-03T23:00Z"
+    },
+    "key-02": {
+      "outcome": "accepted",
+      "status": 200,
+      "keyless": true,
+      "revenue": "EUR 1000"
+    },
+    "ret-01": {
+      "outcome": "suppressed",
+      "status": 200,
+      "reason": "outside_retention",
+      "cutoff": "2025-10-02T22:00:00.000Z"
+    },
+    "ret-02": {
+      "outcome": "accepted",
+      "status": 200,
+      "keyless": true,
+      "reason": "exactly at the retention cutoff, which is kept"
+    },
+    "fut-01": {
+      "outcome": "accepted",
+      "status": 200,
+      "event_time_ahead": true
+    }
+  },
+  "counters": {
+    "dedup_conflict": 1,
+    "consent_ignored": 1,
+    "revenue_invalid": 2,
+    "event_time_ahead": 2,
+    "outside_retention": 1
+  },
+  "stored_by_kind": {
+    "A": {
+      "pageview": 85,
+      "custom_event": 54,
+      "identify": 5,
+      "performance": 7
+    },
+    "B": {
+      "pageview": 9,
+      "custom_event": 2,
+      "identify": 1,
+      "performance": 0
+    }
+  },
+  "suppressed": {
+    "outside_retention": [
+      "ret-01"
+    ]
+  },
+  "keyless": [
+    "key-01",
+    "key-02",
+    "ret-02"
+  ]
+}

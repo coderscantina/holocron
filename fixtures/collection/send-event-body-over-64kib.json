@@ -1,0 +1,48 @@
+{
+  "id": "send-event-body-over-64kib",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Send body of about 66 KiB (one 66,000-character property), just above the 65,536-byte cap.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:75-81",
+    "src/lib/data.ts:53-61"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "name": "big",
+        "data": {
+          "blob": "{{FILL:66000}}"
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact",
+    "notes": "Upstream has no body cap on /api/send; the string is stored truncated to 500."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 413,
+    "decision": "adopted",
+    "notes": "Over the provisional 64 KiB /api/send cap, counted on received bytes before parsing: 413 payloadTooLarge envelope with maxBytes 65536 and size; nothing stored (docs/decisions/0005, request body caps)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

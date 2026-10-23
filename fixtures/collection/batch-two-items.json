@@ -1,0 +1,60 @@
+{
+  "id": "batch-two-items",
+  "surface": "batch",
+  "polarity": "positive",
+  "description": "Two valid items. Items are replayed one by one through the send handler in order.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:7",
+    "src/app/api/batch/route.ts:17-54"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": [
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "/batch",
+          "referrer": "https://referrer.example/article"
+        }
+      },
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "http://localhost/fixture?utm_source=newsletter",
+          "referrer": "https://referrer.example/article",
+          "name": "click"
+        }
+      }
+    ]
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "size": 2,
+      "processed": 2,
+      "errors": 0,
+      "details": [],
+      "cache": "<jwt>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Per-item results, ordering and limits preserved (briefing, transport surfaces). The accepted items of one request share one durable commit before the response; if it fails, nothing is stored and the request is answered 503 (docs/decisions/0005, batch commit)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

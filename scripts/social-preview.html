@@ -1,0 +1,99 @@
+<!doctype html>
+<!-- The GitHub social card, 1280x640. `bun scripts/demo-shots.ts` renders it to .github/social-preview.png
+     after the screenshots. Colours are the dark theme and indigo accent of apps/web/src/assets/css/app.css. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --sidebar: oklch(15.15% 0.004 285.34);
+        --card: oklch(20.63% 0.008 277.83);
+        --border: oklch(26.13% 0.014 277.75);
+        --primary: oklch(96.6% 0.004 278.6);
+        --muted: oklch(80.3% 0.019 279.4);
+        --accent: oklch(56% 0.244 277);
+        --accent-text: oklch(64% 0.194 277);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        position: relative;
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+        background:
+          radial-gradient(760px 460px at 82% 105%, oklch(56% 0.244 277 / 0.3), transparent 70%),
+          var(--sidebar);
+        color: var(--primary);
+        font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+      .text {
+        position: absolute;
+        left: 80px;
+        top: 112px;
+        width: 520px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+        background: var(--accent);
+      }
+      h1 {
+        font-size: 92px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      p {
+        margin-top: 40px;
+        font-size: 34px;
+        line-height: 1.3;
+        font-weight: 500;
+        color: var(--muted);
+        text-wrap: balance;
+      }
+      p strong {
+        color: var(--accent-text);
+        font-weight: 600;
+      }
+      .shot {
+        position: absolute;
+        left: 660px;
+        top: 80px;
+        width: 760px;
+        height: 620px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: url('../docs/assets/overview.png') -165px 0 / 960px auto no-repeat var(--card);
+        box-shadow: 0 30px 80px rgb(0 0 0 / 0.55);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text">
+      <div class="brand">
+        <span class="mark">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+            <path d="M18 17V9" />
+            <path d="M13 17V5" />
+            <path d="M8 17v-3" />
+          </svg>
+        </span>
+        <h1>Holocron</h1>
+      </div>
+      <p>Self-hosted analytics for <strong>Umami operators</strong>. Keep your tracker, see what changed today.</p>
+    </div>
+    <div class="shot"></div>
+  </body>
+</html>

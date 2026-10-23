@@ -1,0 +1,175 @@
+{
+ "status": "adopted (decisions/0003-metric-formulas.md, Attribution, UTM values)",
+ "capability": "CAP-BEHAV-04",
+ "grounding": [
+  "decisions/0003-metric-formulas.md, Attribution: UTM values (percent-decoding and + as space, trim, empty is not set, no Unicode normalization, no case folding, internal whitespace kept, truncate at 255 Unicode scalar values)",
+  ".sources/umami-3.4.0/src/app/api/send/route.ts:214-218"
+ ],
+ "pageviews": [
+  {
+   "id": "c1",
+   "url": "https://example.com/?utm_campaign=Spring",
+   "stored_utm_campaign": "Spring"
+  },
+  {
+   "id": "c2",
+   "url": "https://example.com/?utm_campaign=Spring%20",
+   "stored_utm_campaign": "Spring"
+  },
+  {
+   "id": "c3",
+   "url": "https://example.com/?utm_campaign=%20Spring",
+   "stored_utm_campaign": "Spring"
+  },
+  {
+   "id": "c4",
+   "url": "https://example.com/?utm_campaign=spring",
+   "stored_utm_campaign": "spring"
+  },
+  {
+   "id": "c5",
+   "url": "https://example.com/?utm_campaign=SPRING",
+   "stored_utm_campaign": "SPRING"
+  },
+  {
+   "id": "c6",
+   "url": "https://example.com/?utm_campaign=Spring%20Sale",
+   "stored_utm_campaign": "Spring Sale"
+  },
+  {
+   "id": "c7",
+   "url": "https://example.com/?utm_campaign=Spring+Sale",
+   "stored_utm_campaign": "Spring Sale"
+  },
+  {
+   "id": "c8",
+   "url": "https://example.com/?utm_campaign=Spring%20%20Sale",
+   "stored_utm_campaign": "Spring  Sale"
+  },
+  {
+   "id": "c9",
+   "url": "https://example.com/?utm_campaign=",
+   "stored_utm_campaign": null
+  },
+  {
+   "id": "c10",
+   "url": "https://example.com/?utm_campaign=%20%20",
+   "stored_utm_campaign": null
+  },
+  {
+   "id": "c11",
+   "url": "https://example.com/?utm_campaign=June",
+   "stored_utm_campaign": "June"
+  },
+  {
+   "id": "c12",
+   "url": "https://example.com/?utm_campaign=june",
+   "stored_utm_campaign": "june"
+  },
+  {
+   "id": "c13",
+   "url": "https://example.com/?utm_campaign=%C3%A9",
+   "stored_utm_campaign": "é"
+  },
+  {
+   "id": "c14",
+   "url": "https://example.com/?utm_campaign=e%CC%81",
+   "stored_utm_campaign": "é"
+  },
+  {
+   "id": "c15",
+   "url": "https://example.com/?utm_campaign=<300 x 'a'>",
+   "stored_utm_campaign": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+ ],
+ "expected_breakdown": [
+  {
+   "utm_campaign": "Spring",
+   "pageviews": 3,
+   "from": [
+    "c1",
+    "c2",
+    "c3"
+   ]
+  },
+  {
+   "utm_campaign": "spring",
+   "pageviews": 1,
+   "from": [
+    "c4"
+   ]
+  },
+  {
+   "utm_campaign": "SPRING",
+   "pageviews": 1,
+   "from": [
+    "c5"
+   ]
+  },
+  {
+   "utm_campaign": "Spring Sale",
+   "pageviews": 2,
+   "from": [
+    "c6",
+    "c7"
+   ]
+  },
+  {
+   "utm_campaign": "Spring  Sale",
+   "pageviews": 1,
+   "from": [
+    "c8"
+   ]
+  },
+  {
+   "utm_campaign": {
+    "t": "not_set"
+   },
+   "pageviews": 2,
+   "from": [
+    "c9",
+    "c10"
+   ]
+  },
+  {
+   "utm_campaign": "June",
+   "pageviews": 1,
+   "from": [
+    "c11"
+   ]
+  },
+  {
+   "utm_campaign": "june",
+   "pageviews": 1,
+   "from": [
+    "c12"
+   ]
+  },
+  {
+   "utm_campaign": "é",
+   "pageviews": 1,
+   "from": [
+    "c13"
+   ]
+  },
+  {
+   "utm_campaign": "é",
+   "pageviews": 1,
+   "from": [
+    "c14"
+   ]
+  },
+  {
+   "utm_campaign": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+   "pageviews": 1,
+   "from": [
+    "c15"
+   ]
+  }
+ ],
+ "notes": {
+  "c13_c14": "U+00E9 and e + U+0301 stay different values",
+  "c15": "300 scalar values are truncated to 255 after trimming",
+  "order": "Cells compare as a set. Order among equal counts follows 0004 and is not asserted."
+ }
+}

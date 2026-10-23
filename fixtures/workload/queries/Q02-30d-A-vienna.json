@@ -1,0 +1,91 @@
+{
+  "format_version": 1,
+  "id": "Q02-30d-A-vienna",
+  "family": "Q02",
+  "title": "Top 100 by path, exact totals",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "Europe/Vienna",
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "path"
+    ],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "Europe/Vienna",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 100,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {
+    "totals": "exact totals over all rows, independent of paging"
+  },
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 100,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "broad",
+  "expected": {
+    "row_count": 98600,
+    "matched_records": 4750000,
+    "golden_result_hash": "5f1494c4af86a31045a89a78d9a836639fe48e315e0a6950b5c373fe5d309f6b",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q02-30d-A-vienna.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

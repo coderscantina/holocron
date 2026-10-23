@@ -1,0 +1,24 @@
+{
+  "case": "Q04-30d-A-vienna-selective",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "totals": {
+    "events": 0,
+    "pageviews": 0,
+    "visitor_days": 0
+  },
+  "row_count": 0,
+  "page": {
+    "size": 50,
+    "index": 0
+  },
+  "rows": [],
+  "identity_coverage": {
+    "with_identity": 0,
+    "eligible_events": 0,
+    "rate": null
+  }
+}

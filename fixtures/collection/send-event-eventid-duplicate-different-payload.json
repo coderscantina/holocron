@@ -1,0 +1,71 @@
+{
+  "id": "send-event-eventid-duplicate-different-payload",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Second send reuses the eventId with a different payload.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73"
+  ],
+  "setup": [
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "http://localhost/fixture?utm_source=newsletter",
+          "referrer": "https://referrer.example/article",
+          "name": "checkout",
+          "eventId": "fixture-diff-{{RUN_ID}}",
+          "data": {
+            "step": 1
+          }
+        }
+      }
+    }
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "name": "checkout",
+        "eventId": "fixture-diff-{{RUN_ID}}",
+        "data": {
+          "step": 2
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact",
+    "notes": "eventId is not in the upstream schema; it is stripped and both requests are stored as separate events."
+  },
+  "expected_holocron": {
+    "outcome": "duplicate",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "First accepted event wins. The later payload is acknowledged as duplicate, not stored, not merged, and increments dedup_conflict (docs/decisions/0002). Answered 200 with the unchanged {cache, sessionId, visitId} body computed as for a stored event; visible only in the duplicate and dedup_conflict counters (docs/decisions/0005, duplicate eventId response; docs/decisions/0002)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,1519 @@
+{
+  "engine": "mysql",
+  "tables": [
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "event_data_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_event_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "data_key",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "string_value",
+          "nullable": true,
+          "position": 5,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "number_value",
+          "nullable": true,
+          "position": 6,
+          "type": "decimal(19,4)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "date_value",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "data_type",
+          "nullable": false,
+          "position": 8,
+          "type": "int unsigned"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "event_data_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_event_id"
+          ],
+          "name": "event_data_website_event_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "data_key"
+          ],
+          "name": "event_data_website_id_created_at_data_key_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "event_data_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "event_data_website_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "event_data_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "name": "event_data"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "report_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "type",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(200)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "name",
+          "nullable": false,
+          "position": 5,
+          "type": "varchar(200)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "description",
+          "nullable": false,
+          "position": 6,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "parameters",
+          "nullable": false,
+          "position": 7,
+          "type": "json"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 8,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "report_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "name"
+          ],
+          "name": "report_name_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "report_id"
+          ],
+          "name": "report_report_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "type"
+          ],
+          "name": "report_type_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "report_user_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "report_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "report"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "segment_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "type",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(200)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "name",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(200)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "parameters",
+          "nullable": false,
+          "position": 5,
+          "type": "json"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "segment_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "segment_id"
+          ],
+          "name": "segment_segment_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "segment_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "segment"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "browser",
+          "nullable": true,
+          "position": 3,
+          "type": "varchar(20)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "os",
+          "nullable": true,
+          "position": 4,
+          "type": "varchar(20)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "device",
+          "nullable": true,
+          "position": 5,
+          "type": "varchar(20)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "screen",
+          "nullable": true,
+          "position": 6,
+          "type": "varchar(11)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "language",
+          "nullable": true,
+          "position": 7,
+          "type": "varchar(35)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "country",
+          "nullable": true,
+          "position": 8,
+          "type": "char(2)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "region",
+          "nullable": true,
+          "position": 9,
+          "type": "char(20)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "city",
+          "nullable": true,
+          "position": 10,
+          "type": "varchar(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 11,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "distinct_id",
+          "nullable": true,
+          "position": 12,
+          "type": "varchar(50)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "session_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "session_session_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "browser"
+          ],
+          "name": "session_website_id_created_at_browser_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "city"
+          ],
+          "name": "session_website_id_created_at_city_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "country"
+          ],
+          "name": "session_website_id_created_at_country_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "device"
+          ],
+          "name": "session_website_id_created_at_device_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "session_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "language"
+          ],
+          "name": "session_website_id_created_at_language_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "os"
+          ],
+          "name": "session_website_id_created_at_os_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "region"
+          ],
+          "name": "session_website_id_created_at_region_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "screen"
+          ],
+          "name": "session_website_id_created_at_screen_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "session_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "session"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "session_data_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "data_key",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "string_value",
+          "nullable": true,
+          "position": 5,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "number_value",
+          "nullable": true,
+          "position": 6,
+          "type": "decimal(19,4)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "date_value",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "data_type",
+          "nullable": false,
+          "position": 8,
+          "type": "int unsigned"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "distinct_id",
+          "nullable": true,
+          "position": 10,
+          "type": "varchar(50)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "session_data_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "session_data_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id",
+            "created_at"
+          ],
+          "name": "session_data_session_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "session_data_session_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "data_key"
+          ],
+          "name": "session_data_website_id_created_at_data_key_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "session_data_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "session_data"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "team_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "name",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(50)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "access_code",
+          "nullable": true,
+          "position": 3,
+          "type": "varchar(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 4,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "logo_url",
+          "nullable": true,
+          "position": 7,
+          "type": "varchar(2183)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "access_code"
+          ],
+          "name": "team_access_code_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "access_code"
+          ],
+          "name": "team_access_code_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "team_team_id_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "team"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "team_user_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "team_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "role",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "team_user_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "team_user_team_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "team_user_id"
+          ],
+          "name": "team_user_team_user_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "team_user_user_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "team_user"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "username",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "password",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(60)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "role",
+          "nullable": false,
+          "position": 4,
+          "type": "varchar(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "display_name",
+          "nullable": true,
+          "position": 8,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "logo_url",
+          "nullable": true,
+          "position": 9,
+          "type": "varchar(2183)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "user_user_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "username"
+          ],
+          "name": "user_username_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "user"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "name",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(100)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "domain",
+          "nullable": true,
+          "position": 3,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "share_id",
+          "nullable": true,
+          "position": 4,
+          "type": "varchar(50)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "reset_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "user_id",
+          "nullable": true,
+          "position": 6,
+          "type": "varchar(36)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 8,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "created_by",
+          "nullable": true,
+          "position": 10,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "team_id",
+          "nullable": true,
+          "position": 11,
+          "type": "varchar(36)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "website_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_by"
+          ],
+          "name": "website_created_by_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "share_id"
+          ],
+          "name": "website_share_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "share_id"
+          ],
+          "name": "website_share_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "website_team_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "website_user_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "website_website_id_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "website"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "extra": null,
+          "name": "event_id",
+          "nullable": false,
+          "position": 1,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 3,
+          "type": "varchar(36)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "extra": "DEFAULT_GENERATED",
+          "name": "created_at",
+          "nullable": true,
+          "position": 4,
+          "type": "timestamp"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "url_path",
+          "nullable": false,
+          "position": 5,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "url_query",
+          "nullable": true,
+          "position": 6,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "referrer_path",
+          "nullable": true,
+          "position": 7,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "referrer_query",
+          "nullable": true,
+          "position": 8,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "referrer_domain",
+          "nullable": true,
+          "position": 9,
+          "type": "varchar(500)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "page_title",
+          "nullable": true,
+          "position": 10,
+          "type": "varchar(500)"
+        },
+        {
+          "default": "1",
+          "extra": null,
+          "name": "event_type",
+          "nullable": false,
+          "position": 11,
+          "type": "int unsigned"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "event_name",
+          "nullable": true,
+          "position": 12,
+          "type": "varchar(50)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "visit_id",
+          "nullable": false,
+          "position": 13,
+          "type": "varchar(36)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "tag",
+          "nullable": true,
+          "position": 14,
+          "type": "varchar(50)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "fbclid",
+          "nullable": true,
+          "position": 15,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "gclid",
+          "nullable": true,
+          "position": 16,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "li_fat_id",
+          "nullable": true,
+          "position": 17,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "msclkid",
+          "nullable": true,
+          "position": 18,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "ttclid",
+          "nullable": true,
+          "position": 19,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "twclid",
+          "nullable": true,
+          "position": 20,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "utm_campaign",
+          "nullable": true,
+          "position": 21,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "utm_content",
+          "nullable": true,
+          "position": 22,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "utm_medium",
+          "nullable": true,
+          "position": 23,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "utm_source",
+          "nullable": true,
+          "position": 24,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "utm_term",
+          "nullable": true,
+          "position": 25,
+          "type": "varchar(255)"
+        },
+        {
+          "default": null,
+          "extra": null,
+          "name": "hostname",
+          "nullable": true,
+          "position": 26,
+          "type": "varchar(100)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "event_id"
+          ],
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "website_event_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "website_event_session_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "visit_id"
+          ],
+          "name": "website_event_visit_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "event_name"
+          ],
+          "name": "website_event_website_id_created_at_event_name_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "hostname"
+          ],
+          "name": "website_event_website_id_created_at_hostname_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "page_title"
+          ],
+          "name": "website_event_website_id_created_at_page_title_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "referrer_domain"
+          ],
+          "name": "website_event_website_id_created_at_referrer_domain_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "tag"
+          ],
+          "name": "website_event_website_id_created_at_tag_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "url_path"
+          ],
+          "name": "website_event_website_id_created_at_url_path_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "url_query"
+          ],
+          "name": "website_event_website_id_created_at_url_query_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "website_event_website_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "session_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_session_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "visit_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_visit_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "website_event"
+    }
+  ]
+}

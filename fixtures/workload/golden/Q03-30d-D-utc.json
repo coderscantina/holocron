@@ -1,0 +1,1200 @@
+{
+  "case": "Q03-30d-D-utc",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2026-08-02T00:00:00.000Z",
+    "compare_end": "2026-09-01T00:00:00.000Z"
+  },
+  "totals": {
+    "events": {
+      "current": 89,
+      "previous": 91,
+      "change": -2,
+      "relative_change": -0.022
+    },
+    "visitor_days": {
+      "current": 89,
+      "previous": 91,
+      "change": -2,
+      "relative_change": -0.022
+    }
+  },
+  "row_count": 118,
+  "page": {
+    "size": 50,
+    "index": 0
+  },
+  "rows": [
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 6,
+        "previous": 1,
+        "change": 5,
+        "relative_change": 5.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 1,
+        "change": 5,
+        "relative_change": 5.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "US"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 4,
+        "previous": 9,
+        "change": -5,
+        "relative_change": -0.5556
+      },
+      "visitor_days": {
+        "current": 4,
+        "previous": 9,
+        "change": -5,
+        "relative_change": -0.5556
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 3,
+        "previous": 2,
+        "change": 1,
+        "relative_change": 0.5
+      },
+      "visitor_days": {
+        "current": 3,
+        "previous": 2,
+        "change": 1,
+        "relative_change": 0.5
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00009.example"
+      },
+      "events": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CA"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 2,
+        "previous": 5,
+        "change": -3,
+        "relative_change": -0.6
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 5,
+        "change": -3,
+        "relative_change": -0.6
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "EG"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 2,
+        "previous": 2,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 2,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "JP"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 2,
+        "previous": 1,
+        "change": 1,
+        "relative_change": 1.0
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 1,
+        "change": 1,
+        "relative_change": 1.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "RU"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 2,
+        "previous": 0,
+        "change": 2,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "duckduckgo.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-01368.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00010.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00172.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-09903.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AU"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-01677.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AU"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CH"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CN"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "duckduckgo.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CO"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00154.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CO"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-08500.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CZ"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00009.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00583.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-06581.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DK"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-04527.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "EG"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "ES"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00660.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-09620.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "duckduckgo.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00970.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-03701.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 3,
+        "change": -2,
+        "relative_change": -0.6667
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 3,
+        "change": -2,
+        "relative_change": -0.6667
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "HK"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00988.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00017.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IN"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IN"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 1,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "bing.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00029.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IT"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "JP"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00021.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "MX"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "MY"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00807.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "MY"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NL"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NL"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00136.example"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NL"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 1,
+        "previous": 0,
+        "change": 1,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 89,
+    "eligible_events": 89,
+    "rate": 1.0
+  }
+}

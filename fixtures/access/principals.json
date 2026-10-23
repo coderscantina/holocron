@@ -1,0 +1,167 @@
+{
+ "status": "proposed (milestone 01)",
+ "principals": [
+  {
+   "id": "p_owner",
+   "kind": "user",
+   "user": "u_owner",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "owner"
+   }
+  },
+  {
+   "id": "p_admin",
+   "kind": "user",
+   "user": "u_admin",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "admin"
+   },
+   "note": "team admin"
+  },
+  {
+   "id": "p_member",
+   "kind": "user",
+   "user": "u_member",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "member"
+   }
+  },
+  {
+   "id": "p_viewer",
+   "kind": "user",
+   "user": "u_viewer",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "viewer"
+   },
+   "note": "view-only"
+  },
+  {
+   "id": "p_other_owner",
+   "kind": "user",
+   "user": "u_other",
+   "install_role": "user",
+   "memberships": {
+    "ws_b": "owner"
+   },
+   "note": "outsider to ws_a"
+  },
+  {
+   "id": "p_install_admin",
+   "kind": "user",
+   "user": "u_install_admin",
+   "install_role": "install_admin",
+   "memberships": {},
+   "states": {
+    "only_install_admin": "u_install_admin_m is demoted to user, so u_install_admin is the last install admin (AX-T143)"
+   }
+  },
+  {
+   "id": "p_install_admin_member",
+   "kind": "user",
+   "user": "u_install_admin_m",
+   "install_role": "install_admin",
+   "memberships": {
+    "ws_a": "member"
+   },
+   "note": "install admin who also joined ws_a as member"
+  },
+  {
+   "id": "p_removed",
+   "kind": "user",
+   "user": "u_removed",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "member"
+   },
+   "states": {
+    "before_removal": {
+     "ws_a": "member"
+    },
+    "after_removal": {}
+   },
+   "note": "removed from ws_a while a session, a subscription and stored idempotent results exist"
+  },
+  {
+   "id": "p_key_site",
+   "kind": "api_key",
+   "key": "key_site",
+   "effective_role": "member in ws_a",
+   "note": "operations: five queries plus realtime.site"
+  },
+  {
+   "id": "p_key_readonly",
+   "kind": "api_key",
+   "key": "key_readonly",
+   "effective_role": "admin in ws_a"
+  },
+  {
+   "id": "p_key_revoked",
+   "kind": "api_key",
+   "key": "key_revoked",
+   "effective_role": "none (revoked)"
+  },
+  {
+   "id": "p_share_viewer",
+   "kind": "share",
+   "share": "share_a1"
+  },
+  {
+   "id": "p_share_viewer_rec",
+   "kind": "share",
+   "share": "share_a1_rec"
+  },
+  {
+   "id": "p_share_revoked",
+   "kind": "share",
+   "share": "share_revoked"
+  },
+  {
+   "id": "p_share_expired",
+   "kind": "share",
+   "share": "share_expired"
+  },
+  {
+   "id": "p_share_board",
+   "kind": "share",
+   "share": "share_board_a1"
+  },
+  {
+   "id": "p_signed_out",
+   "kind": "anonymous"
+  },
+  {
+   "id": "p_2fa_enrolled",
+   "kind": "user",
+   "user": "u_2fa",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "member"
+   },
+   "two_factor": "enrolled"
+  },
+  {
+   "id": "p_2fa_unenrolled",
+   "kind": "user",
+   "user": "u_2fa_new",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "member"
+   },
+   "two_factor": "not enrolled",
+   "note": "ws_a policy requires 2FA; enrollment-only session (decision 0007)"
+  },
+  {
+   "id": "u_leaver",
+   "kind": "user_target_only",
+   "install_role": "user",
+   "memberships": {
+    "ws_a": "viewer"
+   },
+   "note": "target of users.delete rows; owns nothing"
+  }
+ ]
+}

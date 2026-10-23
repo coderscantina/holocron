@@ -1,0 +1,28 @@
+[package]
+name = "holocron-analytics"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[features]
+# Process-kill failpoints inside correction transactions. Test support only.
+failpoints = ["holocron-storage/failpoints", "dep:tempfile"]
+
+[dependencies]
+holocron-storage = { path = "../storage" }
+holocron-protocol = { path = "../protocol" }
+serde_json.workspace = true
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+chrono-tz = "0.10"
+thiserror = "2"
+tokio = { workspace = true }
+tempfile = { version = "3", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "analytics-crash-child"
+path = "src/bin/crash_child.rs"
+required-features = ["failpoints"]

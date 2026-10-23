@@ -1,0 +1,46 @@
+{
+  "id": "send-event-invalid-cache-token",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "A cache header that is not a valid signed token is ignored, not rejected.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:113-121",
+    "src/lib/jwt.ts:8-14"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "x-umami-cache": "not-a-token"
+    },
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "An unverifiable token is ignored as if absent and a new one is issued. Upstream tokens fail Holocron's signature check the same way (docs/decisions/0005, cache tokens bound to their website)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

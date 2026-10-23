@@ -1,0 +1,123 @@
+{
+  "metric_version": 1,
+  "cases": [
+    {
+      "id": "signup-session-once",
+      "site": "A",
+      "goal": {
+        "version": 1,
+        "predicate": {
+          "event_name": "signup"
+        },
+        "scope": "session",
+        "counting": "once"
+      },
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-23",
+          "2026-06-23"
+        ],
+        "start": "2026-06-22T22:00:00.000Z",
+        "end": "2026-06-23T22:00:00.000Z"
+      },
+      "completions": 4,
+      "denominator": 7,
+      "rate": 0.5714,
+      "completing_sessions": [
+        [
+          "att-02",
+          "att-03"
+        ],
+        [
+          "att-04",
+          "att-05"
+        ],
+        [
+          "att-07",
+          "att-08"
+        ],
+        [
+          "att-11",
+          "att-12",
+          "att-13",
+          "att-14"
+        ]
+      ],
+      "identity_coverage": {
+        "with_identity": 13,
+        "eligible_events": 13,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "signup-session-every",
+      "site": "A",
+      "goal": {
+        "version": 1,
+        "predicate": {
+          "event_name": "signup"
+        },
+        "scope": "session",
+        "counting": "every"
+      },
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-23",
+          "2026-06-23"
+        ],
+        "start": "2026-06-22T22:00:00.000Z",
+        "end": "2026-06-23T22:00:00.000Z"
+      },
+      "completions": 5,
+      "denominator": 7,
+      "rate": 0.7143,
+      "completing_events": [
+        "att-03",
+        "att-05",
+        "att-08",
+        "att-12",
+        "att-14"
+      ],
+      "identity_coverage": {
+        "with_identity": 13,
+        "eligible_events": 13,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "docs-person-once",
+      "site": "A",
+      "goal": {
+        "version": 1,
+        "predicate": {
+          "path": "/docs"
+        },
+        "scope": "person",
+        "counting": "once"
+      },
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-09-14",
+          "2026-09-27"
+        ],
+        "start": "2026-09-13T22:00:00.000Z",
+        "end": "2026-09-27T22:00:00.000Z"
+      },
+      "completions": 2,
+      "denominator": 3,
+      "rate": 0.6667,
+      "completing_profiles": [
+        "anna",
+        "ben"
+      ],
+      "coverage": {
+        "linked_events": 7,
+        "eligible_events": 9,
+        "rate": 0.7778
+      }
+    }
+  ]
+}

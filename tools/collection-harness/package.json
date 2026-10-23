@@ -1,0 +1,14 @@
+{
+  "name": "holocron-collection-harness",
+  "private": true,
+  "type": "module",
+  "description": "Replays collection fixtures against upstream Umami 3.4.0 and captures real tracker/recorder requests.",
+  "scripts": {
+    "seed": "node seed.mjs",
+    "replay": "node replay.mjs",
+    "capture": "node capture.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

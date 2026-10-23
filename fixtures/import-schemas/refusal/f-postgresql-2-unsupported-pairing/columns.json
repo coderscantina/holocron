@@ -1,0 +1,1528 @@
+{
+  "engine": "postgresql",
+  "tables": [
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "event_data_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_event_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "data_key",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "string_value",
+          "nullable": true,
+          "position": 5,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "number_value",
+          "nullable": true,
+          "position": 6,
+          "type": "numeric(19,4)"
+        },
+        {
+          "default": null,
+          "name": "date_value",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "data_type",
+          "nullable": false,
+          "position": 8,
+          "type": "integer"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp(6) with time zone"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "event_data_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "event_data_id"
+          ],
+          "name": "event_data_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "website_event_id"
+          ],
+          "name": "event_data_website_event_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "data_key"
+          ],
+          "name": "event_data_website_id_created_at_data_key_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "event_data_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "event_data_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "event_data"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "report_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "type",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(200)"
+        },
+        {
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "position": 5,
+          "type": "character varying(200)"
+        },
+        {
+          "default": null,
+          "name": "description",
+          "nullable": false,
+          "position": 6,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "parameters",
+          "nullable": false,
+          "position": 7,
+          "type": "jsonb"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 8,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp(6) with time zone"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "name"
+          ],
+          "name": "report_name_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "report_id"
+          ],
+          "name": "report_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "report_id"
+          ],
+          "name": "report_report_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "type"
+          ],
+          "name": "report_type_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "report_user_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "report_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "report"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "revenue_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "event_id",
+          "nullable": false,
+          "position": 4,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "event_name",
+          "nullable": false,
+          "position": 5,
+          "type": "character varying(50)"
+        },
+        {
+          "default": null,
+          "name": "currency",
+          "nullable": false,
+          "position": 6,
+          "type": "character varying(100)"
+        },
+        {
+          "default": null,
+          "name": "revenue",
+          "nullable": true,
+          "position": 7,
+          "type": "numeric(19,4)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 8,
+          "type": "timestamp(6) with time zone"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "revenue_id"
+          ],
+          "name": "revenue_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "revenue_id"
+          ],
+          "name": "revenue_revenue_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "revenue_session_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "revenue_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "revenue_website_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "session_id",
+            "created_at"
+          ],
+          "name": "revenue_website_id_session_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "revenue"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "segment_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "type",
+          "nullable": false,
+          "position": 3,
+          "type": "character varying(200)"
+        },
+        {
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(200)"
+        },
+        {
+          "default": null,
+          "name": "parameters",
+          "nullable": false,
+          "position": 5,
+          "type": "jsonb"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp(6) with time zone"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "segment_id"
+          ],
+          "name": "segment_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "segment_id"
+          ],
+          "name": "segment_segment_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "segment_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "segment"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "browser",
+          "nullable": true,
+          "position": 4,
+          "type": "character varying(20)"
+        },
+        {
+          "default": null,
+          "name": "os",
+          "nullable": true,
+          "position": 5,
+          "type": "character varying(20)"
+        },
+        {
+          "default": null,
+          "name": "device",
+          "nullable": true,
+          "position": 6,
+          "type": "character varying(20)"
+        },
+        {
+          "default": null,
+          "name": "screen",
+          "nullable": true,
+          "position": 7,
+          "type": "character varying(11)"
+        },
+        {
+          "default": null,
+          "name": "language",
+          "nullable": true,
+          "position": 8,
+          "type": "character varying(35)"
+        },
+        {
+          "default": null,
+          "name": "country",
+          "nullable": true,
+          "position": 9,
+          "type": "character(2)"
+        },
+        {
+          "default": null,
+          "name": "region",
+          "nullable": true,
+          "position": 10,
+          "type": "character varying(20)"
+        },
+        {
+          "default": null,
+          "name": "city",
+          "nullable": true,
+          "position": 12,
+          "type": "character varying(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 13,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "distinct_id",
+          "nullable": true,
+          "position": 14,
+          "type": "character varying(50)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "session_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "session_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "session_session_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "browser"
+          ],
+          "name": "session_website_id_created_at_browser_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "city"
+          ],
+          "name": "session_website_id_created_at_city_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "country"
+          ],
+          "name": "session_website_id_created_at_country_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "device"
+          ],
+          "name": "session_website_id_created_at_device_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "session_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "language"
+          ],
+          "name": "session_website_id_created_at_language_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "os"
+          ],
+          "name": "session_website_id_created_at_os_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "region"
+          ],
+          "name": "session_website_id_created_at_region_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "screen"
+          ],
+          "name": "session_website_id_created_at_screen_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "session_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "session"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "session_data_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "data_key",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "string_value",
+          "nullable": true,
+          "position": 5,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "number_value",
+          "nullable": true,
+          "position": 6,
+          "type": "numeric(19,4)"
+        },
+        {
+          "default": null,
+          "name": "date_value",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "data_type",
+          "nullable": false,
+          "position": 8,
+          "type": "integer"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "distinct_id",
+          "nullable": true,
+          "position": 11,
+          "type": "character varying(50)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "session_data_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_data_id"
+          ],
+          "name": "session_data_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "session_id",
+            "created_at"
+          ],
+          "name": "session_data_session_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "session_data_session_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "data_key"
+          ],
+          "name": "session_data_website_id_created_at_data_key_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "session_data_website_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "session_data"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "team_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "position": 2,
+          "type": "character varying(50)"
+        },
+        {
+          "default": null,
+          "name": "access_code",
+          "nullable": true,
+          "position": 3,
+          "type": "character varying(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 4,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "logo_url",
+          "nullable": true,
+          "position": 7,
+          "type": "character varying(2183)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "access_code"
+          ],
+          "name": "team_access_code_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "access_code"
+          ],
+          "name": "team_access_code_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "team_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "team_team_id_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "team"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "team_user_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "team_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "role",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp(6) with time zone"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "team_user_id"
+          ],
+          "name": "team_user_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "team_user_team_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "team_user_id"
+          ],
+          "name": "team_user_team_user_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "team_user_user_id_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "team_user"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "user_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "username",
+          "nullable": false,
+          "position": 2,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "password",
+          "nullable": false,
+          "position": 3,
+          "type": "character varying(60)"
+        },
+        {
+          "default": null,
+          "name": "role",
+          "nullable": false,
+          "position": 4,
+          "type": "character varying(50)"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 6,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "display_name",
+          "nullable": true,
+          "position": 8,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "logo_url",
+          "nullable": true,
+          "position": 9,
+          "type": "character varying(2183)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "user_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "user_user_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "username"
+          ],
+          "name": "user_username_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "user"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "position": 2,
+          "type": "character varying(100)"
+        },
+        {
+          "default": null,
+          "name": "domain",
+          "nullable": true,
+          "position": 3,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "share_id",
+          "nullable": true,
+          "position": 4,
+          "type": "character varying(50)"
+        },
+        {
+          "default": null,
+          "name": "reset_at",
+          "nullable": true,
+          "position": 5,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "user_id",
+          "nullable": true,
+          "position": 6,
+          "type": "uuid"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 7,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "updated_at",
+          "nullable": true,
+          "position": 8,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "deleted_at",
+          "nullable": true,
+          "position": 9,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "created_by",
+          "nullable": true,
+          "position": 10,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "team_id",
+          "nullable": true,
+          "position": 11,
+          "type": "uuid"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "website_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "created_by"
+          ],
+          "name": "website_created_by_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "website_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "share_id"
+          ],
+          "name": "website_share_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "share_id"
+          ],
+          "name": "website_share_id_key",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columns": [
+            "team_id"
+          ],
+          "name": "website_team_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "user_id"
+          ],
+          "name": "website_user_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "website_website_id_key",
+          "primary": false,
+          "unique": true
+        }
+      ],
+      "name": "website"
+    },
+    {
+      "columns": [
+        {
+          "default": null,
+          "name": "event_id",
+          "nullable": false,
+          "position": 1,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "website_id",
+          "nullable": false,
+          "position": 2,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "session_id",
+          "nullable": false,
+          "position": 3,
+          "type": "uuid"
+        },
+        {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": true,
+          "position": 4,
+          "type": "timestamp(6) with time zone"
+        },
+        {
+          "default": null,
+          "name": "url_path",
+          "nullable": false,
+          "position": 5,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "url_query",
+          "nullable": true,
+          "position": 6,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "referrer_path",
+          "nullable": true,
+          "position": 7,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "referrer_query",
+          "nullable": true,
+          "position": 8,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "referrer_domain",
+          "nullable": true,
+          "position": 9,
+          "type": "character varying(500)"
+        },
+        {
+          "default": null,
+          "name": "page_title",
+          "nullable": true,
+          "position": 10,
+          "type": "character varying(500)"
+        },
+        {
+          "default": "1",
+          "name": "event_type",
+          "nullable": false,
+          "position": 11,
+          "type": "integer"
+        },
+        {
+          "default": null,
+          "name": "event_name",
+          "nullable": true,
+          "position": 12,
+          "type": "character varying(50)"
+        },
+        {
+          "default": null,
+          "name": "visit_id",
+          "nullable": false,
+          "position": 13,
+          "type": "uuid"
+        },
+        {
+          "default": null,
+          "name": "tag",
+          "nullable": true,
+          "position": 14,
+          "type": "character varying(50)"
+        },
+        {
+          "default": null,
+          "name": "fbclid",
+          "nullable": true,
+          "position": 15,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "gclid",
+          "nullable": true,
+          "position": 16,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "li_fat_id",
+          "nullable": true,
+          "position": 17,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "msclkid",
+          "nullable": true,
+          "position": 18,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "ttclid",
+          "nullable": true,
+          "position": 19,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "twclid",
+          "nullable": true,
+          "position": 20,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "utm_campaign",
+          "nullable": true,
+          "position": 21,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "utm_content",
+          "nullable": true,
+          "position": 22,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "utm_medium",
+          "nullable": true,
+          "position": 23,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "utm_source",
+          "nullable": true,
+          "position": 24,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "utm_term",
+          "nullable": true,
+          "position": 25,
+          "type": "character varying(255)"
+        },
+        {
+          "default": null,
+          "name": "hostname",
+          "nullable": true,
+          "position": 26,
+          "type": "character varying(100)"
+        }
+      ],
+      "foreignKeys": [],
+      "indexes": [
+        {
+          "columns": [
+            "created_at"
+          ],
+          "name": "website_event_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "event_id"
+          ],
+          "name": "website_event_pkey",
+          "primary": true,
+          "unique": true
+        },
+        {
+          "columns": [
+            "session_id"
+          ],
+          "name": "website_event_session_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "visit_id"
+          ],
+          "name": "website_event_visit_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "event_name"
+          ],
+          "name": "website_event_website_id_created_at_event_name_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "hostname"
+          ],
+          "name": "website_event_website_id_created_at_hostname_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "page_title"
+          ],
+          "name": "website_event_website_id_created_at_page_title_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "referrer_domain"
+          ],
+          "name": "website_event_website_id_created_at_referrer_domain_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "tag"
+          ],
+          "name": "website_event_website_id_created_at_tag_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "url_path"
+          ],
+          "name": "website_event_website_id_created_at_url_path_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "created_at",
+            "url_query"
+          ],
+          "name": "website_event_website_id_created_at_url_query_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id"
+          ],
+          "name": "website_event_website_id_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "session_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_session_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columns": [
+            "website_id",
+            "visit_id",
+            "created_at"
+          ],
+          "name": "website_event_website_id_visit_id_created_at_idx",
+          "primary": false,
+          "unique": false
+        }
+      ],
+      "name": "website_event"
+    }
+  ]
+}

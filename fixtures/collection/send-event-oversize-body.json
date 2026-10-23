@@ -1,0 +1,48 @@
+{
+  "id": "send-event-oversize-body",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Event with a 2,000,000-character data string. Upstream /api/send has no body size limit and truncates the stored string to 500.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:75-81",
+    "src/lib/data.ts:53-61",
+    "src/lib/constants.ts:290"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "name": "big",
+        "data": {
+          "blob": "{{FILL:2000000}}"
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 413,
+    "decision": "adopted",
+    "notes": "Over the provisional 64 KiB /api/send cap: 413 with the upstream payloadTooLarge envelope, maxBytes and size; nothing stored (docs/decisions/0005, request body caps). Milestone 02 confirms or changes the cap."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,45 @@
+# Isolated Umami deployments for milestone 11: the source databases of the import tests, and
+# the two Umami apps the cutover rehearsal stops, imports from and starts again for rollback.
+# Images are pinned as in tools/import-schemas/compose.yaml. Ports bind to 127.0.0.1 only.
+name: holocron-m11
+
+x-umami: &umami
+  profiles: [rehearsal]
+  restart: "no"
+
+services:
+  pg:
+    image: postgres:15-alpine@sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
+    environment: { POSTGRES_PASSWORD: umami, POSTGRES_USER: umami, POSTGRES_DB: umami }
+    ports: ["127.0.0.1:55411:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 2s
+      retries: 30
+  my:
+    image: mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b
+    environment: { MYSQL_ROOT_PASSWORD: umami, MYSQL_DATABASE: umami }
+    ports: ["127.0.0.1:53311:3306"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -pumami --silent"]
+      interval: 2s
+      retries: 60
+
+  # Umami 3.4.0 on PostgreSQL. Its start runs `prisma migrate deploy`, so the source is a real
+  # migrated database, not a loaded dump.
+  umami-pg:
+    <<: *umami
+    image: ghcr.io/umami-software/umami:3.4.0@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367
+    environment:
+      DATABASE_URL: postgresql://umami:umami@pg:5432/umami
+      APP_SECRET: holocron-m11-rehearsal
+    ports: ["127.0.0.1:53011:3000"]
+    depends_on: { pg: { condition: service_healthy } }
+  umami-my:
+    <<: *umami
+    image: ghcr.io/umami-software/umami:mysql-v2.20.2@sha256:56cc5167a987060b982e4ad13ca86342bc8fb0012fe88a2b59f8b68c071545aa
+    environment:
+      DATABASE_URL: mysql://root:umami@my:3306/umami
+      APP_SECRET: holocron-m11-rehearsal
+    ports: ["127.0.0.1:53012:3000"]
+    depends_on: { my: { condition: service_healthy } }

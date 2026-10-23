@@ -1,0 +1,146 @@
+{
+  "format_version": 1,
+  "id": "Q09-12m-D-vienna",
+  "family": "Q09",
+  "title": "Consented retention, weekly cohorts, grouped cohort predicate",
+  "operation": "analytics.retention",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": false,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "Europe/Vienna",
+  "resolved": {
+    "start": "2025-09-30T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z",
+    "retention_start": "2025-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": {
+      "kind": "retention",
+      "v": 1
+    }
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [],
+    "dimensions": [],
+    "filter": {
+      "kind": "group",
+      "op": "or",
+      "items": [
+        {
+          "kind": "cond",
+          "id": "c1",
+          "field": "country",
+          "cmp": "in",
+          "value": {
+            "t": "list",
+            "v": [
+              {
+                "t": "string",
+                "v": "US"
+              },
+              {
+                "t": "string",
+                "v": "DE"
+              },
+              {
+                "t": "string",
+                "v": "AT"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "c2",
+              "field": "device",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "mobile"
+              }
+            },
+            {
+              "kind": "cond",
+              "id": "c3",
+              "field": {
+                "scope": "session",
+                "key": "account_tier"
+              },
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "business"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "Europe/Vienna",
+    "granularity": "week",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "cohort",
+    "report": {
+      "kind": "retention",
+      "v": 1,
+      "intervals": 13
+    }
+  },
+  "parameters": {
+    "population": "consented persistent profiles only",
+    "activity": "any eligible event",
+    "coverage": "shown",
+    "incomplete": "intervals ending after the watermark are complete: false",
+    "cohort_period": "granularity (week)",
+    "offsets": "0..12"
+  },
+  "sort": {
+    "order": [],
+    "ties": "cohort start, then offset (0004)"
+  },
+  "output_bound": {
+    "max_rows": 689,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "to be fixed after first generation by milestone 02"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "applied_steps_count": 1,
+    "checksum": "6981c78cd41f7d0d49535389d7a1054907e5a4d157421de57f2bbe4f15136166",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "01_init",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "32214b9641c46c80f09e35657592518e370a12dcaac776045db23b748c27b039",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "02_report_schema_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "371184e7c4ab48b35e8515005aeddcdde0c073460ece3b2bd54dca0b50f140a3",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "03_metric_performance_index",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "d94e390749a499e7dd01b6ba115aa6a7c7c116268bfa8d10d07a52311bf5aad9",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "04_team_redesign",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "6ac54ce09837e65f2c81717e33bddc2cdcb2474f9b17d794660b8f31d4b6969d",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "05_add_visit_id",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "c608c8fabd56ea757a8191aad2f9997311342055ee5b11b72057cd28b3eee8dd",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "06_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "432303498733b4ef4e25213430fd04b51373c26b318d866490c054be787dda66",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "07_add_tag",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "1e1c6a77668d16353c47b92a7f6b2f9ab83cc0bfc03dee8e4014cb567bf3b464",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "08_add_utm_clid",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "aff722aa0432d85d3555363acd524a1c257cec8dc0f50ce32a9d55b4d720de21",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "09_update_hostname_region",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "61a33c5c8bd69f3808c83adfadbdf65126034e1b8a70678744c8d833bbcf03a0",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "10_add_distinct_id",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "aac7f571802c8020623c74d556cc3d171835c54d468c272ccb40b2198f39da63",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "11_add_segment",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "65441af74bafefc9d7bc5c5d6680755f81d402c56b12fc7c55bf6bb89b3c4128",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "12_update_report_parameter",
+    "rolled_back_at": null
+  }
+]

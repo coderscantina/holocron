@@ -1,0 +1,112 @@
+{
+  "id": "capture-batch-from-page",
+  "description": "A page posts /api/batch cross-origin with two valid items and one invalid one. The answer lists per-item results in order and the first token.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:7-54"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-auto-track": "false"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.evaluate(async ([base, website]) => {",
+    "const item = payload => ({ type: 'event', payload: { website, hostname: location.hostname, url: '/batched', ...payload } });",
+    "await fetch(`${base}/api/batch`, {",
+    "method: 'POST',",
+    "headers: { 'Content-Type': 'application/json' },",
+    "body: JSON.stringify([item({ name: 'batched-1', data: { n: 1 } }), { type: 'event', payload: { website: 'not-a-uuid' } }, item({ name: 'batched-2' })]),",
+    "});",
+    "}, [BASE_URL, IDS.websitePlain]);"
+  ],
+  "captured": [
+    {
+      "method": "POST",
+      "path": "/api/batch",
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "request_body": [
+        {
+          "type": "event",
+          "payload": {
+            "website": "5e1a0000-0000-4000-8000-000000000001",
+            "hostname": "127.0.0.1",
+            "url": "/batched",
+            "name": "batched-1",
+            "data": {
+              "n": 1
+            }
+          }
+        },
+        {
+          "type": "event",
+          "payload": {
+            "website": "not-a-uuid"
+          }
+        },
+        {
+          "type": "event",
+          "payload": {
+            "website": "5e1a0000-0000-4000-8000-000000000001",
+            "hostname": "127.0.0.1",
+            "url": "/batched",
+            "name": "batched-2"
+          }
+        }
+      ],
+      "response": {
+        "status": 200,
+        "body": {
+          "size": 3,
+          "processed": 2,
+          "errors": 1,
+          "details": [
+            {
+              "index": 1,
+              "response": {
+                "error": {
+                  "message": "Bad request",
+                  "code": "bad-request",
+                  "status": 400
+                }
+              }
+            }
+          ],
+          "cache": "<CACHE_TOKEN>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "one batch request",
+      "passed": true
+    },
+    {
+      "description": "answered 200 with size 3, processed 2, errors 1",
+      "passed": true
+    },
+    {
+      "description": "details list the invalid item at index 1",
+      "passed": true
+    },
+    {
+      "description": "batch carries a cache token",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

@@ -1,0 +1,38 @@
+{
+  "id": "send-identify-link-source",
+  "surface": "send.identify",
+  "polarity": "negative",
+  "description": "identify for a link source. Upstream skips identity writes without a website but still writes session data with websiteId undefined.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:313",
+    "src/app/api/send/route.ts:340-348"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "identify",
+      "payload": {
+        "link": "5e1a0000-0000-4000-8000-0000000000a1",
+        "id": "user-123"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "identify is meaningful only for websites."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

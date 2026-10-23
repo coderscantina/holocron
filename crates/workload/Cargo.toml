@@ -1,0 +1,21 @@
+[package]
+name = "holocron-workload"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+holocron-storage = { path = "../storage" }
+holocron-analytics = { path = "../analytics" }
+holocron-protocol = { path = "../protocol" }
+tokio = { workspace = true, features = ["signal"] }
+serde.workspace = true
+serde_json = { workspace = true, features = ["preserve_order"] }
+chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
+chrono-tz = "0.10"
+uuid = { version = "1", features = ["v5"] }
+sha2 = "0.11"
+blake3 = "1"
+clap = { version = "4", features = ["derive"] }
+flate2 = "1"

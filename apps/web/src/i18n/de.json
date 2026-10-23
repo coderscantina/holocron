@@ -1,0 +1,2354 @@
+{
+  "actions": {
+    "close": "Schließen",
+    "retry": "Erneut versuchen",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "continue": "Weiter",
+    "done": "Fertig",
+    "label": "Aktionen",
+    "save": "Speichern",
+    "selectAll": "Alle auswählen"
+  },
+  "auth": {
+    "title": "Anmelden",
+    "description": "Verwende das Konto, das deine Administration für dich angelegt hat.",
+    "to": "bei {name}.",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden"
+  },
+  "shell": {
+    "skipToContent": "Zum Inhalt springen",
+    "toggleSidebar": "Seitenleiste ein- oder ausblenden",
+    "resizeSidebar": "Breite der Seitenleiste ändern",
+    "mobileNavigation": "Hauptnavigation",
+    "menu": "Menü",
+    "scope": "Umfang: {summary}",
+    "userMenu": "{initials}. Kontomenü",
+    "language": "Sprache",
+    "version": "Version {version}",
+    "dbipAttribution": "IP-Geolokalisierung von DB-IP"
+  },
+  "nav": {
+    "label": "Analyse-Navigation",
+    "drawerDescription": "Arbeitsbereiche und Berichte der aktuellen Website",
+    "sections": {
+      "workspace": "Arbeitsbereich",
+      "traffic": "Traffic",
+      "behaviour": "Verhalten",
+      "acquisition": "Akquise",
+      "experience": "Erlebnis"
+    },
+    "boards": "Boards",
+    "explore": "Erkunden",
+    "overview": "Übersicht",
+    "events": "Ereignisse",
+    "sessions": "Sitzungen",
+    "realtime": "Echtzeit",
+    "funnels": "Trichter",
+    "retention": "Bindung",
+    "revenue": "Umsatz",
+    "replays": "Aufzeichnungen",
+    "heatmaps": "Heatmaps",
+    "performance": "Leistung",
+    "siteSettings": "Website-Einstellungen",
+    "account": "Konto",
+    "goals": "Ziele",
+    "journeys": "Pfade",
+    "campaigns": "Kampagnen",
+    "attribution": "Attribution",
+    "indicator": {
+      "findings": "{count} Befund | {count} Befunde",
+      "live": "{count} Besucher aktiv | {count} Besucher aktiv"
+    }
+  },
+  "context": {
+    "workspaces": "Arbeitsbereiche",
+    "workspaceTrigger": "{name}. Arbeitsbereich wechseln",
+    "siteTrigger": "{name}. Website wechseln",
+    "chooseWorkspace": "Arbeitsbereich wählen",
+    "chooseSite": "Website wählen",
+    "noWorkspaces": "Du bist in keinem Arbeitsbereich Mitglied.",
+    "noSites": "Noch keine Websites in diesem Arbeitsbereich.",
+    "kind": {
+      "team": "Team",
+      "personal": "Persönlich"
+    },
+    "allSites": "Alle Websites in {workspace}",
+    "siteCount": "{count} Website | {count} Websites",
+    "findings": "{count} Befund | {count} Befunde",
+    "pace": {
+      "aboveLabel": "{percent} % über einem typischen {weekday} bisher",
+      "belowLabel": "{percent} % unter einem typischen {weekday} bisher",
+      "usualLabel": "Im üblichen Bereich für einen {weekday} bisher",
+      "change": "{change} % zum Üblichen",
+      "usual": "üblicher Bereich",
+      "new": "neue Website",
+      "quiet": "{count} Aufruf heute | {count} Aufrufe heute",
+      "from": "Tempo von {time}",
+      "behind": "Einige Zusammenfassungen sind veraltet."
+    }
+  },
+  "roles": {
+    "owner": "Eigentümer",
+    "admin": "Administration",
+    "member": "Mitglied",
+    "viewer": "Nur lesen"
+  },
+  "colorMode": {
+    "label": "Darstellung",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "accent": {
+    "label": "Akzentfarbe",
+    "indigo": "Indigo",
+    "blue": "Blau",
+    "violet": "Violett",
+    "rose": "Rosé",
+    "amber": "Bernstein",
+    "emerald": "Smaragd",
+    "cyan": "Cyan",
+    "orange": "Orange"
+  },
+  "shortcuts": {
+    "title": "Tastenkürzel",
+    "description": "Tastenkürzel auf dieser Ansicht.",
+    "empty": "Keine Tastenkürzel auf dieser Ansicht.",
+    "help": "Tastenkürzel anzeigen",
+    "toggleSidebar": "Seitenleiste ein- oder ausblenden",
+    "scopes": {
+      "global": "Überall"
+    }
+  },
+  "commandPalette": {
+    "title": "Befehlspalette",
+    "description": "Seiten, Websites und Aktionen suchen.",
+    "open": "Befehlspalette öffnen",
+    "trigger": "Suchen",
+    "placeholder": "Seiten, Websites und Aktionen suchen",
+    "empty": "Keine Treffer.",
+    "navigation": "Seiten",
+    "sites": "Websites",
+    "actions": "Aktionen",
+    "lightMode": "Zur hellen Darstellung wechseln",
+    "darkMode": "Zur dunklen Darstellung wechseln",
+    "jump": "Zu allem springen",
+    "hintMac": "⌘K",
+    "hintOther": "Strg K",
+    "savedViews": "Gespeicherte Ansichten",
+    "segments": "Segmente",
+    "goals": "Ziele",
+    "findings": "Befunde",
+    "boards": "Boards",
+    "showAll": "Alle {count} zeigen"
+  },
+  "states": {
+    "loading": "Wird geladen",
+    "none": "Keine Angabe"
+  },
+  "errorBoundary": {
+    "title": "Diese Seite konnte nicht angezeigt werden",
+    "description": "Der Rest der Anwendung funktioniert weiter. Versuche es erneut oder öffne eine andere Seite."
+  },
+  "errors": {
+    "network": "Der Server hat nicht geantwortet. Prüfe die Verbindung und versuche es erneut.",
+    "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an.",
+    "invalid_credentials": "E-Mail oder Passwort ist falsch.",
+    "second_factor_required": "Gib den Code aus deiner Authenticator-App ein.",
+    "second_factor_invalid": "Dieser Code ist nicht gültig.",
+    "second_factor_enrollment_required": "Richte die Zwei-Faktor-Anmeldung ein, um fortzufahren.",
+    "reauthentication_required": "Bestätige dein Passwort, um fortzufahren.",
+    "not_found": "Nicht verfügbar. Es existiert nicht, oder dein Konto hat keinen Zugriff.",
+    "forbidden": "Deine Rolle erlaubt das nicht.",
+    "operation_not_granted": "Dieser API-Schlüssel erlaubt diese Aktion nicht.",
+    "grant_exceeds_principal": "Ein Schlüssel kann nicht mehr Zugriff haben als seine Eigentümerin oder sein Eigentümer.",
+    "share_scope_exceeded": "Diese geteilte Ansicht erlaubt diese Änderung nicht.",
+    "origin_rejected": "Die Anfrage wurde blockiert, weil sie nicht von diesem Dashboard kam. Lade die Seite neu.",
+    "stale_revision": "Jemand hat das inzwischen geändert. Lade die aktuelle Fassung neu und wende deine Änderung dann erneut an.",
+    "idempotency_conflict": "Diese Anfrage wurde bereits mit anderen Werten gesendet. Lade neu und versuche es erneut.",
+    "user_owns_resources": "Übertrage oder lösche zuerst die Arbeitsbereiche und Websites dieser Person.",
+    "last_install_admin": "Die Installation braucht mindestens eine Administration.",
+    "malformed_request": "Das Dashboard hat eine Anfrage gesendet, die der Server nicht lesen konnte. Lade die Seite neu.",
+    "invalid_arguments": "Einige Felder müssen korrigiert werden.",
+    "duplicate_predicate_id": "Zwei Filterbedingungen haben dieselbe ID. Setze die Ansicht zurück.",
+    "filter_too_deep": "Filter können höchstens drei Ebenen tief verschachtelt sein.",
+    "too_many_conditions": "Eine Ansicht kann höchstens 32 Filterbedingungen enthalten.",
+    "page_out_of_range": "Diese Seite liegt hinter den ersten 10.000 Zeilen. Schränke den Filter ein oder ändere die Sortierung.",
+    "report_missing": "Diese Darstellung braucht eine Berichtsdefinition.",
+    "report_invalid": "Die Berichtsdefinition ist ungültig.",
+    "report_field_unsupported": "Dieser Bericht unterstützt eine der gewählten Einstellungen nicht.",
+    "report_version_unsupported": "Dieser Bericht wurde mit einer Version gespeichert, die dieser Server nicht unterstützt.",
+    "report_too_large": "Dieser Bericht wäre zu groß. Wähle einen kürzeren Zeitraum oder weniger Intervalle.",
+    "compare_unsupported": "Dieser Vergleich ist für diese Kennzahl, diesen Bericht oder diesen Zeitraum nicht verfügbar. Entferne den Vergleich oder wähle eine andere Kennzahl oder einen anderen Zeitraum.",
+    "payload_too_large": "Die Anfrage ist zu groß.",
+    "rate_limited": "Zu viele Versuche. Warte eine Minute und versuche es erneut.",
+    "query_timeout": "Die Berechnung hat länger als 30 Sekunden gedauert und wurde abgebrochen. Schränke Zeitraum oder Filter ein.",
+    "internal": "Auf dem Server ist ein Fehler aufgetreten. Versuche es erneut.",
+    "saved_replay_budget_exceeded": "Gespeicherte Replays belegen schon ihren Anteil am Aufzeichnungsspeicher. Entferne zuerst eines aus den Gespeicherten.",
+    "setup_required": "Holocron wird gerade eingerichtet. Schließe zuerst die Einrichtung ab.",
+    "setup_token_invalid": "Dieses Einrichtungstoken stimmt nicht. Kopiere es noch einmal aus dem Serverlog.",
+    "import_in_progress": "Der Import läuft oder ist noch nicht fertig. Warte darauf und versuche es dann erneut."
+  },
+  "fieldErrors": {
+    "required": "Pflichtfeld.",
+    "too_short": "Mindestens {limit} Zeichen.",
+    "too_long": "Höchstens {limit} Zeichen.",
+    "too_many": "Höchstens {limit} Einträge.",
+    "invalid_format": "Dieses Format ist ungültig.",
+    "invalid_value": "Dieser Wert ist nicht erlaubt."
+  },
+  "home": {
+    "title": "Start",
+    "noWorkspaces": "Noch kein Arbeitsbereich",
+    "noWorkspacesHint": "Dein Konto ist in keinem Arbeitsbereich Mitglied. Bitte eine Administration, dich hinzuzufügen."
+  },
+  "workspace": {
+    "unavailable": "Dieser Arbeitsbereich ist nicht verfügbar.",
+    "noSites": "Noch keine Websites in diesem Arbeitsbereich",
+    "noSitesHint": "Bitte eine Administration des Arbeitsbereichs, eine Website hinzuzufügen.",
+    "manage": "Arbeitsbereich verwalten",
+    "sections": "Bereiche des Arbeitsbereichs",
+    "sites": {
+      "title": "Websites",
+      "listLabel": "Websites",
+      "views": "{count} Aufruf | {count} Aufrufe",
+      "findings": "{count} Befund | {count} Befunde",
+      "noFindings": "Keine Befunde",
+      "needYou": "{count} braucht dich | {count} brauchen dich",
+      "nothingNeedsYou": "keine braucht dich",
+      "noStatus": "Noch kein Stand",
+      "staleFrom": "Stand von {time}",
+      "statusFailed": "Der Stand konnte nicht geladen werden.",
+      "sparkline": "Aufrufe pro Stunde heute, bisher {today} gegen {typical} an einem typischen Tag um diese Zeit",
+      "sparklineNoTypical": "Aufrufe pro Stunde heute, bisher {today}",
+      "view": {
+        "label": "Ansicht",
+        "tiles": "Kacheln",
+        "details": "Details"
+      },
+      "tiles": {
+        "live": "Besucher in dieser Stunde",
+        "viewsToday": "Aufruf heute | Aufrufe heute"
+      }
+    },
+    "members": "Mitglieder",
+    "settings": "Einstellungen",
+    "loadFailed": "Der Arbeitsbereich konnte nicht geladen werden.",
+    "createTeam": "Team erstellen",
+    "createTeamDescription": "Ein gemeinsamer Arbeitsbereich für Websites und Personen. Du wirst Eigentümer.",
+    "teamName": "Teamname",
+    "saved": "Team gespeichert.",
+    "addSite": "Website hinzufügen",
+    "addSiteDescription": "Die Website startet leer; ihre Einstellungen zeigen, wie der Tracker eingebunden wird.",
+    "twoFactor": "Zwei-Faktor-Authentifizierung",
+    "twoFactorDescription": "Mitglieder ohne zweiten Faktor können nur diesen einrichten, bis sie einen haben.",
+    "twoFactorRequired": "Zwei-Faktor-Authentifizierung verlangen",
+    "twoFactorOn": "Mitglieder brauchen jetzt Zwei-Faktor-Authentifizierung.",
+    "twoFactorOff": "Zwei-Faktor-Authentifizierung ist nicht mehr verpflichtend.",
+    "delete": "Team löschen",
+    "deleteDescription": "Löscht das Team und seine Mitgliedschaften. Websites müssen vorher verschoben oder gelöscht werden.",
+    "deleteConfirm": "\"{team}\" löschen? Es hat {sites} Websites. Das lässt sich nicht rückgängig machen.",
+    "deleted": "\"{team}\" gelöscht."
+  },
+  "site": {
+    "loadFailed": "Diese Website konnte nicht geladen werden",
+    "unavailable": {
+      "title": "Website nicht verfügbar",
+      "description": "Sie existiert nicht, oder dein Konto hat keinen Zugriff darauf.",
+      "home": "Zu deinen Websites"
+    }
+  },
+  "events": {
+    "title": "Ereignisse",
+    "view": "Ansicht",
+    "tabs": {
+      "events": "Ereignisse",
+      "properties": "Eigenschaften"
+    },
+    "chart": {
+      "title": "Ereignisse im Zeitverlauf"
+    },
+    "empty": "Keine eigenen Ereignisse in diesem Zeitraum",
+    "emptyHint": "Mit umami.track() gesendete Ereignisse erscheinen hier. Seitenaufrufe sind keine Ereignisse.",
+    "showProperties": "Eigenschaften von {name}",
+    "event": "Ereignis",
+    "allEvents": "Alle Ereignisse",
+    "property": "Eigenschaft",
+    "chooseProperty": "Eigenschaft wählen",
+    "eventProperties": "Ereigniseigenschaften",
+    "sessionProperties": "Sitzungseigenschaften",
+    "pivot": "Aufschlüsseln nach",
+    "noPivot": "Nicht aufschlüsseln",
+    "pickTitle": "Eigenschaft wählen",
+    "pickHint": "Zeigt ihre Werte mit Anzahlen und bei Zahlen Summe und Mittelwert im Zeitverlauf.",
+    "noProperties": "Noch keine Eigenschaften gespeichert",
+    "noPropertiesHint": "Mit einem Ereignis gesendete Daten, etwa umami.track('signup', { plan: 'pro' }), erscheinen hier.",
+    "stats": "Statistik von {key}",
+    "sumChart": "Summe von {key} im Zeitverlauf",
+    "meanChart": "Mittelwert von {key} im Zeitverlauf",
+    "values": "Werte von {key}",
+    "noValues": "Keine Werte in diesem Zeitraum",
+    "noValuesHint": "Die gewählten Ereignisse haben in diesem Zeitraum keinen Wert für diese Eigenschaft.",
+    "arrayNote": "Listen zählen als ganzer Wert. Um ein Element zu zählen, filtere mit \"enthält\".",
+    "dateNote": "Jedes Datum ist ein eigener Wert, nach Datum sortiert.",
+    "sessionNote": "Sitzungseigenschaften zählen Sitzungen. Summe und Mittelwert gibt es nur für Ereigniseigenschaften."
+  },
+  "findings": {
+    "label": "Aufgefallene Änderungen",
+    "empty": "Heute bisher nichts Ungewöhnliches.",
+    "allTraffic": "Für den gesamten Traffic",
+    "updated": "{time}",
+    "pending": "Auffälligkeiten erscheinen nach der ersten Zusammenfassung der Website.",
+    "updating": "Wird aktualisiert",
+    "behind": "Die Auffälligkeiten wurden zuletzt um {time} berechnet und holen auf.",
+    "showAll": "Alle {count} anzeigen",
+    "all": {
+      "title": "Alle Auffälligkeiten",
+      "description": "Heute bisher aufgefallene Änderungen, für den gesamten Traffic."
+    },
+    "kind": {
+      "mover": "{field} · heute",
+      "goal": "Ziel · heute",
+      "funnel": "Funnel · {title}",
+      "performance": "Performance · letzte 24 Stunden",
+      "generic": "Änderung"
+    },
+    "mover": {
+      "rise": "{value} liegt {change} über einem typischen Wochentag, bisher {today} Besuchertage",
+      "fall": "{value} liegt {change} unter einem typischen Wochentag, bisher {today} Besuchertage",
+      "new": "{value} hat bisher {today} Besuchertage, an einem typischen Wochentag um diese Zeit keine",
+      "detail": "Typisch bis jetzt: {typical}. Gesamter Traffic: {siteToday} gegenüber {siteTypical}."
+    },
+    "goal": {
+      "rise": "{goal} liegt {change} über einem typischen Wochentag, bisher {today} Abschlüsse",
+      "fall": "{goal} liegt {change} unter einem typischen Wochentag, bisher {today} Abschlüsse",
+      "new": "{goal} hat bisher {today} Abschlüsse, an einem typischen Wochentag um diese Zeit keine",
+      "detail": "Typisch bis jetzt: {typical} Abschlüsse.",
+      "unnamed": "Ein Ziel"
+    },
+    "funnel": {
+      "fact": "Die Abbruchquote nach Schritt {step} beträgt heute {dropOff}, an typischen Tagen {baseline}",
+      "detail": "{dropped} von {entered} Besuchern bis {hour}, gegenüber {baselineDropped} von {baselineEntered} über {days} Tage."
+    },
+    "performance": {
+      "fact": "{metric} p75 liegt bei {value} auf {device}, der langsamste Wert seit {days} Tagen",
+      "detail": "Der langsamste Tag davor lag bei {slowest} am {day}. {observations} Messungen in den letzten 24 Stunden."
+    },
+    "generic": {
+      "fact": "In {field} hat sich etwas geändert",
+      "detail": "Öffne die Details, um die gemessenen Werte zu sehen.",
+      "field": "dieser Website"
+    },
+    "action": {
+      "label": "{action}: {fact}",
+      "filter": "Darauf filtern",
+      "report": "Bericht öffnen",
+      "details": "Details öffnen",
+      "replays": "{count} Replay ansehen | {count} Replays ansehen",
+      "annotate": "Anmerkung hinzufügen"
+    }
+  },
+  "overview": {
+    "view": {
+      "label": "Ansicht der Übersicht",
+      "today": "Heute",
+      "details": "Details"
+    },
+    "pace": {
+      "title": "Heute",
+      "figure": "Seitenaufrufe heute, bis {time}",
+      "usual": "Üblicher {weekday}",
+      "verdict": {
+        "above": "Heute {percent} über einem üblichen {weekday}.",
+        "below": "Heute {percent} unter einem üblichen {weekday}.",
+        "usual": "Im üblichen Bereich für einen {weekday}.",
+        "quiet": "Noch zu wenige Seitenaufrufe für einen Vergleich mit einem üblichen {weekday}.",
+        "new": "Noch zu wenig Verlauf, um einen üblichen {weekday} zu kennen."
+      },
+      "projection": "Hochgerechnet {value} bis Tagesende, wahrscheinlich zwischen {low} und {high}.",
+      "moreFindings": "{count} weitere unter Details",
+      "chart": {
+        "label": "Seitenaufrufe heute nach Stunde gegenüber: {usual}. Eine Stunde öffnet sie in Explore.",
+        "now": "Jetzt",
+        "today": "Heute",
+        "projected": "Hochgerechnet",
+        "usualDay": "Üblicher Tag",
+        "hour": "{start} bis {end}",
+        "byTime": "Bis {time}",
+        "thisHour": "Diese Stunde {count}, üblich {usual}",
+        "open": "Diese Stunde in Explore öffnen",
+        "later": "Kommt noch. Üblich sind {usual} in dieser Stunde.",
+        "column": "{hour}: {count} Seitenaufrufe, üblich {usual}. Bis dahin {total}. In Explore öffnen",
+        "columnLater": "{hour}: kommt noch, üblich {usual} Seitenaufrufe"
+      }
+    },
+    "measures": "Kennzahlen",
+    "panels": {
+      "pages": {
+        "title": "Seiten",
+        "count": "{count} Seite | {count} Seiten"
+      },
+      "referrers": {
+        "title": "Verweise",
+        "count": "{count} Verweis | {count} Verweise"
+      },
+      "browsers": {
+        "title": "Browser",
+        "count": "{count} Browser | {count} Browser"
+      },
+      "systems": {
+        "title": "Betriebssysteme",
+        "count": "{count} System | {count} Systeme"
+      },
+      "devices": {
+        "title": "Geräte",
+        "count": "{count} Gerät | {count} Geräte"
+      },
+      "countries": {
+        "title": "Länder",
+        "map": "Karte der Besuchertage nach Land",
+        "legend": "Weniger",
+        "legendMore": "Mehr",
+        "tooltip": "{country}: {value} Besuchertage, {share}",
+        "count": "{count} Land | {count} Länder"
+      },
+      "mode": {
+        "label": "Zeilen von {panel}",
+        "top": "Top",
+        "movers": "Änderungen",
+        "needsComparison": "Änderungen brauchen einen Vergleich. Wähle einen in den Bereichs-Chips."
+      },
+      "change": "Änderung",
+      "technology": "Technik",
+      "technologyViews": {
+        "browsers": "Browser",
+        "systems": "Systeme",
+        "devices": "Geräte"
+      }
+    },
+    "goals": {
+      "title": "Ziele",
+      "count": "{count} Ziel | {count} Ziele",
+      "tick": "Gestrichelte Marke: der typische Wert bis jetzt",
+      "tickPast": "Gestrichelte Marke: der typische Wert",
+      "columns": {
+        "goal": "Ziel",
+        "pace": "Verlauf",
+        "state": "Stand"
+      },
+      "detail": {
+        "soFar": "{completions} bisher, {typical} üblich bis jetzt",
+        "ofTypical": "{completions} von {typical} üblichen",
+        "plain": "{count} Abschluss | {count} Abschlüsse"
+      },
+      "state": {
+        "behind": "{count} hinter dem üblichen Stand",
+        "even": "Im üblichen Rahmen",
+        "ahead": "{count} vor dem üblichen Stand",
+        "aheadFor": "Auf Kurs für {projection}",
+        "below": "{count} unter dem typischen Wert",
+        "above": "{count} über dem typischen Wert",
+        "same": "Etwa typisch",
+        "noHistory": "Noch nicht genug Verlauf",
+        "none": "Kein Vergleich"
+      },
+      "open": "{goal} im Ziele-Bericht öffnen"
+    },
+    "shareColumn": "Anteil",
+    "headline": {
+      "label": "Zusammenfassung",
+      "lead": {
+        "soFar": "{value} {measure} bisher {range}.",
+        "soFarChange": "{value} {measure} bisher {range}, {change}.",
+        "past": "{value} {measure} {range}, {change}.",
+        "plain": "{value} {measure} {range}."
+      },
+      "pace": {
+        "midnight": "Hochgerechnet {projection} bis Mitternacht, {change}.",
+        "endOfToday": "Hochgerechnet {projection} bis Ende des heutigen Tages, {change}."
+      },
+      "change": {
+        "weekday": {
+          "above": "{percent} mehr als an einem typischen {weekday}",
+          "below": "{percent} weniger als an einem typischen {weekday}",
+          "same": "etwa so viel wie an einem typischen {weekday}",
+          "new": "neu, an einem typischen {weekday} keine"
+        },
+        "weekdays": {
+          "above": "{percent} mehr als an typischen Wochentagen",
+          "below": "{percent} weniger als an typischen Wochentagen",
+          "same": "etwa so viel wie an typischen Wochentagen",
+          "new": "neu, an typischen Wochentagen keine"
+        },
+        "previous": {
+          "above": "{percent} mehr als im vorherigen Zeitraum",
+          "below": "{percent} weniger als im vorherigen Zeitraum",
+          "same": "etwa so viel wie im vorherigen Zeitraum",
+          "new": "neu, im vorherigen Zeitraum keine"
+        }
+      },
+      "range": {
+        "today": "heute",
+        "days": "in den letzten {count} Tagen",
+        "weeks": "in den letzten {count} Wochen",
+        "months": "in den letzten {count} Monaten",
+        "day": "am {date}",
+        "fixed": "vom {start} bis {end}",
+        "all": "im gesamten gespeicherten Zeitraum"
+      },
+      "band": "Zwischen {low} und {high}.",
+      "basis": {
+        "weekday": {
+          "1": "Schätzung aus den letzten {count} Montagen.",
+          "2": "Schätzung aus den letzten {count} Dienstagen.",
+          "3": "Schätzung aus den letzten {count} Mittwochen.",
+          "4": "Schätzung aus den letzten {count} Donnerstagen.",
+          "5": "Schätzung aus den letzten {count} Freitagen.",
+          "6": "Schätzung aus den letzten {count} Samstagen.",
+          "7": "Schätzung aus den letzten {count} Sonntagen."
+        },
+        "days": "Schätzung aus {count} Vergleichstagen."
+      },
+      "estimate": "Schätzung: {value}",
+      "notes": {
+        "noEstimate": "Noch nicht genug Verlauf für eine Schätzung.",
+        "noTypicalDay": "Noch nicht genug Verlauf für einen typischen Tag."
+      },
+      "open": "{measure} in Erkunden öffnen",
+      "nouns": {
+        "pageviews": "Aufrufe",
+        "events": "Ereignisse",
+        "visitors": "Besucher",
+        "visitor_days": "Besuchertage",
+        "identified_people": "identifizierte Personen",
+        "sessions": "Sitzungen",
+        "bounce_rate": "Absprungrate",
+        "span_mean": "beobachtete Dauer",
+        "span_median": "mittlere beobachtete Dauer",
+        "revenue_net": "Nettoumsatz",
+        "revenue_gross": "Bruttoumsatz",
+        "revenue_refunds": "Erstattungen",
+        "revenue_count": "Umsatzbuchungen",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95"
+      },
+      "why": {
+        "lift": "Der Großteil des Anstiegs entfällt auf {value}: {change} Besuchertage seit {time}.",
+        "drop": "Der Großteil des Rückgangs entfällt auf {value}: {change} Besuchertage seit {time}.",
+        "liftAfter": "Der Großteil des Anstiegs entfällt auf {value}: {change} Besuchertage seit {time}, nach der Notiz \"{annotation}\".",
+        "dropAfter": "Der Großteil des Rückgangs entfällt auf {value}: {change} Besuchertage seit {time}, nach der Notiz \"{annotation}\".",
+        "usual": "Alles liegt im üblichen Bereich.",
+        "filter": "Auf {value} filtern"
+      }
+    },
+    "measuresStrip": "Kennzahl für Überschrift und Diagramm wählen"
+  },
+  "settings": {
+    "title": "Website-Einstellungen",
+    "general": "Allgemein",
+    "site": "Name und Domain",
+    "generalDescription": "Der Name erscheint im Dashboard. Die Domain ist der Host, von dem dein Tracker meldet.",
+    "readOnly": "Deine Rolle kann diese Einstellungen sehen, aber nicht ändern.",
+    "name": "Name",
+    "nameHint": "Bis zu {max} Zeichen.",
+    "domain": "Domain",
+    "domainHint": "Nur der Hostname, zum Beispiel roadhouse.test.",
+    "timezone": "Zeitzone",
+    "save": "Änderungen speichern",
+    "saved": "Gespeichert.",
+    "reload": "Einstellungen neu laden",
+    "sections": "Einstellungsbereiche",
+    "policyVersion": "Version {version}",
+    "tracking": {
+      "title": "Tracking",
+      "description": "Füge ein Script-Tag in den <head> jeder Seite ein, die erfasst werden soll.",
+      "restricted": "Nur Rollen, die diese Website konfigurieren dürfen, sehen ihren Tracking-Code und ihre Erfassungsschlüssel.",
+      "scripts": "Script-Tags",
+      "tracker": "Tracking-Code",
+      "trackerHint": "Der festgelegte Umami-3.4.0-Tracker. Unveränderte Umami-Tracker-Einstellungen wie data-domains funktionieren weiter.",
+      "alternative": "Auch erreichbar unter {path}",
+      "recorder": "Recorder",
+      "recorderHint": "Füge ihn neben dem Tracking-Code ein, solange Replays oder Heatmaps für diese Website an sind."
+    },
+    "sessions": {
+      "title": "Sitzungen",
+      "description": "Eine so lange Pause ohne Ereignisse beginnt eine neue Sitzung. Die Zeitzone legt die Tagesgrenzen für Berichte und tägliche anonyme Identitäten fest. Änderungen gelten für Ereignisse ab jetzt.",
+      "window": "Inaktivitätsfenster in Minuten",
+      "windowHint": "1 bis 1440 Minuten. Standard ist 30.",
+      "timezoneHint": "Eine Änderung beginnt auch neue anonyme Identitäten und lässt vergangene Tage unverändert."
+    },
+    "recalculate": {
+      "title": "Sitzungen neu berechnen",
+      "description": "Berechnet Sitzungen und Tagessummen dieser Tage mit dem aktuellen Inaktivitätsfenster neu. Bis dahin zeigen Berichte diese Tage als ausstehend. Bis zu {max} Tage.",
+      "firstDay": "Erster Tag",
+      "lastDay": "Letzter Tag",
+      "start": "Neu berechnen",
+      "pending": "{first} bis {last} wird neu berechnet. Verbleibende Tage: {days}.",
+      "done": "{first} bis {last} neu berechnet."
+    },
+    "identity": {
+      "title": "Identität",
+      "description": "Standardmäßig erhalten Besucher jeden Tag eine neue anonyme Identität. Persistente Identität verknüpft Besucher, die zugestimmt haben, tageübergreifend mit einem Profil.",
+      "restricted": "Nur Rollen, die diese Website konfigurieren dürfen, sehen ihre Identitätsrichtlinie.",
+      "toggle": "Besucher mit Zustimmung mit persistenten Profilen verknüpfen",
+      "toggleHint": "Nur Identify-Aufrufe mit dem Zustimmungssignal deiner Website erzeugen ein Profil. Ereignisse vor der Zustimmung bleiben anonym.",
+      "revokeWarning": "Ausschalten widerruft sofort jede Zustimmung. Während der Zustimmung erfasste Daten bleiben bei ihren Profilen. Erneutes Einschalten stellt keine Zustimmung wieder her.",
+      "turnOff": "Ausschalten und Zustimmungen widerrufen"
+    }
+  },
+  "account": {
+    "description": "Das angemeldete Konto.",
+    "name": "Name",
+    "installRole": "Rolle in der Installation",
+    "roles": {
+      "user": "Benutzer",
+      "install_admin": "Administration der Installation"
+    },
+    "nav": {
+      "label": "Konto",
+      "profile": "Profil",
+      "preferences": "Einstellungen",
+      "security": "Sicherheit",
+      "apiKeys": "API-Schlüssel"
+    },
+    "profile": {
+      "title": "Profil",
+      "identity": "Name und E-Mail",
+      "identityDescription": "Sichtbar für die Personen in deinen Teams.",
+      "nameHint": "Bis zu {max} Zeichen.",
+      "saved": "Profil gespeichert.",
+      "installation": "Installation",
+      "memberSince": "Mitglied seit"
+    },
+    "preferences": {
+      "title": "Einstellungen",
+      "saved": "Einstellung gespeichert.",
+      "appearance": "Darstellung",
+      "appearanceDescription": "Design, Akzentfarbe und Sprache der App.",
+      "explorations": "Neue Auswertungen",
+      "explorationsDescription": "Womit eine neue Auswertung beginnt. Gespeicherte Ansichten und Links behalten ihre eigenen Einstellungen.",
+      "timezone": "Zeitzone",
+      "siteTimezone": "Zeitzone der Website",
+      "browserZone": "{zone} (dieser Browser)",
+      "range": "Zeitraum",
+      "pageRange": "Standard der jeweiligen Seite"
+    },
+    "security": {
+      "title": "Sicherheit",
+      "password": "Passwort",
+      "passwordDescription": "Eine Änderung meldet alle anderen Browser ab.",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Neues Passwort wiederholen",
+      "passwordHint": "Mindestens {min} Zeichen.",
+      "mismatch": "Die beiden Passwörter sind verschieden.",
+      "changePassword": "Passwort ändern",
+      "passwordChanged": "Passwort geändert. Andere Browser sind abgemeldet."
+    }
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Diese Adresse passt zu keiner Seite."
+  },
+  "recording": {
+    "title": "Aufzeichnung",
+    "description": "Replays und Heatmaps für diese Website. Beides bleibt aus, bis du es einschaltest.",
+    "open": "Aufzeichnungseinstellungen öffnen",
+    "replay": "Sitzungs-Replays",
+    "replayHint": "Zeichnet auf, was Besucher bei ausgewählten Seitenaufrufen sehen und tun.",
+    "heatmaps": "Heatmaps",
+    "heatmapsHint": "Zählt Klicks und Scrolltiefe bei ausgewählten Seitenaufrufen.",
+    "replaySample": "Replay-Stichprobe, %",
+    "heatmapSample": "Heatmap-Stichprobe, %",
+    "sampleHint": "Anteil der Seitenaufrufe, die aufgezeichnet werden, 1 bis 100. Standard 10.",
+    "maxDuration": "Längstes Replay, Minuten",
+    "maxDurationHint": "1 bis 60. Standard 5.",
+    "excludedElements": "Nie aufgezeichnete Elemente",
+    "excludedElementsHint": "Ein CSS-Selektor pro Zeile, zum Beispiel .account-number. Der Recorder ersetzt sie durch eine leere Fläche, bevor etwas gesendet wird. Elemente mit der Klasse rr-block fehlen immer.",
+    "excludedPaths": "Nie aufgezeichnete Seiten",
+    "excludedPathsHint": "Ein Pfad pro Zeile, * steht für beliebige Zeichen, zum Beispiel /account*. Der Recorder kann eine Seite nicht selbst auslassen. Holocron verwirft daher, was er von diesen Seiten sendet, und löscht jedes Replay, das eine davon erreicht.",
+    "masking": "Texte und Formulareingaben werden immer im Browser maskiert, bevor sie gesendet werden.",
+    "maskingLimit": "Holocron kann nicht prüfen, was ein veränderter Recorder sendet. Nur das Recorder-Skript dieses Servers maskiert wie hier beschrieben.",
+    "budget": {
+      "title": "Speicher für Aufzeichnungen",
+      "description": "Gilt für alle Websites auf diesem Server.",
+      "used": "{used} von {cap} belegt durch {captures} Replays",
+      "saved": "Gespeicherte Replays: {used} von {cap}",
+      "refusing": "Die Grenze für Aufzeichnungen ist erreicht. Neue Replay-Daten werden abgelehnt, bis ältere Replays entfernt sind. Seitenaufrufe, Events und Heatmaps werden weiter erfasst.",
+      "retention": "Replays bleiben 14 Tage, außer sie sind gespeichert. Heatmaps bleiben 90 Tage."
+    }
+  },
+  "replays": {
+    "range": "Zeitraum",
+    "ranges": {
+      "1d": "Letzte 24 Stunden",
+      "7d": "Letzte 7 Tage",
+      "14d": "Letzte 14 Tage"
+    },
+    "path": "Seite enthält",
+    "device": "Gerät",
+    "devices": {
+      "all": "Alle Geräte",
+      "desktop": "Desktop",
+      "mobile": "Mobil",
+      "tablet": "Tablet"
+    },
+    "savedOnly": "Nur gespeicherte",
+    "listLabel": "Replays",
+    "columns": {
+      "recorded": "Aufgezeichnet",
+      "duration": "Dauer",
+      "entry": "Einstiegsseite",
+      "pages": "Seiten",
+      "device": "Gerät",
+      "country": "Land"
+    },
+    "open": "Replay vom {time} abspielen",
+    "saved": "Gespeichert",
+    "truncated": "Abgeschnitten",
+    "more": "Mehr anzeigen",
+    "empty": {
+      "title": "Keine Replays in diesem Zeitraum",
+      "description": "Die Aufzeichnung ist für diese Website vielleicht aus, oder es gab noch keinen ausgewählten Besuch."
+    },
+    "session": "Replays der Sitzung {id}",
+    "clearSession": "Alle Replays anzeigen",
+    "filter": "Replays, deren Sitzung {filter} entspricht",
+    "clearFilter": "Alle Replays anzeigen",
+    "filterUnreadable": "Dieser Replay-Filter ist nicht lesbar. Der Link ist vielleicht abgeschnitten.",
+    "player": {
+      "title": "Replay",
+      "back": "Alle Replays",
+      "save": "Replay speichern",
+      "unsave": "Aus Gespeicherten entfernen",
+      "savedHint": "Gespeicherte Replays bleiben länger als 14 Tage.",
+      "details": "Details",
+      "sessionLink": "Weitere Replays dieser Sitzung",
+      "play": "Abspielen",
+      "pause": "Pause",
+      "position": "Position",
+      "speed": "Geschwindigkeit",
+      "skip": "Inaktivität überspringen",
+      "time": "{current} von {total}",
+      "frame": "Replay eines aufgezeichneten Besuchs, ohne Skripte und Netzwerkzugriff angezeigt",
+      "loading": "Replay wird geladen",
+      "unavailable": {
+        "title": "Dieses Replay kann nicht abgespielt werden",
+        "description": "Es enthält keinen Seitenschnappschuss. Der Anfang fehlt vielleicht, oder die Grenze für Aufzeichnungen hat es gestoppt."
+      },
+      "truncated": "Die Aufzeichnung endete vorzeitig, weil die Grenze für Aufzeichnungen erreicht war.",
+      "gaps": "{count} Teile dieses Replays waren unvollständig und fehlen.",
+      "loadingMore": "Der Rest des Replays wird geladen"
+    },
+    "timeline": {
+      "title": "Ereignisse",
+      "jump": "Zu {time} springen",
+      "page": "Seite {path}",
+      "click": "Klick",
+      "input": "Eingabe",
+      "scroll": "Scrollen",
+      "resize": "Fenstergröße geändert",
+      "empty": "Keine Ereignisse."
+    },
+    "unavailable": "Diese Aufzeichnung ist nicht verfügbar"
+  },
+  "heatmaps": {
+    "range": "Zeitraum",
+    "ranges": {
+      "7d": "Letzte 7 Tage",
+      "30d": "Letzte 30 Tage",
+      "90d": "Letzte 90 Tage"
+    },
+    "viewport": "Ansicht",
+    "viewports": {
+      "desktop": "Desktop, ab 1280 px",
+      "tablet": "Tablet, 768 bis 1279 px",
+      "mobile": "Mobil, schmaler als 768 px"
+    },
+    "pages": "Seiten",
+    "page": "Seite",
+    "visits": "Besuche",
+    "pageCounts": "Klicks: {clicks}, Besuche: {visits}",
+    "clicks": "Klicks",
+    "scroll": "Scrolltiefe",
+    "canvas": "Klickdichte auf {path}",
+    "outline": "Klicks werden auf einem Umriss der Seite gezeigt. Die Seite selbst wird nicht angezeigt.",
+    "total": "Klicks: {count}",
+    "topCells": "Meistgeklickte Bereiche",
+    "cell": "Bereich",
+    "cellPosition": "{x} von links, {y} px von oben",
+    "depth": "Tiefe",
+    "reached": "Besuche, die sie erreicht haben",
+    "scrollTotal": "Besuche mit Scrolltiefe: {count}",
+    "replays": "Replays dieser Seite",
+    "empty": {
+      "title": "Keine Heatmap-Daten in diesem Zeitraum",
+      "description": "Heatmaps sind für diese Website vielleicht aus, oder noch kein ausgewählter Besuch hat geklickt oder gescrollt."
+    },
+    "noClicks": "Keine Klicks auf dieser Seite für diese Ansicht."
+  },
+  "explore": {
+    "title": "Erkunden",
+    "fields": {
+      "path": "Seite",
+      "hostname": "Hostname",
+      "title": "Seitentitel",
+      "query": "Query-String",
+      "event_name": "Ereignis",
+      "tag": "Tag",
+      "perf_metric": "Leistungsmetrik",
+      "currency": "Währung",
+      "referrer_domain": "Verweis",
+      "referrer_path": "Verweispfad",
+      "utm_source": "UTM-Quelle",
+      "utm_medium": "UTM-Medium",
+      "utm_campaign": "UTM-Kampagne",
+      "utm_content": "UTM-Inhalt",
+      "utm_term": "UTM-Begriff",
+      "click_id": "Klick-ID",
+      "channel": "Kanal",
+      "country": "Land",
+      "region": "Region",
+      "city": "Stadt",
+      "browser": "Browser",
+      "os": "Betriebssystem",
+      "device": "Gerät",
+      "language": "Sprache",
+      "screen": "Bildschirmgröße",
+      "weekday": "Wochentag",
+      "hour": "Stunde"
+    },
+    "eventProperty": "{key} (Ereigniseigenschaft)",
+    "sessionProperty": "{key} (Sitzungseigenschaft)",
+    "propertyType": "{key} · {type}",
+    "types": {
+      "null": "null",
+      "bool": "wahr oder falsch",
+      "integer": "Ganzzahl",
+      "decimal": "Dezimalzahl",
+      "date": "Datum",
+      "string": "Text",
+      "array": "Liste"
+    },
+    "measures": {
+      "pageviews": "Aufrufe",
+      "events": "Ereignisse",
+      "visitors": "Besucher",
+      "visitor_days": "Besuchertage",
+      "identified_people": "Identifizierte Personen",
+      "sessions": "Sitzungen",
+      "bounce_rate": "Absprungrate",
+      "span_mean": "Beobachtete Dauer",
+      "span_median": "Mittlere beobachtete Dauer",
+      "revenue_net": "Nettoumsatz",
+      "revenue_gross": "Bruttoumsatz",
+      "revenue_refunds": "Erstattungen",
+      "revenue_count": "Umsatzbuchungen",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95"
+    },
+    "stats": {
+      "count": "Anzahl von {key}",
+      "sum": "Summe von {key}",
+      "min": "Minimum von {key}",
+      "max": "Maximum von {key}",
+      "mean": "Mittelwert von {key}"
+    },
+    "operators": {
+      "eq": "ist",
+      "neq": "ist nicht",
+      "contains": "enthält",
+      "not_contains": "enthält nicht",
+      "starts_with": "beginnt mit",
+      "in": "ist eines von",
+      "not_in": "ist keines von",
+      "gt": "ist größer als",
+      "gte": "ist mindestens",
+      "lt": "ist kleiner als",
+      "lte": "ist höchstens",
+      "between": "liegt zwischen",
+      "is_set": "ist gesetzt",
+      "is_not_set": "ist nicht gesetzt",
+      "is_null": "ist null"
+    },
+    "weekdays": {
+      "1": "Montag",
+      "2": "Dienstag",
+      "3": "Mittwoch",
+      "4": "Donnerstag",
+      "5": "Freitag",
+      "6": "Samstag",
+      "7": "Sonntag"
+    },
+    "range": {
+      "label": "Zeitraum",
+      "today": "Heute",
+      "last7": "Letzte 7 Tage",
+      "last30": "Letzte 30 Tage",
+      "last90": "Letzte 90 Tage",
+      "last12Months": "Letzte 12 Monate",
+      "custom": "Eigener Zeitraum",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Übernehmen",
+      "relativeDays": "Letzte {count} Tage",
+      "relativeWeeks": "Letzte {count} Wochen",
+      "relativeMonths": "Letzte {count} Monate",
+      "days": "{start} bis {end}",
+      "last3Years": "Letzte 3 Jahre",
+      "last5Years": "Letzte 5 Jahre",
+      "all": "Gesamter Zeitraum"
+    },
+    "compare": {
+      "label": "Mit dem vorherigen Zeitraum vergleichen",
+      "short": "Vergleichen",
+      "previous": "Vorheriger Zeitraum: {value}",
+      "new": "neu",
+      "noChange": "unverändert",
+      "up": "Gestiegen",
+      "down": "Gesunken"
+    },
+    "granularity": {
+      "label": "Intervall",
+      "hour": "Stündlich",
+      "day": "Täglich",
+      "week": "Wöchentlich",
+      "month": "Monatlich"
+    },
+    "visualization": {
+      "label": "Darstellung",
+      "table": "Tabelle",
+      "line": "Linie",
+      "bar": "Balken",
+      "grid": "Wochenraster"
+    },
+    "filters": {
+      "label": "Filter",
+      "placeholder": "Nach einem Feld filtern",
+      "pickOperator": "{field}: Vergleich wählen",
+      "pickValue": "{field}: Wert wählen oder eingeben",
+      "enterValue": "{field}: Wert eingeben und Enter drücken",
+      "applied": "Filter auf {field} hinzugefügt",
+      "removed": "Filter auf {field} entfernt",
+      "fieldPicked": "{field} gewählt",
+      "editing": "Filter auf {field} wird bearbeitet",
+      "cleared": "Filter entfernt",
+      "wentBack": "Einen Schritt zurück",
+      "clearAll": "Filter entfernen",
+      "chipCount": "{count} Filter",
+      "remove": "Filter auf {field} entfernen",
+      "edit": "Filter auf {field} bearbeiten",
+      "typeValue": "Wert eingeben und Enter drücken",
+      "noMatch": "Kein Feld passt",
+      "stageField": "Felder",
+      "stageOperator": "Vergleiche",
+      "stageValue": "Werte",
+      "and": "und",
+      "or": "oder",
+      "rootOp": "Bedingungen sind mit {op} verknüpft. Umschalten",
+      "groupWithPrevious": "Mit dem vorherigen Filter gruppieren",
+      "ungroup": "Gruppe auflösen",
+      "groupLabel": "Gruppe aus {count} Bedingungen, verknüpft mit {op}",
+      "chipActions": "Optionen für den Filter auf {field}",
+      "matchAll": "alle",
+      "matchAny": "eine von",
+      "true": "wahr",
+      "false": "falsch",
+      "invalidValue": "Einen Wert vom Typ {type} eingeben",
+      "refused": "Der Server hat diesen Filter abgelehnt"
+    },
+    "segments": {
+      "label": "Segmente",
+      "title": "Segmente",
+      "empty": "Noch keine Segmente.",
+      "save": "Filter als Segment speichern",
+      "apply": "Anwenden",
+      "delete": "Segment {name} löschen",
+      "namePlaceholder": "Name des Segments",
+      "saved": "Segment {name} gespeichert.",
+      "readOnly": "Deine Rolle kann Segmente anwenden, aber nicht speichern."
+    },
+    "views": {
+      "trigger": "Gespeicherte Ansichten",
+      "triggerActive": "Gespeicherte Ansicht: {name}",
+      "title": "Gespeicherte Ansichten",
+      "empty": "Noch nichts gespeichert.",
+      "save": "Diese Ansicht speichern",
+      "update": "{name} aktualisieren",
+      "namePlaceholder": "Name der Ansicht",
+      "delete": "{name} löschen",
+      "deleteTitle": "Gespeicherte Ansicht löschen",
+      "deleteConfirm": "„{name}“ löschen? Board-Karten, die daraus angeheftet wurden, behalten ihre eigene Kopie.",
+      "saved": "Als {name} gespeichert.",
+      "cancel": "Abbrechen",
+      "confirm": "Löschen",
+      "saveAction": "Speichern"
+    },
+    "export": {
+      "label": "Exportieren",
+      "csv": "CSV herunterladen",
+      "json": "JSON mit Zustand herunterladen",
+      "done": "{file} heruntergeladen."
+    },
+    "pin": {
+      "label": "An Board heften",
+      "title": "An ein Board heften",
+      "description": "Die Karte behält genau diese Ansicht: Filter, Zeitraum, Vergleich und Dimensionen.",
+      "board": "Board",
+      "newBoard": "Name des neuen Boards",
+      "cardTitle": "Titel der Karte",
+      "pin": "Anheften",
+      "pinned": "An {board} geheftet.",
+      "noBoards": "Noch keine Boards in diesem Arbeitsbereich. Gib einen Namen ein, um eines anzulegen.",
+      "readOnly": "Deine Rolle kann Boards nicht ändern."
+    },
+    "refresh": "Aktualisieren",
+    "reset": "Ansicht zurücksetzen",
+    "freshness": {
+      "exact": "Exakte Zahlen bis {time}",
+      "stale": "Daten bis {time}",
+      "label": "Datenstand",
+      "range": "{start} bis {end}",
+      "corrected": "Alle Werte korrigiert",
+      "pending": "{count} Tage werden noch neu berechnet",
+      "version": "Kennzahlenversion {version}",
+      "retention": "Beginnt an der Aufbewahrungsgrenze",
+      "updated": "Daten bis Batch {batch}"
+    },
+    "states": {
+      "previous": "Das vorherige Ergebnis bleibt sichtbar, bis das neue geladen ist.",
+      "empty": "Keine Treffer",
+      "emptyHint": "Keine Ereignisse in diesem Zeitraum passen zu den Filtern. Zeitraum erweitern oder Filter entfernen.",
+      "unreadable": "Dieser Link enthält eine Ansicht, die dieses Dashboard nicht lesen kann.",
+      "version": "Dieser Link stammt aus einer neueren Holocron-Version.",
+      "oversize": "Diese Ansicht ist zu groß für einen Link.",
+      "site": "Dieser Link gehört zu einer anderen Website.",
+      "problemHint": "Es wurde nichts berechnet. Setze die Ansicht zurück, um neu zu beginnen.",
+      "refused": "Diese Ansicht kann nicht berechnet werden",
+      "oversizeEdit": "Mit dieser Änderung wird die Ansicht zu groß für einen Link. Speichere sie stattdessen als Ansicht.",
+      "coverage": "{with} von {eligible} Ereignissen hatten eine Identität; Besucher- und Sitzungswerte beruhen auf diesen."
+    },
+    "table": {
+      "label": "Ergebnisse",
+      "actionsFor": "Aktionen für {value}",
+      "include": "Nur {value}",
+      "exclude": "{value} ausschließen",
+      "split": "Nach {field} aufteilen",
+      "notSet": "(nicht gesetzt)",
+      "null": "(null)",
+      "pageOf": "Seite {page} von {pages}",
+      "previousPage": "Vorherige Seite",
+      "nextPage": "Nächste Seite",
+      "total": "Gesamt",
+      "sortBy": "Nach {column} sortieren"
+    },
+    "chart": {
+      "summary": "{measure} über {count} Intervalle, am höchsten bei {peak} mit {value}.",
+      "empty": "Keine Daten in diesem Zeitraum.",
+      "interval": "Intervall",
+      "previousMarker": "Schraffierte Balken liegen vor dem Zeitraum.",
+      "weekOf": "Woche ab {date}",
+      "legendEstimate": "Schätzung",
+      "estimate": "Schätzung {value}, zwischen {low} und {high}",
+      "basis": {
+        "weekday": {
+          "1": "Die Schätzung beruht auf den letzten {count} Montagen.",
+          "2": "Die Schätzung beruht auf den letzten {count} Dienstagen.",
+          "3": "Die Schätzung beruht auf den letzten {count} Mittwochen.",
+          "4": "Die Schätzung beruht auf den letzten {count} Donnerstagen.",
+          "5": "Die Schätzung beruht auf den letzten {count} Freitagen.",
+          "6": "Die Schätzung beruht auf den letzten {count} Samstagen.",
+          "7": "Die Schätzung beruht auf den letzten {count} Sonntagen."
+        },
+        "days": "Die Schätzung beruht auf {count} Vergleichstagen."
+      },
+      "exact": {
+        "now": "Exakte Zahlen bis jetzt.",
+        "until": "Exakte Zahlen bis {time}."
+      },
+      "now": "Jetzt {time}",
+      "dataUntil": "Daten bis {time}",
+      "consequence": {
+        "passesAround": "Überschreitet {value} gegen {time}",
+        "passesOn": "Überschreitet {value} am {date}",
+        "busiestHour": "Stärkste Stunde voraussichtlich {start} bis {end}",
+        "busiestDay": "Stärkster Tag voraussichtlich am {date}"
+      }
+    },
+    "annotations": {
+      "label": "Notizen",
+      "add": "Notiz hinzufügen",
+      "text": "Notiz",
+      "at": "Datum und Uhrzeit",
+      "empty": "Keine Notizen in diesem Zeitraum.",
+      "delete": "Notiz {text} löschen",
+      "save": "Hinzufügen"
+    },
+    "measuresPicker": "Kennzahlen",
+    "dimensionsPicker": "Aufteilen nach",
+    "addDimension": "Dimension hinzufügen",
+    "removeDimension": "{field} entfernen",
+    "noDimensions": "Keine Aufteilung: nur Summen.",
+    "grid": {
+      "label": "Traffic nach Wochentag und Stunde",
+      "summary": "{measure} nach Wochentag und Tagesstunde."
+    },
+    "values": {
+      "device": {
+        "desktop": "Desktop",
+        "laptop": "Laptop",
+        "mobile": "Mobilgerät",
+        "tablet": "Tablet",
+        "console": "Konsole",
+        "smarttv": "Smart-TV"
+      },
+      "channel": {
+        "direct": "Direkt",
+        "referral": "Verweis",
+        "organicSearch": "Organische Suche",
+        "paidSearch": "Bezahlte Suche",
+        "organicSocial": "Soziale Netzwerke",
+        "paidSocial": "Bezahlte soziale Netzwerke",
+        "email": "E-Mail",
+        "sms": "SMS",
+        "affiliate": "Affiliate",
+        "llm": "KI-Assistent",
+        "paidAds": "Bezahlte Anzeigen",
+        "organicShopping": "Shopping",
+        "paidShopping": "Bezahltes Shopping",
+        "organicVideo": "Video",
+        "paidVideo": "Bezahltes Video"
+      }
+    },
+    "scope": {
+      "label": "Umfang",
+      "untilNow": "bis jetzt, {time}",
+      "compare": {
+        "label": "Vergleich",
+        "none": "Kein Vergleich",
+        "previous": "vs. vorheriger Zeitraum",
+        "weekday": "vs. typischer {weekday}",
+        "weekdays": "vs. typische Wochentage",
+        "insufficient": "typischer Wochentag (zu wenig Verlauf)",
+        "options": {
+          "none": "Kein Vergleich",
+          "previous": "Vorheriger Zeitraum",
+          "weekday": "Typischer {weekday}",
+          "weekdays": "Typische Wochentage"
+        },
+        "blocked": {
+          "range": "Höchstens {days} Tage",
+          "measure": "Für {measure} nicht verfügbar",
+          "report": "Für diesen Bericht nicht verfügbar"
+        }
+      },
+      "addFilter": "Filter oder Segment",
+      "filterEditor": "Filter und Segmente",
+      "group": "{count} Bedingungen",
+      "filters": "{count} Filter",
+      "oneFilter": "1 Filter"
+    },
+    "change": {
+      "above": "{percent} mehr",
+      "below": "{percent} weniger",
+      "same": "etwa gleich",
+      "new": "neu"
+    }
+  },
+  "boards": {
+    "title": "Boards",
+    "actions": "Board-Optionen",
+    "empty": "Noch keine Boards",
+    "emptyHint": "Hefte eine Ansicht aus der Übersicht oder Erkunden an, um ein Board zu beginnen.",
+    "create": "Neues Board",
+    "namePlaceholder": "Name des Boards",
+    "createAction": "Anlegen",
+    "cards": "{count} Karte | {count} Karten",
+    "emptyBoard": "Dieses Board hat noch keine Karten",
+    "emptyBoardHint": "Hefte eine Ansicht aus der Übersicht oder Erkunden an.",
+    "readOnly": "Deine Rolle kann dieses Board ansehen, aber nicht ändern.",
+    "rename": "Umbenennen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "moveUp": "{title} nach oben",
+    "moveDown": "{title} nach unten",
+    "remove": "{title} entfernen",
+    "cardActions": "Optionen für {title}",
+    "range": "Zeitraum für alle Karten",
+    "ownRange": "Eigener Zeitraum jeder Karte",
+    "overridden": "Zeitraum auf diesem Board überschrieben",
+    "open": "In Erkunden öffnen",
+    "delete": "Board löschen",
+    "deleteConfirm": "Das Board „{name}“ und seine Karten löschen?",
+    "unavailable": "Board nicht verfügbar",
+    "unavailableHint": "Es existiert nicht, oder dein Konto hat keinen Zugriff.",
+    "noWorkspace": "Wähle einen Arbeitsbereich, um seine Boards zu sehen.",
+    "pinnedFrom": "Aus einer gespeicherten Ansicht angeheftet",
+    "openReport": "Bericht öffnen",
+    "cardUnavailable": "Die Website dieser Karte gehört nicht zu dem, was du sehen kannst."
+  },
+  "realtime": {
+    "title": "Echtzeit",
+    "active": "Gerade aktiv",
+    "activeHint": "Verschiedene tägliche Identitäten mit Aktivität in den letzten 5 Minuten",
+    "minutes": "Letzte 30 Minuten",
+    "summary": "{views} Aufrufe und {visitors} Besucherminuten in den letzten 30 Minuten.",
+    "recent": "Neueste Ereignisse",
+    "noRecent": "Keine Ereignisse in den letzten 30 Minuten.",
+    "status": {
+      "connecting": "Verbinde",
+      "current": "Live",
+      "stale": "Wird aktualisiert",
+      "resyncing": "Verbinde neu",
+      "disconnected": "Getrennt, letzte Daten werden gezeigt"
+    },
+    "columns": {
+      "time": "Zeit",
+      "what": "Seite oder Ereignis",
+      "country": "Land",
+      "device": "Gerät",
+      "browser": "Browser"
+    },
+    "kind": {
+      "pageview": "Aufruf",
+      "custom_event": "Ereignis"
+    },
+    "minute": "Minute",
+    "view": {
+      "label": "Ansicht",
+      "globe": "Globus",
+      "details": "Details"
+    },
+    "globe": {
+      "current": "Aktuelle Besucher",
+      "pageviews": "{count} Aufruf | {count} Aufrufe",
+      "justNow": "gerade eben",
+      "pins": "Orte der aktiven Besucher",
+      "pin": "{place}: {count} aktiver Besucher, zuletzt {path} | {place}: {count} aktive Besucher, zuletzt {path}",
+      "pinActive": "{count} aktiv",
+      "sound": "Ton bei neuen Ereignissen",
+      "soundOn": "Bei neuen Ereignissen einen Ton abspielen",
+      "soundOff": "Neue Ereignisse stumm schalten"
+    }
+  },
+  "stage": {
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Vollbild beenden"
+  },
+  "flow": {
+    "clear": "Fokus aufheben",
+    "currency": "Umsatz in {currency}; andere Währungen stehen unter Details."
+  },
+  "retention": {
+    "title": "Bindung",
+    "period": {
+      "label": "Kohortenzeitraum",
+      "day": "Tageskohorten",
+      "week": "Wochenkohorten"
+    },
+    "intervals": {
+      "days": "{count} Tage",
+      "weeks": "{count} Wochen",
+      "label": "Intervalle: {value}"
+    },
+    "labels": {
+      "label": "Grundgesamtheit und Grenzen dieses Berichts",
+      "population": "Nur dauerhafte Profile mit Einwilligung.",
+      "coverage": "{consented} von {eligible} zählbaren Ereignissen in diesen Zeiträumen stammen von Profilen mit Einwilligung ({share}). Anonyme Besucher erhalten jeden Tag ein neues Pseudonym und werden nicht gezählt.",
+      "history": "Der Eintritt in eine Kohorte ist das erste Ereignis eines Profils seit {date}, dem Beginn der aufbewahrten Daten. Ein Profil, das zuletzt davor aktiv war, zählt als neu.",
+      "incomplete": "Intervalle, die nach {time} enden, sind unvollständig: gestrichelt, mit ihrem aktuellen Wert und ohne Einfluss auf die Durchschnitte."
+    },
+    "table": {
+      "label": "Kohortentabelle",
+      "caption": "Anteil jeder Kohorte, der in jedem Intervall aktiv war, in {timezone}",
+      "cohort": "Kohorte",
+      "size": "Profile",
+      "day": "Tag {offset}",
+      "week": "Woche {offset}",
+      "average": "Durchschnitt",
+      "incomplete": "(unvollständig)",
+      "cellTitle": "{active} von {size} Profilen aktiv"
+    },
+    "empty": {
+      "noConsent": "Keine Profile mit Einwilligung in diesen Zeiträumen",
+      "noConsentHint": "Bindung verfolgt Personen über mehrere Tage und braucht dafür eine dauerhafte Identifizierung mit Einwilligung. Anonyme Besucher erhalten jeden Tag ein neues Pseudonym, daher lässt sich nicht zeigen, ob eine Person zurückkam.",
+      "enable": "Dauerhafte Identität einschalten",
+      "noEntries": "In diesen Zeiträumen ist kein Profil neu hinzugekommen",
+      "noEntriesHint": "Profile mit Einwilligung waren aktiv, hatten ihr erstes Ereignis aber vor diesen Zeiträumen. Wähle einen früheren Zeitraum, um ihre Kohorten zu sehen."
+    },
+    "summary": "Nur dauerhafte Profile mit Einwilligung: {profiles} in {cohorts} Kohorten. Durchschnitte vollständiger Intervalle.",
+    "view": {
+      "label": "Ansicht",
+      "heatmap": "Heatmap",
+      "details": "Details"
+    },
+    "heatmap": {
+      "label": "Wiederkehr nach Kohorte",
+      "weeksAfter": "Wochen nach dem ersten Besuch",
+      "daysAfter": "Tage nach dem ersten Besuch",
+      "people": "Personen",
+      "cohortWeek": "Woche vom {date}",
+      "cohortDay": "{date}",
+      "cellValue": "{rate} kamen wieder, {active} von {size}",
+      "headlineWeek": "kommen in der Woche nach ihrem ersten Besuch wieder",
+      "headlineDay": "kommen am Tag nach ihrem ersten Besuch wieder",
+      "change": "{change} % gegenüber früheren Kohorten",
+      "chart": "Anteil jeder Kohorte, der wiederkam, nach Zeitraum seit dem ersten Besuch: der Durchschnitt und die gewählte Kohorte",
+      "steady": "Neuere Kohorten kommen {later} etwa so oft wieder wie frühere.",
+      "more": "Kohorten seit dem {date} bringen {later} {share} mehr Personen zurück als frühere.",
+      "fewer": "Kohorten seit dem {date} bringen {later} {share} weniger Personen zurück als frühere.",
+      "laterWeek": "eine Woche später",
+      "laterDay": "einen Tag später",
+      "selected": "{active} von {size} Personen kamen wieder ({rate}).",
+      "sessions": "Sitzungen vom {range}",
+      "sessionsHint": "Alle Besucher dieses Zeitraums, nicht nur diese Kohorte.",
+      "hint": "Zeig auf eine Kohorte, um ihre Kurve zu sehen. Wähl eine Zelle, um die Sitzungen ihres Zeitraums zu öffnen.",
+      "population": "Nur dauerhafte Profile mit Einwilligung. Gestrichelte Zellen laufen noch und zählen nicht zum Durchschnitt."
+    }
+  },
+  "revenue": {
+    "title": "Umsatz",
+    "stage": {
+      "view": {
+        "label": "Ansicht",
+        "globe": "Globus",
+        "details": "Details"
+      },
+      "change": "{change} gegenüber dem vorigen Zeitraum",
+      "net": "Nettoumsatz",
+      "byHour": "Nettoumsatz nach Tageszeit",
+      "hour": "{from} bis {until}: {amount}. In Explore öffnen",
+      "takeaway": "Der meiste Umsatz kommt zwischen {from} und {until}, vor allem aus {where}.",
+      "takeawayHours": "Der meiste Umsatz kommt zwischen {from} und {until}.",
+      "places": "Umsatz nach Land",
+      "pin": "{place}: {amount}. In Explore öffnen",
+      "pinDetail": "{amount} · {share} des Umsatzes",
+      "channel": "Stärkster Kanal: {channel}, {amount}"
+    },
+    "note": "{records} Umsatzeinträge. Jede Währung bleibt getrennt: Beträge sind exakt und werden nie umgerechnet. Erstattungen sind negative Beträge.",
+    "currency": "Währung",
+    "chartIn": "{measure}, {currency}",
+    "chartAll": "{measure}, alle Währungen",
+    "refundRate": "Erstattungsquote {rate}",
+    "perRecord": "Netto je Buchung {amount}",
+    "byCurrency": "Nach Währung",
+    "breakdownBy": "Nach Währung und {field}",
+    "empty": "Kein Umsatz in diesem Zeitraum",
+    "emptyHint": "Umsatz stammt aus eigenen Ereignissen, deren Daten einen Betrag und eine ISO-4217-Währung enthalten.",
+    "breakdownLabel": "Aufschlüsselung: {value}"
+  },
+  "performance": {
+    "title": "Leistung",
+    "note": "Perzentile sind der nächste Rang über gespeicherte Messungen: Jeder Wert wurde bei einem echten Seitenaufruf gemessen. Eine Messung ohne eine Kennzahl zählt für diese nicht.",
+    "cards": "Web Vitals beim 75. Perzentil",
+    "p75": "p75",
+    "byMetric": "Nach Kennzahl",
+    "breakdownBy": "Nach Kennzahl und {field}",
+    "empty": "Keine Leistungsmessungen in diesem Zeitraum",
+    "emptyHint": "Der Tracker meldet Web Vitals, wenn eine Seite verborgen oder verlassen wird. Messungen erscheinen hier, sobald sie erfasst sind.",
+    "vitals": {
+      "lcp": "Largest Contentful Paint",
+      "inp": "Interaction to Next Paint",
+      "cls": "Cumulative Layout Shift",
+      "fcp": "First Contentful Paint",
+      "ttfb": "Time to First Byte"
+    },
+    "rating": {
+      "good": "Gut",
+      "improve": "Verbesserungswürdig",
+      "poor": "Schlecht"
+    },
+    "table": {
+      "label": "Perzentile je Kennzahl",
+      "caption": "p50, p75 und p95 je Kennzahl",
+      "rating": "Bewertung bei p75"
+    },
+    "breakdownLabel": "Aufschlüsselung: {value}"
+  },
+  "reports": {
+    "incomplete": "Jeder Schritt und jedes Ziel braucht eine Bedingung, damit Ergebnisse erscheinen.",
+    "view": {
+      "label": "Ansicht",
+      "flow": "Fluss",
+      "details": "Details"
+    },
+    "scope": {
+      "label": "Zählen",
+      "daily": "Tägliche Besucher",
+      "person": "Einwilligende Personen",
+      "session": "Sitzungen"
+    },
+    "population": {
+      "label": "Wen dieser Bericht zählt",
+      "daily": "Der Tagesbereich folgt jedem Besucher innerhalb eines lokalen Tages. Identitäten wechseln um Mitternacht, daher wird nichts über Tage hinweg verbunden.",
+      "person": "Der Personenbereich zählt nur einwilligende, identifizierte Personen über Tage hinweg. Auf sie entfallen {share} der Ereignisse im Zeitraum ({linked} von {all}).",
+      "missing": "{missing} von {all} Ereignissen im Zeitraum hatten keine Identität und werden nicht gezählt."
+    },
+    "quickAdd": {
+      "kind": "Seite oder Ereignis",
+      "page": "Seite",
+      "event": "Ereignis",
+      "pagePlaceholder": "Seitenpfad, etwa /pricing",
+      "eventPlaceholder": "Ereignisname, etwa signup"
+    },
+    "drill": {
+      "actionsFor": "Aktionen für {value}",
+      "sessions": "Sitzungen anzeigen",
+      "events": "Ereignisse in Erkunden öffnen"
+    },
+    "funnel": {
+      "title": "Trichter",
+      "steps": "Trichterschritte",
+      "stepLabel": "Schritt {step}",
+      "step": "Schritt",
+      "add": "Schritt hinzufügen",
+      "emptyStep": "Dieser Schritt braucht eine Bedingung.",
+      "moveUp": "Schritt {step} nach oben",
+      "moveDown": "Schritt {step} nach unten",
+      "remove": "Schritt {step} entfernen",
+      "moved": "Schritt {from} an Position {to} verschoben",
+      "removed": "Schritt {step} entfernt",
+      "window": "Zeitfenster",
+      "windows": {
+        "10m": "10 Min.",
+        "1h": "1 Stunde",
+        "1d": "1 Tag",
+        "7d": "7 Tage",
+        "30d": "30 Tage"
+      },
+      "conversion": "Konversion",
+      "conversionOf": "{last} von {first} erreichten den letzten Schritt",
+      "table": "Trichterschritte und wie viele sie erreichten",
+      "reached": "Erreicht",
+      "fromFirst": "Von Schritt 1",
+      "drop": "Abgesprungen",
+      "stage": {
+        "view": {
+          "label": "Ansicht",
+          "ribbon": "Fluss",
+          "details": "Details"
+        },
+        "change": "{change} Prozentpunkte gegenüber dem vorigen Zeitraum",
+        "unchanged": "Gleich wie im vorigen Zeitraum",
+        "worst": "Die meisten hören nach Schritt {step} auf, {caption}: {rate} von ihnen gehen nicht weiter.",
+        "noDrop": "Alle, die begonnen haben, haben den letzten Schritt erreicht.",
+        "after": "Nach Schritt {step} aufgehört",
+        "stopped": "{count} von {reached} kamen nicht weiter",
+        "exited": "Website verlassen",
+        "back": "Zurückgegangen",
+        "other": "Anderswo",
+        "sessions": "Letzte Sitzungen, die hier aufgehört haben",
+        "noSessions": "Für diesen Schritt gibt es keine Sitzungen zu zeigen.",
+        "session": "Sitzung {id}",
+        "allSessions": "Alle Sitzungen, die Schritt {step} erreicht haben",
+        "anyPageview": "Beliebiger Seitenaufruf",
+        "anyEvent": "Beliebiges Ereignis",
+        "isSet": "{field} ist gesetzt",
+        "notSet": "Ohne {field}",
+        "figure": "Die {steps} Schritte des Funnels als schmaler werdendes Band; wer aufhört, zweigt nach dem nächsten Ziel ab",
+        "stepLink": "Schritt {step}, {caption}: {count} haben ihn erreicht. Ihre Sitzungen öffnen",
+        "flowLabel": "{count} hörten nach Schritt {step} auf: {where}. Den Abgang dieses Schritts zeigen",
+        "summary": "{steps} Schritte · Fenster {window} · {scope}",
+        "edit": "Schritte bearbeiten"
+      }
+    },
+    "journey": {
+      "title": "Pfade",
+      "value": "Schritte sind",
+      "values": {
+        "path": "Seiten",
+        "event_name": "Ereignisse"
+      },
+      "length": "Schritte",
+      "meta": "{sessions} Sitzungen, {distinct} Pfade",
+      "entering": "Sitzungen in diesem Bericht",
+      "table": "Häufigste Pfade",
+      "sequence": "Pfad",
+      "sessions": "Sitzungen",
+      "share": "Anteil",
+      "steps": "Schritte",
+      "flow": {
+        "rail": "Pfade im Überblick",
+        "label": "Pfade vom ersten Schritt bis dorthin, wo sie enden",
+        "topShare": {
+          "session": "der Sitzungen nehmen den häufigsten Pfad",
+          "person": "der Personen nehmen den häufigsten Pfad"
+        },
+        "dropOff": {
+          "session": "{share} der Sitzungen, die {page} erreichen, enden dort.",
+          "person": "{share} der Personen, die {page} erreichen, gehen dort."
+        },
+        "other": "Andere",
+        "exit": "Verlassen",
+        "through": {
+          "session": "Sitzungen hier: {count}, {share} von allen",
+          "person": "Personen hier: {count}, {share} von allen"
+        },
+        "paths": "Häufigste Pfade",
+        "pathsThrough": "Häufigste Pfade hierdurch",
+        "coverage": "Aus den {shown} häufigsten von {distinct} Pfaden, {share} von allen.",
+        "first": "Erster Schritt links, das Ende rechts",
+        "hint": "Schritt wählen, um ihm zu folgen"
+      }
+    },
+    "attribution": {
+      "title": "Attribution",
+      "model": "Modell",
+      "models": {
+        "last_touch": "Letzter Kontakt",
+        "first_touch": "Erster Kontakt"
+      },
+      "touchField": "Zuordnen nach",
+      "lookback": "Rückblick: {days} Tage",
+      "conversions": "Konversionen",
+      "addConversion": "Konversion hinzufügen",
+      "removeConversion": "{name} entfernen",
+      "revenue": "Umsatz",
+      "top": "Die häufigsten {shown} von {count} Werten",
+      "table": "Zugeordnete Konversionen für {name}",
+      "conversionsColumn": "Konversionen",
+      "share": "Anteil",
+      "netRevenue": "Nettoumsatz",
+      "direct": "Direkt oder ohne externen Kontakt",
+      "flow": {
+        "rail": "Attribution im Überblick",
+        "label": "Conversions von {field} zu jeder Conversion zugeordnet",
+        "columns": "{field} links, Conversions rechts",
+        "hint": "Wert wählen, um ihm zu folgen",
+        "headline": {
+          "revenue": "Nettoumsatz, zugeordnet nach {model}",
+          "goal": "{name}, zugeordnet nach {model}"
+        },
+        "shift": {
+          "last_touch": "{value} erhält {now} {what} nach letztem Kontakt und {alt} nach erstem Kontakt.",
+          "first_touch": "{value} erhält {now} {what} nach erstem Kontakt und {alt} nach letztem Kontakt."
+        },
+        "what": {
+          "revenue": "des Umsatzes",
+          "conversions": "der Conversions"
+        },
+        "byTouch": "Nach {field}",
+        "rowCompared": "{value}: {now} bei {model}, {alt} bei {other}",
+        "otherTouches": "Andere Werte",
+        "conversions": "{count} Conversions",
+        "share": "{share} von allen"
+      }
+    },
+    "goals": {
+      "title": "Ziele",
+      "add": "Gespeichertes Ziel hinzufügen",
+      "new": "Neues Ziel",
+      "noneWriter": "Noch keine Ziele. Lege eines an, um seine Konversion zu sehen.",
+      "noneReader": "Noch keine Ziele. Wer Definitionen verwaltet, kann sie anlegen.",
+      "newTitle": "Neues Ziel",
+      "newDescription": "Ein Ziel zählt Sitzungen oder einwilligende Personen mit einem passenden Ereignis.",
+      "editTitle": "{name} bearbeiten",
+      "editDescription": "Speichern erzeugt Version {version}. Berichte mit einer früheren Version behalten sie, bis du sie aktualisierst.",
+      "name": "Name",
+      "predicate": "Passende Ereignisse",
+      "scope": "Zählen je",
+      "counting": "Zählweise",
+      "once": "Einmal je Einheit",
+      "every": "Jedes Ereignis",
+      "create": "Ziel anlegen",
+      "saveVersion": "Neue Version speichern",
+      "table": "Zielkonversion",
+      "goal": "Ziel",
+      "rate": "Rate",
+      "completions": "Abschlüsse",
+      "denominator": "Von",
+      "of": "Nenner",
+      "versionColumn": "Version",
+      "sessionDenominator": "Sitzungen im Zeitraum",
+      "personDenominator": "einwilligende Personen im Zeitraum",
+      "version": "v{version}",
+      "unsaved": "nicht gespeichert",
+      "upgrade": "Version {version} verwenden",
+      "upgradeNamed": "Version {version} von {name} verwenden",
+      "edit": "Ziel bearbeiten (neue Version)",
+      "remove": "Aus dem Bericht entfernen"
+    },
+    "campaigns": {
+      "title": "Kampagnen",
+      "field": "Aufteilen nach",
+      "attribute": "Konversionen zuordnen",
+      "empty": "Kein Kampagnenverkehr in diesem Zeitraum",
+      "emptyHint": "Sitzungen mit UTM-Parametern oder Klick-IDs in der Einstiegs-URL erscheinen hier.",
+      "flow": {
+        "rail": "Kampagnen im Überblick",
+        "label": "Kampagnenverkehr vom Kanal zu {field}",
+        "columns": "Kanal links, {field} rechts",
+        "hint": "Kanal oder Wert wählen, um ihm zu folgen",
+        "weight": {
+          "label": "Größe nach",
+          "revenue": "Umsatz",
+          "sessions": "Sitzungen"
+        },
+        "headline": {
+          "revenue": "Nettoumsatz aus Sitzungen mit {field}",
+          "sessions": "Sitzungen mit {field}"
+        },
+        "leader": "{channel} bringt {share} davon, das meiste über {value}.",
+        "leaderOnly": "{channel} bringt {share} davon.",
+        "channels": "Nach Kanal",
+        "otherChannels": "Andere Kanäle",
+        "otherValues": "Andere Werte",
+        "sessions": "{count} Sitzungen",
+        "revenue": "{amount} netto",
+        "share": "{share} des Flusses",
+        "untagged": "Sitzungen ohne {field} fehlen hier: {count}."
+      }
+    },
+    "sessions": {
+      "title": "Sitzungen",
+      "view": {
+        "label": "Ansicht der Sitzungen",
+        "timeline": "Zeitleiste",
+        "details": "Details"
+      },
+      "timeline": {
+        "title": "Sitzungen im Zeitverlauf",
+        "window": "Zeitfenster",
+        "windows": {
+          "1h": "1 Stunde",
+          "6h": "6 Stunden",
+          "24h": "24 Stunden"
+        },
+        "started": {
+          "1h": "Sitzungen, die in der letzten Stunde begannen",
+          "6h": "Sitzungen, die in den letzten 6 Stunden begannen",
+          "24h": "Sitzungen, die in den letzten 24 Stunden begannen"
+        },
+        "empty": {
+          "1h": "In der letzten Stunde begann keine Sitzung.",
+          "6h": "In den letzten 6 Stunden begann keine Sitzung.",
+          "24h": "In den letzten 24 Stunden begann keine Sitzung."
+        },
+        "median": "Mittlere beobachtete Dauer",
+        "withEvents": "Mit eigenen Ereignissen",
+        "capped": "Die neuesten {shown} von {total} Sitzungen.",
+        "longest": "Längste Sitzungen",
+        "noLongest": "Noch keine Sitzung dauerte über ihr erstes Ereignis hinaus.",
+        "now": "Jetzt",
+        "label": "Sitzungen als Linien im Zeitverlauf. Pfeiltasten wechseln die Sitzung, Enter öffnet sie.",
+        "open": "{session}. Sitzung öffnen",
+        "replay": "Aufzeichnung von {session} ansehen",
+        "pageviews": "{count} Seitenaufruf | {count} Seitenaufrufe",
+        "customEvents": "{count} eigenes Ereignis | {count} eigene Ereignisse",
+        "somewhere": "Unbekannter Ort",
+        "moreEvents": "Weitere in der Sitzung",
+        "hasReplay": "Hat eine Aufzeichnung"
+      },
+      "order": "Reihenfolge",
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "table": "Sitzungen",
+      "count": "{count} Sitzungen",
+      "none": "(keine)",
+      "daily": "Tagesbesucher",
+      "person": "Einwilligende Person",
+      "columns": {
+        "session_id": "Sitzung",
+        "identity_kind": "Identität",
+        "start": "Beginn",
+        "end": "Letztes Ereignis",
+        "span": "Beobachtete Dauer",
+        "pageviews": "Aufrufe",
+        "custom_events": "Ereignisse",
+        "entry_path": "Einstiegsseite",
+        "exit_path": "Ausstiegsseite",
+        "referrer_domain": "Verweis",
+        "channel": "Kanal",
+        "utm_source": "UTM-Quelle",
+        "utm_campaign": "UTM-Kampagne",
+        "country": "Land",
+        "city": "Stadt",
+        "device": "Gerät",
+        "browser": "Browser",
+        "os": "Betriebssystem"
+      },
+      "list": {
+        "started": "Beginn",
+        "time": "Uhrzeit",
+        "source": "Quelle",
+        "location": "Ort",
+        "device": "Gerät",
+        "person": "Person",
+        "open": "Sitzung öffnen, die {time} begann"
+      },
+      "detail": {
+        "title": "Sitzung",
+        "back": "Sitzungen",
+        "activity": "Verlauf",
+        "span": "{start} bis {end}",
+        "visitor": "Besucher",
+        "source": "Quelle",
+        "campaign": "Kampagne",
+        "location": "Ort",
+        "device": "Gerät",
+        "language": "Sprache",
+        "screen": "Bildschirm",
+        "identity": "Identität",
+        "sessionId": "Sitzungs-ID",
+        "copy": "Sitzungs-ID kopieren",
+        "copied": "Sitzungs-ID kopiert.",
+        "properties": "Eigenschaften",
+        "pages": "Seiten",
+        "pageview": "Seitenaufruf",
+        "event": "Ereignis",
+        "after": "{time} später",
+        "truncated": "Nur die ersten {count} Ereignisse werden gezeigt.",
+        "notFoundTitle": "Sitzung nicht gefunden",
+        "notFoundDescription": "Sie liegt vielleicht außerhalb der Datenaufbewahrung oder gehört zu einer anderen Website."
+      }
+    },
+    "summary": {
+      "funnel": "{last} von {first} erreichten den letzten Schritt",
+      "journey": "{sessions} Sitzungen, {distinct} verschiedene Pfade",
+      "attribution": "{conversions} Konversionen, {direct} ohne externen Kontakt",
+      "goals": "{count} Ziele",
+      "sessions": "{count} Sitzungen"
+    }
+  },
+  "reauth": {
+    "title": "Bestätige, dass du es bist",
+    "description": "Gib dein Passwort ein, um fortzufahren. Für {minutes} Minuten wirst du nicht erneut gefragt."
+  },
+  "secrets": {
+    "once": "Das wird nur einmal angezeigt. Kopiere es jetzt: Es kann nicht erneut angezeigt werden.",
+    "withheld": "Das wurde beim Erstellen bereits angezeigt und kann nicht erneut angezeigt werden. Erstelle ein neues, falls es verloren ist.",
+    "copy": "Kopieren",
+    "copied": "In die Zwischenablage kopiert."
+  },
+  "twoFactor": {
+    "title": "Zwei-Faktor-Authentifizierung",
+    "description": "Bei jeder Anmeldung ein Code aus einer Authenticator-App, zusätzlich zum Passwort.",
+    "authenticator": "Authenticator-App",
+    "on": "An",
+    "off": "Aus",
+    "required": "Verpflichtend",
+    "onSince": "An seit {date}. Noch {left} Wiederherstellungscodes.",
+    "offHint": "Wer dein Passwort kennt, kann sich anmelden.",
+    "enable": "Einrichten",
+    "reenroll": "Neuen Authenticator verwenden",
+    "disable": "Ausschalten",
+    "disableConfirm": "Zwei-Faktor-Authentifizierung ausschalten? Dann reicht wieder dein Passwort zur Anmeldung.",
+    "disabled": "Zwei-Faktor-Authentifizierung ist aus.",
+    "enabled": "Zwei-Faktor-Authentifizierung ist an.",
+    "regenerate": "Neue Wiederherstellungscodes",
+    "regenerateConfirm": "Neue Wiederherstellungscodes erstellen? Die bisherigen funktionieren dann nicht mehr.",
+    "regeneratedDescription": "Die bisherigen Codes funktionieren nicht mehr.",
+    "recoveryCodes": "Wiederherstellungscodes",
+    "codesOnce": "Jeder Code meldet dich einmal an, falls du deinen Authenticator verlierst. Bewahre sie sicher auf: Sie werden nur jetzt angezeigt.",
+    "codesWithheld": "Die Codes wurden bereits angezeigt und können nicht erneut angezeigt werden. Erstelle neue, falls sie verloren sind.",
+    "codesCopied": "Wiederherstellungscodes kopiert.",
+    "codesKept": "Ich habe meine Wiederherstellungscodes aufbewahrt",
+    "download": "Herunterladen",
+    "code": "Authentifizierungscode",
+    "recoveryCode": "Wiederherstellungscode",
+    "recoveryHint": "Jeder Wiederherstellungscode funktioniert einmal.",
+    "useRecoveryCode": "Stattdessen einen Wiederherstellungscode verwenden",
+    "useApp": "Stattdessen die Authenticator-App verwenden",
+    "challengeTitle": "Zwei-Faktor-Authentifizierung",
+    "challengeDescription": "Gib den Code aus deiner Authenticator-App ein.",
+    "challengeRecovery": "Gib einen deiner Wiederherstellungscodes ein.",
+    "challengeExpired": "Dieser Anmeldeversuch ist beendet: Er gilt fünf Minuten und erlaubt {attempts} falsche Codes. Beginne erneut mit deinem Passwort.",
+    "startOver": "Neu beginnen",
+    "verify": "Prüfen",
+    "setup": {
+      "description": "Scanne den Code mit einer Authenticator-App und gib dann den angezeigten Code ein.",
+      "step1": "Installiere eine Authenticator-App auf deinem Telefon.",
+      "step2": "Scanne den QR-Code oder tippe den Schlüssel ein.",
+      "step3": "Bestätige mit dem {digits}-stelligen Code.",
+      "qr": "QR-Code für deine Authenticator-App",
+      "manualEntry": "Schlüssel zur manuellen Eingabe",
+      "codeHint": "Der {digits}-stellige Code, den deine App gerade zeigt.",
+      "confirm": "Bestätigen",
+      "withheld": "Diese Einrichtung wurde bereits begonnen und ihr Schlüssel kann nicht erneut angezeigt werden. Geh zurück und beginne noch einmal."
+    },
+    "enroll": {
+      "title": "Zwei-Faktor-Authentifizierung einrichten",
+      "description": "Deine Installation verlangt einen zweiten Faktor für {email}. Richte ihn ein, um fortzufahren."
+    }
+  },
+  "sessions": {
+    "title": "Angemeldete Browser",
+    "description": "Ein Browser bleibt ohne Nutzung {idle} Tage und höchstens {lifetime} Tage angemeldet.",
+    "hint": "Gerät verloren oder an einem fremden Computer angemeldet? Melde alle anderen ab. Dieser Browser bleibt angemeldet.",
+    "revokeOthers": "Andere Browser abmelden",
+    "revokeConfirm": "Alle anderen Browser abmelden? Sie brauchen dann wieder dein Passwort.",
+    "revoked": "{count} andere Browser abgemeldet."
+  },
+  "apiKeys": {
+    "title": "API-Schlüssel",
+    "description": "Schlüssel für Skripte und andere Werkzeuge, gesendet als \"Authorization: {scheme} <Schlüssel>\". Ein Schlüssel kann nur, was du kannst, begrenzt auf seine Operationen und Websites.",
+    "list": "Schlüssel",
+    "empty": "Noch keine API-Schlüssel.",
+    "create": "Schlüssel erstellen",
+    "createDescription": "Wähle, was der Schlüssel darf. Später lässt sich das nicht ändern; erstelle dann einen neuen.",
+    "createdTitle": "Schlüssel erstellt",
+    "createdDescription": "Verwende ihn als \"Authorization: Bearer <Schlüssel>\".",
+    "secret": "API-Schlüssel",
+    "name": "Name",
+    "nameHint": "Wofür der Schlüssel ist. Bis zu {max} Zeichen.",
+    "reads": "Lesen",
+    "writes": "Ändern",
+    "operations": "Operationen",
+    "sites": "Websites",
+    "allSites": "Alle meine Websites",
+    "onlySites": "Nur diese Websites",
+    "sitesHint": "Arbeitsbereichsweite Ressourcen wie Boards brauchen alle Websites.",
+    "chooseSites": "Websites des Schlüssels",
+    "lastUsed": "Zuletzt verwendet",
+    "neverUsed": "Nie verwendet",
+    "revoke": "Schlüssel widerrufen",
+    "revokeNamed": "{name} widerrufen",
+    "revokeConfirm": "\"{name}\" widerrufen? Werkzeuge, die ihn verwenden, funktionieren dann nicht mehr.",
+    "revoked": "Schlüssel widerrufen.",
+    "revokedOn": "Widerrufen am {date}"
+  },
+  "collectionKeys": {
+    "title": "Erfassungsschlüssel",
+    "description": "Für deine eigenen Server, die Ereignisse an /api/send oder /api/batch senden, als \"Authorization: {scheme} <Schlüssel>\". Mit einem Schlüssel beschreiben ip und userAgent im Payload die Besucherin oder den Besucher statt deines Servers, und identify-Aufrufe dürfen eine Einwilligung mitsenden. Schlüssel gehören nicht in Webseiten.",
+    "empty": "Noch keine Erfassungsschlüssel.",
+    "create": "Erfassungsschlüssel erstellen",
+    "createDescription": "Ein Schlüssel gilt nur für diese Website. Widerrufe ihn, wenn die Integration wegfällt.",
+    "createdTitle": "Erfassungsschlüssel erstellt",
+    "createdDescription": "Sende ihn von deinem Server als \"Authorization: {scheme} <Schlüssel>\".",
+    "secret": "Erfassungsschlüssel",
+    "name": "Name",
+    "nameHint": "Welche Integration ihn verwendet. Bis zu {max} Zeichen.",
+    "created": "Erstellt",
+    "state": "Status",
+    "active": "Aktiv",
+    "revoke": "Schlüssel widerrufen",
+    "revokeNamed": "{name} widerrufen",
+    "revokeConfirm": "\"{name}\" widerrufen? Anfragen damit werden ab jetzt abgelehnt.",
+    "revoked": "Erfassungsschlüssel widerrufen.",
+    "revokedOn": "Widerrufen am {date}"
+  },
+  "members": {
+    "person": "Person",
+    "role": "Rolle",
+    "roleOf": "Rolle von {name}",
+    "you": "Du",
+    "twoFactorOn": "Zwei-Faktor-Authentifizierung an",
+    "roleChanged": "{name} ist jetzt {role}.",
+    "remove": "Entfernen",
+    "removeNamed": "{name} entfernen",
+    "removeConfirm": "{name} aus dem Team entfernen? Der Zugriff auf seine Websites endet sofort.",
+    "removed": "{name} entfernt.",
+    "leave": "Team verlassen",
+    "leaveConfirm": "\"{team}\" verlassen? Dein Zugriff auf seine Websites endet sofort.",
+    "left": "Du hast \"{team}\" verlassen.",
+    "lastOwner": "Ein Team braucht einen Eigentümer. Mach zuerst jemand anderen zum Eigentümer."
+  },
+  "invitations": {
+    "title": "Einladungen",
+    "description": "Einmal-Links. Gib sie auf beliebigem Weg weiter; die Person meldet sich an und tritt damit bei.",
+    "empty": "Keine Einladungen.",
+    "create": "Einladen",
+    "createDescription": "Erstellt einen Link für eine Person mit einer Rolle.",
+    "createdTitle": "Einladungslink",
+    "createdDescription": "Schick diesen Link an die Person. Er funktioniert einmal.",
+    "link": "Einladungslink",
+    "label": "Bezeichnung",
+    "labelHint": "Für wen sie ist, damit du Einladungen unterscheiden kannst. Bis zu {max} Zeichen.",
+    "unlabelled": "Ohne Bezeichnung",
+    "lifetime": "Gültig für Tage",
+    "lifetimeHint": "1 bis {max} Tage.",
+    "state": "Status",
+    "expires": "Läuft ab",
+    "revoke": "Einladung widerrufen",
+    "revokeNamed": "Einladung {label} widerrufen",
+    "revokeConfirm": "Die Einladung \"{label}\" widerrufen? Ihr Link funktioniert dann nicht mehr.",
+    "revoked": "Einladung widerrufen.",
+    "states": {
+      "pending": "Offen",
+      "used": "Verwendet",
+      "revoked": "Widerrufen",
+      "expired": "Abgelaufen"
+    }
+  },
+  "join": {
+    "title": "Einem Team beitreten",
+    "description": "Du trittst als {email} bei.",
+    "code": "Einladungscode",
+    "submit": "Team beitreten",
+    "invalid": "Diese Einladung ist nicht gültig. Sie wurde vielleicht schon verwendet, widerrufen oder ist abgelaufen.",
+    "joined": "Du bist \"{team}\" beigetreten."
+  },
+  "sharing": {
+    "title": "Freigaben",
+    "description": "Links, die die Auswertungen dieser Website Personen ohne Konto zeigen, in Grenzen, die du festlegst.",
+    "readOnly": "Deine Rolle kann diese Website nicht freigeben.",
+    "create": "Freigabe erstellen",
+    "createDescription": "Was Betrachter von {site} sehen und tun dürfen.",
+    "createdTitle": "Freigabelink",
+    "createdDescription": "Jede Person mit diesem Link kann die Freigabe sehen, bis sie abläuft oder widerrufen wird.",
+    "link": "Freigabelink",
+    "name": "Name",
+    "nameHint": "Für Betrachter sichtbar. Bis zu {max} Zeichen.",
+    "measures": "Kennzahlen, die Betrachter sehen dürfen",
+    "dimensions": "Felder, nach denen Betrachter aufschlüsseln dürfen",
+    "rangeMax": "Längster lesbarer Zeitraum, Tage",
+    "rangeMaxHint": "1 bis {max} Tage. Ein Vergleich zählt mit.",
+    "lifetime": "Gültig für Tage",
+    "lifetimeHint": "1 bis {max} Tage. Jede Freigabe läuft ab.",
+    "actions": "Betrachter dürfen",
+    "narrowing": "Filter der freigegebenen Felder hinzufügen",
+    "export": "Exportieren, was sie sehen",
+    "recordings": "Aufzeichnungen innerhalb der Freigabe ansehen",
+    "grants": "Grenzen",
+    "state": "Status",
+    "expires": "Läuft ab",
+    "empty": "Diese Website hat keine Freigaben.",
+    "measureCount": "{count} Kennzahlen",
+    "rangeDays": "{days} Tage",
+    "exportBadge": "Export",
+    "recordingsBadge": "Aufzeichnungen",
+    "revoke": "Freigabe widerrufen",
+    "revokeNamed": "{name} widerrufen",
+    "revokeConfirm": "\"{name}\" widerrufen? Betrachter verlieren beim nächsten Lesen den Zugriff.",
+    "revoked": "Freigabe widerrufen.",
+    "states": {
+      "active": "Aktiv",
+      "expired": "Abgelaufen",
+      "revoked": "Widerrufen"
+    }
+  },
+  "share": {
+    "title": "Freigegebene Auswertung",
+    "badge": "Freigegeben",
+    "expires": "Verfügbar bis {date}",
+    "unavailable": "Dieser Link ist nicht verfügbar",
+    "unavailableHint": "Er ist vielleicht abgelaufen oder wurde widerrufen. Bitte die Person, die ihn geteilt hat, um einen neuen.",
+    "loadFailed": "Die Freigabe konnte nicht geladen werden.",
+    "reset": "Zurück zur freigegebenen Ansicht",
+    "replays": "Aufzeichnungen",
+    "back": "Zurück zur freigegebenen Ansicht",
+    "site": "Website",
+    "noRecordings": "Aufzeichnungen gehören nicht zu dieser Freigabe",
+    "noReplaysHint": "Keine Aufzeichnungen in den letzten {days} Tagen."
+  },
+  "siteManage": {
+    "title": "Website verwalten",
+    "description": "Diese Änderungen brauchen dein Passwort und lassen sich nicht rückgängig machen.",
+    "transfer": "Website verschieben",
+    "transferHint": "Verschiebt die Website in einen anderen Arbeitsbereich. Ihre Freigaben und Schlüsselrechte enden.",
+    "transferDescription": "{site} in einen anderen Arbeitsbereich verschieben. Ihre Freigaben und Schlüsselrechte enden.",
+    "target": "Arbeitsbereich",
+    "chooseTarget": "Arbeitsbereich wählen",
+    "personal": "Mein persönlicher Arbeitsbereich",
+    "transferred": "{site} nach {target} verschoben.",
+    "reset": "Daten löschen",
+    "resetHint": "Löscht alles, was für die Website erfasst wurde, und behält ihre Einstellungen.",
+    "resetConfirm": "Alle für {site} erfassten Daten löschen? Die Einstellungen bleiben.",
+    "resetDone": "Daten von {site} gelöscht.",
+    "delete": "Website löschen",
+    "deleteHint": "Löscht die Website mit allen Daten.",
+    "deleteConfirm": "{site} mit allen Daten löschen? Das lässt sich nicht rückgängig machen.",
+    "deleted": "{site} gelöscht.",
+    "transferRefused": "Die Website kann nicht dorthin verschoben werden. Wähle ein anderes Team oder deinen persönlichen Arbeitsbereich."
+  },
+  "admin": {
+    "title": "Administration",
+    "sections": "Bereiche der Administration",
+    "users": {
+      "title": "Benutzer",
+      "empty": "Keine Benutzer.",
+      "create": "Benutzer hinzufügen",
+      "createDescription": "Die Person meldet sich mit dem erzeugten Passwort an und kann es ändern.",
+      "createdTitle": "Benutzer hinzugefügt",
+      "createdDescription": "Gib dieses Passwort an {email} weiter.",
+      "edit": "Benutzer bearbeiten",
+      "created": "Hinzugefügt",
+      "twoFactorRequired": "Zwei-Faktor-Authentifizierung verlangen",
+      "actionsFor": "Aktionen für {name}",
+      "reset": "Anmeldung zurücksetzen",
+      "resetDescription": "Konto von {email} wiederherstellen. Die Sitzungen enden.",
+      "resetPassword": "Passwort durch ein erzeugtes ersetzen",
+      "resetTwoFactor": "Zweiten Faktor und Wiederherstellungscodes entfernen",
+      "resetDone": "Anmeldung zurückgesetzt",
+      "resetDoneDescription": "{email} ist überall abgemeldet.",
+      "delete": "Benutzer löschen",
+      "deleteConfirm": "{name} ({email}) löschen? API-Schlüssel und private Auswertungen werden mitgelöscht.",
+      "deleted": "{name} gelöscht.",
+      "lastAdmin": "Das ist der letzte Installations-Admin. Mach zuerst jemand anderen zum Installations-Admin.",
+      "blockedTitle": "Noch nicht löschbar",
+      "blockedDescription": "{name} ist alleiniger Eigentümer von diesen. Verschiebe oder lösche sie zuerst.",
+      "ownedSite": "Website {name}",
+      "ownedWorkspace": "Arbeitsbereich {name}"
+    },
+    "security": {
+      "title": "Sicherheitsrichtlinie",
+      "saved": "Richtlinie gespeichert.",
+      "installation": "Installation",
+      "installationDescription": "Gilt für jedes Konto ab seiner nächsten Anfrage. Personen ohne zweiten Faktor können dann nur diesen einrichten.",
+      "everyone": "Zwei-Faktor-Authentifizierung für alle verlangen",
+      "teams": "Teams",
+      "teamsDescription": "Gilt für die Mitglieder eines Teams.",
+      "noTeams": "Keine Teams."
+    },
+    "geoip": {
+      "title": "Standort der Besucher",
+      "description": "Bestimmt Land und Stadt von Besuchern, die kein CDN-Header verortet hat. Die Adresse wird nachgeschlagen und nie gespeichert.",
+      "external": "Die Serverkonfiguration gibt die Datenbank vor (HOLOCRON_GEOIP_DB). Sie wird außerhalb des Dashboards verwaltet.",
+      "externalBroken": "Die Datei aus HOLOCRON_GEOIP_DB ließ sich nicht als City-Datenbank öffnen, daher bekommen Besucher ohne CDN-Standort keinen. Der Grund steht im Serverprotokoll.",
+      "none": "Es ist keine Standortdatenbank installiert. Lade DB-IP Lite City, etwa 60 MB, ins Datenverzeichnis.",
+      "current": "DB-IP Lite City von {month} ist installiert.",
+      "newer": "{month} ist verfügbar.",
+      "database": "{type}, erstellt am {date}",
+      "download": "Herunterladen",
+      "update": "Aktualisieren",
+      "running": "Die Datei wird geladen und geprüft. Das kann eine Minute dauern.",
+      "installed": "Standortdatenbank installiert.",
+      "licence": "DB-IP Lite steht unter CC BY 4.0. Solange sie genutzt wird, nennen Seiten mit Standorten DB-IP:",
+      "failed": {
+        "unreachable": "DB-IP war nicht erreichbar oder der Download brach ab. Versuche es später noch einmal.",
+        "notPublished": "DB-IP hat die Datei für diesen und den letzten Monat noch nicht veröffentlicht.",
+        "invalid": "Die geladene Datei ist keine gültige City-Datenbank. Die installierte Datenbank bleibt unverändert.",
+        "diskFull": "Es ist nicht genug Speicher frei. Der Download braucht 512 MiB über der Speicherreserve."
+      }
+    },
+    "status": {
+      "title": "Serverstatus",
+      "healthy": "Läuft",
+      "collectionStopped": "Die Erfassung lehnt Events ab.",
+      "collectionReady": "Die Erfassung speichert weiter Events.",
+      "testClock": "Testuhr",
+      "lag": "Rückstand der Auswertung",
+      "waiting": "Wartet auf die Auswertung",
+      "waitingValue": "{count} Events, {size}",
+      "problems": {
+        "diskFull": {
+          "title": "Speicher voll",
+          "description": "Der freie Speicher liegt unter der Reserve. Die Erfassung lehnt Events ab, bis wieder Platz frei ist."
+        },
+        "storageUnavailable": {
+          "title": "Speicher nicht verfügbar",
+          "description": "Das Speichern von Events ist in der letzten Minute fehlgeschlagen. Die Erfassung lehnt Events ab."
+        },
+        "shuttingDown": {
+          "title": "Wird beendet",
+          "description": "Der Server hat ein Stoppsignal erhalten und nimmt keine Events mehr an."
+        },
+        "transferFailing": {
+          "title": "Übertragung in die Auswertung fehlgeschlagen",
+          "description": "Events werden gespeichert, aber jeder Versuch der letzten Zeit, sie in die Auswertung zu übernehmen, ist fehlgeschlagen."
+        },
+        "analyticsStale": {
+          "title": "Auswertung im Rückstand",
+          "description": "Das älteste Event, das auf die Auswertung wartet, ist älter als eine Minute. Berichte zeigen Daten bis dahin."
+        },
+        "recorderBudget": {
+          "title": "Replay-Speicher fast voll",
+          "description": "Der Replay-Speicher hat in der letzten Minute Daten abgelehnt oder ist zu 90 % belegt. Die übrige Erfassung ist nicht betroffen."
+        }
+      },
+      "budgets": {
+        "title": "Budgets",
+        "disk": "Festplatte",
+        "diskUsed": "{used} von Holocron belegt, {free} frei",
+        "diskReserve": "Die Erfassung stoppt unter {reserve} freiem Speicher.",
+        "replay": "Replay-Speicher",
+        "saved": "Gespeicherte Replays",
+        "ofCap": "{used} von {cap}"
+      },
+      "chart": {
+        "title": "Speicherbelegung",
+        "used": "Von Holocron belegt",
+        "forecast": "Prognose",
+        "reserve": "Speicherreserve",
+        "summary": "Tägliche Messungen: {count}, vom {first} bis {last}, zuletzt {used}.",
+        "date": "Datum",
+        "value": "Von Holocron belegt"
+      },
+      "forecast": {
+        "title": "Speicherprognose",
+        "levelsOff": "Die Belegung pendelt sich am {date} bei etwa {size} ein.",
+        "reachesReserve": "Der freie Speicher erreicht am {date} die Reserve.",
+        "notEnoughHistory": "Zu wenig Verlauf für eine Prognose: {days} von 14 Tagen gespeichert.",
+        "noSample": "Noch keine Speichermessung. Der Server misst beim Start und danach täglich.",
+        "inputs": "So wird gerechnet",
+        "formula": "Dauerzustand = Bytes pro Datensatz × Datensätze pro Tag × 365 + SQLite-Dateien + Replay-Grenze + Speicherreserve. Er ist erreicht, sobald 12 Monate gespeichert sind.",
+        "sampledAt": "Messung",
+        "retainedRecords": "Gespeicherte Datensätze",
+        "bytesPerRecord": "Bytes pro Datensatz",
+        "ingestPerDay": "Datensätze pro Tag (Median über 28 Tage)",
+        "oldestDay": "Ältester gespeicherter Tag",
+        "fullRetentionOn": "12 Monate gespeichert am",
+        "sqlite": "SQLite-Dateien",
+        "replayCap": "Replay-Grenze",
+        "reserve": "Speicherreserve",
+        "steadyState": "Dauerzustand",
+        "used": "Von Holocron belegt",
+        "capacity": "Belegt und frei",
+        "unknown": "Noch nicht bekannt"
+      },
+      "maintenance": {
+        "title": "Wartung",
+        "description": "Der letzte Lauf jeder Aufgabe. Die Verdichtung zeigt ihren letzten Durchlauf seit dem Serverstart.",
+        "task": "Aufgabe",
+        "result": "Ergebnis",
+        "started": "Begonnen",
+        "finished": "Beendet",
+        "empty": "Bisher lief keine Wartung.",
+        "retention": "Aufbewahrung",
+        "compaction": "Verdichtung",
+        "backup": "Sicherung",
+        "queued": "Wartet",
+        "running": "Läuft",
+        "done": "Erledigt",
+        "failed": "Fehlgeschlagen",
+        "failedWith": "Fehlgeschlagen: {code}"
+      },
+      "card": {
+        "label": "Dieser Server",
+        "open": "Serverstatus öffnen"
+      }
+    }
+  },
+  "dataRetention": {
+    "title": "Datenaufbewahrung",
+    "otherLimits": "Replays (14 Tage) und Heatmaps (90 Tage) behalten ihre eigenen Fristen.",
+    "values": {
+      "1y": "1 Jahr",
+      "2y": "2 Jahre",
+      "3y": "3 Jahre",
+      "5y": "5 Jahre",
+      "10y": "10 Jahre",
+      "forever": "Unbegrenzt"
+    },
+    "site": {
+      "description": "Wie lange diese Website ihre Ereignisse behält. Ältere Ereignisse werden endgültig gelöscht.",
+      "label": "Ereignisse behalten für",
+      "followDefault": "Standard der Installation ({value})",
+      "followDefaultPlain": "Standard der Installation",
+      "current": "Aktuell gespeichert für {value}."
+    },
+    "default": {
+      "title": "Standard für die Datenaufbewahrung",
+      "description": "Wie lange Websites ihre Ereignisse behalten, solange sie keinen eigenen Wert haben.",
+      "label": "Ereignisse behalten für",
+      "readOnly": "Nur Administratoren der Installation können den Standard ändern.",
+      "saved": "Standard gespeichert."
+    },
+    "confirm": {
+      "title": "Ältere Ereignisse löschen?",
+      "message": "Dabei werden {events} Ereignisse vor dem {date} gelöscht. Das lässt sich nicht rückgängig machen.",
+      "noCutoff": "Dabei werden {events} Ereignisse gelöscht. Das lässt sich nicht rückgängig machen.",
+      "action": "Löschen und speichern"
+    }
+  },
+  "links": {
+    "title": "Links und Pixel",
+    "links": "Links",
+    "pixels": "Pixel",
+    "linksDescription": "Kurze Adressen, die einen Besuch zählen und auf eine Seite weiterleiten.",
+    "pixelsDescription": "Unsichtbare Bilder, die einen Aufruf zählen, für E-Mails und Seiten ohne Tracker.",
+    "addLink": "Link hinzufügen",
+    "addPixel": "Pixel hinzufügen",
+    "editLink": "Link bearbeiten",
+    "editPixel": "Pixel bearbeiten",
+    "linkDescription": "Jeder Besuch der Adresse wird gezählt und dann an die URL weitergeleitet.",
+    "pixelDescription": "Setze die Adresse in ein Bild-Tag. Jeder Abruf wird gezählt.",
+    "url": "URL",
+    "urlHint": "Wohin der Link führt: eine http- oder https-Adresse.",
+    "slug": "Kürzel",
+    "slugCreateHint": "Buchstaben, Ziffern, - und _, bis zu {max} Zeichen. Leer lassen für ein zufälliges.",
+    "slugHint": "Buchstaben, Ziffern, - und _, bis zu {max} Zeichen.",
+    "slugRenameHint": "{path} funktioniert nach dem Speichern nicht mehr.",
+    "slugTaken": "Dieses Kürzel ist schon vergeben.",
+    "address": "Adresse",
+    "copyAddress": "Adresse von {name} kopieren",
+    "editNamed": "{name} bearbeiten",
+    "deleteNamed": "{name} löschen",
+    "delete": "Löschen",
+    "deleteLink": "Link löschen",
+    "deletePixel": "Pixel löschen",
+    "deleteLinkConfirm": "{path} funktioniert danach nicht mehr, und alle Aufrufe von {name} werden gelöscht. Das lässt sich nicht rückgängig machen.",
+    "deletePixelConfirm": "{path} funktioniert danach nicht mehr, und alle Aufrufe von {name} werden gelöscht. Das lässt sich nicht rückgängig machen.",
+    "deleted": "{name} gelöscht.",
+    "noLinks": "Noch keine Links",
+    "noPixels": "Noch keine Pixel",
+    "linkUnavailable": "Dieser Link ist nicht verfügbar.",
+    "pixelUnavailable": "Dieses Pixel ist nicht verfügbar.",
+    "backToList": "Links und Pixel",
+    "stateUnreadable": "Diese Ansicht konnte nicht gelesen werden.",
+    "resetView": "Standardansicht zeigen",
+    "reportFailed": "Der Bericht konnte nicht geladen werden.",
+    "filteredBy": "Gefiltert nach {filter}",
+    "clearFilters": "Filter entfernen",
+    "target": "Leitet weiter zu {url}",
+    "utcNote": "Tage sind UTC-Tage. Jeder Aufruf zählt als Ereignis.",
+    "lostHits": "{count} Aufruf seit dem Anlegen konnte während eines Speicherausfalls nicht gespeichert werden. | {count} Aufrufe seit dem Anlegen konnten während eines Speicherausfalls nicht gespeichert werden."
+  },
+  "setup": {
+    "title": "Einrichten",
+    "stepOf": "Schritt {current} von {total}",
+    "continue": "Weiter",
+    "token": {
+      "title": "{name} einrichten",
+      "subtitle": "mit dem Token aus dem Serverlog.",
+      "label": "Einrichtungstoken",
+      "hint": "Der Server schreibt es beim Start in sein Log, in die Zeile mit \"setup token\". In Coolify findest du es unter Logs der Ressource."
+    },
+    "path": {
+      "title": "Wie startest du?",
+      "subtitle": "Ein späterer Wechsel heißt, neu anzufangen.",
+      "fresh": {
+        "title": "Neu starten",
+        "description": "Lege dein Admin-Konto und die erste Website an."
+      },
+      "import": {
+        "title": "Aus Umami importieren",
+        "description": "Übernimm Konten, Websites und Verlauf aus Umami 2.20 auf MySQL oder 3.4 auf PostgreSQL."
+      },
+      "restore": {
+        "title": "Backup wiederherstellen",
+        "description": "Nutze ein Holocron-Backup auf diesem Server, mit seinen Konten."
+      },
+      "later": "In diesem Build noch nicht verfügbar."
+    },
+    "check": {
+      "title": "Serverprüfung",
+      "allGood": "Alles sieht gut aus.",
+      "warnings": "{count} Punkt zum Prüfen. Du kannst trotzdem weitermachen. | {count} Punkte zum Prüfen. Du kannst trotzdem weitermachen.",
+      "warning": "Warnung:",
+      "publicUrl": "Öffentliche URL",
+      "notSet": "nicht gesetzt",
+      "publicUrlMissing": "Setze HOLOCRON_PUBLIC_URL auf {origin}, damit Befehle dagegen geprüft werden und das Sitzungscookie als Secure markiert wird.",
+      "publicUrlOther": "HOLOCRON_PUBLIC_URL weicht von {origin} ab, wo diese Seite offen ist. Befehle von hier werden abgelehnt.",
+      "visitor": "Deine Adresse, wie Holocron sie sieht",
+      "visitorPrivate": "Das ist eine private Adresse: Vor Holocron sitzt ein Proxy, dem es nicht vertraut. Jede Besucherin und jeder Besucher bekäme diese Adresse. Setze HOLOCRON_COLLECT_TRUSTED_PROXIES auf das Netz des Proxys.",
+      "disk": "Freier Speicher",
+      "diskValue": "{free} frei, {reserve} als Reserve",
+      "diskLow": "Weniger frei als die Reserve, daher würde die Erfassung Ereignisse ablehnen. Gib dem Datenvolume mehr Platz oder senke HOLOCRON_DISK_RESERVE_MIB.",
+      "version": "Version"
+    },
+    "admin": {
+      "title": "Admin-Konto anlegen",
+      "subtitle": "Damit verwaltest du Konten, Teams und Sicherheit.",
+      "passwordHint": "Mindestens {min} Zeichen.",
+      "create": "Admin anlegen",
+      "starting": "Holocron startet…"
+    },
+    "site": {
+      "title": "Erste Website hinzufügen",
+      "subtitle": "Im Team Default. Weitere kannst du später hinzufügen.",
+      "trackTitle": "{name} erfassen",
+      "firstHit": "Erster Seitenaufruf angekommen: {path}",
+      "waiting": "Warte auf den ersten Seitenaufruf von {domain}…",
+      "open": "Zum Dashboard"
+    },
+    "statusFailed": "Holocron hat nicht geantwortet. Lade die Seite neu.",
+    "signIn": {
+      "title": "Melde dich an, um fortzufahren",
+      "subtitle": "Ein Umami-Import auf diesem Server wartet auf seinen Admin.",
+      "hint": "Der Admin aus dieser Einrichtung. Importierte Umami-Konten melden sich nach der Einrichtung an."
+    },
+    "source": {
+      "title": "Mit Umami verbinden",
+      "subtitle": "Über einen Datenbankbenutzer, der nur lesen darf.",
+      "label": "Datenbank-URL",
+      "hint": "postgres://… für Umami 3.4, mysql://… für Umami 2.20. Außerhalb eines privaten Netzes sslmode=verify-full oder ssl-mode=VERIFY_IDENTITY anhängen. Holocron hält sie nur im Speicher.",
+      "inspect": "Prüfen",
+      "inspecting": "Quelle wird gelesen…",
+      "again": "Erneut prüfen",
+      "refused": "Holocron kann diese Quelle nicht importieren",
+      "warnings": {
+        "source_unencrypted": "Diese Verbindung ist womöglich nicht verschlüsselt",
+        "credentials_writable": "Dieser Benutzer kann die Umami-Datenbank ändern"
+      },
+      "resume": "Ein Import aus {source} wurde unterbrochen. Gib dieselbe Datenbank-URL ein, um ihn fortzusetzen.",
+      "stopped": "Er endete mit: {message}",
+      "events": "{count} Events",
+      "range": "{first} bis {last}",
+      "size": "{size} in der Quelle, eine Obergrenze für den Speicher, den der Import braucht",
+      "tables": "Zeilen pro Tabelle"
+    },
+    "options": {
+      "title": "Import-Optionen",
+      "subtitle": "Ein fortgesetzter Import behält sie.",
+      "resumeSubtitle": "Der Import behält die Optionen, mit denen er begonnen hat.",
+      "timezone": "Zeitzone aller importierten Websites",
+      "timezoneHint": "Umami speichert keine Zeitzone pro Website. Tage und Sitzungen zählen in dieser.",
+      "retention": "Events behalten für",
+      "leaves": "{count} ältere Events bleiben zurück",
+      "keepsAll": "Importiert alle Events",
+      "twoFactorKey": "Umami-2FA-Schlüssel",
+      "twoFactorKeyHint": "Umamis TWO_FACTOR_ENCRYPTION_KEY, 64 Hexadezimalzeichen, damit Authenticator-Apps weiter funktionieren. Nur im Speicher gehalten. Ohne ihn richten Personen mit Zwei-Faktor-Anmeldung sie neu ein.",
+      "advanced": "Erweitert",
+      "loginDomain": "Login-Domain",
+      "loginDomainHint": "Umami-Benutzernamen, die keine E-Mail-Adressen sind, melden sich als benutzername{'@'}{domain} an.",
+      "chunkRows": "Zeilen pro Block",
+      "chunkRowsHint": "Die Einheit für Speicherverbrauch und Checkpoints. Auf einem kleinen Server niedriger setzen.",
+      "start": "Import starten",
+      "resume": "Import fortsetzen"
+    },
+    "import": {
+      "title": "Import aus Umami",
+      "subtitle": "Die Erfassung bleibt geschlossen, bis die Einrichtung endet. Du kannst die Seite schließen und später zurückkommen.",
+      "connecting": "Verbinde mit dem Import…",
+      "rows": "{done} von {total} Zeilen",
+      "eta": "Noch etwa {time}",
+      "steps": {
+        "control": "Konten und Einstellungen",
+        "events": "Events",
+        "identify": "Identify-Daten",
+        "heatmaps": "Heatmaps",
+        "sessionLinks": "Sitzungsverknüpfungen",
+        "replays": "Replays",
+        "finishing": "Sitzungen und Abgleich"
+      }
+    },
+    "report": {
+      "reconciled": "Import abgeglichen",
+      "reconciledHint": "Jede Anzahl, jeder Zeitraum, jede Umsatzsumme und jedes Stichproben-Event stimmt mit der Quelle überein.",
+      "differences": "Mit Abweichungen importiert",
+      "differencesHint": "Diese Werte weichen von der Quelle ab. Das Manifest enthält die Details.",
+      "totals": "{sites} Websites, {sources} Links und Pixel, {events} Events.",
+      "logins": "Logins",
+      "login": "Login",
+      "twoFactor": "Zwei-Faktor",
+      "outcomes": {
+        "kept": "Übernommen",
+        "resetRequired": "Muss zurückgesetzt werden",
+        "enrollmentRequired": "Wird neu eingerichtet",
+        "none": "Keine"
+      },
+      "notImported": "Nicht importiert",
+      "notImportedHint": "{count} Einträge nach Grund und Tabelle",
+      "events": "Events",
+      "nothingLeft": "Alles wurde übernommen.",
+      "manifest": "Manifest herunterladen",
+      "finish": "Holocron starten",
+      "discard": "Import verwerfen und neu beginnen",
+      "discardHint": "Das entfernt alles Importierte. Dein Admin und der geheime Schlüssel bleiben. Gib zur Bestätigung {name} ein.",
+      "discardLabel": "Name der Instanz",
+      "discardConfirm": "Import verwerfen"
+    },
+    "skip": {
+      "action": "Ohne Import fortfahren",
+      "hint": "Das entfernt alles Importierte und startet Holocron leer. Dein Admin und der geheime Schlüssel bleiben. Gib zur Bestätigung {name} ein.",
+      "confirm": "Verwerfen und fortfahren"
+    },
+    "cutover": {
+      "title": "Tracker hierher umstellen",
+      "subtitle": "Die Website-IDs bleiben gleich, nur die Adresse des Skripts ändert sich.",
+      "script": "Script-Tag",
+      "env": "Wenn Umami den Tracker unter einem anderen Namen ausgeliefert oder /api/send verschoben hat, setze hier dieselben Werte und starte Holocron neu:",
+      "waiting": "Warte auf den ersten Hit einer Website…",
+      "firstHit": "Der erste Hit seit der Einrichtung ist angekommen.",
+      "sites": "Importierte Websites: {names}",
+      "open": "Dashboard öffnen"
+    }
+  }
+}

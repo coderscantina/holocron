@@ -1,0 +1,39 @@
+# Throwaway databases and pinned official Umami images for the schema capture.
+# Used only by capture.sh. No host ports are published.
+name: holocron-m01-schemas
+
+x-umami: &umami
+  profiles: [migrate]
+  entrypoint: []
+  command: ["node_modules/.bin/prisma", "migrate", "deploy"]
+  depends_on:
+    pg: { condition: service_healthy }
+    my: { condition: service_healthy }
+
+services:
+  pg:
+    # Upstream compose file: .sources/umami-3.4.0/docker-compose.yml (postgres:15-alpine)
+    image: postgres:15-alpine@sha256:f7d23353e1b15400d22ebe31189f4d314b87a4c129cc400c8c2d8d4ca127bf81
+    environment: { POSTGRES_PASSWORD: umami, POSTGRES_USER: umami, POSTGRES_DB: postgres }
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d postgres"]
+      interval: 2s
+      retries: 30
+  my:
+    # Upstream README of 2.20.2 names MySQL minimum v8.0; 8.0 is the pinned minimum.
+    image: mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b
+    environment: { MYSQL_ROOT_PASSWORD: umami }
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -pumami --silent"]
+      interval: 2s
+      retries: 60
+
+  umami-pg-3: # prisma migrate deploy of Umami 3.4.0 (scripts/check-db.js runs the same command)
+    <<: *umami
+    image: ghcr.io/umami-software/umami:3.4.0@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367
+  umami-pg-2:
+    <<: *umami
+    image: ghcr.io/umami-software/umami:postgresql-v2.20.2@sha256:950133e4158949061b84fa29ce1a87f734655dca5a49a08e727eb23c4e3582cd
+  umami-my-2:
+    <<: *umami
+    image: ghcr.io/umami-software/umami:mysql-v2.20.2@sha256:56cc5167a987060b982e4ad13ca86342bc8fb0012fe88a2b59f8b68c071545aa

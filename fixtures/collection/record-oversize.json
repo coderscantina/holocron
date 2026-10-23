@@ -1,0 +1,57 @@
+{
+  "id": "record-oversize",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "Body above MAX_RECORD_REQUEST_BYTES (1,000,000), checked from content-length before parsing.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:23",
+    "src/app/api/record/route.ts:80-98",
+    "src/app/api/record/route.ts:106-116",
+    "src/lib/response.ts:41-48"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": 3,
+            "data": {
+              "text": "{{FILL:1000000}}"
+            },
+            "timestamp": 1790000000000
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 413,
+    "headers": {
+      "access-control-allow-origin": "*"
+    },
+    "body": {
+      "error": {
+        "message": "Payload too large",
+        "code": "payload-too-large",
+        "status": 413,
+        "reason": "payload_too_large",
+        "maxBytes": 1000000,
+        "size": "<number>"
+      }
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 413,
+    "decision": "confirmed",
+    "notes": "Limit and body preserved. The recorder caps its own payloads at 500,000 bytes (src/recorder/index.js:26)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,27 @@
+version: 2
+# Monthly, one grouped pull request per ecosystem, so updates cost three CI runs a month
+# instead of one per package. Security updates still arrive as soon as they are published.
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      cargo:
+        patterns: ['*']
+
+  - package-ecosystem: bun
+    directory: /apps/web
+    schedule:
+      interval: monthly
+    groups:
+      web:
+        patterns: ['*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']

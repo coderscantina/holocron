@@ -1,0 +1,82 @@
+{
+ "status": "proposed (milestone 01)",
+ "capability": "CAP-OPS-10",
+ "grounding": [
+  "milestone 12 acceptance: 'Diagnostics contain no raw identity inputs, credentials, or event bodies.'",
+  "docs/technical-briefing.md, Maintenance and security: restricted identity provenance is protected from ordinary reporting; logs avoid event bodies and identity inputs"
+ ],
+ "usage": "A run plants every canary through its path, then runs `holocron diagnostics`. No canary string may appear anywhere in the bundle, including inside archives. The bundle must still contain the 'must_contain' items, so an empty bundle does not pass.",
+ "canaries": [
+  {
+   "id": "ip",
+   "value": "203.0.113.77",
+   "path": "collection from this client address, once direct and once through a trusted proxy header",
+   "category": "raw identity input"
+  },
+  {
+   "id": "ua",
+   "value": "HolocronCanaryBrowser/9.9.9 canary-ua-5e1f",
+   "path": "User-Agent header on collection",
+   "category": "raw identity input"
+  },
+  {
+   "id": "event_body",
+   "value": "canary-event-body-7c1e",
+   "path": "custom event name and data value",
+   "category": "event body"
+  },
+  {
+   "id": "identify_id",
+   "value": "canary-person-42b9",
+   "path": "identify id",
+   "category": "raw identity input"
+  },
+  {
+   "id": "source_session",
+   "value": "canary-source-session-0d77",
+   "path": "imported upstream session id",
+   "category": "restricted provenance"
+  },
+  {
+   "id": "bootstrap_password",
+   "value": "canary-bootstrap-password-9f3a",
+   "path": "initialization with a supplied password",
+   "category": "credential"
+  },
+  {
+   "id": "user_password",
+   "value": "canary-user-password-31cc",
+   "path": "account creation and password change",
+   "category": "credential"
+  },
+  {
+   "id": "api_key_secret",
+   "value": "canary-api-key-secret-a4d2",
+   "path": "key created, then used in a request",
+   "category": "credential"
+  },
+  {
+   "id": "share_token",
+   "value": "canary-share-token-88be",
+   "path": "share created, then resolved",
+   "category": "credential"
+  },
+  {
+   "id": "totp_secret",
+   "value": "canary-totp-secret-6e20",
+   "path": "2FA enrollment",
+   "category": "credential"
+  }
+ ],
+ "must_contain": [
+  "version",
+  "schema version",
+  "storage state per engine",
+  "inbox depth and age",
+  "watermark",
+  "recording budget state"
+ ],
+ "open": [
+  "Bundle format, file names and the allowlist of included settings: no decision. The check works on any format."
+ ]
+}

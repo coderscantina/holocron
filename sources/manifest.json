@@ -1,0 +1,306 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "name": "umami-3.4.0",
+      "role": "runtime compatibility target",
+      "url": "https://github.com/umami-software/umami.git",
+      "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+      "tag": "v3.4.0",
+      "license": {
+        "file": "LICENSE",
+        "spdx": "MIT",
+        "sha256": "d59f69c3a56253a150adfc42b41acd49e9024410ad087c58a23d506623258dfe"
+      },
+      "lockfiles": [
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "e74f7eaca25fa295caa44c37073f22f88e887c40d4f7bdc8c1cad76738fef23d",
+          "bytes": 386252
+        }
+      ],
+      "referencedFiles": [],
+      "builtArtifacts": {
+        "image": "ghcr.io/umami-software/umami:3.4.0",
+        "indexDigest": "sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "files": [
+          {
+            "path": "sources/umami-3.4.0/script.js",
+            "imagePath": "/app/public/script.js",
+            "sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+            "bytes": 4773
+          },
+          {
+            "path": "sources/umami-3.4.0/recorder.js",
+            "imagePath": "/app/public/recorder.js",
+            "sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6",
+            "bytes": 190816
+          }
+        ],
+        "sourceBuildMatchesImage": true
+      },
+      "scriptConfig": {
+        "buildTimeEnv": [
+          "COLLECT_API_HOST",
+          "COLLECT_API_ENDPOINT"
+        ],
+        "buildDefaults": {
+          "COLLECT_API_HOST": "",
+          "COLLECT_API_ENDPOINT": "/api/send"
+        },
+        "runtimeEnv": [
+          "TRACKER_SCRIPT_NAME",
+          "TRACKER_SCRIPT_URL",
+          "COLLECT_API_ENDPOINT",
+          "BASE_PATH"
+        ],
+        "notes": "TRACKER_SCRIPT_NAME is a comma separated list of extra paths that serve /script.js. TRACKER_SCRIPT_URL rewrites /script.js to another URL. The recorder has no alias setting and is served at /recorder.js."
+      }
+    },
+    {
+      "name": "umami-2.20.2",
+      "role": "importer source (MySQL 2.20.2 schema only)",
+      "url": "https://github.com/umami-software/umami.git",
+      "commit": "3eb2e890efb5b18bdfbeab46b9946f48e38da424",
+      "tag": "v2.20.2",
+      "license": {
+        "file": "LICENSE",
+        "spdx": "MIT",
+        "sha256": "d59f69c3a56253a150adfc42b41acd49e9024410ad087c58a23d506623258dfe"
+      },
+      "lockfiles": [
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "dc3796c891346696bc1d090d8980df230d21bac74e91457f1f5a69822864ff9c",
+          "bytes": 476531
+        }
+      ],
+      "referencedFiles": []
+    },
+    {
+      "name": "kit",
+      "role": "UX reference",
+      "url": "https://github.com/coderscantina/kit.git",
+      "commit": "f447e797f1c75b967742d47b9cbb6538b32234e3",
+      "tag": null,
+      "license": {
+        "file": null,
+        "spdx": "MIT",
+        "source": "confirmed by Mike on 2026-10-03",
+        "note": "composer.json already declares MIT. The repo has no LICENSE file yet; Mike will add one."
+      },
+      "lockfiles": [
+        {
+          "path": "composer.lock",
+          "sha256": "45dab8b005dcf8b516f323cb8ac287560a2f39d708e50c02979c34a8e53cf6ac",
+          "bytes": 477871
+        },
+        {
+          "path": "bun.lock",
+          "sha256": "ea16d9f196d947720073283122a12dd5cf628fe87828ff8bffafafd302b3f8be",
+          "bytes": 211182
+        }
+      ],
+      "referencedFiles": [
+        {
+          "path": "CLAUDE.md",
+          "sha256": "ee3394505565c89d82bfcb2e9c3ee2e32a5654f541b762f8b9a83282ee101370",
+          "bytes": 8795
+        },
+        {
+          "path": "docs/design-tokens.md",
+          "sha256": "a04ef7e3d6c61f2316e2c5031359db969e2584e354f1196a6d3ecaa506231abb",
+          "bytes": 12999
+        },
+        {
+          "path": "resources",
+          "sha256": "7ac19f4c14675aa078144ccee67df7c279730218e04b7b04f0b73c6771b34a1a",
+          "bytes": 68
+        },
+        {
+          "path": "resources/js/api/client.ts",
+          "sha256": "18e46d604744949de71733bb7783992bdfde27831fb0158eeb2228e892c9dfca",
+          "bytes": 12493
+        },
+        {
+          "path": "resources/js/assets/css/app.css",
+          "sha256": "80ed9be3305c7849fd38108f2307e1b15d6abf9a5cbc86daba0c3cc9ba52bd7e",
+          "bytes": 28350
+        },
+        {
+          "path": "resources/js/components/app/AppHeader.vue",
+          "sha256": "05b708bfebca328971b4bf31cbfb3433d51664a4d2c3c1e23f23d141a97af1a5",
+          "bytes": 3071
+        },
+        {
+          "path": "resources/js/components/app/AppMobileSidebar.vue",
+          "sha256": "7c4e0cc7d09bf205eefd21f2e0188e7ce0fe5e26654b35449653fcb3080bd15f",
+          "bytes": 3653
+        },
+        {
+          "path": "resources/js/components/app/AppSidebar.vue",
+          "sha256": "e883fe5516e9df3a1b6f119d913c6c3cc9279ef1f9e26e5f0aacf247ae7c0e31",
+          "bytes": 1230
+        },
+        {
+          "path": "resources/js/components/app/AppTabBar.vue",
+          "sha256": "666d5397fd75ed621f23598b4677ea94e92c23e88ebd549c3f026f7437a489c8",
+          "bytes": 2750
+        },
+        {
+          "path": "resources/js/components/app/AppUserMenu.vue",
+          "sha256": "1f1205b4aa0e3395d4756d5fa3173413aff83734b7e49ada0b2a3ebe221f11de",
+          "bytes": 6148
+        },
+        {
+          "path": "resources/js/components/people/PeopleTable.vue",
+          "sha256": "cf7263f4e5e74b9904a7f39526e10db40df6e3ba6b379b5ba9cc9e65fa99454c",
+          "bytes": 8651
+        },
+        {
+          "path": "resources/js/components/ui/button/variants.ts",
+          "sha256": "631b9dfeb6ba3f95f6005a6e6e32b971ccaa6650b2fdaebb31467f5e8655e426",
+          "bytes": 1795
+        },
+        {
+          "path": "resources/js/components/ui/card/variants.ts",
+          "sha256": "493bfca454d4be3c9e998bf2811f99580b5b4557d6ddc39778cf93dd2c0d7700",
+          "bytes": 994
+        },
+        {
+          "path": "resources/js/components/ui/data-table/FilterChip.vue",
+          "sha256": "d831cd3a300ad29a39b03da6fc7b48e94b3a9b128decfa64ae63c189b8b5f273",
+          "bytes": 1338
+        },
+        {
+          "path": "resources/js/components/ui/data-table/SavedViews.vue",
+          "sha256": "fa47ab8777f03b1843c6fe1beab105b74180b015b18b51a51dbd5ae88b253958",
+          "bytes": 6689
+        },
+        {
+          "path": "resources/js/components/ui/data-table/TableFilter.vue",
+          "sha256": "7d2f4f27c87265048913ea7812823d8d9964956ceb0b8977c80d02efee9dd507",
+          "bytes": 17162
+        },
+        {
+          "path": "resources/js/components/ui/data-table/TableToolbar.vue",
+          "sha256": "8d47f2c18e7b9d0cd45de9980b736ed1d5d3fe7d870deccecca81bd054b1bda1",
+          "bytes": 923
+        },
+        {
+          "path": "resources/js/components/ui/data-table/types.ts",
+          "sha256": "2d9de6b87b6d85c54111bbebaff164c0fbdca9a07549aea732f01c4c06595170",
+          "bytes": 3811
+        },
+        {
+          "path": "resources/js/components/ui/overlay.ts",
+          "sha256": "02cb6743f26ffe61c70e656f19820e63a69878112420f45df40ccffd40b75acc",
+          "bytes": 512
+        },
+        {
+          "path": "resources/js/components/ui/table/index.ts",
+          "sha256": "9be6814340e4cfea1b6a02bbd0a0b5710ba7fe307cd957e4bfec8e4de3891cff",
+          "bytes": 572
+        },
+        {
+          "path": "resources/js/composables/useSavedViews.ts",
+          "sha256": "e3efc9bc4a580fb4f3bcb8b4e2ef8444f31e8f43a46a88cf99e2f0e4f8a36187",
+          "bytes": 3103
+        },
+        {
+          "path": "resources/js/composables/useTableQueryState.ts",
+          "sha256": "e6a511fed05bb286d719d12a2dcd77b0212034b39e03a414bac5d392fa7d977c",
+          "bytes": 8344
+        },
+        {
+          "path": "resources/js/layouts/AppLayout.vue",
+          "sha256": "abe2e08d3edefd4e60a1132fb4dd431d00c9c79dabca773789e523259e491133",
+          "bytes": 3758
+        },
+        {
+          "path": "resources/js/plugins/i18n.ts",
+          "sha256": "f637d946a430f773b81fa3515aed6d90f6435f13eea242d8fbe2ecec0f675cce",
+          "bytes": 2955
+        },
+        {
+          "path": "resources/js/plugins/vue-query.ts",
+          "sha256": "785186ff273df818c05201b476ae0c230a6e638c30c4f50e631bdd51b66eae4d",
+          "bytes": 783
+        }
+      ]
+    },
+    {
+      "name": "folio",
+      "role": "architecture reference",
+      "url": "https://github.com/badmike/folio.git",
+      "commit": "219e9aaa73b925c084a923835b97d14c142edd09",
+      "tag": null,
+      "license": {
+        "file": null,
+        "spdx": "MIT",
+        "source": "confirmed by Mike on 2026-10-03",
+        "note": "The repo has no LICENSE file yet; Mike will add one."
+      },
+      "lockfiles": [
+        {
+          "path": "pnpm-lock.yaml",
+          "sha256": "06a2ec42618301a81cb3f5b5c7727b3892d2b2bce6792ec8bfd5176681714e78",
+          "bytes": 176482
+        },
+        {
+          "path": "apps/server/Cargo.lock",
+          "sha256": "e20b89797ca5184065a0bc3e393a67e5ba7f5e22b960943830eb92caa3ce1f10",
+          "bytes": 79805
+        }
+      ],
+      "referencedFiles": [
+        {
+          "path": "apps/server/src/lib.rs",
+          "sha256": "d875247a89bd72c95024435a01c3827c6186c538765bd11267538ee755e89c41",
+          "bytes": 4611
+        },
+        {
+          "path": "apps/server/src/main.rs",
+          "sha256": "9d10636d60b5b629b5f6a090155fe43edea65a15242df37f2c9675969d5bd2e8",
+          "bytes": 3683
+        },
+        {
+          "path": "apps/server/src/state.rs",
+          "sha256": "367cf33df7f57078b6ae34c6dea5ffee285eade1b7ad9f0697d7bb755dbf340d",
+          "bytes": 1766
+        },
+        {
+          "path": "apps/server/src/web.rs",
+          "sha256": "8dda397c1cefa3bc6d17e87c7d2ba409c76f93ed337caf55d38eca74657d517e",
+          "bytes": 1600
+        },
+        {
+          "path": "apps/web/src/composables.ts",
+          "sha256": "d84ae236196179c26f9fcedd6008668c1dc1d54bca1299bcfe17d77a928ba671",
+          "bytes": 1766
+        },
+        {
+          "path": "apps/web/src/services/runtime-config.ts",
+          "sha256": "ee7a6bcfdc8a75086c41ebefe039e101c5d05c8b374a38ae4ac674ea5fbce4ef",
+          "bytes": 2249
+        },
+        {
+          "path": "apps/web/src/services/workspace.ts",
+          "sha256": "dff1870bf29fd4b4357a94683732884ebf8658eb2410efe869b5736f052370ee",
+          "bytes": 22495
+        }
+      ]
+    },
+    {
+      "name": "werkstatt",
+      "role": "architecture pattern (described only)",
+      "distributable": false,
+      "reason": "Private, proprietary, all rights reserved. The local commit beac11cd5d1b0b414c6d0aac6563474df8622353 is not on any remote. Patterns are described in docs/contracts/architecture-patterns.md. Not fetched, not copied.",
+      "license": {
+        "file": null,
+        "spdx": null,
+        "declared": "proprietary, all rights reserved"
+      }
+    }
+  ]
+}

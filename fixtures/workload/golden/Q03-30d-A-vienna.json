@@ -1,0 +1,1106 @@
+{
+  "case": "Q03-30d-A-vienna",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z",
+    "compare_start": "2026-08-01T22:00:00.000Z",
+    "compare_end": "2026-08-31T22:00:00.000Z"
+  },
+  "totals": {
+    "events": {
+      "current": 1909,
+      "previous": 1867,
+      "change": 42,
+      "relative_change": 0.0225
+    },
+    "visitor_days": {
+      "current": 1908,
+      "previous": 1863,
+      "change": 45,
+      "relative_change": 0.0242
+    }
+  },
+  "row_count": 1321,
+  "page": {
+    "size": 50,
+    "index": 0
+  },
+  "rows": [
+    {
+      "country": {
+        "t": "string",
+        "v": "US"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 186,
+        "previous": 176,
+        "change": 10,
+        "relative_change": 0.0568
+      },
+      "visitor_days": {
+        "current": 186,
+        "previous": 176,
+        "change": 10,
+        "relative_change": 0.0568
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "US"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 95,
+        "previous": 87,
+        "change": 8,
+        "relative_change": 0.092
+      },
+      "visitor_days": {
+        "current": 95,
+        "previous": 87,
+        "change": 8,
+        "relative_change": 0.092
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 76,
+        "previous": 84,
+        "change": -8,
+        "relative_change": -0.0952
+      },
+      "visitor_days": {
+        "current": 76,
+        "previous": 84,
+        "change": -8,
+        "relative_change": -0.0952
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 52,
+        "previous": 48,
+        "change": 4,
+        "relative_change": 0.0833
+      },
+      "visitor_days": {
+        "current": 52,
+        "previous": 48,
+        "change": 4,
+        "relative_change": 0.0833
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 46,
+        "previous": 38,
+        "change": 8,
+        "relative_change": 0.2105
+      },
+      "visitor_days": {
+        "current": 46,
+        "previous": 38,
+        "change": 8,
+        "relative_change": 0.2105
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 32,
+        "previous": 39,
+        "change": -7,
+        "relative_change": -0.1795
+      },
+      "visitor_days": {
+        "current": 32,
+        "previous": 39,
+        "change": -7,
+        "relative_change": -0.1795
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IN"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 31,
+        "previous": 27,
+        "change": 4,
+        "relative_change": 0.1481
+      },
+      "visitor_days": {
+        "current": 31,
+        "previous": 27,
+        "change": 4,
+        "relative_change": 0.1481
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 30,
+        "previous": 28,
+        "change": 2,
+        "relative_change": 0.0714
+      },
+      "visitor_days": {
+        "current": 30,
+        "previous": 28,
+        "change": 2,
+        "relative_change": 0.0714
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "GB"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 22,
+        "previous": 15,
+        "change": 7,
+        "relative_change": 0.4667
+      },
+      "visitor_days": {
+        "current": 22,
+        "previous": 15,
+        "change": 7,
+        "relative_change": 0.4667
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FR"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 20,
+        "previous": 21,
+        "change": -1,
+        "relative_change": -0.0476
+      },
+      "visitor_days": {
+        "current": 20,
+        "previous": 21,
+        "change": -1,
+        "relative_change": -0.0476
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NL"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 19,
+        "previous": 18,
+        "change": 1,
+        "relative_change": 0.0556
+      },
+      "visitor_days": {
+        "current": 19,
+        "previous": 18,
+        "change": 1,
+        "relative_change": 0.0556
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AU"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 18,
+        "previous": 11,
+        "change": 7,
+        "relative_change": 0.6364
+      },
+      "visitor_days": {
+        "current": 18,
+        "previous": 11,
+        "change": 7,
+        "relative_change": 0.6364
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CA"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 17,
+        "previous": 28,
+        "change": -11,
+        "relative_change": -0.3929
+      },
+      "visitor_days": {
+        "current": 17,
+        "previous": 28,
+        "change": -11,
+        "relative_change": -0.3929
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "JP"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 17,
+        "previous": 14,
+        "change": 3,
+        "relative_change": 0.2143
+      },
+      "visitor_days": {
+        "current": 17,
+        "previous": 14,
+        "change": 3,
+        "relative_change": 0.2143
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "BR"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 16,
+        "previous": 19,
+        "change": -3,
+        "relative_change": -0.1579
+      },
+      "visitor_days": {
+        "current": 16,
+        "previous": 19,
+        "change": -3,
+        "relative_change": -0.1579
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 14,
+        "previous": 10,
+        "change": 4,
+        "relative_change": 0.4
+      },
+      "visitor_days": {
+        "current": 14,
+        "previous": 10,
+        "change": 4,
+        "relative_change": 0.4
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "MX"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 14,
+        "previous": 7,
+        "change": 7,
+        "relative_change": 1.0
+      },
+      "visitor_days": {
+        "current": 14,
+        "previous": 7,
+        "change": 7,
+        "relative_change": 1.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "BR"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 13,
+        "previous": 15,
+        "change": -2,
+        "relative_change": -0.1333
+      },
+      "visitor_days": {
+        "current": 13,
+        "previous": 14,
+        "change": -1,
+        "relative_change": -0.0714
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "ES"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 13,
+        "previous": 15,
+        "change": -2,
+        "relative_change": -0.1333
+      },
+      "visitor_days": {
+        "current": 13,
+        "previous": 15,
+        "change": -2,
+        "relative_change": -0.1333
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IT"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 13,
+        "previous": 13,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 13,
+        "previous": 13,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "PL"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 13,
+        "previous": 8,
+        "change": 5,
+        "relative_change": 0.625
+      },
+      "visitor_days": {
+        "current": 13,
+        "previous": 8,
+        "change": 5,
+        "relative_change": 0.625
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "JP"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 12,
+        "previous": 13,
+        "change": -1,
+        "relative_change": -0.0769
+      },
+      "visitor_days": {
+        "current": 12,
+        "previous": 13,
+        "change": -1,
+        "relative_change": -0.0769
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "ES"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 11,
+        "previous": 5,
+        "change": 6,
+        "relative_change": 1.2
+      },
+      "visitor_days": {
+        "current": 11,
+        "previous": 5,
+        "change": 6,
+        "relative_change": 1.2
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "KR"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 11,
+        "previous": 4,
+        "change": 7,
+        "relative_change": 1.75
+      },
+      "visitor_days": {
+        "current": 11,
+        "previous": 4,
+        "change": 7,
+        "relative_change": 1.75
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CH"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 10,
+        "previous": 16,
+        "change": -6,
+        "relative_change": -0.375
+      },
+      "visitor_days": {
+        "current": 10,
+        "previous": 16,
+        "change": -6,
+        "relative_change": -0.375
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IN"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 10,
+        "previous": 13,
+        "change": -3,
+        "relative_change": -0.2308
+      },
+      "visitor_days": {
+        "current": 10,
+        "previous": 13,
+        "change": -3,
+        "relative_change": -0.2308
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NZ"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 10,
+        "previous": 14,
+        "change": -4,
+        "relative_change": -0.2857
+      },
+      "visitor_days": {
+        "current": 10,
+        "previous": 14,
+        "change": -4,
+        "relative_change": -0.2857
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "US"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "bing.com"
+      },
+      "events": {
+        "current": 10,
+        "previous": 7,
+        "change": 3,
+        "relative_change": 0.4286
+      },
+      "visitor_days": {
+        "current": 10,
+        "previous": 7,
+        "change": 3,
+        "relative_change": 0.4286
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CO"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 9,
+        "previous": 10,
+        "change": -1,
+        "relative_change": -0.1
+      },
+      "visitor_days": {
+        "current": 9,
+        "previous": 10,
+        "change": -1,
+        "relative_change": -0.1
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NL"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 9,
+        "previous": 11,
+        "change": -2,
+        "relative_change": -0.1818
+      },
+      "visitor_days": {
+        "current": 9,
+        "previous": 11,
+        "change": -2,
+        "relative_change": -0.1818
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "PT"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 9,
+        "previous": 7,
+        "change": 2,
+        "relative_change": 0.2857
+      },
+      "visitor_days": {
+        "current": 9,
+        "previous": 7,
+        "change": 2,
+        "relative_change": 0.2857
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CA"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 8,
+        "previous": 13,
+        "change": -5,
+        "relative_change": -0.3846
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 13,
+        "change": -5,
+        "relative_change": -0.3846
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "CL"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 8,
+        "previous": 2,
+        "change": 6,
+        "relative_change": 3.0
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 2,
+        "change": 6,
+        "relative_change": 3.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "DK"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 8,
+        "previous": 10,
+        "change": -2,
+        "relative_change": -0.2
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 10,
+        "change": -2,
+        "relative_change": -0.2
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FI"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 8,
+        "previous": 2,
+        "change": 6,
+        "relative_change": 3.0
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 2,
+        "change": 6,
+        "relative_change": 3.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "FI"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 8,
+        "previous": 6,
+        "change": 2,
+        "relative_change": 0.3333
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 6,
+        "change": 2,
+        "relative_change": 0.3333
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "PL"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 8,
+        "previous": 5,
+        "change": 3,
+        "relative_change": 0.6
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 5,
+        "change": 3,
+        "relative_change": 0.6
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "US"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "github.com"
+      },
+      "events": {
+        "current": 8,
+        "previous": 3,
+        "change": 5,
+        "relative_change": 1.6667
+      },
+      "visitor_days": {
+        "current": 8,
+        "previous": 3,
+        "change": 5,
+        "relative_change": 1.6667
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AR"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 7,
+        "previous": 5,
+        "change": 2,
+        "relative_change": 0.4
+      },
+      "visitor_days": {
+        "current": 7,
+        "previous": 5,
+        "change": 2,
+        "relative_change": 0.4
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "AU"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 7,
+        "previous": 12,
+        "change": -5,
+        "relative_change": -0.4167
+      },
+      "visitor_days": {
+        "current": 7,
+        "previous": 12,
+        "change": -5,
+        "relative_change": -0.4167
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "IT"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "NO"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "RU"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 7,
+        "previous": 7,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "BE"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 6,
+        "previous": 10,
+        "change": -4,
+        "relative_change": -0.4
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 10,
+        "change": -4,
+        "relative_change": -0.4
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "BG"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 6,
+        "previous": 2,
+        "change": 4,
+        "relative_change": 2.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 2,
+        "change": 4,
+        "relative_change": 2.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "EG"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 6,
+        "previous": 4,
+        "change": 2,
+        "relative_change": 0.5
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 4,
+        "change": 2,
+        "relative_change": 0.5
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "KE"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 6,
+        "previous": 7,
+        "change": -1,
+        "relative_change": -0.1429
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 7,
+        "change": -1,
+        "relative_change": -0.1429
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "MY"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 6,
+        "previous": 3,
+        "change": 3,
+        "relative_change": 1.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 3,
+        "change": 3,
+        "relative_change": 1.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "SE"
+      },
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "events": {
+        "current": 6,
+        "previous": 2,
+        "change": 4,
+        "relative_change": 2.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 2,
+        "change": 4,
+        "relative_change": 2.0
+      }
+    },
+    {
+      "country": {
+        "t": "string",
+        "v": "SE"
+      },
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "events": {
+        "current": 6,
+        "previous": 6,
+        "change": 0,
+        "relative_change": 0.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 6,
+        "change": 0,
+        "relative_change": 0.0
+      }
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 1909,
+    "eligible_events": 1909,
+    "rate": 1.0
+  }
+}

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<title>Holocron dashboard v2 reference</title>
+<style>
+:root{
+  --bg:oklch(15.15% .004 285);--panel:oklch(17.9% .006 281);--raise:oklch(20.6% .008 278);
+  --line:oklch(26.1% .014 278);--line2:oklch(23.4% .011 278);
+  --ink:oklch(93% .008 279);--ink2:oklch(74% .024 279);--mute:oklch(56% .04 278);--faint:oklch(39% .024 278);
+  --blue:oklch(66.7% .161 245.5);--blue-d:oklch(49.5% .123 246);--blue-dd:oklch(30.9% .071 243.7);
+  --good:oklch(72% .15 155);--bad:oklch(68% .17 28);--warn:oklch(78% .14 75);
+}
+*{box-sizing:border-box;margin:0}
+body{background:none;color:var(--ink);font:13px/1.45 ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:232px 1fr;width:1440px;background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--line2)}
+aside{border-right:1px solid var(--line2);padding:14px 10px;display:flex;flex-direction:column;gap:14px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:15px;padding:2px 6px}
+.logo{width:24px;height:24px;border-radius:7px;background:var(--blue);display:grid;place-items:center}
+.grp h4{font-size:11px;font-weight:500;color:var(--mute);padding:0 8px 4px}
+.nav{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:7px;color:var(--ink2)}
+.nav.on{background:var(--raise);color:var(--ink)}
+.nav i{width:14px;height:14px;border-radius:3px;border:1.5px solid currentColor;opacity:.7;flex:none}
+.nav .n{margin-left:auto;font-size:11px;color:var(--mute)}
+.nav .badge{margin-left:auto;font-size:10.5px;font-weight:600;background:var(--blue);color:#fff;border-radius:5px;padding:0 5px}
+.nav .live{margin-left:auto;font-size:11px;color:var(--good);display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px oklch(72% .15 155/.15)}
+.health{margin-top:auto;border:1px solid var(--line2);border-radius:9px;padding:10px;background:var(--panel)}
+.health .t{display:flex;justify-content:space-between;font-size:12px}
+.health .s{font-size:11px;color:var(--mute);margin-top:6px}
+main{padding:14px 24px 40px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.scope{display:flex;gap:8px;align-items:center}
+.chip{display:flex;align-items:center;gap:7px;height:32px;padding:0 11px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--ink)}
+.chip small{color:var(--mute);font-size:12px}
+.chip .av{width:18px;height:18px;border-radius:5px;background:var(--blue);display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff}
+.chip.add{color:var(--mute);border-style:dashed;background:none}
+.ask{margin-left:auto;width:340px;color:var(--mute)}
+.ask kbd{margin-left:auto;font:inherit;font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.hero{display:grid;gap:16px;padding-top:10px}
+.hero .kpis{justify-self:start}
+.hero h1{font-size:30px;line-height:1.2;font-weight:600;letter-spacing:-.01em;max-width:760px}
+.hero h1 b{color:var(--blue);font-weight:650}
+.hero h1 span{color:var(--ink2);font-weight:450}
+.hero p{color:var(--ink2);margin-top:8px;font-size:14px;max-width:720px}
+.hero p a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:3px}
+.kpis{display:flex;gap:0;border:1px solid var(--line2);border-radius:10px;background:var(--panel)}
+.kpi{padding:10px 16px;border-left:1px solid var(--line2);min-width:120px}
+.kpi:first-child{border-left:0}
+.kpi .l{font-size:11.5px;color:var(--mute)}
+.kpi .v{font-size:18px;font-weight:600;margin-top:2px}
+.kpi .d{font-size:11.5px}
+.up{color:var(--good)}.down{color:var(--bad)}
+.card{background:var(--panel);border:1px solid var(--line2);border-radius:12px}
+.chart{padding:16px 18px 12px}
+.chart header{display:flex;align-items:center;gap:18px}
+.tabs{display:flex;gap:18px}
+.tabs span{padding-bottom:8px;color:var(--mute);border-bottom:2px solid transparent}
+.tabs span.on{color:var(--ink);border-color:var(--blue)}
+.legend{display:flex;gap:14px;margin-left:auto;color:var(--ink2);font-size:12px;align-items:center}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+svg text{fill:var(--mute);font-size:11px}
+.foot{display:flex;gap:22px;font-size:12.5px;color:var(--ink2);padding-top:8px;border-top:1px solid var(--line2);margin-top:4px}
+.foot b{color:var(--ink);font-weight:550}
+.foot .r{margin-left:auto;color:var(--mute)}
+.noticed{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ins{position:relative;border-radius:11px;padding:13px 14px;background:var(--panel);border:1px solid var(--line2)}
+.ins.lead{border-color:var(--blue)}
+.ins .k{font-size:11.5px;color:var(--mute);display:flex;gap:6px;align-items:center}
+.ins .h{font-size:14px;font-weight:600;margin:5px 0 3px}
+.ins .b{color:var(--ink2);font-size:12.5px}
+.ins .act{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--blue)}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.panel header{display:flex;align-items:center;padding:13px 16px 10px;gap:10px}
+.panel h3{font-size:14px;font-weight:600}
+.seg{margin-left:auto;display:flex;background:var(--bg);border-radius:7px;padding:2px;border:1px solid var(--line2)}
+.seg span{padding:2px 9px;border-radius:5px;color:var(--mute);font-size:12px}
+.seg span.on{background:var(--raise);color:var(--ink)}
+.row{display:grid;align-items:center;gap:12px;padding:8px 16px;border-top:1px solid var(--line2)}
+.movers .row{grid-template-columns:1fr 64px 170px 54px}
+.row .p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .num{text-align:right;font-variant-numeric:tabular-nums}
+.row.quiet{color:var(--faint)}.row.quiet .num{color:var(--faint)}
+.div{position:relative;height:8px}
+.div:before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line)}
+.div b{position:absolute;top:0;height:8px;border-radius:2px}
+.goals .row{grid-template-columns:190px 1fr 150px}
+.meter{height:6px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.meter b{position:absolute;inset:0 auto 0 0;border-radius:3px}
+.meter i{position:absolute;top:0;bottom:0;border-left:1.5px dashed var(--ink2)}
+.sub{font-size:11.5px;color:var(--mute);margin-top:4px;display:flex;justify-content:space-between}
+.state{font-size:12px;text-align:right}
+.pips{display:inline-flex;gap:2px;vertical-align:middle;margin-right:8px}
+.pips i{width:3px;height:11px;border-radius:1px;background:var(--line)}
+.pips i.f{background:var(--blue)}
+.ref .row{grid-template-columns:1fr 70px 56px}
+.tip{position:fixed;pointer-events:none;background:var(--raise);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12px;display:none;z-index:9;box-shadow:0 8px 24px rgb(0 0 0/.4)}
+.tip b{display:block;margin-bottom:2px}
+.disk{padding:12px 16px 14px}
+.top{position:relative;display:flex;align-items:center;gap:4px;height:48px;margin:-14px -24px 0;padding:0 16px;border-bottom:1px solid var(--line2)}
+.crumb{display:flex;align-items:center;gap:8px;height:30px;padding:0 8px;border-radius:7px;font-weight:550}
+.crumb.open{background:var(--raise)}
+.crumb .av{width:20px;height:20px;border-radius:6px;background:var(--raise);border:1px solid var(--line);display:grid;place-items:center;font-size:10.5px;font-weight:650}
+.crumb .kind{font-size:10.5px;font-weight:500;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.crumb .pace{font-size:11.5px;font-weight:500}
+.crumb .ud{color:var(--mute);font-size:12px;margin-top:-4px}
+.sl{color:var(--faint);padding:0 2px}
+.top .ask{height:30px}
+.me{width:28px;height:28px;border-radius:50%;background:var(--raise);border:1px solid var(--line);display:grid;place-items:center;font-size:10.5px;font-weight:600;color:var(--ink2);margin-left:8px}
+.menu{position:absolute;z-index:5;top:44px;left:206px;width:400px;background:var(--raise);border:1px solid var(--line);border-radius:11px;padding:6px;box-shadow:0 18px 50px rgb(0 0 0/.55)}
+.menu .all{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);margin-bottom:4px}
+.menu .all span{display:grid}
+.menu .all b{font-weight:600}
+.menu small{color:var(--mute);font-size:11.5px;font-weight:400}
+.menu .go{color:var(--blue);font-size:12px}
+.menu h5{font-size:11px;font-weight:500;color:var(--mute);padding:9px 10px 3px}
+.site{display:grid;grid-template-columns:1fr auto 8px;gap:12px;align-items:center;padding:6px 10px;border-radius:7px}
+.site.on{background:oklch(30.9% .071 243.7/.45)}
+.site .nm{display:grid;min-width:0}
+.site .st{font-size:12px;color:var(--ink2);text-align:right}
+.site .st.up{color:var(--good)}.site .st.down{color:var(--bad)}
+.flag{width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.flag.bad{background:var(--bad)}.flag.none{background:none}
+.site.quiet,.site.quiet .st{color:var(--faint)}
+.mfoot{font-size:11px;color:var(--mute);padding:8px 10px 4px;border-top:1px solid var(--line2);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand"><div class="logo"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 10V6M6 10V2M10 10V5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>Holocron</div>
+  <div class="grp"><h4>Traffic</h4>
+    <div class="nav on"><i></i>Overview</div>
+    <div class="nav"><i></i>Explore</div>
+    <div class="nav"><i></i>Realtime<span class="live"><span class="dot"></span>14</span></div>
+    <div class="nav"><i></i>Sessions</div>
+  </div>
+  <div class="grp"><h4>Behaviour</h4>
+    <div class="nav"><i></i>Events</div>
+    <div class="nav"><i></i>Funnels<span class="badge">1</span></div>
+    <div class="nav"><i></i>Goals<span class="badge">1</span></div>
+    <div class="nav"><i></i>Journeys</div>
+    <div class="nav"><i></i>Retention</div>
+  </div>
+  <div class="grp"><h4>Acquisition</h4>
+    <div class="nav"><i></i>Campaigns</div>
+    <div class="nav"><i></i>Attribution</div>
+    <div class="nav"><i></i>Revenue</div>
+  </div>
+  <div class="grp"><h4>Experience</h4>
+    <div class="nav"><i></i>Performance<span class="badge">1</span></div>
+    <div class="nav"><i></i>Replays</div>
+    <div class="nav"><i></i>Heatmaps</div>
+  </div>
+  <div class="health">
+    <div class="t"><span>This server</span><span class="up">Healthy</span></div>
+    <div class="meter" style="margin-top:8px"><b style="width:61%;background:var(--ink2)"></b></div>
+    <div class="s">Disk 152 of 250 GiB. Levels off near 171 GiB in January. Install admins only.</div>
+  </div>
+</aside>
+
+<main>
+  <div class="top">
+    <div class="crumb"><span class="av">R</span>Roadhouse<span class="kind">Team</span><span class="ud">⌄</span></div>
+    <span class="sl">/</span>
+    <div class="crumb open">roadhouse.test<span class="pace up">+12%</span><span class="ud">⌄</span></div>
+    <div class="chip ask">Jump to anything<kbd>⌘K</kbd></div>
+    <span class="me">MW</span>
+
+    <div class="menu">
+      <a class="all"><span><b>All sites in Roadhouse</b><small>4 sites, 1 needs you</small></span><span class="go">Open →</span></a>
+      <h5>roadhouse.test</h5>
+      <div class="site on"><span class="nm">roadhouse.test<small>Website</small></span><span class="st up">+12% vs typical</span><span class="flag"></span></div>
+      <div class="site"><span class="nm">tickets.roadhouse.test<small>Ticket shop</small></span><span class="st down">Ticket bought 5 behind</span><span class="flag bad"></span></div>
+      <div class="site quiet"><span class="nm">staging.roadhouse.test<small>Staging</small></span><span class="st">31 views today</span><span class="flag none"></span></div>
+      <h5>kulturhaus-linz.at</h5>
+      <div class="site"><span class="nm">kulturhaus-linz.at<small>Website</small></span><span class="st">usual range</span><span class="flag none"></span></div>
+      <div class="mfoot">Pace from 15:15. A dot means the site has findings.</div>
+    </div>
+  </div>
+
+  <div class="scope">
+    <div class="chip">Today<small>until now, 15:20</small></div>
+    <div class="chip"><small>vs</small>a typical Tuesday</div>
+    <div class="chip add">+ Filter or segment</div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h1>3,630 views so far today. <span>On pace for</span> <b>4,900</b> <span>by midnight, 12% above a typical Tuesday.</span></h1>
+      <p>Most of the lift is <a>instagram.com</a>: +214 visitor-days since 09:40, after the annotation <a>33rd birthday party</a>.</p>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Views</div><div class="v">3,630</div><div class="d up">↑ 12%</div></div>
+      <div class="kpi"><div class="l">Visitor-days</div><div class="v">1,108</div><div class="d up">↑ 4%</div></div>
+      <div class="kpi"><div class="l">Sessions</div><div class="v">1,230</div><div class="d up">↑ 3%</div></div>
+      <div class="kpi"><div class="l">Bounce</div><div class="v">49%</div><div class="d up">↓ 7 pts</div></div>
+      <div class="kpi"><div class="l">Observed span</div><div class="v">2m 14s</div><div class="d down">↓ 9%</div></div>
+    </div>
+  </section>
+
+  <section class="card chart">
+    <header>
+      <div class="tabs"><span class="on">Views</span><span>Visitor-days</span><span>Sessions</span><span>Bounce</span></div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--blue)"></span>Today</span>
+        <span><span class="sw" style="background:none;border:1.5px dashed var(--blue)"></span>Projected</span>
+        <span><span class="sw" style="background:var(--ink2);height:2px;vertical-align:3px"></span>Typical Tuesday</span>
+      </div>
+    </header>
+    <svg id="trend" width="1122" height="250" style="display:block;margin-top:8px"></svg>
+    <div class="foot">
+      <span>Passes 4,000 around <b>19:30</b></span>
+      <span>Busiest hour expected <b>20:00 to 21:00</b></span>
+      <span class="r">Exact counts up to now. Dashed is an estimate from the last 8 Tuesdays.</span>
+    </div>
+  </section>
+
+  <section class="noticed">
+    <div class="ins lead">
+      <div class="k">Referrer · since 09:40</div>
+      <div class="h">instagram.com tripled</div>
+      <div class="b">312 visitor-days so far, 98 on a typical Tuesday by this hour. Explains 64% of today&#39;s change.</div>
+      <div class="act"><span>Filter to this</span><span>Add annotation</span></div>
+    </div>
+    <div class="ins">
+      <div class="k">Funnel · Ticket checkout</div>
+      <div class="h">Payment step loses 9 pts more</div>
+      <div class="b">Drop-off at /de/checkout/payment is 40% today, 31% on a typical Tuesday. 214 sessions entered the step.</div>
+      <div class="act"><span>Watch 12 replays</span><span>Open funnel</span></div>
+    </div>
+    <div class="ins">
+      <div class="k">Performance · last 24 hours</div>
+      <div class="h">LCP p75 3.4 s on Android, slowest in 28 days</div>
+      <div class="b">The slowest day of the previous 28 was 2.6 s. 1,420 observations.</div>
+      <div class="act"><span>Open performance</span><span>Add annotation</span></div>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <section class="card panel movers">
+      <header><h3>Pages</h3><div class="seg"><span>Top</span><span class="on">Movers</span></div></header>
+      <div id="movers"></div>
+    </section>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <section class="card panel goals">
+        <header><h3>Goals today</h3><span style="margin-left:auto;color:var(--mute);font-size:12px">dashed = where a typical Tuesday is by now</span></header>
+        <div id="goals"></div>
+      </section>
+      <section class="card panel ref">
+        <header><h3>Referrers</h3><div class="seg"><span class="on">Top</span><span>Movers</span></div></header>
+        <div id="refs"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card panel">
+    <header><h3>Storage forecast</h3><span style="color:var(--mute);font-size:12px">install admins only, on the status page in production</span><span style="margin-left:auto;color:var(--ink2);font-size:12.5px">Levels off near <b style="color:var(--ink)">171 GiB on Jan 9</b>, when 12 months are retained. Reserve stays 75 GiB away.</span></header>
+    <div class="disk"><svg id="disk" width="1090" height="130" style="display:block"></svg></div>
+  </section>
+</main>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const NS='http://www.w3.org/2000/svg'
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+const tip=document.getElementById('tip')
+const showTip=(e,html)=>{tip.innerHTML=html;tip.style.display='block';tip.style.left=e.clientX+14+'px';tip.style.top=e.clientY+14+'px'}
+const hideTip=()=>tip.style.display='none'
+
+// hourly views: actual until 15:00, projected after; typical Tuesday line
+const typical=[40,22,14,10,9,12,30,70,120,160,190,205,210,200,195,205,230,260,290,320,330,300,220,120]
+const actual=[44,25,13,11,10,14,33,78,131,262,301,288,245,236,251,212]
+const proj=typical.map((v,i)=>i<16?null:Math.round(v*1.14))
+function drawTrend(){
+  const s=document.getElementById('trend');s.innerHTML=''
+  const W=1122,H=250,L=36,R=8,T=14,B=26,pw=W-L-R,ph=H-T-B,max=420
+  const x=i=>L+pw*i/24, y=v=>T+ph*(1-v/max), bw=pw/24-3
+  for(let g=0;g<=420;g+=70){el('line',{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:'oklch(23.4% .011 278)'},s);el('text',{x:L-8,y:y(g)+4,'text-anchor':'end'},s).textContent=g}
+  for(let i=0;i<24;i+=3)el('text',{x:x(i)+bw/2,y:H-8,'text-anchor':'middle'},s).textContent=String(i).padStart(2,'0')+':00'
+  actual.forEach((v,i)=>{el('rect',{x:x(i)+1.5,y:y(v),width:bw,height:y(0)-y(v),rx:3,fill:'oklch(66.7% .161 245.5)'},s)})
+  proj.forEach((v,i)=>{if(v==null)return;el('rect',{x:x(i)+2.25,y:y(v)+.75,width:bw-1.5,height:y(0)-y(v)-.75,rx:3,fill:'oklch(30.9% .071 243.7 / .35)',stroke:'oklch(66.7% .161 245.5)','stroke-width':1.5,'stroke-dasharray':'4 3'},s)})
+  el('path',{d:typical.map((v,i)=>(i?'L':'M')+(x(i)+bw/2+1.5)+' '+y(v)).join(' '),fill:'none',stroke:'oklch(74% .024 279)','stroke-width':2,'stroke-opacity':.55,'stroke-linejoin':'round'},s)
+  const nx=x(15.33)
+  el('line',{x1:nx,x2:nx,y1:T-6,y2:y(0),stroke:'oklch(93% .008 279)','stroke-dasharray':'2 3'},s)
+  const t=el('text',{x:nx+6,y:T+2},s);t.textContent='Now 15:20';t.style.fill='oklch(93% .008 279)'
+  for(let i=0;i<24;i++){
+    const r=el('rect',{x:x(i),y:T,width:pw/24,height:ph,fill:'transparent'},s)
+    r.addEventListener('mousemove',e=>{const a=i<16?actual[i]:proj[i];showTip(e,`<b>${String(i).padStart(2,'0')}:00 to ${String(i+1).padStart(2,'0')}:00</b>${i<16?'Views':'Projected'} ${a}<br><span style="color:var(--mute)">Typical Tuesday ${typical[i]}</span>`)})
+    r.addEventListener('mouseleave',hideTip)
+  }
+}
+
+const movers=[
+  ['/de/events/33rd-roadhouse-birthday-party',134,+101],
+  ['/de/checkout/payment',43,-19],
+  ['/de/events/25-jahre-revivalband',111,+22],
+  ['/en',57,-11],
+  ['/de/events',459,+6],
+  ['/de',346,-3],
+  ['/de/checkout',50,+2],
+  ['/de/events/my-son-the-doctor',41,-1],
+  ['/de/checkout/success',38,+1],
+  ['/de/events/krissy-matthews-band',52,0],
+]
+document.getElementById('movers').innerHTML=movers.map(([p,v,d])=>{
+  const q=Math.abs(d)<5, w=Math.min(50,Math.abs(d)/2.2), c=d>0?'var(--good)':'var(--bad)'
+  return `<div class="row${q?' quiet':''}"><span class="p">${p}</span><span class="num">${v}</span><span class="div"><b style="${d>0?'left:50%':'right:50%'};width:${w}%;background:${q?'var(--faint)':c}"></b></span><span class="num ${q?'':d>0?'up':'down'}">${d>0?'+':''}${d||'0'}</span></div>`
+}).join('')
+
+const goals=[
+  ['Ticket bought',41,'of 60 usual by midnight',68,72,'behind','5 behind pace','var(--bad)'],
+  ['Newsletter signup',88,'of 70 usual by midnight',100,55,'done','Passed the typical day at 14:05','var(--good)'],
+  ['Event page shared',23,'of 30 usual by midnight',77,60,'ahead','On pace for 36','var(--good)'],
+]
+document.getElementById('goals').innerHTML=goals.map(([n,v,s,pct,typ,_,st,c])=>`
+  <div class="row"><div><div>${n}</div><div class="sub"><span>${v} ${s}</span></div></div>
+  <div><div class="meter"><b style="width:${pct}%;background:${c}"></b><i style="left:${typ}%"></i></div></div>
+  <div class="state" style="color:${c}">${st}</div></div>`).join('')
+
+const refs=[['roadhouse.test',506,5],['google.com',483,5],['instagram.com',312,4],['bing.com',21,1],['duckduckgo.com',13,1]]
+document.getElementById('refs').innerHTML=refs.map(([n,v,p])=>`<div class="row"><span><span class="pips">${[0,1,2,3,4].map(i=>`<i class="${i<p?'f':''}"></i>`).join('')}</span>${n}</span><span class="num">${v}</span><span class="num" style="color:var(--mute)">${Math.round(v/1108*100)}%</span></div>`).join('')
+
+// disk: grows with ingest, drops at monthly retention prune
+function drawDisk(){
+  const s=document.getElementById('disk');s.innerHTML=''
+  const W=1090,H=130,L=48,R=8,T=8,B=20,pw=W-L-R,ph=H-T-B
+  const x=d=>L+pw*(d+30)/120,y=g=>T+ph*(1-(g-100)/100)
+  ;[100,150,200].forEach(g=>{el('line',{x1:L,x2:W-R,y1:y(g),y2:y(g),stroke:'oklch(23.4% .011 278)'},s);el('text',{x:L-8,y:y(g)+4,'text-anchor':'end'},s).textContent=g+' G'})
+  el('line',{x1:L,x2:W-R,y1:y(175),y2:y(175),stroke:'oklch(78% .14 75)','stroke-dasharray':'3 4','stroke-opacity':.6},s)
+  el('text',{x:W-R,y:y(175)-5,'text-anchor':'end'},s).textContent='175 G, 70%'
+  const pts=[];let g=145.4
+  for(let d=-30;d<=90;d++){pts.push([d,g]);if(d<86)g+=.22}
+  const past=pts.filter(p=>p[0]<=0),fut=pts.filter(p=>p[0]>=0)
+  const path=a=>a.map((p,i)=>(i?'L':'M')+x(p[0])+' '+y(p[1])).join(' ')
+  el('path',{d:path(past)+` L${x(0)} ${y(100)} L${x(-30)} ${y(100)} Z`,fill:'oklch(66.7% .161 245.5 / .14)'},s)
+  el('path',{d:path(past),fill:'none',stroke:'oklch(66.7% .161 245.5)','stroke-width':2},s)
+  el('path',{d:path(fut),fill:'none',stroke:'oklch(66.7% .161 245.5)','stroke-width':1.5,'stroke-dasharray':'5 4'},s)
+  el('line',{x1:x(0),x2:x(0),y1:T,y2:y(100),stroke:'oklch(93% .008 279)','stroke-dasharray':'2 3'},s)
+  const t=el('text',{x:x(0)+6,y:T+10},s);t.textContent='Now';t.style.fill='oklch(93% .008 279)'
+  ;[['Oct 15',0],['Nov 1',17],['Dec 1',47],['Jan 9',86]].forEach(([l,d])=>el('text',{x:x(d),y:H-4,'text-anchor':'middle'},s).textContent=l)
+}
+const fit=()=>{document.querySelector('.app').style.zoom=Math.min(1,document.documentElement.clientWidth/1442)};fit();drawTrend();drawDisk();addEventListener('resize',fit)
+</script>
+</body>
+</html>

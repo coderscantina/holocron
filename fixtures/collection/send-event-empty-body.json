@@ -1,0 +1,31 @@
+{
+  "id": "send-event-empty-body",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "POST without a body.",
+  "upstream_ref": [
+    "src/lib/request.ts:62-68"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send"
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Bad request",
+        "code": "bad-request",
+        "status": 400
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Keep the {error:{message,code,status}} envelope. Zod tree details are not part of the contract."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

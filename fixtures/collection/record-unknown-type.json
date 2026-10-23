@@ -1,0 +1,38 @@
+{
+  "id": "record-unknown-type",
+  "surface": "record.heatmap",
+  "polarity": "negative",
+  "description": "Top-level type other than record or heatmap.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:25"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "body": {
+      "type": "clicks",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": []
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Bad request",
+        "code": "bad-request",
+        "status": 400
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Keep the {error:{message,code,status}} envelope. Zod tree details are not part of the contract."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

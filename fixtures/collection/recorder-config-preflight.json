@@ -1,0 +1,33 @@
+{
+  "id": "recorder-config-preflight",
+  "surface": "recorder.config",
+  "polarity": "positive",
+  "description": "CORS preflight for the configuration route.",
+  "upstream_ref": [
+    "src/app/api/websites/[websiteId]/recorder/route.ts:6-8",
+    "src/lib/cors.ts:3-32",
+    "next.config.ts:65-97"
+  ],
+  "request": {
+    "method": "OPTIONS",
+    "path": "/api/websites/5e1a0000-0000-4000-8000-000000000002/recorder",
+    "headers": {
+      "origin": "http://localhost:8080",
+      "access-control-request-method": "GET"
+    }
+  },
+  "expected_upstream": {
+    "status": 204,
+    "headers": {
+      "access-control-allow-origin": "*"
+    }
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 204,
+    "decision": "confirmed",
+    "notes": "Cross-origin tracker collection remains supported (briefing, transport surfaces)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

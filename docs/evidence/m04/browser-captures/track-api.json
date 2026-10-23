@@ -1,0 +1,176 @@
+{
+  "id": "capture-track-api",
+  "description": "umami.track with a name and data, with a full payload object, and with a function.",
+  "upstream_ref": [
+    "src/tracker/index.ts:432-440"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.evaluate(async () => {",
+    "await window.umami.track('signup', { plan: 'pro', seats: 3, trial: false });",
+    "await window.umami.track({ website: document.currentScript?.dataset.websiteId ?? '5e1a0000-0000-4000-8000-000000000001', url: '/custom', title: 'Custom' });",
+    "await window.umami.track(props => ({ ...props, name: 'from-function', data: { n: 1 } }));",
+    "});"
+  ],
+  "captured": [
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "name": "signup",
+          "data": {
+            "plan": "pro",
+            "seats": 3,
+            "trial": false
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "url": "/custom",
+          "title": "Custom"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "name": "from-function",
+          "data": {
+            "n": 1
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "four sends (pageview + three track calls)",
+      "passed": true
+    },
+    {
+      "description": "typed data preserved for track(name, data)",
+      "passed": true
+    },
+    {
+      "description": "object form sends only the given fields",
+      "passed": true
+    },
+    {
+      "description": "function form receives the default payload",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

@@ -1,0 +1,44 @@
+{
+  "id": "send-alias-collect-endpoint",
+  "surface": "send.alias",
+  "polarity": "positive",
+  "description": "With COLLECT_API_ENDPOINT=/api/collect the alias is rewritten to /api/send.",
+  "upstream_ref": [
+    "docker/proxy.ts:31-42",
+    "next.config.ts:119-129"
+  ],
+  "requires_pass": "collect-alias",
+  "request": {
+    "method": "POST",
+    "path": "/api/collect",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Alias behaves exactly like /api/send. Respond only after the payload is durably committed (briefing, durability). Keep the {cache, sessionId, visitId} shape (briefing, identity). Values come from the identity derivation in docs/decisions/0001, so they will not equal upstream values."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

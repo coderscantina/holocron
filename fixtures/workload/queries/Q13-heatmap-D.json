@@ -1,0 +1,62 @@
+{
+  "format_version": 1,
+  "id": "Q13-heatmap-D",
+  "family": "Q13",
+  "title": "Heatmap cells for one page and viewport, 90 days",
+  "operation": "heatmaps.cells",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "90d",
+  "latency": {
+    "gate": "separate",
+    "target_p95_ms": null,
+    "note": "Own latency distribution and correctness assertion; runs inside concurrent load, never excluded from it. No agreed numeric target."
+  },
+  "early_gate": false,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-07-03T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": null,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": null,
+  "parameters": {
+    "path": "/",
+    "viewport_width": 390,
+    "page_version": "all (the fixture has one page version)",
+    "types": [
+      "click",
+      "scroll"
+    ],
+    "cell_key": "provisional manifest aggregate_cell_key"
+  },
+  "sort": {
+    "order": [],
+    "ties": "type, then cell y, then cell x ascending"
+  },
+  "output_bound": {
+    "max_rows": 10000,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "to be fixed after first generation by milestone 02"
+  },
+  "retention_clock": null
+}

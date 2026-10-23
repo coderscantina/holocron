@@ -1,0 +1,89 @@
+{
+  "format_version": 1,
+  "id": "Q01-12m-A-utc",
+  "family": "Q01",
+  "title": "Traffic overview, day series",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": true,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2024-10-01T00:00:00.000Z",
+    "compare_end": "2025-10-01T00:00:00.000Z",
+    "compare_retention_start": "2025-09-30T22:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "pageviews",
+      "visitor_days",
+      "sessions",
+      "bounce_rate",
+      "span_mean",
+      "span_median"
+    ],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "previous_period",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "line"
+  },
+  "parameters": {
+    "series": "day",
+    "headline": "visitor_days (range longer than one local day, 0003)",
+    "compare_note": "annual previous period lies before the fixture, so it is all zero_baseline by construction"
+  },
+  "sort": {
+    "order": [],
+    "ties": "series ordered by bucket start ascending"
+  },
+  "output_bound": {
+    "max_rows": 365,
+    "max_response_bytes": 1048576,
+    "series_points": 365
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": 365,
+    "matched_records": 57000000,
+    "golden_result_hash": "74b309dc9b159707335d771a45c773dc31962a188b2fd3e2e7dcc026b8821f27",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q01-12m-A-utc.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

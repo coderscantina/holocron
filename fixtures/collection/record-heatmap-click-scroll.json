@@ -1,0 +1,65 @@
+{
+  "id": "record-heatmap-click-scroll",
+  "surface": "record.heatmap",
+  "polarity": "positive",
+  "description": "Heatmap payload with one click and one scroll event, as the recorder sends them.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:34-69",
+    "src/app/api/record/route.ts:216-248",
+    "src/recorder/index.js:503-634"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000002}}"
+    },
+    "body": {
+      "type": "heatmap",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": "click",
+            "url": "http://localhost:8080/pricing?x=1",
+            "x": 100,
+            "y": 200,
+            "pageX": 100,
+            "pageY": 900,
+            "pageW": 1280,
+            "pageH": 3000,
+            "viewportW": 1280,
+            "viewportH": 720,
+            "timestamp": 1790000000000
+          },
+          {
+            "type": "scroll",
+            "url": "http://localhost:8080/pricing",
+            "scrollPct": 64,
+            "pageW": 1280,
+            "pageH": 3000,
+            "viewportW": 1280,
+            "viewportH": 720,
+            "timestamp": 1790000001000
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "ok": true
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Heatmap payloads preserved. Upstream returns ok:true even when the save throws (record/route.ts:243-246); Holocron returns ok:true only after commit."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

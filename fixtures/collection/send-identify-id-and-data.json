@@ -1,0 +1,52 @@
+{
+  "id": "send-identify-id-and-data",
+  "surface": "send.identify",
+  "polarity": "positive",
+  "description": "identify with distinct id and session data, as umami.identify(\"user-123\", {plan:\"pro\"}) sends it.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:154",
+    "src/app/api/send/route.ts:160-162",
+    "src/app/api/send/route.ts:312-348"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "x-umami-cache": ""
+    },
+    "body": {
+      "type": "identify",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "id": "user-123",
+        "data": {
+          "plan": "pro",
+          "seats": 3
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Accepted. The id is hashed into the daily identified pseudonym; it does not establish consent (docs/decisions/0001, identify). identify never creates or extends a session (0002)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

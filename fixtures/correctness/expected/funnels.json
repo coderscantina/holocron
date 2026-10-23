@@ -1,0 +1,160 @@
+{
+  "metric_version": 1,
+  "cases": [
+    {
+      "id": "pricing-signup-daily",
+      "site": "A",
+      "steps": [
+        {
+          "pageview_path": "/pricing"
+        },
+        {
+          "event_name": "signup_start"
+        },
+        {
+          "event_name": "signup"
+        }
+      ],
+      "window_minutes": 60,
+      "scope": "daily",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-16",
+          "2026-06-16"
+        ],
+        "start": "2026-06-15T22:00:00.000Z",
+        "end": "2026-06-16T22:00:00.000Z"
+      },
+      "steps_reached": [
+        5,
+        3,
+        1
+      ],
+      "step_drop": [
+        2,
+        2
+      ],
+      "conversion": 0.2,
+      "limitation": "daily scope cannot cross local midnight",
+      "paths": {
+        "anon 192.0.2.81 desk_chrome 2026-06-16": [
+          "fun-01",
+          "fun-02",
+          "fun-03"
+        ],
+        "anon 192.0.2.82 desk_chrome 2026-06-16": [
+          "fun-06",
+          "fun-08"
+        ],
+        "anon 192.0.2.83 iphone_safari 2026-06-16": [
+          "fun-10"
+        ],
+        "anon 192.0.2.84 desk_chrome 2026-06-16": [
+          "fun-12",
+          "fun-13"
+        ],
+        "anon 192.0.2.85 desk_chrome 2026-06-16": [
+          "fun-15"
+        ]
+      },
+      "identity_coverage": {
+        "with_identity": 20,
+        "eligible_events": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "docs-docs-signup-daily",
+      "site": "A",
+      "steps": [
+        {
+          "pageview_path": "/docs"
+        },
+        {
+          "pageview_path": "/docs"
+        },
+        {
+          "event_name": "signup"
+        }
+      ],
+      "window_minutes": 60,
+      "scope": "daily",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-16",
+          "2026-06-16"
+        ],
+        "start": "2026-06-15T22:00:00.000Z",
+        "end": "2026-06-16T22:00:00.000Z"
+      },
+      "steps_reached": [
+        2,
+        1,
+        1
+      ],
+      "step_drop": [
+        1,
+        0
+      ],
+      "conversion": 0.5,
+      "paths": {
+        "anon 192.0.2.86 desk_chrome 2026-06-16": [
+          "fun-17",
+          "fun-18",
+          "fun-19"
+        ],
+        "anon 192.0.2.87 desk_chrome 2026-06-16": [
+          "fun-20"
+        ]
+      },
+      "identity_coverage": {
+        "with_identity": 20,
+        "eligible_events": 20,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "docs-pricing-person",
+      "site": "A",
+      "steps": [
+        {
+          "pageview_path": "/docs"
+        },
+        {
+          "pageview_path": "/pricing"
+        }
+      ],
+      "window_minutes": 60,
+      "scope": "person",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-09-14",
+          "2026-09-27"
+        ],
+        "start": "2026-09-13T22:00:00.000Z",
+        "end": "2026-09-27T22:00:00.000Z"
+      },
+      "steps_reached": [
+        2,
+        1
+      ],
+      "step_drop": [
+        1
+      ],
+      "conversion": 0.5,
+      "paths": {
+        "profile anna": [
+          "con-08"
+        ],
+        "profile ben": [
+          "con-11",
+          "con-12"
+        ]
+      }
+    }
+  ],
+  "window_rule": "half-open: t1 <= event_time < t1 + window (0003 Funnels)"
+}

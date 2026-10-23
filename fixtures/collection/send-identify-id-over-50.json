@@ -1,0 +1,45 @@
+{
+  "id": "send-identify-id-over-50",
+  "surface": "send.identify",
+  "polarity": "positive",
+  "description": "Distinct id of 80 characters. Upstream truncates to 50 before deriving the session id.",
+  "upstream_ref": [
+    "src/lib/constants.ts:281",
+    "src/app/api/send/route.ts:154",
+    "src/app/api/send/route.ts:162"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "identify",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "id": "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "id is trimmed and truncated to 50 characters, then hashed into the daily identified pseudonym; the raw id is not stored in daily mode (docs/decisions/0001, identify)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

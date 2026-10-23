@@ -1,0 +1,287 @@
+{
+  "format_version": 1,
+  "streams_version": 1,
+  "status": "frozen in milestone 01",
+  "manifest": "fixtures/workload/manifest.json",
+  "think_time": {
+    "base_ms": 500,
+    "jitter_ms": "uniform(draw(stream_seed(\"stream.jitter\"), user_index * 2^32 + request_index), 101) - 50",
+    "seed": "0x020407ECFEC494E5",
+    "note": "think time runs from full response to next send; each user has one request in flight"
+  },
+  "latency": "queue wait is part of measured latency; record HTTP result latency, not only analytical execution",
+  "order_rule": "A cycle has 4 rounds. Rounds 0, 1, 2 use 30-day cases and round 3 uses annual cases (3:1). Each round issues the user's families in the listed order. In cycle c, round r (0..2) uses thirty_day_cases[f][(3c + r) mod len] and round 3 uses annual_cases[f][c mod len]. A family with no case for the round's window is skipped in that round.",
+  "final_gate": {
+    "users": [
+      {
+        "user": "A",
+        "families": [
+          "Q01",
+          "Q02",
+          "Q03",
+          "Q06",
+          "Q11"
+        ],
+        "start_offset_ms": 0,
+        "thirty_day_cases": {
+          "Q01": [
+            "Q01-30d-A-vienna",
+            "Q01-30d-D-utc"
+          ],
+          "Q02": [
+            "Q02-30d-A-vienna",
+            "Q02-30d-A-vienna-page-99",
+            "Q02-30d-A-vienna-tail",
+            "Q02-30d-D-utc"
+          ],
+          "Q03": [
+            "Q03-30d-A-vienna",
+            "Q03-30d-A-vienna-drill-at",
+            "Q03-30d-D-utc"
+          ],
+          "Q06": [
+            "Q06-30d-A-vienna",
+            "Q06-30d-D-utc"
+          ],
+          "Q11": [
+            "Q11-30d-A-vienna",
+            "Q11-30d-D-utc"
+          ]
+        },
+        "annual_cases": {
+          "Q01": [
+            "Q01-12m-A-utc",
+            "Q01-12m-D-vienna"
+          ],
+          "Q02": [
+            "Q02-12m-A-utc",
+            "Q02-12m-A-utc-tail",
+            "Q02-12m-D-vienna"
+          ],
+          "Q03": [
+            "Q03-12m-A-utc",
+            "Q03-12m-A-utc-drill-at",
+            "Q03-12m-D-vienna"
+          ],
+          "Q06": [
+            "Q06-12m-A-utc",
+            "Q06-12m-D-vienna"
+          ],
+          "Q11": [
+            "Q11-12m-A-utc",
+            "Q11-12m-D-vienna"
+          ]
+        }
+      },
+      {
+        "user": "B",
+        "families": [
+          "Q04",
+          "Q07",
+          "Q08",
+          "Q09",
+          "Q12"
+        ],
+        "start_offset_ms": 250,
+        "thirty_day_cases": {
+          "Q04": [
+            "Q04-30d-A-vienna",
+            "Q04-30d-A-vienna-broad",
+            "Q04-30d-A-vienna-selective",
+            "Q04-30d-D-utc"
+          ],
+          "Q07": [
+            "Q07-30d-A-vienna",
+            "Q07-30d-D-utc"
+          ],
+          "Q08": [
+            "Q08-30d-A-vienna",
+            "Q08-30d-D-utc"
+          ],
+          "Q09": [
+            "Q09-30d-A-vienna",
+            "Q09-30d-D-utc"
+          ],
+          "Q12": [
+            "Q12-30d-A-vienna",
+            "Q12-30d-A-vienna-broad",
+            "Q12-30d-A-vienna-pivot",
+            "Q12-30d-A-vienna-selective",
+            "Q12-30d-A-vienna-session",
+            "Q12-30d-A-vienna-tail",
+            "Q12-30d-D-utc"
+          ]
+        },
+        "annual_cases": {
+          "Q04": [
+            "Q04-12m-A-utc",
+            "Q04-12m-A-utc-selective",
+            "Q04-12m-D-vienna"
+          ],
+          "Q07": [
+            "Q07-12m-A-utc",
+            "Q07-12m-D-vienna"
+          ],
+          "Q08": [
+            "Q08-12m-A-utc",
+            "Q08-12m-D-vienna"
+          ],
+          "Q09": [
+            "Q09-12m-A-utc",
+            "Q09-12m-D-vienna"
+          ],
+          "Q12": [
+            "Q12-12m-A-utc",
+            "Q12-12m-A-utc-broad",
+            "Q12-12m-A-utc-pivot",
+            "Q12-12m-A-utc-selective",
+            "Q12-12m-A-utc-session",
+            "Q12-12m-A-utc-tail",
+            "Q12-12m-D-vienna"
+          ]
+        }
+      }
+    ],
+    "periodic": [
+      {
+        "what": "live snapshot",
+        "case": "Q14-realtime-A",
+        "who": "each user, own subscription connection",
+        "every_ms": 2000
+      },
+      {
+        "what": "saved-view mutation and board reopen",
+        "cases": [
+          "Q14-saved-exploration-A",
+          "Q14-board-A"
+        ],
+        "who": "user A",
+        "every_ms": 60000
+      },
+      {
+        "what": "replay or heatmap request",
+        "cases": [
+          "Q13-replay-list-A",
+          "Q13-replay-fetch-A",
+          "Q13-heatmap-A",
+          "Q13-heatmap-D"
+        ],
+        "who": "user B, rotating in order",
+        "every_ms": 60000
+      },
+      {
+        "what": "status and share snapshot",
+        "cases": [
+          "Q14-status-A",
+          "Q14-share-A",
+          "Q14-annotations-A"
+        ],
+        "who": "user A, rotating in order",
+        "every_ms": 60000
+      }
+    ],
+    "periodic_rule": "Minute tasks are queued at each run-minute boundary and issued as the user's next request, so one request at a time still holds. Live snapshots run on a separate subscription connection and do not wait for the report stream."
+  },
+  "early_gate": {
+    "subset": [
+      "Q01-12m-A-utc",
+      "Q01-12m-D-vienna",
+      "Q01-30d-A-vienna",
+      "Q01-30d-D-utc",
+      "Q02-12m-A-utc",
+      "Q02-12m-A-utc-tail",
+      "Q02-12m-D-vienna",
+      "Q02-30d-A-vienna",
+      "Q02-30d-A-vienna-page-99",
+      "Q02-30d-A-vienna-tail",
+      "Q02-30d-D-utc",
+      "Q03-12m-A-utc",
+      "Q03-12m-A-utc-drill-at",
+      "Q03-12m-D-vienna",
+      "Q03-30d-A-vienna",
+      "Q03-30d-A-vienna-drill-at",
+      "Q03-30d-D-utc",
+      "Q04-12m-A-utc",
+      "Q04-12m-A-utc-selective",
+      "Q04-12m-D-vienna",
+      "Q04-30d-A-vienna",
+      "Q04-30d-A-vienna-broad",
+      "Q04-30d-A-vienna-selective",
+      "Q04-30d-D-utc",
+      "Q06-30d-A-vienna"
+    ],
+    "users": [
+      {
+        "user": "A",
+        "families": [
+          "Q01",
+          "Q02",
+          "Q03"
+        ],
+        "start_offset_ms": 0,
+        "thirty_day_cases": {
+          "Q01": [
+            "Q01-30d-A-vienna",
+            "Q01-30d-D-utc"
+          ],
+          "Q02": [
+            "Q02-30d-A-vienna",
+            "Q02-30d-A-vienna-page-99",
+            "Q02-30d-A-vienna-tail",
+            "Q02-30d-D-utc"
+          ],
+          "Q03": [
+            "Q03-30d-A-vienna",
+            "Q03-30d-A-vienna-drill-at",
+            "Q03-30d-D-utc"
+          ]
+        },
+        "annual_cases": {
+          "Q01": [
+            "Q01-12m-A-utc",
+            "Q01-12m-D-vienna"
+          ],
+          "Q02": [
+            "Q02-12m-A-utc",
+            "Q02-12m-A-utc-tail",
+            "Q02-12m-D-vienna"
+          ],
+          "Q03": [
+            "Q03-12m-A-utc",
+            "Q03-12m-A-utc-drill-at",
+            "Q03-12m-D-vienna"
+          ]
+        }
+      },
+      {
+        "user": "B",
+        "families": [
+          "Q04",
+          "Q06"
+        ],
+        "start_offset_ms": 250,
+        "thirty_day_cases": {
+          "Q04": [
+            "Q04-30d-A-vienna",
+            "Q04-30d-A-vienna-broad",
+            "Q04-30d-A-vienna-selective",
+            "Q04-30d-D-utc"
+          ],
+          "Q06": [
+            "Q06-30d-A-vienna"
+          ]
+        },
+        "annual_cases": {
+          "Q04": [
+            "Q04-12m-A-utc",
+            "Q04-12m-A-utc-selective",
+            "Q04-12m-D-vienna"
+          ],
+          "Q06": []
+        }
+      }
+    ],
+    "periodic": [],
+    "note": "Q01 to Q04 plus one exact ordered Q06 case (Q06-30d-A-vienna), as frozen in performance-validation.md. Burst, memory/disk checks, transfer failpoints, and bounded correction and recording probes run alongside as in that document."
+  }
+}

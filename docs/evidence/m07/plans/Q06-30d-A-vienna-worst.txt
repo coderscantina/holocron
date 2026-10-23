@@ -1,0 +1,645 @@
+CREATE OR REPLACE TEMP TABLE fn_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id, e.path FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.path AS f0 FROM r) WHERE (((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)))
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│             f0            │
+│                           │
+│       ~184,615 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│            path           │
+│                           │
+│       ~184,615 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ ((path = '/') OR (path = '│
+│  /pricing') OR (path = '  │
+│ /docs') OR (path = '/blog'│
+│ ) OR (path = '/') OR (path│
+│  = '/pricing') OR (path = │
+│ '/docs') OR (path = '/blog│
+│            '))            │
+│                           │
+│       ~184,615 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│            path           │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-08-31 22│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-10-01 │
+│  21:59:59.999'::TIMESTAMP │
+│ optional: path='/' OR path│
+│ ='/pricing' OR path='/docs│
+│ ' OR path='/blog' OR path=│
+│ '/' OR path='/pricing' OR │
+│   path='/docs' OR path='  │
+│           /blog'          │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO fn_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id, e.path FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.path AS f0 FROM r) WHERE (((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)) OR ((f0 = ?)))
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│        EMPTY_RESULT       │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_c AS SELECT daily_id AS id, t, (t::HUGEINT * 9223372036854775808 + seq) AS k, (CASE WHEN ((f0 = ?)) THEN 1 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 2 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 4 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 8 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 16 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 32 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 64 ELSE 0 END) + (CASE WHEN ((f0 = ?)) THEN 128 ELSE 0 END) AS mask FROM fn_ev WHERE daily_id IS NOT NULL
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             id            │
+│             t             │
+│             k             │
+│            mask           │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             id            │
+│             t             │
+│            seq            │
+│         (f0 = '/')        │
+│     (f0 = '/pricing')     │
+│       (f0 = '/docs')      │
+│       (f0 = '/blog')      │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│     "temp".main.fn_ev     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│          daily_id         │
+│             t             │
+│            seq            │
+│             f0            │
+│                           │
+│          Filters:         │
+│   (daily_id IS NOT NULL)  │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s0 AS SELECT id, min(k) AS k, arg_min(t, k) AS t1
+             FROM fn_c WHERE mask & 1 <> 0 AND t >= ? AND t < ? GROUP BY id
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│          min(#1)          │
+│      arg_min(#2, #3)      │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             id            │
+│             k             │
+│             t             │
+│             k             │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│      "temp".main.fn_c     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             t             │
+│             id            │
+│             k             │
+│                           │
+│          Filters:         │
+│     ((mask & 1) != 0)     │
+│   t>=1788213600000 AND t  │
+│       <1790805600000      │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s1 AS SELECT p.id, p.t1, e.k
+             FROM fn_s0 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 2 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s0     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 2) != 0)     │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s2 AS SELECT p.id, p.t1, e.k
+             FROM fn_s1 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 4 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s1     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 4) != 0)     │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s3 AS SELECT p.id, p.t1, e.k
+             FROM fn_s2 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 8 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s2     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 8) != 0)     │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s4 AS SELECT p.id, p.t1, e.k
+             FROM fn_s3 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 16 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s3     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 16) != 0)    │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s5 AS SELECT p.id, p.t1, e.k
+             FROM fn_s4 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 32 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s4     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 32) != 0)    │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s6 AS SELECT p.id, p.t1, e.k
+             FROM fn_s5 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 64 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s5     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││     ((mask & 64) != 0)    │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE fn_s7 AS SELECT p.id, p.t1, e.k
+             FROM fn_s6 p ASOF JOIN (SELECT id, k, t FROM fn_c WHERE mask & 128 <> 0) e
+               ON p.id = e.id AND p.k < e.k
+             WHERE e.t < p.t1 + ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│  (t < (t1 + 2592000000))  │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│           k < k           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│     "temp".main.fn_s6     ││      "temp".main.fn_c     │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│             id            ││             id            │
+│             k             ││             k             │
+│             t1            ││             t             │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││    ((mask & 128) != 0)    │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE cov_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-08-31 22│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-09-30 │
+│  21:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘

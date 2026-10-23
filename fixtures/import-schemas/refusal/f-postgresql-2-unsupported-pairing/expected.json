@@ -1,0 +1,25 @@
+{
+  "case": "f",
+  "code": "unsupported_pairing",
+  "details": {
+    "applied": 13,
+    "missing": [
+      "14_add_link_and_pixel",
+      "15_add_share",
+      "16_boards",
+      "17_remove_duplicate_key",
+      "18_add_performance",
+      "19_add_session_replay",
+      "20_add_heatmap",
+      "21_add_session_link",
+      "22_add_2fa",
+      "23_update_session_data",
+      "24_lowercase_username",
+      "25_add_annotation",
+      "26_add_api_key"
+    ]
+  },
+  "engine": "postgresql",
+  "message": "This PostgreSQL database has exactly the 13 migrations of Umami 2.x. Holocron imports Umami 2.x only from MySQL 2.20.2, and PostgreSQL only at 3.4.0. Upgrade the source to Umami 3.4.0 (it applies migrations 14 to 26), then run the inspection again. If this database is a stopped 3.x upgrade, finish the upgrade the same way. Holocron did not change the source.",
+  "outcome": "refuse"
+}

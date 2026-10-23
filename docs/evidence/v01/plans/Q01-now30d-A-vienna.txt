@@ -1,0 +1,303 @@
+-- Q01-now30d-A-vienna, unfiltered, compared with typical_weekday: `holocron-gate explore --plans
+-- --compare typical_weekday` on the 10% load, with a scratch copy of Q01-30d-A-vienna over
+-- 2026-09-02 to 10-01, so the range contains the clock (2026-10-01 02:00 local). 21 planned
+-- statements: the range's event remainder, the baseline window's event remainder (zb, 2026-07-08
+-- to 09-24 from rollups), today's eight baseline days up to 02:00 from events (zu0_ to zu7_),
+-- today's part of the range (zt_) and two row reads per panel, the range's and one grouped read
+-- over every baseline window. Kept: zb, zu0_, and the grouped read of the first panel. The slot
+-- column `g` comes from the view zs_ev over zb_ev and zu_ev. Totals, series buckets and span
+-- medians are one grouped read each and are not recorded by --plans.
+
+CREATE OR REPLACE TEMP TABLE zb0_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.path, CASE WHEN m.session_id IS NULL THEN e.referrer_domain ELSE s.referrer_domain END AS referrer_domain, CASE WHEN m.session_id IS NULL THEN e.browser ELSE s.browser END AS browser, CASE WHEN m.session_id IS NULL THEN e.os ELSE s.os END AS os, CASE WHEN m.session_id IS NULL THEN e.device ELSE s.device END AS device FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq LEFT JOIN (SELECT * FROM sessions WHERE site = ? AND start_time <= epoch_ms(?) AND last_time >= epoch_ms(?)) s ON s.session_id = m.session_id WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, f0, f1, f2, f3, f4 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.path AS f0, r.referrer_domain AS f1, r.browser AS f2, r.os AS f3, r.device AS f4 FROM r)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│        EMPTY_RESULT       │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE zu0_0_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.path, CASE WHEN m.session_id IS NULL THEN e.referrer_domain ELSE s.referrer_domain END AS referrer_domain, CASE WHEN m.session_id IS NULL THEN e.browser ELSE s.browser END AS browser, CASE WHEN m.session_id IS NULL THEN e.os ELSE s.os END AS os, CASE WHEN m.session_id IS NULL THEN e.device ELSE s.device END AS device FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq LEFT JOIN (SELECT * FROM sessions WHERE site = ? AND start_time <= epoch_ms(?) AND last_time >= epoch_ms(?)) s ON s.session_id = m.session_id WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, f0, f1, f2, f3, f4 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.path AS f0, r.referrer_domain AS f1, r.browser AS f2, r.os AS f3, r.device AS f4 FROM r)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│             f0            │
+│             f1            │
+│             f2            │
+│             f3            │
+│             f4            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│            path           │
+│      referrer_domain      │
+│          browser          │
+│             os            │
+│           device          │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│            path           │
+│    (session_id IS NULL)   │
+│      referrer_domain      │
+│      referrer_domain      │
+│          browser          │
+│          browser          │
+│             os            │
+│             os            │
+│           device          │
+│           device          │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│                           │
+│        Conditions:        ├───────────────────────────────────────────┐
+│  session_id = session_id  │                                           │
+│                           │                                           │
+│       ~953,858 rows       │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │        EMPTY_RESULT       │
+│    ────────────────────   │                             │                           │
+│      Join Type: LEFT      │                             │                           │
+│   Conditions: seq = seq   ├──────────────┐              │                           │
+│                           │              │              │                           │
+│       ~953,858 rows       │              │              │                           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│        EMPTY_RESULT       ││        EMPTY_RESULT       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+WITH ea AS (SELECT g, f0, sum(visitors)::BIGINT AS a0 FROM (SELECT g, f0, count(*) FILTER (WHERE kind = 1) AS pageviews, count(*) FILTER (WHERE kind = 2) AS custom_events, count(DISTINCT daily_id) AS visitors FROM zs_ev GROUP BY ALL
+         UNION ALL
+         SELECT d.g, a.value, a.pageviews, a.custom_events, a.visitors
+         FROM dimension_aggregates a JOIN zs_days d ON a.site = d.site AND a.local_day = d.local_day
+         WHERE a.field = 'path') GROUP BY g, f0), j AS (SELECT * FROM ea) SELECT g, f0, a0, count(*) OVER () AS n FROM j WHERE (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) OR (f0 IS NOT DISTINCT FROM ?) ORDER BY a0 DESC NULLS LAST, f0 ASC NULLS LAST
+
+┌───────────────────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│         j.a0 DESC         │
+│          j.f0 ASC         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│      count() OVER ()      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             g             │
+│             f0            │
+│             a0            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│                           │
+│    Aggregates: sum(#2)    │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             g             │
+│             f0            │
+│          visitors         │
+│                           │
+│        ~1,047 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           UNION           ├───────────────────────────────────────────┐
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │                             │         PROJECTION        │
+│    ────────────────────   │                             │    ────────────────────   │
+│          Groups:          │                             │             g             │
+│             #0            │                             │           value           │
+│             #1            │                             │          visitors         │
+│                           │                             │                           │
+│        Aggregates:        │                             │                           │
+│     count(DISTINCT #2)    │                             │                           │
+│                           │                             │                           │
+│          ~0 rows          │                             │        ~1,047 rows        │
+└─────────────┬─────────────┘                             └─────────────┬─────────────┘
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         PROJECTION        │                             │         HASH_JOIN         │
+│    ────────────────────   │                             │    ────────────────────   │
+│             g             │                             │      Join Type: INNER     │
+│             f0            │                             │                           │
+│          daily_id         │                             │        Conditions:        ├──────────────┐
+│                           │                             │        site = site        │              │
+│                           │                             │   local_day = local_day   │              │
+│                           │                             │                           │              │
+│          ~2 rows          │                             │        ~1,047 rows        │              │
+└─────────────┬─────────────┘                             └─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│           UNION           │                             │           FILTER          ││         PROJECTION        │
+│                           │                             │    ────────────────────   ││    ────────────────────   │
+│                           │                             │  ((value IS NOT DISTINCT  ││            site           │
+│                           │                             │   FROM '/') OR (value IS  ││         local_day         │
+│                           │                             │     NOT DISTINCT FROM '   ││             g             │
+│                           │                             │  /pricing') OR (value IS  ││                           │
+│                           │                             │  NOT DISTINCT FROM '/docs'││                           │
+│                           │                             │     ) OR (value IS NOT    ││                           │
+│                           │                             │  DISTINCT FROM '/blog') OR││                           │
+│                           │                             │   (value IS NOT DISTINCT  ││                           │
+│                           │                             │  FROM '/signup') OR (value││                           │
+│                           ├──────────────┐              │   IS NOT DISTINCT FROM '  ││                           │
+│                           │              │              │ /login') OR (value IS NOT ││                           │
+│                           │              │              │  DISTINCT FROM '/features'││                           │
+│                           │              │              │     ) OR (value IS NOT    ││                           │
+│                           │              │              │   DISTINCT FROM '/about') ││                           │
+│                           │              │              │  OR (value IS NOT DISTINCT││                           │
+│                           │              │              │    FROM '/contact') OR    ││                           │
+│                           │              │              │   (value IS NOT DISTINCT  ││                           │
+│                           │              │              │     FROM '/changelog'))   ││                           │
+│                           │              │              │                           ││                           │
+│                           │              │              │       ~102,625 rows       ││          ~0 rows          │
+└─────────────┬─────────────┘              │              └─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│        EMPTY_RESULT       ││         PROJECTION        ││          SEQ_SCAN         ││          SEQ_SCAN         │
+│                           ││    ────────────────────   ││    ────────────────────   ││    ────────────────────   │
+│                           ││          daily_id         ││           Table:          ││           Table:          │
+│                           ││             f0            ││       analytics.main      ││    "temp".main.zb_days    │
+│                           ││             g             ││   .dimension_aggregates   ││                           │
+│                           ││                           ││                           ││   Type: Sequential Scan   │
+│                           ││                           ││   Type: Sequential Scan   ││                           │
+│                           ││                           ││                           ││        Projections:       │
+│                           ││                           ││        Projections:       ││            site           │
+│                           ││                           ││            site           ││         local_day         │
+│                           ││                           ││         local_day         ││                           │
+│                           ││                           ││           value           ││                           │
+│                           ││                           ││          visitors         ││                           │
+│                           ││                           ││                           ││                           │
+│                           ││                           ││          Filters:         ││                           │
+│                           ││                           ││        field='path'       ││                           │
+│                           ││                           ││   optional: valueIS NOT   ││                           │
+│                           ││                           ││     DISTINCT FROM'/' OR   ││                           │
+│                           ││                           ││  valueIS NOT DISTINCT FROM││                           │
+│                           ││                           ││ '/pricing' OR valueIS NOT ││                           │
+│                           ││                           ││   DISTINCT FROM'/docs' OR ││                           │
+│                           ││                           ││  valueIS NOT DISTINCT FROM││                           │
+│                           ││                           ││   '/blog' OR valueIS NOT  ││                           │
+│                           ││                           ││  DISTINCT FROM'/signup' OR││                           │
+│                           ││                           ││  valueIS NOT DISTINCT FROM││                           │
+│                           ││                           ││  '/login' OR valueIS NOT  ││                           │
+│                           ││                           ││  DISTINCT FROM'/features' ││                           │
+│                           ││                           ││   OR valueIS NOT DISTINCT ││                           │
+│                           ││                           ││   FROM'/about' OR valueIS ││                           │
+│                           ││                           ││     NOT DISTINCT FROM'    ││                           │
+│                           ││                           ││  /contact' OR valueIS NOT ││                           │
+│                           ││                           ││  DISTINCT FROM'/changelog'││                           │
+│                           ││                           ││                           ││                           │
+│                           ││           ~1 row          ││       ~513,127 rows       ││          ~0 rows          │
+└───────────────────────────┘└─────────────┬─────────────┘└───────────────────────────┘└───────────────────────────┘
+                             ┌─────────────┴─────────────┐
+                             │           FILTER          │
+                             │    ────────────────────   │
+                             │ ((f0 IS NOT DISTINCT FROM │
+                             │     '/') OR (f0 IS NOT    │
+                             │  DISTINCT FROM '/pricing')│
+                             │   OR (f0 IS NOT DISTINCT  │
+                             │   FROM '/docs') OR (f0 IS │
+                             │  NOT DISTINCT FROM '/blog'│
+                             │  ) OR (f0 IS NOT DISTINCT │
+                             │  FROM '/signup') OR (f0 IS│
+                             │  NOT DISTINCT FROM '/login│
+                             │ ') OR (f0 IS NOT DISTINCT │
+                             │  FROM '/features') OR (f0 │
+                             │   IS NOT DISTINCT FROM '  │
+                             │   /about') OR (f0 IS NOT  │
+                             │  DISTINCT FROM '/contact')│
+                             │   OR (f0 IS NOT DISTINCT  │
+                             │     FROM '/changelog'))   │
+                             │                           │
+                             │           ~1 row          │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │          SEQ_SCAN         │
+                             │    ────────────────────   │
+                             │           Table:          │
+                             │     "temp".main.zu_ev     │
+                             │                           │
+                             │   Type: Sequential Scan   │
+                             │                           │
+                             │        Projections:       │
+                             │             t             │
+                             │          daily_id         │
+                             │             f0            │
+                             │                           │
+                             │          Filters:         │
+                             │     optional: f0IS NOT    │
+                             │  DISTINCT FROM'/' OR f0IS │
+                             │     NOT DISTINCT FROM'    │
+                             │   /pricing' OR f0IS NOT   │
+                             │   DISTINCT FROM'/docs' OR │
+                             │   f0IS NOT DISTINCT FROM' │
+                             │     /blog' OR f0IS NOT    │
+                             │  DISTINCT FROM'/signup' OR│
+                             │   f0IS NOT DISTINCT FROM' │
+                             │    /login' OR f0IS NOT    │
+                             │  DISTINCT FROM'/features' │
+                             │  OR f0IS NOT DISTINCT FROM│
+                             │    '/about' OR f0IS NOT   │
+                             │   DISTINCT FROM'/contact' │
+                             │  OR f0IS NOT DISTINCT FROM│
+                             │        '/changelog'       │
+                             │                           │
+                             │          ~0 rows          │
+                             └───────────────────────────┘

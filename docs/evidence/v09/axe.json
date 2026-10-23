@@ -1,0 +1,100 @@
+[
+  {
+    "page": "overview",
+    "scheme": "light",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "html": "<span class=\"shrink-0 text-xs font-medium tabular-nums text-success\" aria-hidden=\"true\">+31&nbsp;%</span>"
+  },
+  {
+    "page": "overview",
+    "scheme": "light",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Today, u...\">"
+  },
+  {
+    "page": "explore",
+    "scheme": "light",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "html": "<span class=\"shrink-0 text-xs font-medium tabular-nums text-success\" aria-hidden=\"true\">+31&nbsp;%</span>"
+  },
+  {
+    "page": "explore",
+    "scheme": "light",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Last 7 d...\">"
+  },
+  {
+    "page": "goals",
+    "scheme": "light",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "html": "<span class=\"shrink-0 text-xs font-medium tabular-nums text-success\" aria-hidden=\"true\">+31&nbsp;%</span>"
+  },
+  {
+    "page": "goals",
+    "scheme": "light",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Last 30 ...\">"
+  },
+  {
+    "page": "replays",
+    "scheme": "light",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "html": "<span class=\"shrink-0 text-xs font-medium tabular-nums text-success\" aria-hidden=\"true\">+31&nbsp;%</span>"
+  },
+  {
+    "page": "replays",
+    "scheme": "light",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"cursor-pointer focus...\" aria-label=\"Range: Last 7 days\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\">"
+  },
+  {
+    "page": "replays",
+    "scheme": "light",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"cursor-pointer focus...\" aria-label=\"Device: All devices\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\">"
+  },
+  {
+    "page": "overview",
+    "scheme": "dark",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Today, u...\">"
+  },
+  {
+    "page": "explore",
+    "scheme": "dark",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Last 7 d...\">"
+  },
+  {
+    "page": "goals",
+    "scheme": "dark",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"shrink-0 inline-flex...\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\" aria-label=\"Date range: Last 30 ...\">"
+  },
+  {
+    "page": "replays",
+    "scheme": "dark",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"cursor-pointer focus...\" aria-label=\"Range: Last 7 days\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\">"
+  },
+  {
+    "page": "replays",
+    "scheme": "dark",
+    "rule": "label-content-name-mismatch",
+    "impact": "serious",
+    "html": "<button class=\"cursor-pointer focus...\" aria-label=\"Device: All devices\" id=\"reka-dropdown-menu-t...\" type=\"button\" aria-haspopup=\"menu\" aria-expanded=\"false\" data-state=\"closed\">"
+  }
+]

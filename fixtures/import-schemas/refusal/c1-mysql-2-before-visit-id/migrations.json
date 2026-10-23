@@ -1,0 +1,34 @@
+[
+  {
+    "applied_steps_count": 1,
+    "checksum": "6981c78cd41f7d0d49535389d7a1054907e5a4d157421de57f2bbe4f15136166",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "01_init",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "32214b9641c46c80f09e35657592518e370a12dcaac776045db23b748c27b039",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "02_report_schema_session_data",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "371184e7c4ab48b35e8515005aeddcdde0c073460ece3b2bd54dca0b50f140a3",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "03_metric_performance_index",
+    "rolled_back_at": null
+  },
+  {
+    "applied_steps_count": 1,
+    "checksum": "d94e390749a499e7dd01b6ba115aa6a7c7c116268bfa8d10d07a52311bf5aad9",
+    "finished_at": "<set>",
+    "logs": null,
+    "migration_name": "04_team_redesign",
+    "rolled_back_at": null
+  }
+]

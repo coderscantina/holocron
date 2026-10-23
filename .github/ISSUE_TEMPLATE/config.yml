@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/coderscantina/holocron/discussions
+    about: Questions, ideas, and open-ended technical discussions.
+  - name: Security vulnerability
+    url: https://github.com/coderscantina/holocron/security/advisories/new
+    about: Report vulnerabilities privately. Do not open a public issue.

@@ -1,0 +1,121 @@
+{
+  "id": "capture-recorder-replay-and-heatmap",
+  "description": "Recorder on a site with replay and heatmaps at sample rate 1 and strict masking: configuration fetch, replay chunks with the tracker cache token, heatmap click and scroll payloads. Masked text and input values never leave the browser.",
+  "upstream_ref": [
+    "src/recorder/index.js:18-22",
+    "src/recorder/index.js:109-128",
+    "src/recorder/index.js:310-322",
+    "src/recorder/index.js:432-634",
+    "src/recorder/index.js:678-713"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "recorder_sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "recorder_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "body": "<main style=\"height:2400px\"><h1>Secret customer text 4711</h1><input id=\"i\" type=\"text\"><button id=\"b\">Buy</button></main>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForTimeout(1500);",
+    "await page.type('#i', SECRET_INPUT);",
+    "await page.click('#b');",
+    "await page.mouse.wheel(0, 1200);",
+    "await page.waitForTimeout(7000);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/api/websites/5e1a0000-0000-4000-8000-000000000002/recorder",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 200,
+        "body": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000002",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "configuration enabled with strict masking",
+      "passed": false
+    },
+    {
+      "description": "replay chunks sent with cache token",
+      "passed": false
+    },
+    {
+      "description": "a full snapshot (rrweb type 2) was sent",
+      "passed": false
+    },
+    {
+      "description": "every chunk has at most 200 events",
+      "passed": true
+    },
+    {
+      "description": "heatmap click sent",
+      "passed": false
+    },
+    {
+      "description": "heatmap scroll sent",
+      "passed": false
+    },
+    {
+      "description": "upstream answered ok:true to every record post",
+      "passed": true
+    },
+    {
+      "description": "secret text never transmitted",
+      "passed": true
+    },
+    {
+      "description": "typed input never transmitted",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

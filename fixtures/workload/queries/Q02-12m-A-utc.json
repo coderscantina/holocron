@@ -1,0 +1,91 @@
+{
+  "format_version": 1,
+  "id": "Q02-12m-A-utc",
+  "family": "Q02",
+  "title": "Top 100 by path, exact totals",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": true,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "path"
+    ],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 100,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {
+    "totals": "exact totals over all rows, independent of paging"
+  },
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 100,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "broad",
+  "expected": {
+    "row_count": 100000,
+    "matched_records": 57000000,
+    "golden_result_hash": "b51150b7632b8c25de59a3789c0d801abf1c312aa86229f5ae5f6ae9ff9eaed2",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q02-12m-A-utc.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

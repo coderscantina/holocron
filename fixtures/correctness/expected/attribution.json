@@ -1,0 +1,186 @@
+{
+  "metric_version": 1,
+  "cases": [
+    {
+      "id": "signup-daily-every",
+      "site": "A",
+      "conversion": {
+        "goal": {
+          "predicate": {
+            "event_name": "signup"
+          },
+          "scope": "session",
+          "counting": "every"
+        }
+      },
+      "scope": "daily",
+      "lookback_days": 30,
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-23",
+          "2026-06-24"
+        ],
+        "start": "2026-06-22T22:00:00.000Z",
+        "end": "2026-06-24T22:00:00.000Z"
+      },
+      "conversions": {
+        "att-03": {
+          "last_touch": "att-02",
+          "first_touch": "att-01"
+        },
+        "att-05": {
+          "last_touch": "direct",
+          "first_touch": "direct"
+        },
+        "att-08": {
+          "last_touch": "att-06",
+          "first_touch": "att-06"
+        },
+        "att-10": {
+          "last_touch": "direct",
+          "first_touch": "direct"
+        },
+        "att-12": {
+          "last_touch": "att-11",
+          "first_touch": "att-11"
+        },
+        "att-14": {
+          "last_touch": "att-11",
+          "first_touch": "att-11"
+        }
+      },
+      "touches": {
+        "att-01": {
+          "referrer_domain": "news.example.net"
+        },
+        "att-02": {
+          "utm_source": "newsletter",
+          "utm_medium": "email",
+          "utm_campaign": "june"
+        },
+        "att-06": {
+          "referrer_domain": "search.example.net",
+          "click_id": "gclid"
+        },
+        "att-11": {
+          "utm_source": "newsletter",
+          "utm_medium": "email",
+          "utm_campaign": "June"
+        }
+      },
+      "last_touch_by_utm_campaign": {
+        "June": 2,
+        "june": 1
+      },
+      "first_touch_by_utm_campaign": {
+        "June": 2
+      },
+      "direct": {
+        "last_touch": 2,
+        "first_touch": 2
+      },
+      "identity_coverage": {
+        "with_identity": 14,
+        "eligible_events": 14,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "signup-daily-once",
+      "site": "A",
+      "conversion": {
+        "goal": {
+          "predicate": {
+            "event_name": "signup"
+          },
+          "scope": "session",
+          "counting": "once"
+        }
+      },
+      "conversion_event": "first matching event per session in (event_time, ingestion_sequence) order (0003 Attribution)",
+      "scope": "daily",
+      "lookback_days": 30,
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-23",
+          "2026-06-24"
+        ],
+        "start": "2026-06-22T22:00:00.000Z",
+        "end": "2026-06-24T22:00:00.000Z"
+      },
+      "conversions": {
+        "att-03": {
+          "last_touch": "att-02",
+          "first_touch": "att-01"
+        },
+        "att-05": {
+          "last_touch": "direct",
+          "first_touch": "direct"
+        },
+        "att-08": {
+          "last_touch": "att-06",
+          "first_touch": "att-06"
+        },
+        "att-10": {
+          "last_touch": "direct",
+          "first_touch": "direct"
+        },
+        "att-12": {
+          "last_touch": "att-11",
+          "first_touch": "att-11"
+        }
+      },
+      "last_touch_by_utm_campaign": {
+        "June": 1,
+        "june": 1
+      },
+      "first_touch_by_utm_campaign": {
+        "June": 1
+      },
+      "direct": {
+        "last_touch": 2,
+        "first_touch": 2
+      },
+      "identity_coverage": {
+        "with_identity": 14,
+        "eligible_events": 14,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "revenue-daily",
+      "site": "A",
+      "conversion": "revenue events",
+      "scope": "daily",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-23",
+          "2026-06-24"
+        ],
+        "start": "2026-06-22T22:00:00.000Z",
+        "end": "2026-06-24T22:00:00.000Z"
+      },
+      "conversions": {
+        "att-13": {
+          "last_touch": "att-11",
+          "first_touch": "att-11",
+          "currency": "EUR",
+          "minor_units": 3000
+        }
+      },
+      "last_touch_revenue_by_utm_campaign": {
+        "June": {
+          "EUR": 3000
+        }
+      },
+      "identity_coverage": {
+        "with_identity": 14,
+        "eligible_events": 14,
+        "rate": 1.0
+      }
+    }
+  ]
+}

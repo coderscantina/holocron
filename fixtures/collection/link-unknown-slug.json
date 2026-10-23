@@ -1,0 +1,33 @@
+{
+  "id": "link-unknown-slug",
+  "surface": "link",
+  "polarity": "negative",
+  "description": "Unknown slug returns the JSON not-found envelope.",
+  "upstream_ref": [
+    "src/app/(collect)/q/[slug]/route.ts:33-42",
+    "src/lib/response.ts:50-55"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/q/no-such-link"
+  },
+  "expected_upstream": {
+    "status": 404,
+    "body": {
+      "error": {
+        "message": "Not found",
+        "code": "not-found",
+        "status": 404
+      }
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 404,
+    "decision": "adopted",
+    "notes": "Unknown slugs keep upstream's 404 (docs/decisions/0005)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

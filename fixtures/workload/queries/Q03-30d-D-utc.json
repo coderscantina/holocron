@@ -1,0 +1,132 @@
+{
+  "format_version": 1,
+  "id": "Q03-30d-D-utc",
+  "family": "Q03",
+  "title": "Mobile AND signup AND plan=pro, split country x referrer, previous period",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2026-08-02T00:00:00.000Z",
+    "compare_end": "2026-09-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [
+      "events",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "country",
+      "referrer_domain"
+    ],
+    "filter": {
+      "kind": "group",
+      "op": "and",
+      "items": [
+        {
+          "kind": "cond",
+          "id": "f1",
+          "field": "device",
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "mobile"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f2",
+          "field": "event_name",
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "signup"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f3",
+          "field": {
+            "scope": "event",
+            "key": "plan"
+          },
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "pro"
+          }
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "previous_period",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "events",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {
+    "plants": "acceptance plants guarantee matches in both periods (manifest)"
+  },
+  "sort": {
+    "order": [
+      {
+        "by": "events",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 50,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "selective",
+  "expected": {
+    "row_count": 118,
+    "matched_records": 89,
+    "golden_result_hash": "d815058936ae4436b86bcd94a100c18651643d4e53febc3d8864971b2e6cb04a",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q03-30d-D-utc.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

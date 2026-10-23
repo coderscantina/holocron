@@ -1,0 +1,45 @@
+{
+  "id": "send-identify-consent-none",
+  "surface": "send.identify",
+  "polarity": "positive",
+  "description": "identify with consent:\"none\" and id, the revocation signal.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73",
+    "src/tracker/index.ts:384-395"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "identify",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "id": "user-123",
+        "consent": "none"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Sets revoked_at, closes any open identified session, later events return to daily mode. Revocation stops linking new events and keeps facts recorded under consent attributed until revoked_at: Confirmed (Mike, 2026-10-03) (docs/decisions/0001, Revocation and returning to anonymous). Erasure is the separate maintenance command."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

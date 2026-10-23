@@ -1,0 +1,68 @@
+{
+  "metric_version": 1,
+  "site": "A",
+  "server_time": "2026-10-03T10:00:00.000Z",
+  "rule": "activity time = min(event_time, receive_time); active when activity time is in [now - 5 min, now], both ends inclusive (0003 Realtime)",
+  "active": 4,
+  "active_identities": [
+    "anon 203.0.113.32 desk_chrome 2026-10-03",
+    "anon 203.0.113.33 iphone_safari 2026-10-03",
+    "anon 203.0.113.36 desk_chrome 2026-10-03",
+    "anon 203.0.113.37 android_chrome 2026-10-03"
+  ],
+  "activity_time": {
+    "rt-01": "2026-10-03T09:50:00.000Z",
+    "rt-02": "2026-10-03T09:56:00.000Z",
+    "rt-03": "2026-10-03T09:58:00.000Z",
+    "rt-04": "2026-10-03T09:59:00.000Z",
+    "rt-05": "2026-10-03T09:40:00.000Z",
+    "rt-06": "2026-10-03T09:55:00.000Z",
+    "rt-07": "2026-10-03T09:58:00.000Z",
+    "fut-01": "2026-10-03T09:30:00.000Z"
+  },
+  "series": {
+    "buckets": 30,
+    "first_bucket_start": "2026-10-03T09:31:00.000Z",
+    "last_bucket": [
+      "2026-10-03T10:00:00.000Z",
+      "2026-10-03T10:00:00.000Z"
+    ],
+    "non_empty": [
+      {
+        "start": "2026-10-03T09:40:00.000Z",
+        "pageviews": 1,
+        "visitors": 1
+      },
+      {
+        "start": "2026-10-03T09:50:00.000Z",
+        "pageviews": 1,
+        "visitors": 1
+      },
+      {
+        "start": "2026-10-03T09:55:00.000Z",
+        "pageviews": 1,
+        "visitors": 1
+      },
+      {
+        "start": "2026-10-03T09:56:00.000Z",
+        "pageviews": 1,
+        "visitors": 1
+      },
+      {
+        "start": "2026-10-03T09:58:00.000Z",
+        "pageviews": 2,
+        "visitors": 2
+      },
+      {
+        "start": "2026-10-03T09:59:00.000Z",
+        "pageviews": 0,
+        "visitors": 1
+      }
+    ]
+  },
+  "identity_coverage": {
+    "with_identity": 5,
+    "eligible_events": 5,
+    "rate": 1.0
+  }
+}

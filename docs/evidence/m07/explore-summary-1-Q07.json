@@ -1,0 +1,115 @@
+{
+  "users": 2,
+  "planner": "rollup",
+  "seconds": 7.453676458,
+  "cases": {
+    "Q07-12m-A-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 270.052209,
+        "p50": 285.07016600000003,
+        "p95": 297.584375,
+        "p99": 298.365042,
+        "max": 298.365042
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q07-12m-A-utc-length-7": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 299.38991599999997,
+        "p50": 313.635583,
+        "p95": 321.51566599999995,
+        "p99": 325.590958,
+        "max": 325.590958
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q07-12m-D-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 54.611542,
+        "p50": 57.171875,
+        "p95": 59.810125,
+        "p99": 60.594750000000005,
+        "max": 60.594750000000005
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q07-30d-A-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 30.27075,
+        "p50": 36.430125000000004,
+        "p95": 40.835375,
+        "p99": 40.922374999999995,
+        "max": 40.922374999999995
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q07-30d-A-vienna-events-7": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 30.925583,
+        "p50": 33.658541,
+        "p95": 41.661625,
+        "p99": 42.739625000000004,
+        "max": 42.739625000000004
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q07-30d-D-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 12.657292,
+        "p50": 13.814292,
+        "p95": 14.855417,
+        "p99": 15.622874999999999,
+        "max": 15.622874999999999
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    }
+  }
+}

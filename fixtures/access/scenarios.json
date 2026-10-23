@@ -1,0 +1,1387 @@
+{
+ "status": "proposed (milestone 01)",
+ "note": "Steps run in order against one fresh seed of resources.json. 'event' steps change state through an operator or admin path outside the case. Each expect compares status, code and the named fields. 'expect_stream' asserts what the subscription socket sees. Session state `reauthenticated N minutes ago` uses the test clock (decision 0006).",
+ "scenarios": [
+  {
+   "id": "AX-S001",
+   "title": "Same key, same arguments returns the stored result",
+   "rule": "R-IDEM",
+   "status": "briefing (Control transactions): \"Bind each idempotency key to the principal, operation, and normalized argument fingerprint.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K1",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8,
+      "replayed": false
+     }
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K1",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8,
+      "replayed": true,
+      "note": "same body; no second revision; no second topic event"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S002",
+   "title": "Same key, different arguments is a conflict",
+   "rule": "R-IDEM",
+   "status": "briefing (Control transactions): \"Bind each idempotency key to the principal, operation, and normalized argument fingerprint.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K2",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8
+     }
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K2",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L2"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 409,
+      "code": "idempotency_conflict"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S003",
+   "title": "A key is bound to its principal",
+   "rule": "R-IDEM",
+   "status": "briefing (Control transactions): \"Bind each idempotency key to the principal, operation, and normalized argument fingerprint.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K3",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8
+     }
+    },
+    {
+     "actor": "p_admin",
+     "op": "boards.update",
+     "idempotency_key": "K3",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 409,
+      "code": "stale_revision"
+     },
+     "note": "p_admin's K3 is a new key: the command runs and meets the stale revision 7 against current 8. It never sees p_member's stored result and learns nothing about K3."
+    }
+   ]
+  },
+  {
+   "id": "AX-S004",
+   "title": "Replay after membership revoked is reauthorized and denied",
+   "rule": "R-IDEM-REAUTH",
+   "status": "briefing (Control transactions): \"Reauthorize access before returning a stored result after membership changes.\"",
+   "steps": [
+    {
+     "actor": "p_removed",
+     "state": "before_removal",
+     "op": "boards.update",
+     "idempotency_key": "K4",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8
+     }
+    },
+    {
+     "event": "remove u_removed from ws_a"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "boards.update",
+     "idempotency_key": "K4",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "note": "stored result must not be returned; response identical to a missing board"
+    }
+   ]
+  },
+  {
+   "id": "AX-S005",
+   "title": "Replay after the capability was downgraded is reauthorized",
+   "rule": "R-IDEM-REAUTH",
+   "status": "briefing (Control transactions): \"Reauthorize access before returning a stored result after membership changes.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K5",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8
+     }
+    },
+    {
+     "event": "change u_member in ws_a from member to viewer"
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K5",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "forbidden"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S006",
+   "title": "One-time key secret is withheld on replay",
+   "rule": "R-IDEM-SECRET",
+   "status": "briefing (Control transactions): \"One-time credentials and keys need a withholding policy rather than durable replay of the original secret.\" Response shape is proposed.",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "apiKeys.create",
+     "idempotency_key": "K6",
+     "args": {
+      "operations": [
+       "analytics.explore"
+      ],
+      "sites": [
+       "site_a1"
+      ],
+      "name": "ci"
+     },
+     "expect": {
+      "result": "allow",
+      "response": {
+       "key_id": "present",
+       "secret": "present, disclosed once"
+      }
+     },
+     "session": "reauthenticated 1 minute ago"
+    },
+    {
+     "actor": "p_member",
+     "op": "apiKeys.create",
+     "idempotency_key": "K6",
+     "args": {
+      "operations": [
+       "analytics.explore"
+      ],
+      "sites": [
+       "site_a1"
+      ],
+      "name": "ci"
+     },
+     "expect": {
+      "result": "allow",
+      "replayed": true,
+      "response": {
+       "key_id": "same",
+       "secret": null,
+       "secret_withheld": true
+      },
+      "note": "no second key is created and the secret never appears in stored responses"
+     },
+     "session": "reauthenticated 1 minute ago"
+    }
+   ]
+  },
+  {
+   "id": "AX-S007",
+   "title": "Stale expected revision on an accessible resource",
+   "rule": "R-REV",
+   "status": "briefing (Control transactions): \"reject stale expected revisions without disclosing inaccessible resources.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 5,
+      "layout": "L3"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 409,
+      "code": "stale_revision",
+      "body_includes": "current_revision 7"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S008",
+   "title": "Stale expected revision on an inaccessible or missing resource",
+   "rule": "R-REV",
+   "status": "briefing (Control transactions): \"reject stale expected revisions without disclosing inaccessible resources.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "args": {
+      "board": "board_b1",
+      "expected_revision": 5,
+      "layout": "L3"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "same_response_group": "stale-hidden"
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "args": {
+      "board": "board_missing",
+      "expected_revision": 5,
+      "layout": "L3"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "same_response_group": "stale-hidden",
+     "note": "access and existence are checked before the revision; no current_revision in the body"
+    },
+    {
+     "actor": "p_viewer",
+     "op": "boards.update",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 5,
+      "layout": "L3"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "forbidden"
+     },
+     "note": "capability is checked before the revision too; a viewer learns no revision number"
+    }
+   ]
+  },
+  {
+   "id": "AX-S009",
+   "title": "Revoked key loses access immediately",
+   "rule": "R-KEY-REVOKED",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "revoke key_site"
+    },
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     },
+     "note": "same response as a key that never existed"
+    }
+   ]
+  },
+  {
+   "id": "AX-S010",
+   "title": "Share revoked while the viewer is connected",
+   "rule": "R-SHARE-LIFE",
+   "status": "briefing (Maintenance and security): \"Reauthorize exports, recordings, shared explorations, and live subscriptions.\"",
+   "steps": [
+    {
+     "actor": "p_share_viewer",
+     "op": "analytics.explore",
+     "args": {
+      "state": "pinned"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "revoke share_a1"
+    },
+    {
+     "actor": "p_share_viewer",
+     "op": "analytics.explore",
+     "args": {
+      "state": "pinned"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     }
+    },
+    {
+     "actor": "p_share_viewer",
+     "op": "sharing.resolve",
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S011",
+   "title": "Member removed mid-session",
+   "rule": "R-HIDE",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_removed",
+     "state": "before_removal",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_removed",
+     "state": "before_removal",
+     "op": "analytics.export",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "remove u_removed from ws_a; the login session stays valid"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "same_response_group": "removed"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_guess"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "same_response_group": "removed"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "apiKeys.create",
+     "args": {
+      "operations": [
+       "analytics.explore"
+      ],
+      "sites": []
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "note": "account.self survives"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "workspaces.list",
+     "expect": {
+      "result": "allow",
+      "response": "ws_a absent"
+     },
+     "note": "header context options are server-authorized (CAP-ACCESS-12)"
+    }
+   ]
+  },
+  {
+   "id": "AX-S012",
+   "title": "Keys owned by a removed member lose that member's reach",
+   "rule": "R-KEY-CEILING",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "remove u_member from ws_a"
+    },
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "note": "effective grants are the intersection of key grants and the owner's current capabilities, evaluated per request"
+    }
+   ]
+  },
+  {
+   "id": "AX-S013",
+   "title": "Subscription closes when membership is removed",
+   "rule": "R-SUB",
+   "status": "briefing (Control transactions and subscriptions): \"Reauthorize delivery when permissions or sessions change.\"",
+   "steps": [
+    {
+     "actor": "p_removed",
+     "state": "before_removal",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow",
+      "delivers": "snapshot, then events"
+     }
+    },
+    {
+     "event": "remove u_removed from ws_a"
+    },
+    {
+     "expect_stream": "terminal event access_revoked, then close; no topic event with a log position after the revocation is delivered"
+    },
+    {
+     "actor": "p_removed",
+     "state": "after_removal",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1",
+      "resume_cursor": "last seen"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "note": "reconnect with a valid cursor still gets the not_found response, not a resync hint"
+    }
+   ]
+  },
+  {
+   "id": "AX-S014",
+   "title": "Subscription closes when a key is revoked",
+   "rule": "R-SUB",
+   "status": "briefing (Control transactions and subscriptions): \"Reauthorize delivery when permissions or sessions change.\"",
+   "steps": [
+    {
+     "actor": "p_key_site",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "revoke key_site"
+    },
+    {
+     "expect_stream": "terminal event access_revoked, then close"
+    },
+    {
+     "actor": "p_key_site",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1",
+      "resume_cursor": "last seen"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S015",
+   "title": "Subscription closes when a share is revoked",
+   "rule": "R-SUB",
+   "status": "briefing (Maintenance and security): \"Reauthorize exports, recordings, shared explorations, and live subscriptions.\"",
+   "steps": [
+    {
+     "actor": "p_share_viewer",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "note": "share_a1 grants no realtime topic"
+    },
+    {
+     "actor": "p_share_viewer",
+     "op": "subscribe analytics.watermark",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow",
+      "note": "watermark topic scoped to the share's site"
+     }
+    },
+    {
+     "event": "revoke share_a1"
+    },
+    {
+     "expect_stream": "terminal event access_revoked, then close"
+    },
+    {
+     "actor": "p_share_viewer",
+     "op": "subscribe analytics.watermark",
+     "args": {
+      "site": "site_a1",
+      "resume_cursor": "last seen"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S016",
+   "title": "Permission downgrade changes the topic set, not the whole subscription",
+   "rule": "R-SUB",
+   "status": "briefing (Control transactions and subscriptions): \"Reauthorize delivery when permissions or sessions change.\"",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "change u_member in ws_a from member to viewer"
+    },
+    {
+     "expect_stream": "realtime.site keeps delivering without a gap; viewer still holds site.read"
+    },
+    {
+     "actor": "p_install_admin",
+     "op": "subscribe operations.status",
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "change u_install_admin to install_role user"
+    },
+    {
+     "expect_stream": "operations.status closes with access_revoked; install.admin is gone"
+    }
+   ]
+  },
+  {
+   "id": "AX-S017",
+   "title": "2FA required and enrolled: login needs a challenge",
+   "rule": "R-2FA",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_signed_out",
+     "op": "auth.login",
+     "args": {
+      "user": "u_2fa",
+      "password": "correct"
+     },
+     "expect": {
+      "result": "allow",
+      "response": {
+       "status": "second_factor_required",
+       "session": null,
+       "partial_token": "present"
+      }
+     },
+     "note": "no session cookie and no full token"
+    },
+    {
+     "actor": "partial_token",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     },
+     "note": "a partial token is never a session; upstream src/lib/auth.ts:81-86"
+    },
+    {
+     "actor": "partial_token",
+     "op": "auth.verifySecondFactor",
+     "args": {
+      "code": "wrong"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "second_factor_invalid"
+     }
+    },
+    {
+     "actor": "partial_token",
+     "op": "auth.verifySecondFactor",
+     "args": {
+      "code": "valid"
+     },
+     "expect": {
+      "result": "allow",
+      "response": {
+       "session": "present"
+      }
+     }
+    },
+    {
+     "actor": "p_2fa_enrolled",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S018",
+   "title": "Wrong password and unknown user are indistinguishable",
+   "rule": "R-2FA",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_signed_out",
+     "op": "auth.login",
+     "args": {
+      "user": "u_2fa",
+      "password": "wrong"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "invalid_credentials"
+     },
+     "same_response_group": "login"
+    },
+    {
+     "actor": "p_signed_out",
+     "op": "auth.login",
+     "args": {
+      "user": "nobody",
+      "password": "wrong"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "invalid_credentials"
+     },
+     "same_response_group": "login",
+     "note": "no second-factor prompt for a wrong password, so enrolment is not disclosed"
+    }
+   ]
+  },
+  {
+   "id": "AX-S019",
+   "title": "Recovery code is single use",
+   "rule": "R-2FA",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "partial_token",
+     "op": "auth.verifySecondFactor",
+     "args": {
+      "recovery_code": "R1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "partial_token",
+     "op": "auth.verifySecondFactor",
+     "args": {
+      "recovery_code": "R1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "second_factor_invalid"
+     },
+     "note": "second login with the same code"
+    }
+   ]
+  },
+  {
+   "id": "AX-S020",
+   "title": "Team requires 2FA and the member is not enrolled",
+   "rule": "R-2FA-ENROLL",
+   "status": "adopted (decisions/0007-access-and-account-security.md, Required 2FA without enrollment)",
+   "steps": [
+    {
+     "actor": "p_2fa_unenrolled",
+     "op": "auth.login",
+     "args": {
+      "user": "u_2fa_new",
+      "password": "correct"
+     },
+     "expect": {
+      "result": "allow",
+      "response": {
+       "session": "enrollment_only"
+      }
+     }
+    },
+    {
+     "actor": "p_2fa_unenrolled",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "second_factor_enrollment_required"
+     }
+    },
+    {
+     "actor": "p_2fa_unenrolled",
+     "op": "twoFactor.begin",
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_2fa_unenrolled",
+     "op": "twoFactor.confirm",
+     "args": {
+      "code": "valid"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_2fa_unenrolled",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "note": "same session, now full"
+    }
+   ]
+  },
+  {
+   "id": "AX-S021",
+   "title": "Password change invalidates older sessions",
+   "rule": "R-AUTH",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_member",
+     "session": "S1",
+     "op": "account.get",
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_member",
+     "session": "S2",
+     "op": "account.changePassword",
+     "args": {
+      "new": "n"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "reauthentication_required"
+     },
+     "note": "changePassword needs reauthentication"
+    },
+    {
+     "actor": "p_member",
+     "session": "S2",
+     "op": "auth.reauthenticate",
+     "args": {
+      "password": "correct"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_member",
+     "session": "S2",
+     "op": "account.changePassword",
+     "args": {
+      "new": "n"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_member",
+     "session": "S1",
+     "op": "account.get",
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     },
+     "note": "upstream src/lib/auth.ts:98-103 compares a password fingerprint"
+    },
+    {
+     "actor": "p_member",
+     "session": "S2",
+     "op": "account.get",
+     "expect": {
+      "result": "allow"
+     },
+     "note": "proposed: the session that changed the password stays valid"
+    }
+   ]
+  },
+  {
+   "id": "AX-S022",
+   "title": "auth.revokeSessions ends other sessions",
+   "rule": "R-AUTH",
+   "status": "proposed (milestone 01)",
+   "steps": [
+    {
+     "actor": "p_member",
+     "session": "S1",
+     "op": "auth.revokeSessions",
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_member",
+     "session": "S2",
+     "op": "account.get",
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S023",
+   "title": "Bootstrap leaves no known default credentials",
+   "rule": "R-BOOT",
+   "status": "briefing (Maintenance and security): \"Generate or require bootstrap credentials; do not ship a known default password.\"",
+   "steps": [
+    {
+     "surface": "cli",
+     "actor": "operator",
+     "op": "holocron init",
+     "expect": {
+      "result": "allow",
+      "note": "either prints a generated one-time password once or requires one on stdin or a file"
+     }
+    },
+    {
+     "actor": "p_signed_out",
+     "op": "auth.login",
+     "args": {
+      "user": "admin",
+      "password": "umami"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "invalid_credentials"
+     },
+     "note": "upstream seeds an admin user in prisma/migrations/01_init/migration.sql:199; Holocron must not ship it"
+    },
+    {
+     "surface": "cli",
+     "assert": "no secret appears in data-directory files in clear text, in logs, or in the diagnostics bundle"
+    }
+   ]
+  },
+  {
+   "id": "AX-S024",
+   "title": "Failed command stores nothing under its key",
+   "rule": "R-IDEM-FAIL",
+   "status": "adopted (decisions/0002-sessions-and-events.md, Request idempotency and batch IDs)",
+   "steps": [
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K7",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 5,
+      "layout": "L4"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 409,
+      "code": "stale_revision"
+     }
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K7",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 7,
+      "layout": "L4"
+     },
+     "expect": {
+      "result": "allow",
+      "revision": 8,
+      "replayed": false
+     },
+     "note": "same key, different arguments: no conflict, because the failure was not stored"
+    },
+    {
+     "actor": "p_member",
+     "op": "boards.update",
+     "idempotency_key": "K7",
+     "args": {
+      "board": "board_a1",
+      "expected_revision": 5,
+      "layout": "L4"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 409,
+      "code": "idempotency_conflict"
+     },
+     "note": "after a stored success, different arguments conflict"
+    }
+   ]
+  },
+  {
+   "id": "AX-S025",
+   "title": "Reauthentication failure is not stored and runs before the idempotency check",
+   "rule": "R-REAUTH",
+   "status": "adopted (decisions/0007-access-and-account-security.md, Reauthentication for sensitive commands)",
+   "steps": [
+    {
+     "actor": "p_admin",
+     "op": "sites.reset",
+     "idempotency_key": "K8",
+     "args": {
+      "site": "site_a1"
+     },
+     "session": "not reauthenticated",
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "reauthentication_required"
+     }
+    },
+    {
+     "actor": "p_admin",
+     "op": "auth.reauthenticate",
+     "args": {
+      "password": "correct"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_admin",
+     "op": "sites.reset",
+     "idempotency_key": "K8",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow",
+      "replayed": false
+     }
+    },
+    {
+     "event": "advance the test clock 11 minutes (testing.setClock, decision 0006)"
+    },
+    {
+     "actor": "p_admin",
+     "op": "sites.reset",
+     "idempotency_key": "K8",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "reauthentication_required"
+     },
+     "note": "a stored result is not returned to a session whose reauthentication has expired"
+    }
+   ]
+  },
+  {
+   "id": "AX-S026",
+   "title": "users.delete effects",
+   "rule": "R-ERASE",
+   "status": "adopted (decisions/0007-access-and-account-security.md, User erasure scope)",
+   "steps": [
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_member",
+     "op": "subscribe realtime.site",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "actor": "p_install_admin",
+     "op": "users.delete",
+     "args": {
+      "user": "u_member"
+     },
+     "session": "reauthenticated 1 minute ago",
+     "expect": {
+      "result": "allow",
+      "note": "returns a job id"
+     }
+    },
+    {
+     "expect_stream": "p_member subscription ends with access_revoked at once"
+    },
+    {
+     "actor": "p_member",
+     "op": "account.get",
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     },
+     "note": "login sessions ended"
+    },
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 401,
+      "code": "unauthenticated"
+     },
+     "note": "the user's keys are revoked then deleted"
+    },
+    {
+     "actor": "p_admin",
+     "op": "boards.get",
+     "args": {
+      "board": "board_a1"
+     },
+     "expect": {
+      "result": "allow",
+      "response": "board kept; author shown as Deleted user"
+     }
+    },
+    {
+     "actor": "p_admin",
+     "op": "explorations.get",
+     "args": {
+      "exploration": "exp_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 404,
+      "code": "not_found"
+     },
+     "note": "own explorations of the deleted user are deleted"
+    },
+    {
+     "actor": "p_admin",
+     "op": "sharing.revoke",
+     "args": {
+      "share": "share_a1"
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "note": "shares the user created are kept and still manageable"
+    },
+    {
+     "actor": "p_install_admin",
+     "op": "jobs.status",
+     "args": {
+      "job": "users.delete"
+     },
+     "expect": {
+      "result": "allow",
+      "response": "complete; tombstone keeps user id and deletion time only"
+     }
+    }
+   ]
+  },
+  {
+   "id": "AX-S027",
+   "title": "Requirement switched on drops existing sessions to enrollment-only",
+   "rule": "R-2FA-ENROLL",
+   "status": "adopted (decisions/0007-access-and-account-security.md, Required 2FA without enrollment)",
+   "steps": [
+    {
+     "actor": "p_2fa_unenrolled",
+     "session": "S1",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     }
+    },
+    {
+     "event": "ws_a switches the 2FA requirement on"
+    },
+    {
+     "actor": "p_2fa_unenrolled",
+     "session": "S1",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "second_factor_enrollment_required"
+     },
+     "note": "no grace period"
+    },
+    {
+     "actor": "p_key_site",
+     "op": "analytics.explore",
+     "args": {
+      "site": "site_a1"
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "note": "API keys are separate credentials and keep working (key owner modelled as the unenrolled user)"
+    }
+   ]
+  },
+  {
+   "id": "AX-S028",
+   "title": "Owners demote other owners; the team keeps one",
+   "rule": "R-RANK",
+   "status": "adopted (Mike, 2026-10-06)",
+   "steps": [
+    {
+     "actor": "p_owner",
+     "op": "members.updateRole",
+     "args": {
+      "workspace": "ws_a",
+      "user": "u_admin",
+      "role": "owner"
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "session": "reauthenticated 1 minute ago"
+    },
+    {
+     "actor": "p_admin",
+     "op": "members.updateRole",
+     "args": {
+      "workspace": "ws_a",
+      "user": "u_owner",
+      "role": "member"
+     },
+     "expect": {
+      "result": "allow"
+     },
+     "session": "not reauthenticated",
+     "note": "an owner demotes another owner; lowering a role needs no check"
+    },
+    {
+     "actor": "p_admin",
+     "op": "members.updateRole",
+     "args": {
+      "workspace": "ws_a",
+      "user": "u_admin",
+      "role": "admin"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "forbidden"
+     },
+     "note": "the remaining owner cannot demote themselves"
+    },
+    {
+     "actor": "p_admin",
+     "op": "members.remove",
+     "args": {
+      "workspace": "ws_a",
+      "user": "u_admin"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 422,
+      "code": "invalid_arguments"
+     },
+     "note": "nor leave as the last owner"
+    },
+    {
+     "actor": "p_owner",
+     "op": "members.updateRole",
+     "args": {
+      "workspace": "ws_a",
+      "user": "u_admin",
+      "role": "member"
+     },
+     "expect": {
+      "result": "deny",
+      "status": 403,
+      "code": "forbidden"
+     },
+     "note": "the demoted owner is a member now and outranks nobody"
+    }
+   ]
+  }
+ ]
+}

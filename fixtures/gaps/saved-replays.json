@@ -1,0 +1,57 @@
+{
+ "status": "adopted (decisions/0006-retention-clock-and-operations.md, Saved replays; confirmed by Mike 2026-10-03)",
+ "capability": "CAP-RECORD-04",
+ "grounding": [
+  "decisions/0006-retention-clock-and-operations.md: Retention cutoff (raw replay removed when its first fragment is before today - 14 days) and Saved replays (exempt, counts against the 25 GiB cap, 5 GiB sub-cap, saved_replay_budget_exceeded)",
+  "decisions/0006-retention-clock-and-operations.md: Application clock (cases use the test clock)",
+  ".sources/umami-3.4.0/src/app/api/websites/[websiteId]/replays/saved (upstream never expires saved replays)"],
+ "format": "The replay chunk format stays with milestone 09. Captures here are opaque byte counts; any format can store them.",
+ "limits": {"cap_gib": 25, "saved_sub_cap_gib": 5, "retention_days": 14, "new_recording_reserve_gib": 20},
+ "clock": {"mode": "frozen", "start": "2026-10-03T12:00:00.000Z"},
+ "captures": [
+  {"id": "cap_a", "site": "site_a1", "first_fragment": "2026-09-30T08:00:00.000Z", "size_gib": 2.0, "note": "3 days old"},
+  {"id": "cap_b", "site": "site_a1", "first_fragment": "2026-09-25T08:00:00.000Z", "size_gib": 2.5, "note": "8 days old"},
+  {"id": "cap_c", "site": "site_a1", "first_fragment": "2026-10-01T08:00:00.000Z", "size_gib": 1.0, "note": "2 days old"},
+  {"id": "cap_d", "site": "site_b1", "first_fragment": "2026-09-28T08:00:00.000Z", "size_gib": 0.5, "note": "5 days old, other workspace"}],
+ "cases": [
+  {"id": "sr-save", "steps": [
+    {"op": "recordings.save", "capture": "cap_a", "actor": "p_member", "expect": {"result": "allow"}},
+    {"check": "saved total 2.0 GiB, recording cap used includes it"}]},
+  {"id": "sr-survive", "setup": "cap_a saved at 3 days old", "steps": [
+    {"event": "advance the test clock to 2026-10-20T12:00:00.000Z (cap_a is 20 days old)"},
+    {"event": "run retention"},
+    {"check": "cap_a still exists and plays back", "expect": "present"},
+    {"check": "unsaved captures older than 14 days are gone", "expect": "cap_b absent, cap_c absent"}]},
+  {"id": "sr-save-second", "setup": "cap_a saved (2.0 GiB)", "steps": [
+    {"op": "recordings.save", "capture": "cap_b", "actor": "p_member", "expect": {"result": "allow"}, "note": "2.0 + 2.5 = 4.5 GiB, under 5"}]},
+  {"id": "sr-refuse-at-subcap", "setup": "cap_a and cap_b saved (4.5 GiB)", "steps": [
+    {"op": "recordings.save", "capture": "cap_c", "actor": "p_member", "expect": {"result": "deny", "status": 409, "code": "saved_replay_budget_exceeded"}, "note": "4.5 + 1.0 = 5.5 GiB over the sub-cap; HTTP status is a proposal"},
+    {"check": "cap_c is not saved and stays under the 14-day rule", "expect": "removed at the first run after day 14"},
+    {"op": "recordings.save", "capture": "cap_d", "actor": "p_other_owner", "expect": {"result": "allow"}, "note": "4.5 + 0.5 = 5.0 GiB, exactly at the sub-cap: allowed. The sub-cap is per installation, so workspaces share it."}]},
+  {"id": "sr-save-idempotent", "steps": [
+    {"op": "recordings.save", "capture": "cap_a", "actor": "p_member", "expect": {"result": "allow"}},
+    {"op": "recordings.save", "capture": "cap_a", "actor": "p_member", "expect": {"result": "allow"}, "note": "saving twice does not count the capture twice"}],
+   "open": "0006 does not say what saving an already saved capture returns; the fixture asserts only that accounting is unchanged."},
+  {"id": "sr-unsave-old", "setup": "cap_b saved at 8 days old; clock advanced to 2026-10-20 (cap_b is 25 days old)", "steps": [
+    {"op": "recordings.unsave", "capture": "cap_b", "actor": "p_member", "expect": {"result": "allow"}},
+    {"event": "run retention"},
+    {"check": "cap_b removed at that run", "expect": "absent"},
+    {"check": "saved total no longer counts cap_b"}]},
+  {"id": "sr-unsave-young", "setup": "cap_a saved, clock at 2026-10-05 (cap_a is 5 days old)", "steps": [
+    {"op": "recordings.unsave", "capture": "cap_a", "actor": "p_member", "expect": {"result": "allow"}},
+    {"event": "advance the test clock to 2026-10-20 and run retention"},
+    {"check": "cap_a removed once it passes 14 days", "expect": "absent"}]},
+  {"id": "sr-accounting", "setup": "cap_a and cap_b saved; unsaved captures cap_c present", "check": [
+    "recordings.budget reports saved 4.5 GiB of 5 GiB, total replay bytes used including saved and unsaved, and the 25 GiB cap",
+    "saved bytes are counted once in the 25 GiB total",
+    "at least 20 GiB of the cap stays available for new recording whatever is saved",
+    "the 25 GiB cap refuses new recording with the existing cap outcome even when saved replays hold 5 GiB"]},
+  {"id": "sr-site-delete", "setup": "cap_a saved", "steps": [
+    {"op": "sites.delete", "site": "site_a1", "actor": "p_admin", "session": "reauthenticated 1 minute ago", "expect": {"result": "allow"}},
+    {"check": "cap_a removed with the site; saved total drops by 2.0 GiB"}]},
+  {"id": "sr-permissions", "steps": [
+    {"op": "recordings.save", "capture": "cap_a", "actor": "p_viewer", "expect": {"result": "allow", "note": "capability is site.recordings.read in the matrix, which viewers hold"}},
+    {"op": "recordings.save", "capture": "cap_a", "actor": "p_share_viewer", "expect": {"result": "deny", "status": 404, "code": "not_found"}},
+    {"op": "recordings.save", "capture": "cap_d", "actor": "p_member", "expect": {"result": "deny", "status": 404, "code": "not_found"}, "note": "other workspace: same response as a missing capture"}]}],
+ "open": ["Matrix gives recordings.save the capability site.recordings.read, so a viewer can save and consume the shared 5 GiB. Whether saving should need more is not decided; the fixture follows the matrix.", "HTTP status for saved_replay_budget_exceeded is not named in 0006."]
+}

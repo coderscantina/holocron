@@ -1,0 +1,343 @@
+{
+ "status": "proposed (milestone 01)",
+ "note": "Identifiers are readable aliases. A harness maps each alias to a generated UUID. site_guess is a well-formed UUID that no site uses.",
+ "workspaces": [
+  {
+   "id": "ws_a",
+   "name": "Acme",
+   "kind": "team"
+  },
+  {
+   "id": "ws_b",
+   "name": "Beta",
+   "kind": "team"
+  }
+ ],
+ "sites": [
+  {
+   "id": "site_a1",
+   "workspace": "ws_a",
+   "recording_enabled": true
+  },
+  {
+   "id": "site_a2",
+   "workspace": "ws_a",
+   "recording_enabled": false
+  },
+  {
+   "id": "site_b1",
+   "workspace": "ws_b",
+   "recording_enabled": true
+  }
+ ],
+ "missing": [
+  {
+   "id": "site_guess",
+   "kind": "site",
+   "note": "never existed"
+  },
+  {
+   "id": "board_missing",
+   "kind": "board",
+   "note": "never existed"
+  },
+  {
+   "id": "rec_missing",
+   "kind": "recording",
+   "note": "never existed"
+  },
+  {
+   "id": "share_missing",
+   "kind": "share",
+   "note": "never existed"
+  },
+  {
+   "id": "exp_missing",
+   "kind": "exploration",
+   "note": "never existed"
+  },
+  {
+   "id": "goal_missing",
+   "kind": "goal",
+   "note": "never existed"
+  },
+  {
+   "id": "ws_missing",
+   "kind": "workspace",
+   "note": "never existed"
+  },
+  {
+   "id": "invitation_missing",
+   "kind": "invitation",
+   "note": "code that was never issued"
+  }
+ ],
+ "explorations": [
+  {
+   "id": "exp_a1",
+   "site": "site_a1",
+   "owner": "u_member",
+   "visibility": "own",
+   "revision": 4,
+   "state": "ExplorationState v1 (decision 0004): measures [pageviews, visitor_days], dimensions [path, country], filter device eq mobile, relative 30 days"
+  }
+ ],
+ "boards": [
+  {
+   "id": "board_a1",
+   "workspace": "ws_a",
+   "revision": 7,
+   "cards": [
+    {
+     "id": "c1",
+     "kind": "site",
+     "site": "site_a1"
+    },
+    {
+     "id": "c2",
+     "kind": "site",
+     "site": "site_a2"
+    }
+   ]
+  },
+  {
+   "id": "board_b1",
+   "workspace": "ws_b",
+   "revision": 1,
+   "cards": [
+    {
+     "id": "c1",
+     "kind": "site",
+     "site": "site_b1"
+    }
+   ]
+  }
+ ],
+ "goals": [
+  {
+   "id": "goal_a1",
+   "site": "site_a1",
+   "created_by": "u_member",
+   "note": "a saved goal on site_a1"
+  }
+ ],
+ "segments": [
+  {
+   "id": "segment_a1",
+   "site": "site_a1",
+   "created_by": "u_member"
+  }
+ ],
+ "annotations": [
+  {
+   "id": "annotation_a1",
+   "site": "site_a1",
+   "created_by": "u_member"
+  }
+ ],
+ "recalculations": [
+  {
+   "id": "recalc_a1",
+   "site": "site_a1",
+   "requested_by": "u_owner"
+  }
+ ],
+ "invitations": [
+  {
+   "id": "invitation_a1",
+   "workspace": "ws_a",
+   "role": "member",
+   "created_by": "u_admin",
+   "state": "pending",
+   "note": "rows send its code to teams.join and its id to teams.revokeInvitation"
+  },
+  {
+   "id": "invitation_revoked",
+   "workspace": "ws_a",
+   "role": "member",
+   "created_by": "u_admin",
+   "state": "revoked"
+  },
+  {
+   "id": "invitation_expired",
+   "workspace": "ws_a",
+   "role": "member",
+   "created_by": "u_admin",
+   "state": "expired"
+  }
+ ],
+ "recordings": [
+  {
+   "id": "rec_a1",
+   "site": "site_a1",
+   "session_in_share_scope": true
+  },
+  {
+   "id": "rec_a1_old",
+   "site": "site_a1",
+   "session_in_share_scope": false,
+   "note": "session outside the share's pinned filter (a desktop session). Replay retention matches the 30-day share range, so a replay older than the range is gone for every reader"
+  }
+ ],
+ "shares": [
+  {
+   "id": "share_a1",
+   "target": {
+    "kind": "exploration",
+    "id": "exp_a1"
+   },
+   "site": "site_a1",
+   "created_by": "u_member",
+   "state": "active",
+   "grants": {
+    "measures": [
+     "pageviews",
+     "visitor_days"
+    ],
+    "dimensions": [
+     "path",
+     "country"
+    ],
+    "properties": [],
+    "actions": [
+     "read"
+    ],
+    "recordings": false,
+    "range_max_days": 30,
+    "expires": "2026-12-31T00:00:00.000Z",
+    "pinned_filter": "device eq mobile",
+    "narrowing_allowed": true
+   }
+  },
+  {
+   "id": "share_a1_rec",
+   "target": {
+    "kind": "exploration",
+    "id": "exp_a1"
+   },
+   "site": "site_a1",
+   "created_by": "u_member",
+   "state": "active",
+   "grants": {
+    "measures": [
+     "pageviews",
+     "visitor_days"
+    ],
+    "dimensions": [
+     "path",
+     "country"
+    ],
+    "properties": [],
+    "actions": [
+     "read"
+    ],
+    "recordings": true,
+    "range_max_days": 30,
+    "expires": "2026-12-31T00:00:00.000Z",
+    "pinned_filter": "device eq mobile",
+    "narrowing_allowed": true
+   }
+  },
+  {
+   "id": "share_revoked",
+   "target": {
+    "kind": "exploration",
+    "id": "exp_a1"
+   },
+   "site": "site_a1",
+   "created_by": "u_member",
+   "state": "revoked",
+   "grants": "as share_a1"
+  },
+  {
+   "id": "share_expired",
+   "target": {
+    "kind": "exploration",
+    "id": "exp_a1"
+   },
+   "site": "site_a1",
+   "created_by": "u_member",
+   "state": "expired",
+   "grants": "as share_a1, expires 2026-09-01T00:00:00.000Z"
+  },
+  {
+   "id": "share_board_a1",
+   "target": {
+    "kind": "board",
+    "id": "board_a1"
+   },
+   "site": null,
+   "created_by": "u_member",
+   "state": "active",
+   "grants": {
+    "sites": [
+     "site_a1"
+    ],
+    "actions": [
+     "read"
+    ],
+    "recordings": false,
+    "expires": "2026-12-31T00:00:00.000Z"
+   }
+  }
+ ],
+ "api_keys": [
+  {
+   "id": "key_site",
+   "owner": "u_member",
+   "state": "active",
+   "operations": [
+    "analytics.explore",
+    "analytics.export",
+    "sessions.list",
+    "fields.values",
+    "realtime.snapshot",
+    "realtime.site (topic)"
+   ],
+   "sites": [
+    "site_a1"
+   ]
+  },
+  {
+   "id": "key_readonly",
+   "owner": "u_admin",
+   "state": "active",
+   "operations": "every query in this fixture, no command",
+   "sites": "all sites the owner can read"
+  },
+  {
+   "id": "key_revoked",
+   "owner": "u_admin",
+   "state": "revoked",
+   "operations": [
+    "analytics.explore"
+   ],
+   "sites": [
+    "site_a1"
+   ]
+  }
+ ],
+ "collection_keys": [
+  {
+   "id": "collection_key_a1",
+   "site": "site_a1",
+   "state": "active"
+  }
+ ],
+ "links": [
+  {
+   "id": "link_a1",
+   "workspace": "ws_a",
+   "slug": "spring",
+   "note": "a link of ws_a, created by u_member (decision 0020)"
+  }
+ ],
+ "pixels": [
+  {
+   "id": "pixel_a1",
+   "workspace": "ws_a",
+   "slug": "newsletter",
+   "note": "a pixel of ws_a, created by u_member (decision 0020)"
+  }
+ ]
+}

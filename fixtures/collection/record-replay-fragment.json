@@ -1,0 +1,52 @@
+{
+  "id": "record-replay-fragment",
+  "surface": "record.replay",
+  "polarity": "positive",
+  "description": "One fragment of an oversized rrweb event, in the recorder fragment envelope.",
+  "upstream_ref": [
+    "src/recorder/index.js:26-28",
+    "src/recorder/index.js:87-96",
+    "src/recorder/index.js:143-185"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000002}}"
+    },
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": "umami:rrweb-event-fragment",
+            "timestamp": 1790000000000,
+            "data": {
+              "id": "lzq1-abc",
+              "index": 0,
+              "total": 2,
+              "value": "{\"type\":2,\"data\":{\"node\":"
+            }
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "ok": true
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Fragments are stored as received and reassembled on playback."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,215 @@
+{
+  "format_version": 1,
+  "id": "Q06-12m-A-utc-worst-person",
+  "family": "Q06",
+  "title": "Eight frequent repeated steps, 30-day window, person scope",
+  "operation": "analytics.funnel",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": false,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": {
+      "kind": "funnel",
+      "v": 1
+    }
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "funnel",
+    "report": {
+      "kind": "funnel",
+      "v": 1,
+      "steps": [
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w0",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w1",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/pricing"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w2",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/docs"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w3",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/blog"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w4",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w5",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/pricing"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w6",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/docs"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "and",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "w7",
+              "field": "path",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "/blog"
+              }
+            }
+          ]
+        }
+      ],
+      "window_seconds": 2592000,
+      "scope": "person"
+    }
+  },
+  "parameters": {
+    "steps": "8, the most allowed, each a frequent path; steps 5 to 8 repeat steps 1 to 4 and need distinct events",
+    "window": "30 days, the longest allowed: step events are read until 30 days after the range"
+  },
+  "sort": {
+    "order": [],
+    "ties": "by step (0004 report output order)"
+  },
+  "output_bound": {
+    "max_rows": 3,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "added by milestone 07 as a worst supported case; latency only, no golden result"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

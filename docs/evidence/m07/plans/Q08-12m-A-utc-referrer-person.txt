@@ -1,0 +1,1648 @@
+CREATE OR REPLACE TEMP TABLE at_scope AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2025-10-01 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2025-10-31 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2025-10-01 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2025-10-31 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2025-11-01 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2025-12-01 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2025-11-01 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2025-12-01 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2025-12-02 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-01-01 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2025-12-02 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-01-01 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-01-02 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-02-01 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-01-02 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-02-01 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-02-02 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-03-04 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-02-02 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-03-04 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-03-05 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-04-04 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-03-05 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-04-04 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-04-05 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-05-05 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-04-05 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-05-05 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-05-06 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-06-05 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-05-06 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-06-05 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-06-06 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-07-06 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-06-06 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-07-06 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-07-07 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-08-06 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-07-07 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-08-06 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            kind           ││            seq            │
+│         event_time        ││         session_id        │
+│          daily_id         ││                           │
+│         profile_id        ││          Filters:         │
+│         event_name        ││site=1198808858014540920149│
+│          currency         ││     39663769085192113     │
+│       revenue_minor       ││           role=1          │
+│                           ││ event_time>='2026-08-07 00│
+│          Filters:         ││   :00:00'::TIMESTAMP AND  │
+│site=1198808858014540920149││   event_time<='2026-09-06 │
+│     39663769085192113     ││  23:59:59.999'::TIMESTAMP │
+│    kind>=1 AND kind<=2    ││                           │
+│ event_time>='2026-08-07 00││                           │
+│   :00:00'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-09-06 ││                           │
+│  23:59:59.999'::TIMESTAMP ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+INSERT INTO at_scope WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id, e.event_name, e.currency AS cur, e.revenue_minor AS rev FROM events e LEFT JOIN (SELECT seq, session_id FROM session_members WHERE site = ? AND role = 1 AND event_time >= epoch_ms(?) AND event_time <= epoch_ms(?)) m ON m.seq = e.seq WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id, session_id, cur, rev, f0 FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.cur, r.rev, r.event_name AS f0 FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│         event_name        │
+│            cur            │
+│            rev            │
+│                           │
+│       ~953,858 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│       ~953,858 rows       │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│        EMPTY_RESULT       ││        EMPTY_RESULT       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_ev AS SELECT * EXCLUDE (session_id) FROM at_scope WHERE t >= ? AND t < ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│    "temp".main.at_scope   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             t             │
+│            seq            │
+│            kind           │
+│          daily_id         │
+│         profile_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│                           │
+│          Filters:         │
+│   t>=1759276800000 AND t  │
+│       <1790812800000      │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_se AS
+             SELECT x.*, s.pageviews AS pv, s.custom_events AS ce,
+                    epoch_ms(s.last_time) - epoch_ms(s.start_time) AS span, epoch_ms(s.start_time) AS st
+             FROM at_scope x JOIN sessions s ON s.site = ? AND s.session_id = x.session_id WHERE s.start_time >= epoch_ms(?) AND s.start_time < epoch_ms(?)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│             pv            │
+│             ce            │
+│            span           │
+│             st            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            cur            │
+│            rev            │
+│             f0            │
+│             pv            │
+│             ce            │
+│         last_time         │
+│    epoch_ms(start_time)   │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│  session_id = session_id  │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│  analytics.main.sessions  ││    "temp".main.at_scope   │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│         session_id        ││         session_id        │
+│         start_time        ││            seq            │
+│         pageviews         ││            kind           │
+│       custom_events       ││             t             │
+│         last_time         ││          daily_id         │
+│                           ││         profile_id        │
+│          Filters:         ││            cur            │
+│site=1198808858014540920149││            rev            │
+│     39663769085192113     ││             f0            │
+│                           ││                           │
+│        ~92,308 rows       ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_cv AS SELECT * FROM (SELECT 0 AS c, arg_min(profile_id, (t::HUGEINT * 9223372036854775808 + seq)) AS id, arg_min(t, (t::HUGEINT * 9223372036854775808 + seq)) AS t, min((t::HUGEINT * 9223372036854775808 + seq)) AS k, NULL::VARCHAR AS currency, NULL::BIGINT AS minor
+                     FROM at_se WHERE session_id IS NOT NULL AND ((f0 = ?)) GROUP BY session_id UNION ALL SELECT 1 AS c, profile_id AS id, t, (t::HUGEINT * 9223372036854775808 + seq) AS k, NULL::VARCHAR AS currency, NULL::BIGINT AS minor
+                     FROM at_se WHERE session_id IS NOT NULL AND ((f0 = ?)) UNION ALL SELECT 2 AS c, profile_id AS id, t, (t::HUGEINT * 9223372036854775808 + seq) AS k, NULL::VARCHAR AS currency, NULL::BIGINT AS minor
+                     FROM at_ev WHERE profile_id IS NOT NULL AND ((f0 = ?)) UNION ALL SELECT 3 AS c, profile_id AS id, t, (t::HUGEINT * 9223372036854775808 + seq) AS k, cur AS currency, rev AS minor
+                     FROM at_ev WHERE rev IS NOT NULL) WHERE id IS NOT NULL
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           UNION           ├──────────────┬────────────────────────────┬────────────────────────────┐
+└─────────────┬─────────────┘              │                            │                            │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         PROJECTION        ││         PROJECTION        ││         PROJECTION        ││         PROJECTION        │
+│    ────────────────────   ││    ────────────────────   ││    ────────────────────   ││    ────────────────────   │
+│             c             ││             c             ││             c             ││             c             │
+│             id            ││             id            ││             id            ││             id            │
+│             t             ││             t             ││             t             ││             t             │
+│             k             ││             k             ││             k             ││             k             │
+│          currency         ││          currency         ││          currency         ││          currency         │
+│           minor           ││           minor           ││           minor           ││           minor           │
+│                           ││                           ││                           ││                           │
+│          ~0 rows          ││          ~0 rows          ││          ~0 rows          ││          ~0 rows          │
+└─────────────┬─────────────┘└─────────────┬─────────────┘└─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         PROJECTION        ││          SEQ_SCAN         ││          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   ││    ────────────────────   ││    ────────────────────   │
+│             #1            ││           Table:          ││           Table:          ││           Table:          │
+│             #2            ││     "temp".main.at_se     ││     "temp".main.at_ev     ││     "temp".main.at_ev     │
+│             #3            ││                           ││                           ││                           │
+│                           ││   Type: Sequential Scan   ││   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           ││                           ││                           │
+│                           ││        Projections:       ││        Projections:       ││        Projections:       │
+│                           ││         profile_id        ││         profile_id        ││            rev            │
+│                           ││             t             ││             t             ││         profile_id        │
+│                           ││            seq            ││            seq            ││             t             │
+│                           ││                           ││                           ││            seq            │
+│                           ││          Filters:         ││          Filters:         ││            cur            │
+│                           ││  (session_id IS NOT NULL) ││  (profile_id IS NOT NULL) ││                           │
+│                           ││       f0='click_cta'      ││   AND (profile_id IS NOT  ││          Filters:         │
+│                           ││  (profile_id IS NOT NULL) ││            NULL)          ││     (rev IS NOT NULL)     │
+│                           ││                           ││       f0='view_item'      ││  (profile_id IS NOT NULL) │
+│                           ││                           ││                           ││                           │
+│          ~0 rows          ││          ~0 rows          ││          ~0 rows          ││          ~0 rows          │
+└─────────────┬─────────────┘└───────────────────────────┘└───────────────────────────┘└───────────────────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│      (id IS NOT NULL)     │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│      arg_min(#1, #2)      │
+│      arg_min(#3, #4)      │
+│          min(#5)          │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         session_id        │
+│         profile_id        │
+│             #2            │
+│             t             │
+│             #2            │
+│             #2            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         session_id        │
+│         profile_id        │
+│   ((CAST(t AS HUGEINT) *  │
+│   9223372036854775808) +  │
+│    CAST(seq AS HUGEINT))  │
+│             t             │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│     "temp".main.at_se     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│         session_id        │
+│         profile_id        │
+│             t             │
+│            seq            │
+│                           │
+│          Filters:         │
+│  (session_id IS NOT NULL) │
+│        f0='signup'        │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_ss AS SELECT session_id, last_time FROM sessions WHERE site = ? AND start_time >= epoch_ms(?) AND start_time < epoch_ms(?)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│  analytics.main.sessions  │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│         session_id        │
+│         last_time         │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│ start_time>='2025-09-01 00│
+│   :02:32'::TIMESTAMP AND  │
+│  start_time<'2026-09-03 21│
+│   :52:16.001'::TIMESTAMP  │
+│                           │
+│        ~92,308 rows       │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_tp AS
+         WITH touch AS (
+            SELECT m.session_id, arg_min(m.seq, (e.kind <> 1, m.event_time, m.seq)) AS seq
+            FROM session_members m JOIN events e ON e.seq = m.seq AND e.site = ? AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?) WHERE m.site = ? AND m.role = 1 AND m.event_time >= epoch_ms(?) AND m.event_time <= epoch_ms(?) AND m.session_id IN (SELECT session_id FROM at_ss) GROUP BY m.session_id
+         )
+         SELECT t.profile_id AS id, epoch_ms(t.event_time) AS t, (epoch_ms(t.event_time)::HUGEINT * 9223372036854775808 + t.seq) AS k, t.referrer_domain AS v FROM touch x JOIN events t ON t.seq = x.seq AND t.site = ? AND t.event_time >= epoch_ms(?) AND t.event_time <= epoch_ms(?) WHERE t.profile_id IS NOT NULL AND (t.utm_source IS NOT NULL OR t.click_id IS NOT NULL
+             OR (t.referrer_domain IS NOT NULL
+                 AND regexp_replace(lower(t.referrer_domain), '^www\.', '') NOT IN ('')))
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             id            │
+│             t             │
+│             k             │
+│             v             │
+│                           │
+│         ~216 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             id            │
+│             t             │
+│            seq            │
+│             v             │
+│                           │
+│         ~216 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│   Conditions: seq = seq   ├──────────────┐
+│                           │              │
+│         ~216 rows         │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         PROJECTION        ││         PROJECTION        │
+│    ────────────────────   ││    ────────────────────   │
+│             #0            ││            seq            │
+│             #1            ││                           │
+│             #2            ││                           │
+│             #5            ││                           │
+│                           ││                           │
+│       ~184,615 rows       ││        ~14,271 rows       │
+└─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│           FILTER          ││         PROJECTION        │
+│    ────────────────────   ││    ────────────────────   │
+│ ((utm_source IS NOT NULL) ││__internal_decompress_integ│
+│   OR ((referrer_domain IS ││     ral_bigint(#0, 1)     │
+│       NOT NULL) AND       ││             #1            │
+│   (regexp_replace(lower   ││                           │
+│ (referrer_domain), '^www\.││                           │
+│      ', '') != '')))      ││                           │
+│                           ││                           │
+│       ~184,615 rows       ││        ~14,271 rows       │
+└─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││       HASH_GROUP_BY       │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││         Groups: #0        │
+│   analytics.main.events   ││                           │
+│                           ││        Aggregates:        │
+│   Type: Sequential Scan   ││      arg_min(#1, #2)      │
+│                           ││                           │
+│        Projections:       ││                           │
+│            seq            ││                           │
+│         event_time        ││                           │
+│         profile_id        ││                           │
+│         utm_source        ││                           │
+│          click_id         ││                           │
+│      referrer_domain      ││                           │
+│                           ││                           │
+│          Filters:         ││                           │
+│site=1198808858014540920149││                           │
+│     39663769085192113     ││                           │
+│ event_time>='2025-09-01 00││                           │
+│   :02:32'::TIMESTAMP AND  ││                           │
+│   event_time<='2026-09-03 ││                           │
+│    21:54:30'::TIMESTAMP   ││                           │
+│  (profile_id IS NOT NULL) ││                           │
+│                           ││                           │
+│       ~923,077 rows       ││        ~14,271 rows       │
+└───────────────────────────┘└─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         PROJECTION        │
+                             │    ────────────────────   │
+                             │         session_id        │
+                             │            seq            │
+                             │     "row"((kind != 1),    │
+                             │      event_time, seq)     │
+                             │                           │
+                             │        ~14,470 rows       │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         PROJECTION        │
+                             │    ────────────────────   │
+                             │             #0            │
+                             │             #1            │
+                             │__internal_compress_integra│
+                             │     l_uinteger(#2, 1)     │
+                             │             #3            │
+                             │                           │
+                             │        ~14,470 rows       │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         HASH_JOIN         │
+                             │    ────────────────────   │
+                             │      Join Type: SEMI      │
+                             │                           │
+                             │        Conditions:        ├───────────────────────────────────────────┐
+                             │      session_id = #0      │                                           │
+                             │                           │                                           │
+                             │        ~14,470 rows       │                                           │
+                             └─────────────┬─────────────┘                                           │
+                             ┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                             │         HASH_JOIN         │                             │          SEQ_SCAN         │
+                             │    ────────────────────   │                             │    ────────────────────   │
+                             │      Join Type: INNER     │                             │           Table:          │
+                             │   Conditions: seq = seq   │                             │     "temp".main.at_ss     │
+                             │                           │                             │                           │
+                             │                           ├──────────────┐              │   Type: Sequential Scan   │
+                             │                           │              │              │                           │
+                             │                           │              │              │        Projections:       │
+                             │                           │              │              │         session_id        │
+                             │                           │              │              │                           │
+                             │        ~72,354 rows       │              │              │          ~0 rows          │
+                             └─────────────┬─────────────┘              │              └───────────────────────────┘
+                             ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                             │          SEQ_SCAN         ││          SEQ_SCAN         │
+                             │    ────────────────────   ││    ────────────────────   │
+                             │           Table:          ││           Table:          │
+                             │       analytics.main      ││   analytics.main.events   │
+                             │      .session_members     ││                           │
+                             │                           ││   Type: Sequential Scan   │
+                             │   Type: Sequential Scan   ││                           │
+                             │                           ││        Projections:       │
+                             │        Projections:       ││            seq            │
+                             │            seq            ││            kind           │
+                             │         event_time        ││                           │
+                             │         session_id        ││          Filters:         │
+                             │                           ││site=1198808858014540920149│
+                             │          Filters:         ││     39663769085192113     │
+                             │site=1198808858014540920149││ event_time>='2025-09-01 00│
+                             │     39663769085192113     ││   :02:32'::TIMESTAMP AND  │
+                             │           role=1          ││   event_time<='2026-09-03 │
+                             │ event_time>='2025-09-01 00││    21:54:30'::TIMESTAMP   │
+                             │   :02:32'::TIMESTAMP AND  ││                           │
+                             │   event_time<='2026-09-03 ││                           │
+                             │    21:54:30'::TIMESTAMP   ││                           │
+                             │                           ││                           │
+                             │       ~953,858 rows       ││       ~923,077 rows       │
+                             └───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_r AS
+                 SELECT c.c, c.currency, c.minor, coalesce(p.k < c.k, false) AS touched, p.v
+                 FROM (SELECT *, (t - ?)::HUGEINT * 9223372036854775808 AS lo FROM at_cv) c
+                 ASOF LEFT JOIN at_tp p ON c.id = p.id AND c.lo <= p.k
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             c             │
+│          currency         │
+│           minor           │
+│          touched          │
+│             v             │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         ASOF_JOIN         │
+│    ────────────────────   │
+│      Join Type: LEFT      │
+│                           │
+│        Conditions:        ├──────────────┐
+│          id = id          │              │
+│          lo <= k          │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         PROJECTION        ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│             c             ││           Table:          │
+│             id            ││     "temp".main.at_tp     │
+│             k             ││                           │
+│          currency         ││   Type: Sequential Scan   │
+│           minor           ││                           │
+│             lo            ││        Projections:       │
+│                           ││             id            │
+│                           ││             k             │
+│                           ││             v             │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└─────────────┬─────────────┘└───────────────────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│     "temp".main.at_cv     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             c             │
+│             id            │
+│             t             │
+│             k             │
+│          currency         │
+│           minor           │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE at_top AS SELECT c, v, n, distinct_values, rank FROM (
+            SELECT c, v, count(*) AS n, count(*) OVER (PARTITION BY c) AS distinct_values,
+                   row_number() OVER (PARTITION BY c ORDER BY count(*) DESC, v ASC NULLS LAST) AS rank
+            FROM at_r WHERE touched GROUP BY c, v
+         ) WHERE rank <= 100
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│       (rank <= 100)       │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│ count() OVER (PARTITION BY│
+│             c)            │
+│     ROW_NUMBER() OVER     │
+│  (PARTITION BY c ORDER BY │
+│   count_star() DESC NULLS │
+│   LAST, v ASC NULLS LAST) │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             c             │
+│             v             │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│      "temp".main.at_r     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             c             │
+│             v             │
+│                           │
+│      Filters: touched     │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+SELECT c, v, n, distinct_values FROM at_top ORDER BY c, rank
+
+┌───────────────────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│  "temp".main.at_top.c ASC │
+│           #4 ASC          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│     "temp".main.at_top    │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             c             │
+│             v             │
+│             n             │
+│      distinct_values      │
+│            rank           │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+SELECT c, count(*) FROM at_r WHERE NOT touched GROUP BY c
+
+┌───────────────────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             c             │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│      "temp".main.at_r     │
+│                           │
+│   Type: Sequential Scan   │
+│       Projections: c      │
+│                           │
+│          Filters:         │
+│       (NOT touched)       │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+SELECT r.c, r.touched, r.v, r.currency, sum(r.minor)::HUGEINT FROM at_r r
+         WHERE r.currency IS NOT NULL AND (NOT r.touched OR EXISTS (
+            SELECT 1 FROM at_top t WHERE t.c = r.c AND t.v IS NOT DISTINCT FROM r.v))
+         GROUP BY ALL ORDER BY r.currency
+
+┌───────────────────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│       r.currency ASC      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│                           │
+│    Aggregates: sum(#4)    │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             c             │
+│          touched          │
+│             v             │
+│          currency         │
+│           minor           │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│(SUBQUERY OR (NOT touched))│
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      LEFT_DELIM_JOIN      │
+│    ────────────────────   │
+│      Join Type: MARK      │
+│                           │
+│        Conditions:        │
+│  v IS NOT DISTINCT FROM v ├──────────────┬──────────────────────────────────────────────────────────────────────────────────────┐
+│  c IS NOT DISTINCT FROM c │              │                                                                                      │
+│                           │              │                                                                                      │
+│                           │              │                                                                                      │
+│                           │              │                                                                                      │
+│       Delim Index: 1      │              │                                                                                      │
+└─────────────┬─────────────┘              │                                                                                      │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐                                                          ┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││         HASH_JOIN         │                                                          │       HASH_GROUP_BY       │
+│    ────────────────────   ││    ────────────────────   │                                                          │    ────────────────────   │
+│           Table:          ││      Join Type: MARK      │                                                          │          Groups:          │
+│      "temp".main.at_r     ││                           │                                                          │             #3            │
+│                           ││        Conditions:        │                                                          │             #2            │
+│   Type: Sequential Scan   ││  v IS NOT DISTINCT FROM v │                                                          │                           │
+│                           ││  c IS NOT DISTINCT FROM c │                                                          │                           │
+│        Projections:       ││                           │                                                          │                           │
+│          currency         ││                           │                                                          │                           │
+│          touched          ││                           ├──────────────┐                                           │                           │
+│             c             ││                           │              │                                           │                           │
+│             v             ││                           │              │                                           │                           │
+│           minor           ││                           │              │                                           │                           │
+│                           ││                           │              │                                           │                           │
+│          Filters:         ││                           │              │                                           │                           │
+│   (currency IS NOT NULL)  ││                           │              │                                           │                           │
+│                           ││                           │              │                                           │                           │
+│          ~0 rows          ││          ~0 rows          │              │                                           │          ~0 rows          │
+└───────────────────────────┘└─────────────┬─────────────┘              │                                           └───────────────────────────┘
+                             ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                             │      COLUMN_DATA_SCAN     ││         PROJECTION        │
+                             │    ────────────────────   ││    ────────────────────   │
+                             │                           ││             v             │
+                             │                           ││             c             │
+                             │                           ││                           │
+                             │          ~0 rows          ││           ~1 row          │
+                             └───────────────────────────┘└─────────────┬─────────────┘
+                                                          ┌─────────────┴─────────────┐
+                                                          │         HASH_JOIN         │
+                                                          │    ────────────────────   │
+                                                          │      Join Type: INNER     │
+                                                          │                           │
+                                                          │        Conditions:        ├──────────────┐
+                                                          │  v IS NOT DISTINCT FROM v │              │
+                                                          │           c = c           │              │
+                                                          │                           │              │
+                                                          │           ~1 row          │              │
+                                                          └─────────────┬─────────────┘              │
+                                                          ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                                                          │          SEQ_SCAN         ││         DELIM_SCAN        │
+                                                          │    ────────────────────   ││    ────────────────────   │
+                                                          │           Table:          ││       Delim Index: 1      │
+                                                          │     "temp".main.at_top    ││                           │
+                                                          │                           ││                           │
+                                                          │   Type: Sequential Scan   ││                           │
+                                                          │                           ││                           │
+                                                          │        Projections:       ││                           │
+                                                          │             c             ││                           │
+                                                          │             v             ││                           │
+                                                          │                           ││                           │
+                                                          │          ~0 rows          ││          ~0 rows          │
+                                                          └───────────────────────────┘└───────────────────────────┘

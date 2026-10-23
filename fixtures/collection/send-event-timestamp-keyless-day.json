@@ -1,0 +1,44 @@
+{
+  "id": "send-event-timestamp-keyless-day",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Timestamp 3 days before receive time; the identity day key for that day is destroyed (end(D) + 25h has passed).",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:51",
+    "src/app/api/send/route.ts:152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "timestamp": "{{NOW_S-259200}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "Stored keyless: no daily pseudonym, counted in pageviews and events, excluded from visitor and session measures, visible in identity coverage. The sessionId and visitId in the body are derived from the request as usual and identify no stored session (docs/decisions/0001, Key retention and keyless events; docs/decisions/0005, Event time outcomes)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

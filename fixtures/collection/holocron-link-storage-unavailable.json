@@ -1,0 +1,26 @@
+{
+  "id": "holocron-link-storage-unavailable",
+  "surface": "link",
+  "polarity": "negative",
+  "description": "Link followed while durable storage is unavailable.",
+  "upstream_ref": [
+    "src/app/(collect)/q/[slug]/route.ts:60-62"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/q/holocron-link"
+  },
+  "expected_upstream": {
+    "status": 307,
+    "notes": "Upstream ignores the send result and redirects; a failed write is silent."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 307,
+    "reason": "storage_unavailable",
+    "decision": "adopted",
+    "notes": "Redirect still sent; the hit is not stored and increments lost_hits, shown in link reports (docs/decisions/0005, links and pixels during a storage outage)."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Needs a storage fault injected into Holocron."
+}

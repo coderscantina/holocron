@@ -1,0 +1,14 @@
+{
+  "case": "b1",
+  "code": "migration_failed",
+  "details": {
+    "failed": [
+      "26_add_api_key"
+    ],
+    "finishedAt": null,
+    "rolledBackAt": null
+  },
+  "engine": "postgresql",
+  "message": "Migration 26_add_api_key started but never finished (finished_at is empty). The source is partially migrated. Read _prisma_migrations.logs for the cause, repair the source with Umami 3.4.0 (prisma migrate resolve, then prisma migrate deploy), and run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

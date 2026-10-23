@@ -1,0 +1,20 @@
+{
+  "case": "c1",
+  "code": "migration_missing",
+  "details": {
+    "missing": [
+      "05_add_visit_id",
+      "06_session_data",
+      "07_add_tag",
+      "08_add_utm_clid",
+      "09_update_hostname_region",
+      "10_add_distinct_id",
+      "11_add_segment",
+      "12_update_report_parameter",
+      "13_add_revenue"
+    ]
+  },
+  "engine": "mysql",
+  "message": "This MySQL database is older than Umami 2.20.2: migrations 05_add_visit_id to 13_add_revenue are missing, so website_event has no visit_id. Upgrade the source to Umami 2.20.2 (the last release with MySQL support) so it applies all 13 migrations, then run the inspection again. Do not upgrade to Umami 3.x, it does not support MySQL. Holocron did not change the source.",
+  "outcome": "refuse"
+}

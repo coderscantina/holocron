@@ -1,0 +1,917 @@
+CREATE OR REPLACE TEMP TABLE jy_entry AS SELECT session_id, last_time FROM sessions
+             WHERE site = ? AND start_time >= epoch_ms(?) AND start_time < epoch_ms(?) AND pageviews > 0
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│  analytics.main.sessions  │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│         session_id        │
+│         last_time         │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│                           │
+│        ~92,308 rows       │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE jy_steps AS
+             WITH v AS (
+                SELECT m.session_id, coalesce(e.path, '') AS v, m.event_time AS t, m.seq
+                FROM session_members m
+                JOIN events e ON e.seq = m.seq AND e.site = ? AND e.kind = 1 AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?) WHERE m.site = ? AND m.role = 1 AND m.event_time >= epoch_ms(?) AND m.event_time <= epoch_ms(?) AND m.session_id IN (SELECT session_id FROM jy_entry)
+             ), compressed AS (
+                SELECT session_id, v, t, seq FROM (
+                    SELECT *, lag(v) OVER (PARTITION BY session_id ORDER BY t, seq) AS previous FROM v
+                ) WHERE previous IS DISTINCT FROM v
+             ), numbered AS (
+                SELECT session_id, v, row_number() OVER (PARTITION BY session_id ORDER BY t, seq) AS n
+                FROM compressed
+             )
+             SELECT session_id, list(v ORDER BY n) AS steps FROM numbered WHERE n <= 7
+             GROUP BY session_id
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_integ│
+│     ral_bigint(#0, 1)     │
+│             #1            │
+│                           │
+│         ~577 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        list(#1, #2)       │
+│                           │
+│         ~577 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         session_id        │
+│             v             │
+│             n             │
+│                           │
+│         ~578 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_integra│
+│     l_uinteger(#0, 1)     │
+│             #1            │
+│             #2            │
+│                           │
+│         ~578 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #4            │
+│                           │
+│         ~578 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│          (n <= 7)         │
+│                           │
+│         ~578 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│                           │
+│        ~2,894 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│     ROW_NUMBER() OVER     │
+│  (PARTITION BY session_id │
+│  ORDER BY t ASC NULLS LAST│
+│   , seq ASC NULLS LAST)   │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│                           │
+│        ~2,894 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ (previous IS DISTINCT FROM│
+│             v)            │
+│                           │
+│        ~2,894 rows        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│                           │
+│        ~14,470 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│ LAG(v) OVER (PARTITION BY │
+│  session_id ORDER BY t ASC│
+│  NULLS LAST, seq ASC NULLS│
+│            LAST)          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         session_id        │
+│            path           │
+│             t             │
+│            seq            │
+│                           │
+│        ~14,470 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: SEMI      │
+│                           │
+│        Conditions:        ├───────────────────────────────────────────┐
+│      session_id = #0      │                                           │
+│                           │                                           │
+│        ~14,470 rows       │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │          SEQ_SCAN         │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │           Table:          │
+│   Conditions: seq = seq   │                             │    "temp".main.jy_entry   │
+│                           │                             │                           │
+│                           ├──────────────┐              │   Type: Sequential Scan   │
+│                           │              │              │                           │
+│                           │              │              │        Projections:       │
+│                           │              │              │         session_id        │
+│                           │              │              │                           │
+│        ~72,354 rows       │              │              │          ~0 rows          │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│   analytics.main.events   ││       analytics.main      │
+│                           ││      .session_members     │
+│   Type: Sequential Scan   ││                           │
+│                           ││   Type: Sequential Scan   │
+│        Projections:       ││                           │
+│            seq            ││        Projections:       │
+│            path           ││            seq            │
+│                           ││         event_time        │
+│          Filters:         ││         session_id        │
+│site=1198808858014540920149││                           │
+│     39663769085192113     ││          Filters:         │
+│           kind=1          ││site=1198808858014540920149│
+│ event_time>='2025-10-01 00││     39663769085192113     │
+│   :00:00'::TIMESTAMP AND  ││           role=1          │
+│   event_time<='2026-09-03 ││ event_time>='2025-10-01 00│
+│    21:54:30'::TIMESTAMP   ││   :00:00'::TIMESTAMP AND  │
+│                           ││   event_time<='2026-09-03 │
+│                           ││    21:54:30'::TIMESTAMP   │
+│                           ││                           │
+│       ~923,077 rows       ││       ~953,858 rows       │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+SELECT steps::VARCHAR[], count(*) AS n FROM jy_steps GROUP BY steps
+         ORDER BY n DESC, steps LIMIT 100
+
+┌───────────────────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           TOP_N           │
+│    ────────────────────   │
+│          Top: 100         │
+│                           │
+│         Order By:         │
+│     count_star() DESC     │
+│           #2 ASC          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│           steps           │
+│             n             │
+│           steps           │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│           steps           │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│    "temp".main.jy_steps   │
+│                           │
+│   Type: Sequential Scan   │
+│     Projections: steps    │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE cov_ev AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2025-10-01 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2025-10-31 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2025-11-01 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2025-12-01 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2025-12-02 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-01-01 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-01-02 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-02-01 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-02-02 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-03-04 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-03-05 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-04-04 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-04-05 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-05-05 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-05-06 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-06-05 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-06-06 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-07-06 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-07-07 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-08-06 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│       ~923,077 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│ event_time>='2026-08-07 00│
+│   :00:00'::TIMESTAMP AND  │
+│   event_time<='2026-09-06 │
+│  23:59:59.999'::TIMESTAMP │
+│                           │
+│       ~923,077 rows       │
+└───────────────────────────┘
+
+
+----
+
+INSERT INTO cov_ev WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)) SELECT seq, kind, t, daily_id, profile_id FROM (SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id FROM r)
+
+┌───────────────────────────┐
+│           INSERT          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│        EMPTY_RESULT       │
+└───────────────────────────┘

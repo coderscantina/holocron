@@ -1,0 +1,138 @@
+{
+  "metric_version": 1,
+  "cases": [
+    {
+      "id": "revenue-2026-06-11",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-11",
+          "2026-06-11"
+        ],
+        "start": "2026-06-10T22:00:00.000Z",
+        "end": "2026-06-11T22:00:00.000Z"
+      },
+      "by_currency": {
+        "EUR": {
+          "exponent": 2,
+          "gross": 6990,
+          "refunds": -1999,
+          "net": 4991,
+          "count": 3,
+          "net_display": "49.91"
+        },
+        "GBP": {
+          "exponent": 2,
+          "gross": 1250,
+          "refunds": 0,
+          "net": 1250,
+          "count": 1,
+          "net_display": "12.50"
+        },
+        "JPY": {
+          "exponent": 0,
+          "gross": 4500,
+          "refunds": 0,
+          "net": 4500,
+          "count": 2,
+          "net_display": "4500"
+        },
+        "USD": {
+          "exponent": 2,
+          "gross": 2512,
+          "refunds": 0,
+          "net": 2512,
+          "count": 2,
+          "net_display": "25.12"
+        }
+      },
+      "records": {
+        "rev-01": {
+          "currency": "EUR",
+          "minor_units": 4990
+        },
+        "rev-02": {
+          "currency": "EUR",
+          "minor_units": 2000
+        },
+        "rev-03": {
+          "currency": "EUR",
+          "minor_units": -1999
+        },
+        "rev-04": "invalid: revenue is a string",
+        "rev-05": "invalid: unknown currency ZZZ",
+        "rev-06": "no revenue record: zero is valid",
+        "rev-07": {
+          "currency": "GBP",
+          "minor_units": 1250
+        },
+        "rev-08": {
+          "currency": "USD",
+          "minor_units": 2500
+        },
+        "rev-09": {
+          "currency": "USD",
+          "minor_units": 12
+        },
+        "rev-10": {
+          "currency": "JPY",
+          "minor_units": 1500
+        },
+        "rev-11": {
+          "currency": "JPY",
+          "minor_units": 3000
+        }
+      },
+      "revenue_invalid": 2
+    },
+    {
+      "id": "revenue-site-a-all",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2025-10-01",
+          "2026-10-03"
+        ],
+        "start": "2025-09-30T22:00:00.000Z",
+        "end": "2026-10-03T22:00:00.000Z"
+      },
+      "by_currency": {
+        "EUR": {
+          "exponent": 2,
+          "gross": 10990,
+          "refunds": -1999,
+          "net": 8991,
+          "count": 5,
+          "net_display": "89.91"
+        },
+        "GBP": {
+          "exponent": 2,
+          "gross": 1250,
+          "refunds": 0,
+          "net": 1250,
+          "count": 1,
+          "net_display": "12.50"
+        },
+        "JPY": {
+          "exponent": 0,
+          "gross": 4500,
+          "refunds": 0,
+          "net": 4500,
+          "count": 2,
+          "net_display": "4500"
+        },
+        "USD": {
+          "exponent": 2,
+          "gross": 2512,
+          "refunds": 0,
+          "net": 2512,
+          "count": 2,
+          "net_display": "25.12"
+        }
+      },
+      "note": "key-02 is keyless and still counts (0001 Key retention and keyless events)"
+    }
+  ]
+}

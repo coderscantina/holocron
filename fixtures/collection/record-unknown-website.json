@@ -1,0 +1,68 @@
+{
+  "id": "record-unknown-website",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "Valid token, unknown website.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:148-152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000001}}"
+    },
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-0000000000ff",
+        "events": [
+          {
+            "type": 4,
+            "data": {
+              "href": "http://localhost:8080/",
+              "width": 1280,
+              "height": 720
+            },
+            "timestamp": 1790000000000
+          },
+          {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Website not found.",
+        "code": "bad-request",
+        "status": 400
+      }
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Same message."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

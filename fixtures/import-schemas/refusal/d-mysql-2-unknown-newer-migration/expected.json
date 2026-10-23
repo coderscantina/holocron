@@ -1,0 +1,12 @@
+{
+  "case": "d",
+  "code": "migration_unknown",
+  "details": {
+    "unknown": [
+      "14_future_example"
+    ]
+  },
+  "engine": "mysql",
+  "message": "This MySQL database has a migration Holocron does not know: 14_future_example. The source is newer than Umami 2.20.2 or was modified. Holocron imports only the exact 2.20.2 schema. Restore a snapshot taken at 2.20.2, or export from the source with its own tools, then run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

@@ -1,0 +1,14 @@
+{
+  "case": "b2",
+  "code": "migration_failed",
+  "details": {
+    "failed": [
+      "26_add_api_key"
+    ],
+    "finishedAt": null,
+    "rolledBackAt": "set"
+  },
+  "engine": "postgresql",
+  "message": "Migration 26_add_api_key is marked rolled back and never finished. The source is not at the Umami 3.4.0 schema. Re-apply it with Umami 3.4.0 (prisma migrate deploy) and run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

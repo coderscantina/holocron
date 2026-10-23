@@ -1,0 +1,30 @@
+{
+  "id": "script-alias-tracker-name",
+  "surface": "script.asset",
+  "polarity": "positive",
+  "description": "TRACKER_SCRIPT_NAME alias (harness sets \"analytics.js, /stats/a.js\") serves the tracker bytes.",
+  "upstream_ref": [
+    "docker/proxy.ts:44-56",
+    "src/lib/match-configured-path.ts:17-38"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/analytics.js"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "public, max-age=86400, must-revalidate"
+    },
+    "body_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f"
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Configured aliases are part of the asset surface (briefing, transport surfaces). Holocron reads aliases from runtime configuration."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,122 @@
+{
+ "status": "adopted (decisions/0006-retention-clock-and-operations.md, holocron init outcomes)",
+ "capabilities": [
+  "CAP-OPS-01",
+  "CAP-ACCESS-01"
+ ],
+ "grounding": [
+  "decisions/0006-retention-clock-and-operations.md: `holocron init` outcomes and exit codes",
+  "technical-briefing.md, Maintenance and security: no known default password",
+  "fixtures/access/scenarios.json AX-S023"
+ ],
+ "exit_codes": {
+  "0": "success",
+  "1": "internal error",
+  "2": "usage",
+  "3": "refused by data-directory state",
+  "4": "storage unavailable"
+ },
+ "command": "holocron init --data-dir <path> --admin-email <email> [--admin-password-file <path>]",
+ "markers": {
+  "in_progress": "holocron.init-in-progress",
+  "done": "holocron.initialized",
+  "note": "other file names belong to milestone 02"
+ },
+ "cases": [
+  {
+   "id": "init-empty-generated",
+   "setup": "data dir missing or empty",
+   "args": "no password file",
+   "exit": 0,
+   "stdout": "one 24 character generated password, printed once",
+   "stderr_and_logs": "never contain the password",
+   "after": "SQLite and DuckDB files, root secret, schema, first install admin; done marker present, in-progress marker absent; login with the printed password works"
+  },
+  {
+   "id": "init-empty-file",
+   "setup": "data dir missing or empty",
+   "args": "password file with 12 characters",
+   "exit": 0,
+   "stdout": "does not contain the password",
+   "after": "login with the file's password works"
+  },
+  {
+   "id": "init-no-default",
+   "setup": "after any successful init",
+   "check": "login as admin with the upstream default password is refused with invalid_credentials (access scenario AX-S023)"
+  },
+  {
+   "id": "init-short-password",
+   "setup": "data dir empty",
+   "args": "password file with 11 characters",
+   "exit": 2,
+   "after": "nothing written; directory still empty"
+  },
+  {
+   "id": "init-missing-email",
+   "setup": "data dir empty",
+   "args": "no --admin-email",
+   "exit": 2,
+   "after": "nothing written"
+  },
+  {
+   "id": "init-twice",
+   "setup": "initialized directory",
+   "exit": 3,
+   "code": "already_initialized",
+   "after": "every file byte-identical to before (checksum all files)"
+  },
+  {
+   "id": "init-foreign",
+   "setup": "directory contains an unrelated file",
+   "exit": 3,
+   "code": "directory_not_empty",
+   "after": "nothing changed"
+  },
+  {
+   "id": "init-readonly",
+   "setup": "directory not writable or read-only filesystem",
+   "exit": 4,
+   "code": "storage_unavailable",
+   "message_includes": [
+    "the path",
+    "the OS error"
+   ]
+  },
+  {
+   "id": "init-lock",
+   "setup": "another process holds the data directory lock",
+   "exit": 4,
+   "code": "storage_unavailable"
+  },
+  {
+   "id": "init-disk-full",
+   "setup": "filesystem full after the in-progress marker is written",
+   "exit": 4,
+   "code": "storage_unavailable",
+   "after": "rerun after freeing space succeeds (see init-interrupted)"
+  },
+  {
+   "id": "init-interrupted",
+   "setup": "in-progress marker present, partial files, no done marker (kill at each write step)",
+   "args": "rerun init",
+   "exit": 0,
+   "after": "leftovers of the earlier run removed, init completes, done marker present; no manual cleanup"
+  },
+  {
+   "id": "serve-half-initialized",
+   "setup": "in-progress marker present, no done marker",
+   "args": "holocron serve",
+   "expect": "does not start and does not serve; exit code not named in 0006 for this case, so assert non-zero and no listening socket"
+  },
+  {
+   "id": "init-internal-error",
+   "setup": "injected failpoint after the schema step",
+   "exit": 1,
+   "stderr": "error report without secrets"
+  }
+ ],
+ "open": [
+  "serve on a half-initialized directory: 0006 says it must not start but gives no exit code or outcome name."
+ ]
+}

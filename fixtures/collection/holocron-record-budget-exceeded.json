@@ -1,0 +1,59 @@
+{
+  "id": "holocron-record-budget-exceeded",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "Replay storage cap (default 25 GiB) reached while ordinary collection continues.",
+  "upstream_ref": [],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000002}}"
+    },
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": 4,
+            "data": {
+              "href": "http://localhost:8080/",
+              "width": 1280,
+              "height": 720
+            },
+            "timestamp": 1790000000000
+          },
+          {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": null,
+    "notes": "No equivalent. Upstream has no replay storage cap."
+  },
+  "expected_holocron": {
+    "outcome": "suppressed",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Report the outcome and keep analytics collection available (briefing, replay: confirmed). Body {ok:false, reason:\"replay_budget_exceeded\"} follows the upstream reason pattern (proposed). The recorder ignores the response body."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Holocron-only behaviour. No upstream equivalent to compare."
+}

@@ -1,0 +1,236 @@
+{
+ "status": "adopted (decisions/0003-metric-formulas.md, Realtime and Identity coverage; 0001 Key retention and keyless events; 0002 Late-event window)",
+ "capability": "CAP-TRAFFIC-08",
+ "grounding": [
+  "decisions/0003-metric-formulas.md, Realtime",
+  "decisions/0002-sessions-and-events.md, Eligible event kinds and Late-event window",
+  "decisions/0006-retention-clock-and-operations.md, Application clock (now comes from the test clock, frozen at server_time)",
+  ".sources/umami-3.4.0/src/queries/sql/getActiveVisitors.ts",
+  "decisions/0001-identity-and-consent.md, Key retention and keyless events (live events may carry any timestamp; keyless events are excluded from realtime)"
+ ],
+ "rule": "Activity time = min(event_time, receive_time). Active = distinct daily pseudonyms with an eligible event (pageview or custom_event) whose activity time is in [now - 5 min, now], both ends inclusive. Series: 30 one-minute buckets on UTC minute boundaries; bucket i starts at floor_minute(now) - (29 - i) minutes; the last bucket is [floor_minute(now), now]; each bucket reports pageviews and distinct pseudonyms of eligible events whose activity time falls in it. Events with no daily pseudonym (keyless, their day key already destroyed) are not eligible for realtime, in the active count or the series.",
+ "server_time": "2026-10-03T12:00:00.000Z",
+ "clock": "frozen at server_time",
+ "site": "site_x",
+ "events": [
+  {
+   "id": "e01",
+   "identity": "d1",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:59:30.000Z",
+   "receive_time": "2026-10-03T11:59:30.000Z",
+   "activity_time": "2026-10-03T11:59:30.000Z"
+  },
+  {
+   "id": "e02",
+   "identity": "d1",
+   "kind": "custom_event",
+   "event_time": "2026-10-03T11:58:00.000Z",
+   "receive_time": "2026-10-03T11:58:00.000Z",
+   "activity_time": "2026-10-03T11:58:00.000Z",
+   "note": "same identity, counted once"
+  },
+  {
+   "id": "e03",
+   "identity": "d2",
+   "kind": "custom_event",
+   "event_time": "2026-10-03T11:56:10.000Z",
+   "receive_time": "2026-10-03T11:56:11.000Z",
+   "activity_time": "2026-10-03T11:56:10.000Z"
+  },
+  {
+   "id": "e04",
+   "identity": "d3",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:54:00.000Z",
+   "receive_time": "2026-10-03T11:54:00.000Z",
+   "activity_time": "2026-10-03T11:54:00.000Z",
+   "note": "older than 5 minutes"
+  },
+  {
+   "id": "e05",
+   "identity": "d4",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:40:20.000Z",
+   "receive_time": "2026-10-03T11:58:00.000Z",
+   "activity_time": "2026-10-03T11:40:20.000Z",
+   "note": "late arrival: activity time is the event time; not active, but it lands in its past bucket"
+  },
+  {
+   "id": "e06",
+   "identity": "d5",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:56:00.000Z",
+   "receive_time": "2026-10-03T11:52:00.000Z",
+   "activity_time": "2026-10-03T11:52:00.000Z",
+   "note": "client clock 4 minutes ahead: activity time is the receive time, 11:52"
+  },
+  {
+   "id": "e07",
+   "identity": "d6",
+   "kind": "identify",
+   "event_time": "2026-10-03T11:59:00.000Z",
+   "receive_time": "2026-10-03T11:59:00.000Z",
+   "activity_time": "2026-10-03T11:59:00.000Z",
+   "note": "not an eligible kind"
+  },
+  {
+   "id": "e08",
+   "identity": "d7",
+   "kind": "performance",
+   "event_time": "2026-10-03T11:59:00.000Z",
+   "receive_time": "2026-10-03T11:59:00.000Z",
+   "activity_time": "2026-10-03T11:59:00.000Z",
+   "note": "not an eligible kind"
+  },
+  {
+   "id": "e09",
+   "identity": "d8",
+   "kind": "link_event",
+   "event_time": "2026-10-03T11:59:00.000Z",
+   "receive_time": "2026-10-03T11:59:00.000Z",
+   "activity_time": "2026-10-03T11:59:00.000Z",
+   "note": "link and pixel events never count"
+  },
+  {
+   "id": "e10",
+   "identity": "d9",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:55:00.000Z",
+   "receive_time": "2026-10-03T11:55:00.000Z",
+   "activity_time": "2026-10-03T11:55:00.000Z",
+   "note": "exactly at now - 5 min: inclusive"
+  },
+  {
+   "id": "e11",
+   "identity": "d10",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:54:59.999Z",
+   "receive_time": "2026-10-03T11:54:59.999Z",
+   "activity_time": "2026-10-03T11:54:59.999Z",
+   "note": "1 ms before the window"
+  },
+  {
+   "id": "e12",
+   "identity": "d11",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:59:59.999Z",
+   "receive_time": "2026-10-03T11:59:59.999Z",
+   "activity_time": "2026-10-03T11:59:59.999Z"
+  },
+  {
+   "id": "e13",
+   "identity": "d12",
+   "kind": "pageview",
+   "event_time": "2026-10-03T12:02:00.000Z",
+   "receive_time": "2026-10-03T11:59:59.000Z",
+   "activity_time": "2026-10-03T11:59:59.000Z",
+   "note": "event time 2 minutes ahead; activity time is the receive time, so it is active"
+  },
+  {
+   "id": "e14",
+   "identity": "d13",
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:59:00.000Z",
+   "receive_time": "2026-10-03T11:59:00.000Z",
+   "activity_time": "2026-10-03T11:59:00.000Z",
+   "site": "site_other",
+   "note": "other site"
+  },
+  {
+   "id": "e15",
+   "identity": "d14",
+   "kind": "pageview",
+   "event_time": "2026-10-03T12:00:00.000Z",
+   "receive_time": "2026-10-03T12:00:00.000Z",
+   "activity_time": "2026-10-03T12:00:00.000Z",
+   "note": "exactly at now: inclusive"
+  },
+  {
+   "id": "e16",
+   "identity": null,
+   "keyless": true,
+   "kind": "pageview",
+   "event_time": "2026-10-03T11:59:00.000Z",
+   "receive_time": "2026-10-03T11:59:00.000Z",
+   "activity_time": "2026-10-03T11:59:00.000Z",
+   "note": "keyless: the event's identity day key was destroyed; inside the window but excluded from realtime"
+  },
+  {
+   "id": "e17",
+   "identity": null,
+   "keyless": true,
+   "kind": "pageview",
+   "event_time": "2026-09-20T09:00:00.000Z",
+   "receive_time": "2026-10-03T11:57:00.000Z",
+   "activity_time": "2026-09-20T09:00:00.000Z",
+   "note": "accepted with a 13 day old event time (any timestamp is accepted); its day key is long destroyed, so it is keyless; not active, not in any bucket"
+  }
+ ],
+ "expected": {
+  "active": 6,
+  "identities": [
+   "d1",
+   "d2",
+   "d9",
+   "d11",
+   "d12",
+   "d14"
+  ],
+  "series_nonzero_buckets": [
+   {
+    "i": 9,
+    "start": "11:40",
+    "pageviews": 1,
+    "visitors": 1
+   },
+   {
+    "i": 21,
+    "start": "11:52",
+    "pageviews": 1,
+    "visitors": 1
+   },
+   {
+    "i": 23,
+    "start": "11:54",
+    "pageviews": 2,
+    "visitors": 2
+   },
+   {
+    "i": 24,
+    "start": "11:55",
+    "pageviews": 1,
+    "visitors": 1
+   },
+   {
+    "i": 25,
+    "start": "11:56",
+    "pageviews": 0,
+    "visitors": 1
+   },
+   {
+    "i": 27,
+    "start": "11:58",
+    "pageviews": 0,
+    "visitors": 1
+   },
+   {
+    "i": 28,
+    "start": "11:59",
+    "pageviews": 3,
+    "visitors": 3
+   },
+   {
+    "i": 29,
+    "start": "12:00",
+    "pageviews": 1,
+    "visitors": 1
+   }
+  ],
+  "series_all_other_buckets": {
+   "pageviews": 0,
+   "visitors": 0
+  },
+  "note": "e16 and e17 change nothing: active stays 6 and every bucket is unchanged. Pageview totals outside realtime count them (0001)."
+ }
+}

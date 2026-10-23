@@ -1,0 +1,52 @@
+{
+  "fixture": "holocron-correctness-small",
+  "fixture_version": 1,
+  "evaluation_instant": "2026-10-03T10:00:00.000Z",
+  "conventions": {
+    "delivery_order": "events.jsonl is sorted by receive_time. Records with equal receive_time keep file order. Each accepted record gets the next ingestion_sequence in file order; refused and duplicate records get none.",
+    "event_time": "payload.timestamp (integer seconds) times 1000 when present, else receive_time (0002 Late-event window).",
+    "transient_inputs": "transient.ip is the connection peer address and transient.user_agent the User-Agent header. Neither is stored (0001 Transient inputs). No proxy is trusted, so forwarding and geo headers would be ignored.",
+    "geo": "transient.country is the result of the configured geo database lookup for transient.ip. The fixture fixes it so results do not depend on a MaxMind build.",
+    "device": "Browser, OS, and device for each user agent and screen are fixed in user-agents.json so results do not depend on a UA parser version.",
+    "watermark": "All records are ingested and corrected before evaluation_instant. Retention uses evaluation_instant as the result watermark."
+  },
+  "collection": {
+    "trusted_proxies": [],
+    "client_ip_header": "x-forwarded-for"
+  },
+  "sites": [
+    {
+      "key": "A",
+      "id": "0d2c9a6e-5a3b-4f1e-9b1c-7e2f1a4d8c01",
+      "name": "Fixture site A",
+      "hostnames": ["www.example.com"],
+      "timezone": "Europe/Vienna",
+      "session_window_minutes": 30,
+      "persistent_identity_enabled": true,
+      "identity_policy_version": 1,
+      "engagement_events": "every custom_event; not configurable in metric_version 1 (0003 Formulas, Bounce rate)",
+      "session_policy_versions": [
+        { "version": 1, "effective": "2025-01-01T00:00:00.000Z", "timezone": "Europe/Vienna", "session_window_minutes": 30 }
+      ],
+      "timezone_changes": []
+    },
+    {
+      "key": "B",
+      "id": "7b1e4f20-8c3d-4a5e-9f60-1d2c3b4a5e6f",
+      "name": "Fixture site B",
+      "hostnames": ["example.org"],
+      "timezone": "UTC",
+      "session_window_minutes": 30,
+      "persistent_identity_enabled": false,
+      "identity_policy_version": 1,
+      "engagement_events": "every custom_event; not configurable in metric_version 1 (0003 Formulas, Bounce rate)",
+      "session_policy_versions": [
+        { "version": 1, "effective": "2025-01-01T00:00:00.000Z", "timezone": "America/New_York", "session_window_minutes": 30 },
+        { "version": 2, "effective": "2026-09-15T12:00:00.000Z", "timezone": "UTC", "session_window_minutes": 30 }
+      ],
+      "timezone_changes": [
+        { "from": "America/New_York", "to": "UTC", "effective": "2026-09-15T12:00:00.000Z" }
+      ]
+    }
+  ]
+}

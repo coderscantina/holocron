@@ -1,0 +1,51 @@
+{
+  "id": "send-event-website-not-uuid",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "website is not a UUID.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:37"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "not-a-uuid",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "code": "bad-request",
+        "status": 400,
+        "properties": {
+          "payload": {
+            "properties": {
+              "website": {
+                "errors": "<array>"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Keep the {error:{message,code,status}} envelope. Zod tree details are not part of the contract."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

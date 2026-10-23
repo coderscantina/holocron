@@ -1,0 +1,139 @@
+{
+ "status": "adopted (decisions/0007-access-and-account-security.md, User erasure scope)",
+ "capability": "CAP-OPS-07",
+ "grounding": [
+  "decisions/0007-access-and-account-security.md, User erasure scope",
+  "fixtures/access/cases.json (users.delete authorization rows) and scenarios.json AX-S026"
+ ],
+ "seed": {
+  "users": {
+   "U1": "member of ws_a, no ownership",
+   "U2": "owns a personal site",
+   "U3": "only owner of ws_c",
+   "U4": "one of two owners of ws_d",
+   "U5": "the only install admin"
+  },
+  "u1_data": {
+   "login_sessions": 2,
+   "subscriptions": 1,
+   "two_factor": "secret and recovery codes",
+   "api_keys": 2,
+   "own_explorations": 1,
+   "pending_invitations_sent": 1,
+   "workspace_exploration": 1,
+   "board": 1,
+   "annotation": 1,
+   "segment": 1,
+   "goal": 1,
+   "share": 1,
+   "consented_profile_events": "events of a consented visitor profile on a ws_a site"
+  }
+ },
+ "cases": [
+  {
+   "id": "ue-ok",
+   "user": "U1",
+   "actor": "install admin, reauthenticated",
+   "expect": {
+    "result": "accepted as a durable job",
+    "job_status": "complete"
+   },
+   "after": {
+    "deleted": [
+     "account, email, name, password hash, preferences",
+     "2FA secrets and recovery codes",
+     "both API keys (revoked first, then deleted)",
+     "own exploration",
+     "pending invitations"
+    ],
+    "ended_at_once": [
+     "both login sessions",
+     "the subscription (receives access_revoked)"
+    ],
+    "kept": [
+     "workspace exploration",
+     "board",
+     "annotation",
+     "segment",
+     "goal",
+     "share"
+    ],
+    "author_shown_as": "Deleted user",
+    "tombstone": "user id and deletion time only",
+    "not_affected": "consented visitor profiles and all visitor data"
+   }
+  },
+  {
+   "id": "ue-owns-site",
+   "user": "U2",
+   "expect": {
+    "status": 409,
+    "code": "user_owns_resources",
+    "body_lists": [
+     "the personal site"
+    ]
+   },
+   "after": "nothing changed"
+  },
+  {
+   "id": "ue-sole-owner",
+   "user": "U3",
+   "expect": {
+    "status": 409,
+    "code": "user_owns_resources",
+    "body_lists": [
+     "ws_c"
+    ]
+   },
+   "after": "nothing changed"
+  },
+  {
+   "id": "ue-co-owner",
+   "user": "U4",
+   "expect": "accepted",
+   "after": "ws_d continues with its other owner"
+  },
+  {
+   "id": "ue-after-transfer",
+   "user": "U2",
+   "setup": "transfer the site to a workspace",
+   "expect": "accepted"
+  },
+  {
+   "id": "ue-last-admin",
+   "user": "U5",
+   "expect": {
+    "status": 409,
+    "code": "last_install_admin"
+   }
+  },
+  {
+   "id": "ue-reauth",
+   "user": "U1",
+   "actor": "install admin, not reauthenticated",
+   "expect": {
+    "status": 403,
+    "code": "reauthentication_required"
+   }
+  },
+  {
+   "id": "ue-interrupted",
+   "user": "U1",
+   "inject": "kill the server after sessions are ended and before keys are deleted",
+   "expect": "after restart the job resumes and completes; the user cannot log in at any point; keys never work again"
+  },
+  {
+   "id": "ue-idempotent",
+   "user": "U1",
+   "setup": "run twice with the same idempotency key",
+   "expect": "second call returns the stored result after reauthorization; no second job"
+  },
+  {
+   "id": "ue-visitor-data",
+   "check": "event counts of every site are identical before and after ue-ok"
+  }
+ ],
+ "open": [
+  "Resolved by 0007: nothing open here. Profile-level erasure of consented visitors is a separate command (0001) and not covered."
+ ]
+}

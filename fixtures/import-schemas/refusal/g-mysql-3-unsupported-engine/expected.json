@@ -1,0 +1,13 @@
+{
+  "case": "g",
+  "code": "unsupported_engine",
+  "details": {
+    "note": "hand-built migration table, no upstream MySQL 3.x schema exists",
+    "unknown": [
+      "14_add_link_and_pixel"
+    ]
+  },
+  "engine": "mysql",
+  "message": "This MySQL database lists an Umami 3.x migration (14_add_link_and_pixel). Umami 3.x supports only PostgreSQL, so this database is not a supported layout. Holocron imports MySQL only at Umami 2.20.2 and PostgreSQL only at 3.4.0. Restore the MySQL database at 2.20.2, or migrate the data to PostgreSQL with Umami 3.4.0, then run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

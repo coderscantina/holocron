@@ -1,0 +1,12 @@
+{
+  "case": "a",
+  "code": "migration_missing",
+  "details": {
+    "missing": [
+      "26_add_api_key"
+    ]
+  },
+  "engine": "postgresql",
+  "message": "This PostgreSQL database is missing the Umami migration 26_add_api_key. Holocron imports only the fully migrated Umami 3.4.0 schema (26 migrations). Upgrade the source to Umami 3.4.0 and let it finish `prisma migrate deploy`, or restore a backup taken after the upgrade, then run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

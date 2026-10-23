@@ -1,0 +1,44 @@
+{
+  "id": "send-event-unknown-fields-stripped",
+  "surface": "send.event",
+  "polarity": "positive",
+  "description": "Unknown payload and top-level fields are ignored (zod object strips them). The tracker sends performance \"duration\" this way.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "extra": 1,
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "unknownField": "x"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Ignore unknown fields; do not store them."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

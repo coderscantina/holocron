@@ -1,0 +1,114 @@
+{
+  "format_version": 1,
+  "id": "Q08-30d-D-utc",
+  "family": "Q08",
+  "title": "Last-touch attribution by campaign, goal and revenue per currency",
+  "operation": "analytics.attribution",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": false,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": {
+      "kind": "attribution",
+      "v": 1
+    }
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table",
+    "report": {
+      "kind": "attribution",
+      "v": 1,
+      "model": "last_touch",
+      "lookback_days": 30,
+      "scope": "daily",
+      "touch_field": "utm_campaign",
+      "conversions": [
+        {
+          "kind": "goal",
+          "goal": {
+            "predicate": {
+              "kind": "group",
+              "op": "and",
+              "items": [
+                {
+                  "kind": "cond",
+                  "id": "g1",
+                  "field": "event_name",
+                  "cmp": "eq",
+                  "value": {
+                    "t": "string",
+                    "v": "signup"
+                  }
+                }
+              ]
+            },
+            "scope": "session",
+            "counting": "once"
+          }
+        },
+        {
+          "kind": "revenue"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "revenue": "kept per currency, no conversion (0003)"
+  },
+  "sort": {
+    "order": [],
+    "ties": "per conversion by conversions desc, then touch value ascending; top 100 touch values per conversion (0004)"
+  },
+  "output_bound": {
+    "max_rows": 200,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "to be fixed after first generation by milestone 02"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

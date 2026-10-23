@@ -1,0 +1,34 @@
+{
+  "id": "send-event-text-plain-content-type",
+  "surface": "send.event",
+  "polarity": "positive",
+  "description": "JSON body with content-type text/plain is parsed; upstream does not check the content type.",
+  "upstream_ref": [
+    "src/lib/request.ts:62-68"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "content-type": "text/plain"
+    },
+    "body_raw": "{\"type\":\"event\",\"payload\":{\"website\":\"5e1a0000-0000-4000-8000-000000000001\",\"hostname\":\"localhost\",\"language\":\"en-US\",\"screen\":\"1920x1080\",\"title\":\"Fixture page\",\"url\":\"http://localhost/fixture?utm_source=newsletter\",\"referrer\":\"https://referrer.example/article\"}}"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Accept any content type whose body parses as JSON, as upstream does."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

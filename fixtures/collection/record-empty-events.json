@@ -1,0 +1,36 @@
+{
+  "id": "record-empty-events",
+  "surface": "record.replay",
+  "polarity": "positive",
+  "description": "Empty events array returns ok:true before the token check, so no token is needed.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:128-130"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "ok": true
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Nothing stored. Same body."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

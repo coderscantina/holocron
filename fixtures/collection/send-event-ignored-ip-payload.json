@@ -1,0 +1,47 @@
+{
+  "id": "send-event-ignored-ip-payload",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "payload.ip \"203.0.113.7\" overrides the connection address and hits IGNORE_IP.",
+  "upstream_ref": [
+    "src/lib/detect.ts:136-139",
+    "src/app/api/send/route.ts:49",
+    "src/app/api/send/route.ts:147-150"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "ip": "203.0.113.7"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 403,
+    "body": {
+      "error": {
+        "message": "Forbidden",
+        "code": "forbidden",
+        "status": 403
+      }
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "payload.ip is ignored for unauthenticated requests (docs/decisions/0001, transient inputs), so collect.ignore_ips sees the resolved peer address and the event is accepted (docs/decisions/0005, operator IP block list). Upstream lets any client choose its IP, location and session id this way."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

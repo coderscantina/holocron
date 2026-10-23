@@ -1,0 +1,86 @@
+name: Bug report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. A report someone can reproduce without guessing saves hours, so please fill in as much as you can.
+  - type: input
+    id: version
+    attributes:
+      label: Holocron version
+      description: Run `holocron --version`, or give the image tag or commit SHA.
+      placeholder: 26.10.19 (1a2b3c4)
+    validations:
+      required: true
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Install method
+      options:
+        - Docker image
+        - Docker compose
+        - Coolify
+        - Built from source
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Dashboard
+        - Collection (tracker, /api/send, /api/batch)
+        - Replays or heatmaps
+        - Sign-in, teams or access
+        - Share links
+        - Umami import (holocron import)
+        - Operator commands (backup, restore, upgrade, retention, diagnostics)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, architecture, the proxy or CDN in front of Holocron, and the browser if the bug is in the dashboard.
+      placeholder: Debian 13 arm64, Caddy, Firefox 144
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Be specific. What did you click, call, or run?
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Output of `holocron diagnostics`, if the server is involved. It holds no event data, addresses or credentials. For import bugs, add the Umami version and database, and the refusal code or the manifest's `differences`.
+      render: json
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Relevant server log lines, browser console output, or screenshots. Remove tokens, passwords and database URLs first. This field is rendered as code automatically.
+      render: shell

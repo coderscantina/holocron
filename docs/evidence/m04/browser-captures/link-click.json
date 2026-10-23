@@ -1,0 +1,55 @@
+{
+  "id": "capture-link-click",
+  "description": "Clicking an anchor to /q/{slug} answers 307 to the link target; the browser follows it.",
+  "upstream_ref": [
+    "src/app/(collect)/q/[slug]/route.ts:10-63"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-auto-track": "false"
+    },
+    "body": "<a id=\"l\" href=\"http://127.0.0.1:33400/q/holocron-link\">Go</a>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.route('https://example.com/**', route => route.fulfill({ status: 200, contentType: 'text/html', body: 'landing' }));",
+    "await Promise.all([page.waitForURL(IDS.linkTarget), page.click('#l')]);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/q/holocron-link",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 307,
+        "headers": {
+          "location": "https://example.com/landing?from=holocron"
+        },
+        "body": null
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "one link request",
+      "passed": true
+    },
+    {
+      "description": "307 to the link target",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

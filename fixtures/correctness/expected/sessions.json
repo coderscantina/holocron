@@ -1,0 +1,1119 @@
+{
+  "metric_version": 1,
+  "note": "Every stored pageview and custom event except the keyless ones belongs to exactly one session below. bounce is null for sessions without a pageview, which are outside the bounce and span denominators. Session identity is the profile for linked events and the daily pseudonym otherwise (0001 Daily identity of every event). Labels: anon <ip> <ua> <local day>, daily-id <id> <local day>, profile <id>; site B labels add the timezone epoch because its timezone changed (0001 Timezone change).",
+  "session_policy_versions": {
+    "A": [
+      1
+    ],
+    "B": [
+      1,
+      2
+    ]
+  },
+  "sessions": [
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.21 mac_firefox 2025-10-26",
+      "events": [
+        "fal-01",
+        "fal-02"
+      ],
+      "start": "2025-10-26T00:40:00.000Z",
+      "span_ms": 1500000,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.21 mac_firefox 2025-10-26",
+      "events": [
+        "fal-03"
+      ],
+      "start": "2025-10-26T22:55:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.21 mac_firefox 2025-10-27",
+      "events": [
+        "fal-04"
+      ],
+      "start": "2025-10-26T23:05:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.11 desk_chrome 2026-03-29",
+      "events": [
+        "spr-01",
+        "spr-02"
+      ],
+      "start": "2026-03-29T00:50:00.000Z",
+      "span_ms": 1200000,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.11 desk_chrome 2026-03-29",
+      "events": [
+        "spr-03"
+      ],
+      "start": "2026-03-29T21:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.11 desk_chrome 2026-03-30",
+      "events": [
+        "spr-04"
+      ],
+      "start": "2026-03-29T22:05:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.31 desk_chrome 2026-06-02",
+      "events": [
+        "gap-01"
+      ],
+      "start": "2026-06-02T08:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.31 desk_chrome 2026-06-02",
+      "events": [
+        "gap-02",
+        "gap-03"
+      ],
+      "start": "2026-06-02T08:30:00.000Z",
+      "span_ms": 1799999,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.32 iphone_safari 2026-06-02",
+      "events": [
+        "gap-04"
+      ],
+      "start": "2026-06-02T09:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.33 desk_chrome 2026-06-02",
+      "events": [
+        "gap-05",
+        "gap-06"
+      ],
+      "start": "2026-06-02T10:00:00.000Z",
+      "span_ms": 5000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.41 desk_chrome 2026-06-02",
+      "events": [
+        "dup-01",
+        "dup-04",
+        "dup-05"
+      ],
+      "start": "2026-06-02T12:00:00.000Z",
+      "span_ms": 11000,
+      "pageviews": 2,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.51 desk_chrome 2026-06-03",
+      "events": [
+        "late-01",
+        "late-02",
+        "late-03",
+        "late-04"
+      ],
+      "start": "2026-06-03T10:00:00.000Z",
+      "span_ms": 1499000,
+      "pageviews": 4,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.41 desk_chrome 2026-06-04",
+      "events": [
+        "dup-06"
+      ],
+      "start": "2026-06-04T13:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.61 desk_chrome 2026-06-10",
+      "events": [
+        "prop-01",
+        "prop-02",
+        "prop-03",
+        "prop-04",
+        "prop-05",
+        "prop-06"
+      ],
+      "start": "2026-06-10T09:00:00.000Z",
+      "span_ms": 300000,
+      "pageviews": 1,
+      "custom_events": 5,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.71 desk_chrome 2026-06-11",
+      "events": [
+        "rev-01",
+        "rev-02",
+        "rev-03",
+        "rev-04",
+        "rev-05",
+        "rev-06",
+        "rev-07"
+      ],
+      "start": "2026-06-11T10:00:00.000Z",
+      "span_ms": 360000,
+      "pageviews": 0,
+      "custom_events": 7,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.72 iphone_safari 2026-06-11",
+      "events": [
+        "rev-08",
+        "rev-09",
+        "rev-10",
+        "rev-11"
+      ],
+      "start": "2026-06-11T11:00:00.000Z",
+      "span_ms": 180000,
+      "pageviews": 0,
+      "custom_events": 4,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.81 desk_chrome 2026-06-16",
+      "events": [
+        "fun-01",
+        "fun-02",
+        "fun-03",
+        "fun-04"
+      ],
+      "start": "2026-06-16T10:00:00.000Z",
+      "span_ms": 1200000,
+      "pageviews": 2,
+      "custom_events": 2,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.82 desk_chrome 2026-06-16",
+      "events": [
+        "fun-05",
+        "fun-06",
+        "fun-07",
+        "fun-08"
+      ],
+      "start": "2026-06-16T10:00:00.000Z",
+      "span_ms": 180000,
+      "pageviews": 1,
+      "custom_events": 3,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.83 iphone_safari 2026-06-16",
+      "events": [
+        "fun-09",
+        "fun-10",
+        "fun-11"
+      ],
+      "start": "2026-06-16T11:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 2,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.84 desk_chrome 2026-06-16",
+      "events": [
+        "fun-12",
+        "fun-13"
+      ],
+      "start": "2026-06-16T12:00:00.000Z",
+      "span_ms": 1200000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.84 desk_chrome 2026-06-16",
+      "events": [
+        "fun-14"
+      ],
+      "start": "2026-06-16T13:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.85 desk_chrome 2026-06-16",
+      "events": [
+        "fun-15"
+      ],
+      "start": "2026-06-16T21:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.85 desk_chrome 2026-06-17",
+      "events": [
+        "fun-16"
+      ],
+      "start": "2026-06-16T22:05:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.86 desk_chrome 2026-06-16",
+      "events": [
+        "fun-17",
+        "fun-18",
+        "fun-19"
+      ],
+      "start": "2026-06-16T14:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 2,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.87 desk_chrome 2026-06-16",
+      "events": [
+        "fun-20",
+        "fun-21"
+      ],
+      "start": "2026-06-16T14:10:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.91 desk_chrome 2026-06-18",
+      "events": [
+        "jou-01",
+        "jou-02",
+        "jou-03",
+        "jou-04"
+      ],
+      "start": "2026-06-18T09:00:00.000Z",
+      "span_ms": 180000,
+      "pageviews": 4,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.92 desk_chrome 2026-06-18",
+      "events": [
+        "jou-05",
+        "jou-06",
+        "jou-07",
+        "jou-08"
+      ],
+      "start": "2026-06-18T10:00:00.000Z",
+      "span_ms": 180000,
+      "pageviews": 4,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.93 iphone_safari 2026-06-18",
+      "events": [
+        "jou-09",
+        "jou-10",
+        "jou-11"
+      ],
+      "start": "2026-06-18T11:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 3,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.94 android_chrome 2026-06-18",
+      "events": [
+        "jou-12",
+        "jou-13",
+        "jou-14"
+      ],
+      "start": "2026-06-18T12:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 3,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.95 desk_chrome 2026-06-18",
+      "events": [
+        "jou-15"
+      ],
+      "start": "2026-06-18T13:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.101 desk_chrome 2026-06-23",
+      "events": [
+        "att-01"
+      ],
+      "start": "2026-06-23T08:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.101 desk_chrome 2026-06-23",
+      "events": [
+        "att-02",
+        "att-03"
+      ],
+      "start": "2026-06-23T09:00:00.000Z",
+      "span_ms": 300000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.102 desk_chrome 2026-06-23",
+      "events": [
+        "att-04",
+        "att-05"
+      ],
+      "start": "2026-06-23T10:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.103 desk_chrome 2026-06-23",
+      "events": [
+        "att-06"
+      ],
+      "start": "2026-06-23T11:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.103 desk_chrome 2026-06-23",
+      "events": [
+        "att-07",
+        "att-08"
+      ],
+      "start": "2026-06-23T12:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.105 desk_chrome 2026-06-23",
+      "events": [
+        "att-11",
+        "att-12",
+        "att-13",
+        "att-14"
+      ],
+      "start": "2026-06-23T15:00:00.000Z",
+      "span_ms": 360000,
+      "pageviews": 1,
+      "custom_events": 3,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.104 iphone_safari 2026-06-23",
+      "events": [
+        "att-09"
+      ],
+      "start": "2026-06-23T21:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 192.0.2.104 iphone_safari 2026-06-24",
+      "events": [
+        "att-10"
+      ],
+      "start": "2026-06-23T22:10:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.72 iphone_safari 2026-08-04",
+      "events": [
+        "acc-01",
+        "acc-02"
+      ],
+      "start": "2026-08-04T21:50:00.000Z",
+      "span_ms": 300000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile dora",
+      "events": [
+        "con-02"
+      ],
+      "start": "2026-08-11T09:01:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "daily-id dora 2026-08-11",
+      "events": [
+        "con-04"
+      ],
+      "start": "2026-08-11T09:06:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.71 iphone_safari 2026-08-20",
+      "events": [
+        "acc-03",
+        "acc-04"
+      ],
+      "start": "2026-08-20T10:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.69 iphone_safari 2026-09-03",
+      "events": [
+        "acc-05",
+        "acc-06"
+      ],
+      "start": "2026-09-03T21:58:00.000Z",
+      "span_ms": 119999,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.70 android_chrome 2026-09-04",
+      "events": [
+        "acc-07",
+        "acc-08"
+      ],
+      "start": "2026-09-03T22:00:00.000Z",
+      "span_ms": 30000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.61 iphone_safari 2026-09-05",
+      "events": [
+        "acc-09",
+        "acc-10"
+      ],
+      "start": "2026-09-05T08:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.61 iphone_safari 2026-09-06",
+      "events": [
+        "acc-11",
+        "acc-12"
+      ],
+      "start": "2026-09-06T08:00:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.62 android_chrome 2026-09-10",
+      "events": [
+        "acc-13",
+        "acc-14",
+        "acc-15"
+      ],
+      "start": "2026-09-10T18:00:00.000Z",
+      "span_ms": 180000,
+      "pageviews": 1,
+      "custom_events": 2,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.68 iphone_safari 2026-09-12",
+      "events": [
+        "acc-16",
+        "acc-17"
+      ],
+      "start": "2026-09-12T12:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.11 iphone_safari 2026-09-15",
+      "events": [
+        "con-05"
+      ],
+      "start": "2026-09-15T08:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile anna",
+      "events": [
+        "con-07",
+        "con-08"
+      ],
+      "start": "2026-09-15T08:02:00.000Z",
+      "span_ms": 480000,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile ben",
+      "events": [
+        "con-10"
+      ],
+      "start": "2026-09-16T10:01:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile ben",
+      "events": [
+        "con-11",
+        "con-12"
+      ],
+      "start": "2026-09-16T21:50:00.000Z",
+      "span_ms": 900000,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile anna",
+      "events": [
+        "con-13"
+      ],
+      "start": "2026-09-22T09:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile cleo",
+      "events": [
+        "con-15"
+      ],
+      "start": "2026-09-23T12:01:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.19 desk_chrome 2026-09-24",
+      "events": [
+        "con-16"
+      ],
+      "start": "2026-09-24T10:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile ben",
+      "events": [
+        "con-17"
+      ],
+      "start": "2026-09-29T07:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile cleo",
+      "events": [
+        "con-18"
+      ],
+      "start": "2026-09-29T12:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.63 iphone_safari 2026-09-30",
+      "events": [
+        "acc-18",
+        "acc-19"
+      ],
+      "start": "2026-09-30T16:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.64 desk_chrome 2026-09-30",
+      "events": [
+        "acc-20",
+        "acc-21"
+      ],
+      "start": "2026-09-30T17:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "profile anna",
+      "events": [
+        "con-19"
+      ],
+      "start": "2026-10-01T09:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.65 iphone_safari 2026-10-02",
+      "events": [
+        "acc-22",
+        "acc-23"
+      ],
+      "start": "2026-10-02T07:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 198.51.100.66 android_chrome 2026-10-03",
+      "events": [
+        "acc-24",
+        "acc-25"
+      ],
+      "start": "2026-10-03T08:00:00.000Z",
+      "span_ms": 60000,
+      "pageviews": 1,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.34 desk_chrome 2026-10-03",
+      "events": [
+        "rt-05"
+      ],
+      "start": "2026-10-03T09:40:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.31 desk_chrome 2026-10-03",
+      "events": [
+        "rt-01"
+      ],
+      "start": "2026-10-03T09:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.36 desk_chrome 2026-10-03",
+      "events": [
+        "rt-06"
+      ],
+      "start": "2026-10-03T09:55:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.32 desk_chrome 2026-10-03",
+      "events": [
+        "rt-02",
+        "rt-03"
+      ],
+      "start": "2026-10-03T09:56:00.000Z",
+      "span_ms": 120000,
+      "pageviews": 2,
+      "custom_events": 0,
+      "bounce": false,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.37 android_chrome 2026-10-03",
+      "events": [
+        "rt-07"
+      ],
+      "start": "2026-10-03T10:02:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.33 iphone_safari 2026-10-03",
+      "events": [
+        "rt-04"
+      ],
+      "start": "2026-10-03T09:59:00.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "A",
+      "identity": "anon 203.0.113.43 desk_chrome 2100-01-01",
+      "events": [
+        "fut-01"
+      ],
+      "start": "2100-01-01T00:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.80 desk_chrome 2026-06-02 epoch 1",
+      "events": [
+        "b-01"
+      ],
+      "start": "2026-06-02T12:00:03.000Z",
+      "span_ms": 0,
+      "pageviews": 0,
+      "custom_events": 1,
+      "bounce": null,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.81 desk_chrome 2026-09-13 epoch 1",
+      "events": [
+        "b-02"
+      ],
+      "start": "2026-09-14T03:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.81 desk_chrome 2026-09-14 epoch 1",
+      "events": [
+        "b-03"
+      ],
+      "start": "2026-09-14T04:05:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.81 desk_chrome 2026-09-14 epoch 1",
+      "events": [
+        "b-12"
+      ],
+      "start": "2026-09-15T03:00:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.82 iphone_safari 2026-09-15 epoch 1",
+      "events": [
+        "b-10"
+      ],
+      "start": "2026-09-15T11:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 1
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.82 iphone_safari 2026-09-15 epoch 2",
+      "events": [
+        "b-11"
+      ],
+      "start": "2026-09-15T12:10:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 2
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.81 desk_chrome 2026-09-15 epoch 2",
+      "events": [
+        "b-04"
+      ],
+      "start": "2026-09-15T23:50:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 2
+    },
+    {
+      "site": "B",
+      "identity": "anon 198.51.100.81 desk_chrome 2026-09-16 epoch 2",
+      "events": [
+        "b-05"
+      ],
+      "start": "2026-09-16T00:05:00.000Z",
+      "span_ms": 0,
+      "pageviews": 1,
+      "custom_events": 0,
+      "bounce": true,
+      "policy": 2
+    },
+    {
+      "site": "B",
+      "identity": "daily-id eve 2026-09-20 epoch 2",
+      "events": [
+        "b-07",
+        "b-08",
+        "b-09"
+      ],
+      "start": "2026-09-20T15:01:00.000Z",
+      "span_ms": 540000,
+      "pageviews": 2,
+      "custom_events": 1,
+      "bounce": false,
+      "policy": 2
+    }
+  ],
+  "performance_attachment": {
+    "note": "A performance row joins the session of its identity whose interval [first, last + window) contains its event time (0002 Identify, performance, and recorder messages).",
+    "perf-07": [
+      "gap-02",
+      "gap-03"
+    ],
+    "perf-01": null,
+    "perf-02": null,
+    "perf-03": null,
+    "perf-04": null,
+    "perf-05": null,
+    "perf-06": null
+  },
+  "keyless_events": {
+    "note": "Stored without a daily pseudonym; in no session (0001 Key retention and keyless events).",
+    "events": [
+      "key-01",
+      "key-02",
+      "ret-02"
+    ]
+  }
+}

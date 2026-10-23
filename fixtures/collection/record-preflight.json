@@ -1,0 +1,34 @@
+{
+  "id": "record-preflight",
+  "surface": "record.replay",
+  "polarity": "positive",
+  "description": "CORS preflight for /api/record with the x-umami-cache header.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:100-102",
+    "src/lib/cors.ts:3-11",
+    "next.config.ts:65-97"
+  ],
+  "request": {
+    "method": "OPTIONS",
+    "path": "/api/record",
+    "headers": {
+      "origin": "http://localhost:8080",
+      "access-control-request-method": "POST",
+      "access-control-request-headers": "content-type,x-umami-cache"
+    }
+  },
+  "expected_upstream": {
+    "status": 204,
+    "headers": {
+      "access-control-allow-origin": "*"
+    }
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 204,
+    "decision": "confirmed",
+    "notes": "Cross-origin collection remains supported."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

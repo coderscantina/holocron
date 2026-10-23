@@ -1,0 +1,65 @@
+{
+  "id": "capture-exclude-search-and-hash",
+  "description": "data-exclude-search and data-exclude-hash strip query and fragment from url (and referrer) before sending.",
+  "upstream_ref": [
+    "src/tracker/index.ts:248-249",
+    "src/tracker/index.ts:266-276"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture?utm_source=newsletter#intro",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-exclude-search": "true",
+      "data-exclude-hash": "true"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [],
+  "captured": [
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "url has no query or hash",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

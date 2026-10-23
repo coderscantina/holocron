@@ -1,0 +1,42 @@
+{
+  "id": "recorder-config-enabled",
+  "surface": "recorder.config",
+  "polarity": "positive",
+  "description": "Recorder configuration for a site with replay and heatmaps enabled, sample rates 1, strict masking.",
+  "upstream_ref": [
+    "src/app/api/websites/[websiteId]/recorder/route.ts:10-47",
+    "src/lib/recorder.ts:11-48",
+    "next.config.ts:65-92"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/api/websites/5e1a0000-0000-4000-8000-000000000002/recorder"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache"
+    },
+    "notes": "The route sets Cache-Control \"public, max-age=60, stale-while-revalidate=300\" (recorder/route.ts:23-26), but the next.config.ts /api/:path* header rule (next.config.ts:82-85, 88-92) replaces it with \"no-cache\" on the wire.",
+    "body": {
+      "enabled": true,
+      "replayEnabled": true,
+      "heatmapEnabled": true,
+      "sampleRate": 1,
+      "heatmapSampleRate": 1,
+      "maskLevel": "strict",
+      "maxDuration": 300000,
+      "blockSelector": ""
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Configuration, sampling and strict masking preserved (briefing, transport surfaces). Holocron defaults differ: strict masking and 10% replay sampling (briefing, replay); upstream defaults are moderate and 0.15."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

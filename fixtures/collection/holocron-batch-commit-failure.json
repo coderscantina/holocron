@@ -1,0 +1,52 @@
+{
+  "id": "holocron-batch-commit-failure",
+  "surface": "batch",
+  "polarity": "negative",
+  "description": "The single durable commit for the accepted items of a batch fails.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:21-54"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": [
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "http://localhost/fixture?utm_source=newsletter",
+          "referrer": "https://referrer.example/article"
+        }
+      },
+      {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "http://localhost/fixture?utm_source=newsletter",
+          "referrer": "https://referrer.example/article",
+          "name": "x"
+        }
+      }
+    ]
+  },
+  "expected_upstream": {
+    "status": null,
+    "notes": "Upstream writes item by item; a failing write yields a 500 entry in details while earlier items stay stored."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 503,
+    "decision": "adopted",
+    "notes": "No item stored; whole request 503 with Retry-After. A request is never half stored because of storage (docs/decisions/0005, batch commit). The unchanged tracker and recorder never retry, so the event is lost on the client; refusals count in refused_backpressure{route, reason} and show as lost client events. Retry-After helps only server integrations. One such refusal during the agreed 500 events/s burst fails the capacity gate."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Needs a storage fault injected into Holocron. Upstream behaviour is from source reading."
+}

@@ -1,0 +1,435 @@
+{
+ "status": "adopted (decisions/0003-metric-formulas.md, Channels)",
+ "capability": "CAP-TRAFFIC-04",
+ "grounding": [
+  "decisions/0003-metric-formulas.md, Channels (12 ordered rules, paid detection, session touch)",
+  "decisions/0004-exploration-state-and-limits.md (channel is a session field)",
+  ".sources/umami-3.4.0/src/lib/constants.ts (lists copied verbatim below)",
+  ".sources/umami-3.4.0/src/queries/sql/getChannelMetrics.ts"
+ ],
+ "site_hostnames": [
+  "example.com"
+ ],
+ "lists": {
+  "PAID_AD_PARAMS": [
+   "ad_id=",
+   "aid=",
+   "dclid=",
+   "epik=",
+   "gclid=",
+   "li_fat_id=",
+   "msclkid=",
+   "ob_click_id=",
+   "pc_id=",
+   "rdt_cid=",
+   "scid=",
+   "ttclid=",
+   "twclid=",
+   "utm_medium=cpc",
+   "utm_medium=paid",
+   "utm_medium=paid_social",
+   "utm_source=google"
+  ],
+  "LLM_DOMAINS": [
+   "chatgpt.com",
+   "claude.ai",
+   "copilot.microsoft.com",
+   "gemini.google.com",
+   "meta.ai",
+   "perplexity.ai"
+  ],
+  "SEARCH_DOMAINS": [
+   "baidu.com",
+   "bing.com",
+   "duckduckgo.com",
+   "ecosia.org",
+   "google.",
+   "msn.com",
+   "search.brave.com",
+   "yandex."
+  ],
+  "SOCIAL_DOMAINS": [
+   "bsky.app",
+   "facebook.com",
+   "fb.com",
+   "ig.com",
+   "instagram.com",
+   "linkedin.",
+   "news.ycombinator.com",
+   "pinterest.",
+   "reddit.",
+   "snapchat.",
+   "t.co",
+   "threads.net",
+   "tiktok.",
+   "twitter.com",
+   "x.com"
+  ],
+  "EMAIL_DOMAINS": [
+   "gmail.",
+   "hotmail.",
+   "mail.yahoo.",
+   "outlook.",
+   "proton.me",
+   "protonmail."
+  ],
+  "SHOPPING_DOMAINS": [
+   "alibaba.com",
+   "aliexpress.com",
+   "amazon.",
+   "bestbuy.com",
+   "ebay.com",
+   "etsy.com",
+   "newegg.com",
+   "target.com",
+   "walmart.com"
+  ],
+  "VIDEO_DOMAINS": [
+   "twitch.",
+   "youtube."
+  ]
+ },
+ "paid_if_medium_contains": [
+  "cp",
+  "ppc",
+  "retargeting",
+  "paid"
+ ],
+ "touch_cases": [
+  {
+   "id": "k01",
+   "touch": {
+    "referrer_domain": "www.google.com",
+    "page_query": "gclid=abc",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "paidAds",
+   "why": "rule 1 beats search"
+  },
+  {
+   "id": "k02",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_source=google&utm_medium=email",
+    "utm_medium": "email",
+    "utm_source": "google"
+   },
+   "expected_channel": "paidAds",
+   "why": "'utm_source=google' is a paid param and rule 1 beats email"
+  },
+  {
+   "id": "k03",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_medium=referral",
+    "utm_medium": "referral",
+    "utm_source": null
+   },
+   "expected_channel": "referral",
+   "why": "rule 2"
+  },
+  {
+   "id": "k04",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_medium=app",
+    "utm_medium": "app",
+    "utm_source": null
+   },
+   "expected_channel": "referral",
+   "why": "rule 2, 'app'"
+  },
+  {
+   "id": "k05",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_medium=affiliate",
+    "utm_medium": "affiliate",
+    "utm_source": null
+   },
+   "expected_channel": "affiliate",
+   "why": "rule 3"
+  },
+  {
+   "id": "k06",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_source=sms-blast&utm_medium=text",
+    "utm_medium": "text",
+    "utm_source": "sms-blast"
+   },
+   "expected_channel": "sms",
+   "why": "rule 4"
+  },
+  {
+   "id": "k07",
+   "touch": {
+    "referrer_domain": "chatgpt.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "llm",
+   "why": "rule 5"
+  },
+  {
+   "id": "k08",
+   "touch": {
+    "referrer_domain": "gemini.google.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "llm",
+   "why": "rule 5 beats the 'google.' search entry"
+  },
+  {
+   "id": "k09",
+   "touch": {
+    "referrer_domain": "www.google.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "organicSearch",
+   "why": "rule 6"
+  },
+  {
+   "id": "k10",
+   "touch": {
+    "referrer_domain": "www.google.com",
+    "page_query": "utm_medium=ppc",
+    "utm_medium": "ppc",
+    "utm_source": null
+   },
+   "expected_channel": "paidSearch",
+   "why": "paid by 'ppc'"
+  },
+  {
+   "id": "k11",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_medium=organic",
+    "utm_medium": "organic",
+    "utm_source": null
+   },
+   "expected_channel": "organicSearch",
+   "why": "rule 6 by medium"
+  },
+  {
+   "id": "k12",
+   "touch": {
+    "referrer_domain": "l.facebook.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "organicSocial",
+   "why": "rule 7"
+  },
+  {
+   "id": "k13",
+   "touch": {
+    "referrer_domain": "facebook.com",
+    "page_query": "utm_medium=retargeting",
+    "utm_medium": "retargeting",
+    "utm_source": null
+   },
+   "expected_channel": "paidSocial",
+   "why": "paid by 'retargeting'"
+  },
+  {
+   "id": "k14",
+   "touch": {
+    "referrer_domain": "facebook.com",
+    "page_query": "utm_medium=email",
+    "utm_medium": "email",
+    "utm_source": null
+   },
+   "expected_channel": "organicSocial",
+   "why": "rule 7 beats rule 8"
+  },
+  {
+   "id": "k15",
+   "touch": {
+    "referrer_domain": "mail.yahoo.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "email",
+   "why": "rule 8"
+  },
+  {
+   "id": "k16",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "utm_medium=newsletter-mail",
+    "utm_medium": "newsletter-mail",
+    "utm_source": null
+   },
+   "expected_channel": "email",
+   "why": "rule 8 by medium"
+  },
+  {
+   "id": "k17",
+   "touch": {
+    "referrer_domain": "www.amazon.de",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "organicShopping",
+   "why": "rule 9"
+  },
+  {
+   "id": "k18",
+   "touch": {
+    "referrer_domain": "www.amazon.de",
+    "page_query": "utm_medium=cpm",
+    "utm_medium": "cpm",
+    "utm_source": null
+   },
+   "expected_channel": "paidShopping",
+   "why": "paid by 'cp'"
+  },
+  {
+   "id": "k19",
+   "touch": {
+    "referrer_domain": "www.youtube.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "organicVideo",
+   "why": "rule 10"
+  },
+  {
+   "id": "k20",
+   "touch": {
+    "referrer_domain": "blog.example.net",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "referral",
+   "why": "rule 11"
+  },
+  {
+   "id": "k21",
+   "touch": {
+    "referrer_domain": "www.example.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "direct",
+   "why": "internal referrer; the site hostname is example.com"
+  },
+  {
+   "id": "k22",
+   "touch": {
+    "referrer_domain": null,
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "direct",
+   "why": "rule 12"
+  },
+  {
+   "id": "k23",
+   "touch": {
+    "referrer_domain": "www.google.com",
+    "page_query": "utm_medium=partner",
+    "utm_medium": "partner",
+    "utm_source": null
+   },
+   "expected_channel": "organicSearch",
+   "why": "'partner' is not paid; upstream's PostgreSQL 'LIKE p%' would call it paid and is not adopted"
+  },
+  {
+   "id": "k24",
+   "touch": {
+    "referrer_domain": "WWW.GOOGLE.COM",
+    "page_query": "utm_medium=REFERRAL",
+    "utm_medium": "REFERRAL",
+    "utm_source": null
+   },
+   "expected_channel": "referral",
+   "why": "matching is case-insensitive"
+  },
+  {
+   "id": "k25",
+   "touch": {
+    "referrer_domain": "box.com",
+    "page_query": "",
+    "utm_medium": null,
+    "utm_source": null
+   },
+   "expected_channel": "organicSocial",
+   "why": "substring matching, as upstream: 'x.com' is in 'box.com'"
+  }
+ ],
+ "session_cases": [
+  {
+   "id": "k26",
+   "events": [
+    {
+     "kind": "pageview",
+     "touch": {
+      "referrer_domain": null,
+      "page_query": "",
+      "utm_medium": null,
+      "utm_source": null
+     }
+    },
+    {
+     "kind": "pageview",
+     "touch": {
+      "referrer_domain": "www.google.com",
+      "page_query": "gclid=abc",
+      "utm_medium": null,
+      "utm_source": null
+     }
+    }
+   ],
+   "expected_channel": "direct",
+   "why": "the touch is the session's first pageview; upstream's first non-empty channel would say paidAds"
+  },
+  {
+   "id": "k27",
+   "events": [
+    {
+     "kind": "custom_event",
+     "touch": {
+      "referrer_domain": "chatgpt.com",
+      "page_query": "",
+      "utm_medium": null,
+      "utm_source": null
+     }
+    }
+   ],
+   "expected_channel": "llm",
+   "why": "no pageview: the touch is the first eligible event"
+  }
+ ],
+ "expected_channel_counts": {
+  "affiliate": 1,
+  "direct": 3,
+  "email": 2,
+  "llm": 3,
+  "organicSearch": 3,
+  "organicShopping": 1,
+  "organicSocial": 3,
+  "organicVideo": 1,
+  "paidAds": 2,
+  "paidSearch": 1,
+  "paidShopping": 1,
+  "paidSocial": 1,
+  "referral": 4,
+  "sms": 1
+ },
+ "note": "Each case is one session. Lists copied from src/lib/constants.ts; changing a list changes results and bumps metric_version (0003)."
+}

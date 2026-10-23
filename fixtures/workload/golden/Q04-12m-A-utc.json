@@ -1,0 +1,52 @@
+{
+  "case": "Q04-12m-A-utc",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "totals": {
+    "events": 1119027,
+    "pageviews": 4255883,
+    "visitor_days": 933013
+  },
+  "row_count": 3,
+  "page": {
+    "size": 50,
+    "index": 0
+  },
+  "rows": [
+    {
+      "device": {
+        "t": "string",
+        "v": "mobile"
+      },
+      "events": 1076296,
+      "pageviews": 4150625,
+      "visitor_days": 802161
+    },
+    {
+      "device": {
+        "t": "string",
+        "v": "desktop"
+      },
+      "events": 37932,
+      "pageviews": 93213,
+      "visitor_days": 115960
+    },
+    {
+      "device": {
+        "t": "string",
+        "v": "tablet"
+      },
+      "events": 4799,
+      "pageviews": 12045,
+      "visitor_days": 14892
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 5374910,
+    "eligible_events": 5374910,
+    "rate": 1.0
+  }
+}

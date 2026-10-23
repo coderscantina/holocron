@@ -1,0 +1,50 @@
+{
+  "id": "send-event-pageview",
+  "surface": "send.event",
+  "polarity": "positive",
+  "description": "Pageview as sent by the tracker (no name). Response carries a signed cache token, sessionId and visitId.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:33-73",
+    "src/app/api/send/route.ts:200-311",
+    "src/app/api/send/route.ts:378-383"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "origin": "http://localhost:8080"
+    },
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*"
+    },
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Respond only after the payload is durably committed (briefing, durability). Keep the {cache, sessionId, visitId} shape (briefing, identity). Values come from the identity derivation in docs/decisions/0001, so they will not equal upstream values."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

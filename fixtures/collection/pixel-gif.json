@@ -1,0 +1,32 @@
+{
+  "id": "pixel-gif",
+  "surface": "pixel",
+  "polarity": "positive",
+  "description": "GET /p/{slug} records a pixel event and returns a 43-byte transparent GIF with no-store headers.",
+  "upstream_ref": [
+    "src/app/(collect)/p/[slug]/route.ts:10-73"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/p/holocron-pixel"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "content-type": "image/gif",
+      "content-length": "43",
+      "cache-control": "no-cache, no-store, must-revalidate",
+      "pragma": "no-cache",
+      "expires": "0"
+    },
+    "body_bytes": 43
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "adopted",
+    "notes": "Same bytes and headers. During a storage outage the GIF is still served and the hit increments lost_hits (docs/decisions/0005)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,141 @@
+{
+  "format_version": 1,
+  "id": "Q03-12m-A-utc-drill-at",
+  "family": "Q03",
+  "title": "Acceptance exploration, drill into country AT (appends f4)",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2024-10-01T00:00:00.000Z",
+    "compare_end": "2025-10-01T00:00:00.000Z",
+    "compare_retention_start": "2025-09-30T22:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "events",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "country",
+      "referrer_domain"
+    ],
+    "filter": {
+      "kind": "group",
+      "op": "and",
+      "items": [
+        {
+          "kind": "cond",
+          "id": "f1",
+          "field": "device",
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "mobile"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f2",
+          "field": "event_name",
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "signup"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f3",
+          "field": {
+            "scope": "event",
+            "key": "plan"
+          },
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "pro"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f4",
+          "field": "country",
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "AT"
+          }
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "previous_period",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "events",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {},
+  "sort": {
+    "order": [
+      {
+        "by": "events",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 50,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "selective",
+  "expected": {
+    "row_count": 363,
+    "matched_records": 1627,
+    "golden_result_hash": "711dac803a74ba6898b58f5de3662e692468ae7425863a70085529aa159bef91",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q03-12m-A-utc-drill-at.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

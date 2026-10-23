@@ -1,0 +1,824 @@
+{
+  "case": "Q02-30d-A-vienna-tail",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "totals": {
+    "pageviews": 353,
+    "visitor_days": 353
+  },
+  "row_count": 100,
+  "page": {
+    "size": 100,
+    "index": 0
+  },
+  "rows": [
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99962"
+      },
+      "pageviews": 8,
+      "visitor_days": 8
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99915"
+      },
+      "pageviews": 7,
+      "visitor_days": 7
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99940"
+      },
+      "pageviews": 7,
+      "visitor_days": 7
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99941"
+      },
+      "pageviews": 7,
+      "visitor_days": 7
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99950"
+      },
+      "pageviews": 7,
+      "visitor_days": 7
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99901"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99907"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99920"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99953"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99956"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99975"
+      },
+      "pageviews": 6,
+      "visitor_days": 6
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99903"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99913"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99919"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99929"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99931"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99937"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99939"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99944"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99957"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99959"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99966"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99984"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99995"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99997"
+      },
+      "pageviews": 5,
+      "visitor_days": 5
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99908"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99909"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99910"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99917"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99921"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99930"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99936"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99938"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99943"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99945"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99946"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99949"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99951"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99954"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99976"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99980"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99981"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99982"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99983"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99992"
+      },
+      "pageviews": 4,
+      "visitor_days": 4
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99900"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99902"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99904"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99905"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99906"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99914"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99918"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99922"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99924"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99927"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99928"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99933"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99960"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99961"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99963"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99967"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99970"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99974"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99977"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99985"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99986"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99987"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99988"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99989"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99993"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99994"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99996"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99998"
+      },
+      "pageviews": 3,
+      "visitor_days": 3
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99911"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99912"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99923"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99925"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99935"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99942"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99948"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99952"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99958"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99964"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99965"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99969"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99971"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99972"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99973"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99978"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99979"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99990"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99991"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99999"
+      },
+      "pageviews": 2,
+      "visitor_days": 2
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99916"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99926"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99932"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99934"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99947"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99955"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/99968"
+      },
+      "pageviews": 1,
+      "visitor_days": 1
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 424,
+    "eligible_events": 424,
+    "rate": 1.0
+  }
+}

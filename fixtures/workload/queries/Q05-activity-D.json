@@ -1,0 +1,63 @@
+{
+  "format_version": 1,
+  "id": "Q05-activity-D",
+  "family": "Q05",
+  "title": "One complete session activity sequence",
+  "operation": "sessions.get",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "separate",
+    "target_p95_ms": null,
+    "note": "Own latency distribution and correctness assertion; runs inside concurrent load, never excluded from it. No agreed numeric target."
+  },
+  "early_gate": false,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": null,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": null,
+  "parameters": {
+    "session": "the session containing capture group 11000031 (identified, consented, September 2026); the session ID is resolved after generation",
+    "include": [
+      "identify",
+      "pageview",
+      "custom_event",
+      "performance",
+      "session_properties"
+    ],
+    "order": "(event_time, ingestion_sequence) ascending"
+  },
+  "sort": {
+    "order": [],
+    "ties": "(event_time, ingestion_sequence) ascending"
+  },
+  "output_bound": {
+    "max_rows": 12,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": null,
+    "matched_records": null,
+    "golden_result_hash": null,
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "to be fixed after first generation by milestone 02"
+  },
+  "retention_clock": null
+}

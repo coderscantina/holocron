@@ -1,0 +1,164 @@
+CREATE OR REPLACE TEMP TABLE x_scope AS WITH r AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, NULL::BIGINT AS session_id, e.path FROM events e WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time < epoch_ms(?)) SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, r.path AS f0 FROM r
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│             f0            │
+│                           │
+│        ~92,308 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│         event_time        │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            path           │
+│                           │
+│        ~92,308 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│   analytics.main.events   │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│            kind           │
+│         event_time        │
+│            seq            │
+│          daily_id         │
+│         profile_id        │
+│            path           │
+│                           │
+│          Filters:         │
+│site=1198808858014540920149│
+│     39663769085192113     │
+│    kind>=1 AND kind<=2    │
+│                           │
+│        ~92,308 rows       │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE x_ev AS SELECT * EXCLUDE (session_id) FROM x_scope WHERE t >= ? AND t < ?
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│             f0            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│    "temp".main.x_scope    │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             t             │
+│            seq            │
+│            kind           │
+│          daily_id         │
+│         profile_id        │
+│             f0            │
+│                           │
+│          Filters:         │
+│   t>=1759276800000 AND t  │
+│       <1790812800000      │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+WITH ea AS (SELECT f0, count(*) FILTER (WHERE kind = 1) AS a0, count(DISTINCT daily_id) AS a1 FROM x_ev GROUP BY f0), j AS (SELECT * FROM ea) SELECT f0, a0, a1, count(*) OVER () AS n FROM j ORDER BY a0 DESC NULLS LAST, f0 ASC NULLS LAST LIMIT ? OFFSET ?
+
+┌───────────────────────────┐
+│           TOP_N           │
+│    ────────────────────   │
+│          Top: 100         │
+│                           │
+│         Order By:         │
+│         j.a0 DESC         │
+│          j.f0 ASC         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│      count() OVER ()      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│ count_star() FILTER (WHERE│
+│       #1) Filter: #1      │
+│     count(DISTINCT #2)    │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             f0            │
+│         (kind = 1)        │
+│          daily_id         │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│      "temp".main.x_ev     │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             f0            │
+│            kind           │
+│          daily_id         │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘

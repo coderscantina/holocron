@@ -1,0 +1,54 @@
+{
+    "availability": "available",
+    "since": 1791065088901,
+    "clock": "system",
+    "inbox_records": 0,
+    "inbox_bytes": 0,
+    "processing_lag_ms": 0,
+    "watermark_batch": 25,
+    "watermark_sequence": 30,
+    "disk_free_bytes": 36469215232,
+    "disk_reserve_bytes": 1073741824,
+    "outcomes": [
+        {
+            "route": "send",
+            "outcome": "accepted",
+            "count": 26
+        },
+        {
+            "route": "send",
+            "outcome": "suppressed",
+            "reason": "bot",
+            "count": 2
+        },
+        {
+            "route": "batch",
+            "outcome": "accepted",
+            "count": 2
+        },
+        {
+            "route": "batch",
+            "outcome": "refused",
+            "reason": "invalid",
+            "count": 1
+        },
+        {
+            "route": "link",
+            "outcome": "accepted",
+            "count": 1
+        },
+        {
+            "route": "pixel",
+            "outcome": "accepted",
+            "count": 1
+        }
+    ],
+    "counters": [
+        {
+            "counter": "consent_ignored",
+            "count": 1
+        }
+    ],
+    "revision": 0,
+    "cursor": "installation@0"
+}

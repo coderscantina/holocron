@@ -1,0 +1,12 @@
+{
+  "case": "c2",
+  "code": "migration_missing",
+  "details": {
+    "missing": [
+      "13_add_revenue"
+    ]
+  },
+  "engine": "mysql",
+  "message": "This MySQL database is missing the Umami migration 13_add_revenue (no revenue table). Upgrade the source to Umami 2.20.2 so it applies all 13 migrations, then run the inspection again. Holocron did not change the source.",
+  "outcome": "refuse"
+}

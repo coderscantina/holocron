@@ -1,0 +1,6 @@
+{
+  "case": "mysql-2.20.2",
+  "engine": "mysql",
+  "migrationCount": 13,
+  "outcome": "accept"
+}

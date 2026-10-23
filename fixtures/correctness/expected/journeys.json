@@ -1,0 +1,169 @@
+{
+  "metric_version": 1,
+  "rules": "loops compress on the whole session before the step limit; one-step sessions are reported; ties compare element by element, a prefix first (0003 Journeys)",
+  "cases": [
+    {
+      "id": "pageview-journeys-length-7",
+      "site": "A",
+      "report": {
+        "kind": "journey",
+        "v": 1,
+        "value": "path",
+        "length": 7,
+        "scope": "session"
+      },
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-18",
+          "2026-06-18"
+        ],
+        "start": "2026-06-17T22:00:00.000Z",
+        "end": "2026-06-18T22:00:00.000Z"
+      },
+      "entry_sessions": 5,
+      "distinct_sequences": 4,
+      "sequences": [
+        {
+          "steps": [
+            "/",
+            "/pricing",
+            "/docs"
+          ],
+          "sessions": 2,
+          "members": [
+            [
+              "jou-01",
+              "jou-02",
+              "jou-03",
+              "jou-04"
+            ],
+            [
+              "jou-12",
+              "jou-13",
+              "jou-14"
+            ]
+          ]
+        },
+        {
+          "steps": [
+            "/"
+          ],
+          "sessions": 1,
+          "members": [
+            [
+              "jou-15"
+            ]
+          ]
+        },
+        {
+          "steps": [
+            "/",
+            "/pricing"
+          ],
+          "sessions": 1,
+          "members": [
+            [
+              "jou-09",
+              "jou-10",
+              "jou-11"
+            ]
+          ]
+        },
+        {
+          "steps": [
+            "/",
+            "/pricing",
+            "/",
+            "/pricing"
+          ],
+          "sessions": 1,
+          "members": [
+            [
+              "jou-05",
+              "jou-06",
+              "jou-07",
+              "jou-08"
+            ]
+          ]
+        }
+      ],
+      "identity_coverage": {
+        "with_identity": 15,
+        "eligible_events": 15,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "pageview-journeys-length-2",
+      "site": "A",
+      "report": {
+        "kind": "journey",
+        "v": 1,
+        "value": "path",
+        "length": 2,
+        "scope": "session"
+      },
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-18",
+          "2026-06-18"
+        ],
+        "start": "2026-06-17T22:00:00.000Z",
+        "end": "2026-06-18T22:00:00.000Z"
+      },
+      "entry_sessions": 5,
+      "distinct_sequences": 2,
+      "sequences": [
+        {
+          "steps": [
+            "/",
+            "/pricing"
+          ],
+          "sessions": 4,
+          "members": [
+            [
+              "jou-01",
+              "jou-02",
+              "jou-03",
+              "jou-04"
+            ],
+            [
+              "jou-05",
+              "jou-06",
+              "jou-07",
+              "jou-08"
+            ],
+            [
+              "jou-09",
+              "jou-10",
+              "jou-11"
+            ],
+            [
+              "jou-12",
+              "jou-13",
+              "jou-14"
+            ]
+          ]
+        },
+        {
+          "steps": [
+            "/"
+          ],
+          "sessions": 1,
+          "members": [
+            [
+              "jou-15"
+            ]
+          ]
+        }
+      ],
+      "identity_coverage": {
+        "with_identity": 15,
+        "eligible_events": 15,
+        "rate": 1.0
+      }
+    }
+  ]
+}

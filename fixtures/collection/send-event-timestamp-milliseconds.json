@@ -1,0 +1,44 @@
+{
+  "id": "send-event-timestamp-milliseconds",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "A millisecond timestamp sent where seconds are expected. Upstream multiplies by 1000 and stores a date tens of thousands of years ahead.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:51",
+    "src/app/api/send/route.ts:152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "timestamp": 1790000000000
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Confirmed (Mike, 2026-10-03): no payload is refused for its event time, matching upstream (docs/decisions/0002, Event time; docs/decisions/0005, Event time outcomes). Respond only after the payload is durably committed (briefing, durability). Keep the {cache, sessionId, visitId} shape (briefing, identity). Values come from the identity derivation in docs/decisions/0001, so they will not equal upstream values. Read as seconds, as upstream; the millisecond form (1.79e15) fits a signed 64-bit integer, so it is stored about 56,700 years ahead. Stored as sent and counted in event_time_ahead (docs/decisions/0002, Event time). Known risk: a far-future row is never reached by the 12-month retention cutoff (docs/decisions/0006, Retention cutoff)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

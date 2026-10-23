@@ -1,0 +1,165 @@
+{
+ "status": "adopted (decisions/0004-exploration-state-and-limits.md, Weekday and hour)",
+ "capability": "CAP-TRAFFIC-05",
+ "grounding": [
+  "decisions/0004-exploration-state-and-limits.md, Weekday and hour (ISO weekday 1 to 7, hour 0 to 23, wall clock in the state's timezone, grid visualization needs exactly these two dimensions)",
+  "decisions/0003-metric-formulas.md (grouping rule: a session appears in every cell where it has an event)"
+ ],
+ "state": {
+  "v": 1,
+  "site": "site_x",
+  "measures": [
+   "pageviews"
+  ],
+  "dimensions": [
+   "weekday",
+   "hour"
+  ],
+  "filter": null,
+  "range": {
+   "kind": "days",
+   "start": "2026-03-28",
+   "end": "2026-10-26"
+  },
+  "timezone": "Europe/Vienna",
+  "granularity": "day",
+  "compare": "none",
+  "metric_version": 1,
+  "sort": [],
+  "page": {
+   "size": 100,
+   "index": 0
+  },
+  "visualization": "grid"
+ },
+ "events": [
+  {
+   "id": "w1",
+   "event_time": "2026-10-05T07:15:30.000Z",
+   "kind": "pageview",
+   "local": "2026-10-05 09:15",
+   "weekday": 1,
+   "hour": 9,
+   "note": "Monday 09:15 CEST"
+  },
+  {
+   "id": "w2",
+   "event_time": "2026-10-04T22:30:00.000Z",
+   "kind": "pageview",
+   "local": "2026-10-05 00:30",
+   "weekday": 1,
+   "hour": 0,
+   "note": "UTC Sunday, local Monday 00:30 CEST"
+  },
+  {
+   "id": "w3",
+   "event_time": "2026-10-25T00:30:00.000Z",
+   "kind": "pageview",
+   "local": "2026-10-25 02:30",
+   "weekday": 7,
+   "hour": 2,
+   "note": "fall-back day, first 02:30 (CEST)"
+  },
+  {
+   "id": "w4",
+   "event_time": "2026-10-25T01:30:00.000Z",
+   "kind": "pageview",
+   "local": "2026-10-25 02:30",
+   "weekday": 7,
+   "hour": 2,
+   "note": "fall-back day, second 02:30 (CET)"
+  },
+  {
+   "id": "w5",
+   "event_time": "2026-03-29T00:59:00.000Z",
+   "kind": "pageview",
+   "local": "2026-03-29 01:59",
+   "weekday": 7,
+   "hour": 1,
+   "note": "spring-forward day, 01:59 CET"
+  },
+  {
+   "id": "w6",
+   "event_time": "2026-03-29T01:00:00.000Z",
+   "kind": "pageview",
+   "local": "2026-03-29 03:00",
+   "weekday": 7,
+   "hour": 3,
+   "note": "spring-forward day, 03:00 CEST; hour 2 does not exist"
+  }
+ ],
+ "expected_pageview_cells": [
+  {
+   "weekday": 1,
+   "hour": 0,
+   "pageviews": 1
+  },
+  {
+   "weekday": 1,
+   "hour": 9,
+   "pageviews": 1
+  },
+  {
+   "weekday": 7,
+   "hour": 1,
+   "pageviews": 1
+  },
+  {
+   "weekday": 7,
+   "hour": 2,
+   "pageviews": 2
+  },
+  {
+   "weekday": 7,
+   "hour": 3,
+   "pageviews": 1
+  }
+ ],
+ "empty": "Nothing reads hour 2 on 2026-03-29 because the hour does not exist. Cell (weekday 7, hour 2) holds only the two fall-back events of 2026-10-25.",
+ "session_case": {
+  "measure": "sessions",
+  "events": [
+   {
+    "identity": "s1",
+    "at": "2026-10-06T07:10:00.000Z"
+   },
+   {
+    "identity": "s1",
+    "at": "2026-10-06T08:05:00.000Z"
+   }
+  ],
+  "expected_cells": [
+   {
+    "weekday": 2,
+    "hour": 9,
+    "sessions": 1
+   },
+   {
+    "weekday": 2,
+    "hour": 10,
+    "sessions": 1
+   }
+  ],
+  "note": "one session, two local hours, so the grid sums to 2 while the total is 1"
+ },
+ "refusals": [
+  {
+   "id": "grid_one_dim",
+   "state": "visualization grid with dimensions [weekday]",
+   "expect": "refused"
+  },
+  {
+   "id": "grid_three_dim",
+   "state": "visualization grid with dimensions [weekday, hour, country]",
+   "expect": "refused"
+  },
+  {
+   "id": "grid_wrong_dims",
+   "state": "visualization grid with dimensions [country, hour]",
+   "expect": "refused"
+  }
+ ],
+ "open": [
+  "Error codes for the refusals are not named in 0004."
+ ]
+}

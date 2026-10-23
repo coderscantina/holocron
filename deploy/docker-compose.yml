@@ -1,0 +1,31 @@
+# Holocron behind a reverse proxy on the same host. See docs/guide/install.md.
+#
+#   export HOLOCRON_PUBLIC_URL=https://analytics.example.com
+#   docker compose run --rm holocron init --admin-email you@example.com   # once, prints the password
+#   docker compose up -d
+services:
+  holocron:
+    image: ${HOLOCRON_IMAGE:-ghcr.io/coderscantina/holocron:latest}
+    restart: unless-stopped
+    # serve stops in order on SIGTERM; the runbook asks for at least 30 s before SIGKILL.
+    stop_grace_period: 35s
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - holocron-data:/data
+    environment:
+      HOLOCRON_PUBLIC_URL: ${HOLOCRON_PUBLIC_URL:?set HOLOCRON_PUBLIC_URL, e.g. https://analytics.example.com}
+      HOLOCRON_INSTANCE_NAME: ${HOLOCRON_INSTANCE_NAME:-Holocron}
+      # A proxy on the host reaches the published port through Docker's bridge, so the peer
+      # address is a bridge gateway. Trusting it lets Holocron read X-Forwarded-For.
+      HOLOCRON_COLLECT_TRUSTED_PROXIES: ${HOLOCRON_COLLECT_TRUSTED_PROXIES:-172.16.0.0/12}
+      HOLOCRON_DISK_RESERVE_MIB: ${HOLOCRON_DISK_RESERVE_MIB:-4096}
+      HOLOCRON_LOG: ${HOLOCRON_LOG:-info,sqlx=warn}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+
+volumes:
+  holocron-data:

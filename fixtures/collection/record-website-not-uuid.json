@@ -1,0 +1,64 @@
+{
+  "id": "record-website-not-uuid",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "payload.website is not a UUID.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:29"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "not-a-uuid",
+        "events": [
+          {
+            "type": 4,
+            "data": {
+              "href": "http://localhost:8080/",
+              "width": 1280,
+              "height": 720
+            },
+            "timestamp": 1790000000000
+          },
+          {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Bad request",
+        "code": "bad-request",
+        "status": 400
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Keep the {error:{message,code,status}} envelope. Zod tree details are not part of the contract."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

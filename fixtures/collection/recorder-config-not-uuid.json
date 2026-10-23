@@ -1,0 +1,28 @@
+{
+  "id": "recorder-config-not-uuid",
+  "surface": "recorder.config",
+  "polarity": "negative",
+  "description": "Website path segment is not a UUID.",
+  "upstream_ref": [
+    "src/app/api/websites/[websiteId]/recorder/route.ts:20-30"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/api/websites/not-a-uuid/recorder"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "enabled": false
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Same body."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

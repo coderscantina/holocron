@@ -1,0 +1,87 @@
+{
+  "format_version": 1,
+  "id": "Q01-30d-D-utc",
+  "family": "Q01",
+  "title": "Traffic overview, day series",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2026-08-02T00:00:00.000Z",
+    "compare_end": "2026-09-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [
+      "pageviews",
+      "visitor_days",
+      "sessions",
+      "bounce_rate",
+      "span_mean",
+      "span_median"
+    ],
+    "dimensions": [],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "previous_period",
+    "metric_version": 1,
+    "sort": [],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "line"
+  },
+  "parameters": {
+    "series": "day",
+    "headline": "visitor_days (range longer than one local day, 0003)"
+  },
+  "sort": {
+    "order": [],
+    "ties": "series ordered by bucket start ascending"
+  },
+  "output_bound": {
+    "max_rows": 30,
+    "max_response_bytes": 1048576,
+    "series_points": 30
+  },
+  "selectivity": null,
+  "expected": {
+    "row_count": 30,
+    "matched_records": 250000,
+    "golden_result_hash": "06e236ae7a5c71aa63665f7205e0135de4bad865d43cc392bf30f88a778e6d44",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q01-30d-D-utc.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

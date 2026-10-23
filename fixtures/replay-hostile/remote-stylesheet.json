@@ -1,0 +1,103 @@
+{
+ "id": "remote-stylesheet",
+ "description": "A stylesheet link without captured CSS text, which would load from the network.",
+ "events": [
+  {
+   "type": 4,
+   "timestamp": 1790000000000,
+   "data": {
+    "href": "https://shop.test/hostile",
+    "width": 1280,
+    "height": 720
+   }
+  },
+  {
+   "type": 2,
+   "timestamp": 1790000000010,
+   "data": {
+    "node": {
+     "type": 0,
+     "childNodes": [
+      {
+       "type": 1,
+       "name": "html",
+       "publicId": "",
+       "systemId": "",
+       "id": 2
+      },
+      {
+       "type": 2,
+       "tagName": "html",
+       "attributes": {},
+       "childNodes": [
+        {
+         "type": 2,
+         "tagName": "head",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "link",
+           "attributes": {
+            "rel": "stylesheet",
+            "href": "https://beacon.hostile.test/style.css"
+           },
+           "childNodes": [],
+           "id": 13
+          }
+         ],
+         "id": 4
+        },
+        {
+         "type": 2,
+         "tagName": "body",
+         "attributes": {},
+         "childNodes": [
+          {
+           "type": 2,
+           "tagName": "p",
+           "attributes": {},
+           "childNodes": [
+            {
+             "type": 3,
+             "textContent": "***",
+             "id": 11
+            }
+           ],
+           "id": 12
+          }
+         ],
+         "id": 5
+        }
+       ],
+       "id": 3
+      }
+     ],
+     "id": 1
+    },
+    "initialOffset": {
+     "left": 0,
+     "top": 0
+    }
+   }
+  },
+  {
+   "type": 3,
+   "timestamp": 1790000002000,
+   "data": {
+    "source": 1,
+    "positions": [
+     {
+      "x": 10,
+      "y": 10,
+      "id": 5,
+      "timeOffset": 0
+     }
+    ]
+   }
+  }
+ ],
+ "must_not_contain": [
+  "beacon.hostile.test"
+ ]
+}

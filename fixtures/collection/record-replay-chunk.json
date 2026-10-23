@@ -1,0 +1,70 @@
+{
+  "id": "record-replay-chunk",
+  "surface": "record.replay",
+  "polarity": "positive",
+  "description": "Replay chunk with rrweb Meta and IncrementalSnapshot events, session token from /api/send.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:25-33",
+    "src/app/api/record/route.ts:133-145",
+    "src/app/api/record/route.ts:185-214"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000002}}",
+      "origin": "http://localhost:8080"
+    },
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": 4,
+            "data": {
+              "href": "http://localhost:8080/",
+              "width": 1280,
+              "height": 720
+            },
+            "timestamp": 1790000000000
+          },
+          {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*"
+    },
+    "body": {
+      "ok": true
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Recording fragments and session-cache handshake preserved (briefing, transport surfaces). ok:true only after durable commit; capture ids stay separate from derived sessions (briefing, identity)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

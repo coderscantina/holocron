@@ -1,0 +1,52 @@
+{
+  "case": "Q04-30d-A-vienna-broad",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "totals": {
+    "events": 985182,
+    "pageviews": 3694410,
+    "visitor_days": 492591
+  },
+  "row_count": 3,
+  "page": {
+    "size": 50,
+    "index": 0
+  },
+  "rows": [
+    {
+      "device": {
+        "t": "string",
+        "v": "desktop"
+      },
+      "events": 550010,
+      "pageviews": 2062439,
+      "visitor_days": 275005
+    },
+    {
+      "device": {
+        "t": "string",
+        "v": "mobile"
+      },
+      "events": 380380,
+      "pageviews": 1426493,
+      "visitor_days": 190190
+    },
+    {
+      "device": {
+        "t": "string",
+        "v": "tablet"
+      },
+      "events": 54792,
+      "pageviews": 205478,
+      "visitor_days": 27396
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 4679592,
+    "eligible_events": 4679592,
+    "rate": 1.0
+  }
+}

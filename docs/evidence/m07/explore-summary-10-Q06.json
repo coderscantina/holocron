@@ -1,0 +1,115 @@
+{
+  "users": 2,
+  "planner": "rollup",
+  "seconds": 23.575562833,
+  "cases": {
+    "Q06-12m-A-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 828.4846249999999,
+        "p50": 870.327583,
+        "p95": 933.350083,
+        "p99": 940.70825,
+        "max": 940.70825
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q06-12m-A-utc-worst-person": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 782.0271250000001,
+        "p50": 802.0455,
+        "p95": 839.905958,
+        "p99": 868.76875,
+        "max": 868.76875
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q06-12m-D-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 331.04570900000004,
+        "p50": 364.864166,
+        "p95": 390.773875,
+        "p99": 390.85875,
+        "max": 390.85875
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q06-30d-A-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 91.404375,
+        "p50": 101.310542,
+        "p95": 108.8445,
+        "p99": 111.63525,
+        "max": 111.63525
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q06-30d-A-vienna-worst": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 122.877292,
+        "p50": 139.931583,
+        "p95": 167.894084,
+        "p99": 169.44120900000001,
+        "max": 169.44120900000001
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q06-30d-D-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 51.708292,
+        "p50": 55.043917,
+        "p95": 66.297833,
+        "p99": 69.651667,
+        "max": 69.651667
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "Q08-12m-A-utc": {
+    "abandoned": 2,
+    "next_wait_ms": 0.130666
+  },
+  "Q08-12m-A-utc-referrer-person": {
+    "abandoned": 2,
+    "next_wait_ms": 0.163375
+  },
+  "Q08-12m-D-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.220666
+  },
+  "Q08-30d-A-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.435084
+  },
+  "Q08-30d-A-vienna-referrer": {
+    "abandoned": 2,
+    "next_wait_ms": 0.430917
+  },
+  "Q08-30d-D-utc": {
+    "abandoned": 2,
+    "next_wait_ms": 3.449333
+  }
+}

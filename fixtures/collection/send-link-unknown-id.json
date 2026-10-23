@@ -1,0 +1,38 @@
+{
+  "id": "send-link-unknown-id",
+  "surface": "send.link",
+  "polarity": "negative",
+  "description": "payload.link is a UUID that is not a link. Upstream never looks up links or pixels in /api/send.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:112-131"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "link": "5e1a0000-0000-4000-8000-0000000000fe",
+        "url": "/q/x"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact",
+    "notes": "Upstream stores an event for a nonexistent source."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "adopted",
+    "notes": "Refused in the upstream error envelope with message \"Link not found.\" (docs/decisions/0005, unknown link and pixel IDs)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,47 @@
+{
+  "id": "batch-over-500",
+  "surface": "batch",
+  "polarity": "negative",
+  "description": "501 items. The whole batch is rejected before any item is processed.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:7",
+    "src/app/api/batch/route.ts:11-15"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": {
+      "$repeat": 501,
+      "item": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "hostname": "localhost",
+          "language": "en-US",
+          "screen": "1920x1080",
+          "title": "Fixture page",
+          "url": "/batch",
+          "referrer": "https://referrer.example/article"
+        }
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Bad request",
+        "code": "bad-request",
+        "status": 400
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "confirmed",
+    "notes": "Limit preserved (briefing, transport surfaces). Envelope proposed."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,115 @@
+{
+  "users": 2,
+  "planner": "rollup",
+  "seconds": 102.314211625,
+  "cases": {
+    "Q08-12m-A-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 4097.119042,
+        "p50": 4349.042292,
+        "p95": 4798.122042,
+        "p99": 4911.00425,
+        "max": 4911.00425
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q08-12m-A-utc-referrer-person": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 3474.9170409999997,
+        "p50": 3971.836958,
+        "p95": 4764.928542,
+        "p99": 4841.624833,
+        "max": 4841.624833
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q08-12m-D-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 643.4629160000001,
+        "p50": 781.489,
+        "p95": 1020.954375,
+        "p99": 1124.583834,
+        "max": 1124.583834
+      },
+      "target_p95_ms": 10000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q08-30d-A-vienna": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 301.432375,
+        "p50": 357.23616699999997,
+        "p95": 522.742708,
+        "p99": 700.2987499999999,
+        "max": 700.2987499999999
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q08-30d-A-vienna-referrer": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 287.473375,
+        "p50": 341.3435,
+        "p95": 396.206541,
+        "p99": 512.6549160000001,
+        "max": 512.6549160000001
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    },
+    "Q08-30d-D-utc": {
+      "n": 20,
+      "latency": {
+        "n": 20,
+        "min": 94.47224999999999,
+        "p50": 111.086083,
+        "p95": 145.94470800000002,
+        "p99": 174.344334,
+        "max": 174.344334
+      },
+      "target_p95_ms": 2000.0,
+      "passes": true,
+      "refused": null,
+      "resolved_matches": true,
+      "panels": 0,
+      "rollup": true,
+      "matches_raw": true
+    }
+  }
+}

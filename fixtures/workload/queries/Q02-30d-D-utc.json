@@ -1,0 +1,91 @@
+{
+  "format_version": 1,
+  "id": "Q02-30d-D-utc",
+  "family": "Q02",
+  "title": "Top 100 by referrer_domain, exact totals",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "D",
+  "authorized_sites": [
+    "78daa192-5264-5819-8add-bacd5b7822ff"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "78daa192-5264-5819-8add-bacd5b7822ff",
+    "measures": [
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "referrer_domain"
+    ],
+    "filter": null,
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 100,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {
+    "totals": "exact totals over all rows, independent of paging"
+  },
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 100,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "broad",
+  "expected": {
+    "row_count": 2964,
+    "matched_records": 250000,
+    "golden_result_hash": "9c2b554458d508c629857d6b546246fe9e87562eef46a0b4d71c6b175086e215",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q02-30d-D-utc.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

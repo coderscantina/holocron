@@ -1,0 +1,50 @@
+{
+  "id": "send-event-ignore-ips-trusted-proxy",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "x-forwarded-for resolves to an address on the operator block list (harness IGNORE_IP / Holocron collect.ignore_ips = 203.0.113.7).",
+  "upstream_ref": [
+    "src/lib/ip.ts:75-88",
+    "src/lib/detect.ts:150-179",
+    "src/app/api/send/route.ts:147-150"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "x-forwarded-for": "203.0.113.7"
+    },
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 403,
+    "body": {
+      "error": {
+        "message": "Forbidden",
+        "code": "forbidden",
+        "status": 403
+      }
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "suppressed",
+    "status": 403,
+    "reason": "ip_blocked",
+    "decision": "adopted",
+    "notes": "Holocron fixture config: collect.trusted_proxies contains the harness peer and collect.ignore_ips = [\"203.0.113.7\"]. The resolved client IP matches collect.ignore_ips: 403 Forbidden as upstream, outcome suppressed, reason ip_blocked, not stored, counted, IP not logged (docs/decisions/0005, operator IP block list)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

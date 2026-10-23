@@ -1,0 +1,9 @@
+# Caddy in front of deploy/docker-compose.yml. Caddy gets the certificate, sets
+# X-Forwarded-For and does not buffer the dashboard's live updates.
+#
+# One host serves the dashboard, the tracker (/script.js, /recorder.js) and collection
+# (/api/send, /api/batch, /api/record). Point the tracker's script tags at this host.
+
+analytics.example.com {
+	reverse_proxy 127.0.0.1:8080
+}

@@ -1,0 +1,26 @@
+{
+  "id": "holocron-pixel-storage-unavailable",
+  "surface": "pixel",
+  "polarity": "negative",
+  "description": "Pixel requested while durable storage is unavailable.",
+  "upstream_ref": [
+    "src/app/(collect)/p/[slug]/route.ts:60-72"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/p/holocron-pixel"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "notes": "Upstream ignores the send result and serves the GIF."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 200,
+    "reason": "storage_unavailable",
+    "decision": "adopted",
+    "notes": "GIF still served; the hit increments lost_hits (docs/decisions/0005)."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Needs a storage fault injected into Holocron."
+}

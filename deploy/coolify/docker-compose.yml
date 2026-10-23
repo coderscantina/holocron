@@ -1,0 +1,31 @@
+# Holocron behind CloudFront on a Coolify host. Set the domain of the `holocron` service in
+# Coolify to the origin host with the container port, e.g. https://holocron.example.com:8080.
+services:
+  holocron:
+    image: ${HOLOCRON_IMAGE:?set HOLOCRON_IMAGE to the pushed image, e.g. ghcr.io/coderscantina/holocron:26.10.19}
+    restart: unless-stopped
+    # serve stops in order on SIGTERM; the runbook asks for at least 30 s before SIGKILL.
+    stop_grace_period: 35s
+    volumes:
+      - holocron-data:/data
+      # Nightly backups, on other storage than the data volume. The directory must be
+      # writable by uid 10001. See "Back up on Coolify" in docs/guide/install.md.
+      - ${HOLOCRON_BACKUP_DIR:-/srv/holocron-backups}:/backups
+    environment:
+      HOLOCRON_PUBLIC_URL: ${HOLOCRON_PUBLIC_URL:?set HOLOCRON_PUBLIC_URL, e.g. https://insights.example.com}
+      HOLOCRON_INSTANCE_NAME: ${HOLOCRON_INSTANCE_NAME:-Holocron}
+      HOLOCRON_BUDGET: ${HOLOCRON_BUDGET:-standard}
+      # The peer is Coolify's Traefik on a Docker network. Its CloudFront headers carry the
+      # visitor's address and location.
+      HOLOCRON_COLLECT_TRUSTED_PROXIES: ${HOLOCRON_COLLECT_TRUSTED_PROXIES:-10.0.0.0/8,172.16.0.0/12}
+      HOLOCRON_COLLECT_CLIENT_IP_HEADER: cloudfront-viewer-address
+      HOLOCRON_DISK_RESERVE_MIB: ${HOLOCRON_DISK_RESERVE_MIB:-4096}
+      HOLOCRON_LOG: ${HOLOCRON_LOG:-info,sqlx=warn}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+
+volumes:
+  holocron-data:

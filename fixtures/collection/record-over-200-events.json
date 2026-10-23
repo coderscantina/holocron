@@ -1,0 +1,56 @@
+{
+  "id": "record-over-200-events",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "201 events in one chunk exceeds the schema maximum of 200.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:30"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": {
+          "$repeat": 201,
+          "item": {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        },
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "message": "Bad request",
+        "code": "bad-request",
+        "status": 400
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "confirmed",
+    "notes": "Limit preserved."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

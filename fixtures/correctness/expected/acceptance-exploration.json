@@ -1,0 +1,180 @@
+{
+  "metric_version": 1,
+  "session_policy_versions": [
+    1
+  ],
+  "state": "0004 Complete example, site A, without f4 for the breakdown and with f4 for the drill-down",
+  "filter": {
+    "device": "mobile",
+    "event_name": "signup",
+    "plan": {
+      "t": "string",
+      "v": "pro"
+    }
+  },
+  "measures": [
+    "events",
+    "visitor_days"
+  ],
+  "dimensions": [
+    "country",
+    "referrer_domain"
+  ],
+  "evaluated_at": "2026-10-03T10:00:00.000Z",
+  "resolved": {
+    "start": "2026-09-03T22:00:00.000Z",
+    "end": "2026-10-03T22:00:00.000Z",
+    "compare_start": "2026-08-04T22:00:00.000Z",
+    "compare_end": "2026-09-03T22:00:00.000Z"
+  },
+  "breakdown": {
+    "totals": {
+      "events": {
+        "current": 7,
+        "previous": 1,
+        "change": 6,
+        "relative_change": 6.0
+      },
+      "visitor_days": {
+        "current": 6,
+        "previous": 1,
+        "change": 5,
+        "relative_change": 5.0
+      }
+    },
+    "rows": [
+      {
+        "country": "AT",
+        "referrer_domain": "news.example.net",
+        "events": {
+          "current": 5,
+          "previous": 0,
+          "change": 5,
+          "relative_change": null,
+          "reason": "zero_baseline"
+        },
+        "visitor_days": {
+          "current": 4,
+          "previous": 0,
+          "change": 4,
+          "relative_change": null,
+          "reason": "zero_baseline"
+        },
+        "current_events": [
+          "acc-08",
+          "acc-10",
+          "acc-12",
+          "acc-14",
+          "acc-15"
+        ],
+        "previous_events": []
+      },
+      {
+        "country": "AT",
+        "referrer_domain": "social.example.net",
+        "events": {
+          "current": 1,
+          "previous": 0,
+          "change": 1,
+          "relative_change": null,
+          "reason": "zero_baseline"
+        },
+        "visitor_days": {
+          "current": 1,
+          "previous": 0,
+          "change": 1,
+          "relative_change": null,
+          "reason": "zero_baseline"
+        },
+        "current_events": [
+          "acc-25"
+        ],
+        "previous_events": []
+      },
+      {
+        "country": "DE",
+        "referrer_domain": "search.example.net",
+        "events": {
+          "current": 1,
+          "previous": 1,
+          "change": 0,
+          "relative_change": 0.0
+        },
+        "visitor_days": {
+          "current": 1,
+          "previous": 1,
+          "change": 0,
+          "relative_change": 0.0
+        },
+        "current_events": [
+          "acc-19"
+        ],
+        "previous_events": [
+          "acc-04"
+        ]
+      }
+    ],
+    "identity_coverage": {
+      "current": {
+        "with_identity": 7,
+        "eligible_events": 7,
+        "rate": 1.0
+      },
+      "previous": {
+        "with_identity": 1,
+        "eligible_events": 1,
+        "rate": 1.0
+      }
+    }
+  },
+  "drill_down_at": {
+    "added_condition": {
+      "id": "f4",
+      "field": "country",
+      "cmp": "eq",
+      "value": {
+        "t": "string",
+        "v": "AT"
+      }
+    },
+    "totals": {
+      "events": {
+        "current": 6,
+        "previous": 0,
+        "change": 6,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      },
+      "visitor_days": {
+        "current": 5,
+        "previous": 0,
+        "change": 5,
+        "relative_change": null,
+        "reason": "zero_baseline"
+      }
+    },
+    "rows": [
+      {
+        "country": "AT",
+        "referrer_domain": "news.example.net",
+        "events": 5,
+        "visitor_days": 4
+      },
+      {
+        "country": "AT",
+        "referrer_domain": "social.example.net",
+        "events": 1,
+        "visitor_days": 1
+      }
+    ]
+  },
+  "excluded": {
+    "acc-02": "2026-08-04 local, before compare_start",
+    "acc-06": "previous totals stop at 2026-09-03 12:00 local, the offset of now into the range",
+    "acc-17": "plan is \"Pro\"; string equality is exact",
+    "acc-21": "desktop device",
+    "acc-23": "plan is \"free\"",
+    "b-08": "site B"
+  },
+  "field_scope": "device, country and referrer_domain are session fields taken from each event's session (0004 Field scope); visitor_days are distinct daily pseudonyms (0003 Formulas)"
+}

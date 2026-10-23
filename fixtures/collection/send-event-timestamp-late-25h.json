@@ -1,0 +1,44 @@
+{
+  "id": "send-event-timestamp-late-25h",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Timestamp 25 hours before receive time. Upstream has no range check.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:51",
+    "src/app/api/send/route.ts:152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "timestamp": "{{NOW_S-90000}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Confirmed (Mike, 2026-10-03): no payload is refused for its event time, matching upstream (docs/decisions/0002, Event time; docs/decisions/0005, Event time outcomes). Respond only after the payload is durably committed (briefing, durability). Keep the {cache, sessionId, visitId} shape (briefing, identity). Values come from the identity derivation in docs/decisions/0001, so they will not equal upstream values. Inside retention, so stored. Its day key normally still exists (destroyed at end(D) + 25h); if it is gone the event is stored keyless (docs/decisions/0001, Key retention and keyless events)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

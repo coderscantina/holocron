@@ -1,0 +1,47 @@
+{
+  "id": "send-event-with-cache-token",
+  "surface": "send.event",
+  "polarity": "positive",
+  "description": "Second request with the x-umami-cache token from a previous response for the same website.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:109-131",
+    "src/app/api/send/route.ts:185-198",
+    "src/lib/jwt.ts:8-14"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000001}}"
+    },
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "/second",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Accept the token as an opaque hint. Upstream tokens may be replaced at cutover; continuous old sessions are not promised (briefing, identity)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,12 @@
+{
+  "metric_version": 1,
+  "site": "A",
+  "range": { "timezone": "Europe/Vienna", "days": ["2026-06-25", "2026-06-25"], "start": "2026-06-24T22:00:00.000Z", "end": "2026-06-25T22:00:00.000Z" },
+  "rank": "nearest rank, r = ceil(p * n)",
+  "cases": [
+    { "metric": "lcp", "group": "all", "n": 5, "sorted": [0, 800, 1200, 2500, 4000], "p50": 1200, "p75": 2500, "p95": 4000, "excluded_missing": ["perf-06"] },
+    { "metric": "cls", "group": "all", "n": 5, "sorted": ["0.0100", "0.0412", "0.0500", "0.1000", "0.2500"], "p50": "0.0500", "p75": "0.1000", "p95": "0.2500", "excluded_missing": ["perf-04"] },
+    { "metric": "lcp", "group": { "device": "mobile" }, "n": 2, "sorted": [1200, 2500], "p50": 1200, "p75": 2500, "p95": 2500 },
+    { "metric": "lcp", "group": { "device": "desktop" }, "n": 3, "sorted": [0, 800, 4000], "p50": 800, "p75": 4000, "p95": 4000 }
+  ]
+}

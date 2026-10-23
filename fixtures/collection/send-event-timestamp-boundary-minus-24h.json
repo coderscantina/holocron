@@ -1,0 +1,45 @@
+{
+  "id": "send-event-timestamp-boundary-minus-24h",
+  "surface": "send.event",
+  "polarity": "positive",
+  "description": "Timestamp exactly 24 hours before receive time. Former live-window boundary, kept to check no window is enforced.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:51",
+    "src/app/api/send/route.ts:152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "timestamp": "{{NOW_S-86400}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "cache": "<jwt>",
+      "sessionId": "<uuid>",
+      "visitId": "<uuid>"
+    },
+    "body_match": "exact",
+    "notes": "Upstream has no range check and stores every integer timestamp. Replaying this fixture against Holocron at the exact boundary needs an injectable clock; over HTTP the request takes milliseconds to arrive, which moves an exact boundary by up to one second."
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Confirmed (Mike, 2026-10-03): no payload is refused for its event time, matching upstream (docs/decisions/0002, Event time; docs/decisions/0005, Event time outcomes). Respond only after the payload is durably committed (briefing, durability). Keep the {cache, sessionId, visitId} shape (briefing, identity). Values come from the identity derivation in docs/decisions/0001, so they will not equal upstream values."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

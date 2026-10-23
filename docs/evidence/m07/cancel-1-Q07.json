@@ -1,0 +1,26 @@
+{
+  "Q07-12m-A-utc": {
+    "abandoned": 2,
+    "next_wait_ms": 0.44958299999999995
+  },
+  "Q07-12m-A-utc-length-7": {
+    "abandoned": 2,
+    "next_wait_ms": 0.45437500000000003
+  },
+  "Q07-12m-D-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.6629160000000001
+  },
+  "Q07-30d-A-vienna": {
+    "abandoned": 2,
+    "next_wait_ms": 0.430791
+  },
+  "Q07-30d-A-vienna-events-7": {
+    "abandoned": 2,
+    "next_wait_ms": 0.307459
+  },
+  "Q07-30d-D-utc": {
+    "abandoned": 0,
+    "next_wait_ms": 0.00725
+  }
+}

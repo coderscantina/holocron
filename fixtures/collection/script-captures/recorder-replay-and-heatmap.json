@@ -1,0 +1,670 @@
+{
+  "id": "capture-recorder-replay-and-heatmap",
+  "description": "Recorder on a site with replay and heatmaps at sample rate 1 and strict masking: configuration fetch, replay chunks with the tracker cache token, heatmap click and scroll payloads. Masked text and input values never leave the browser.",
+  "upstream_ref": [
+    "src/recorder/index.js:18-22",
+    "src/recorder/index.js:109-128",
+    "src/recorder/index.js:310-322",
+    "src/recorder/index.js:432-634",
+    "src/recorder/index.js:678-713"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "recorder_sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6",
+    "served_by": "official Umami 3.4.0 container (tools/collection-harness/compose.yaml)"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "recorder_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000002"
+    },
+    "body": "<main style=\"height:2400px\"><h1>Secret customer text 4711</h1><input id=\"i\" type=\"text\"><button id=\"b\">Buy</button></main>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForTimeout(1500);",
+    "await page.type('#i', SECRET_INPUT);",
+    "await page.click('#b');",
+    "await page.mouse.wheel(0, 1200);",
+    "await page.waitForTimeout(7000);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/api/websites/5e1a0000-0000-4000-8000-000000000002/recorder",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 200,
+        "body": {
+          "enabled": true,
+          "replayEnabled": true,
+          "heatmapEnabled": true,
+          "sampleRate": 1,
+          "heatmapSampleRate": 1,
+          "maskLevel": "strict",
+          "maxDuration": 300000,
+          "blockSelector": ""
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000002",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "events": [
+            {
+              "type": 4,
+              "data": {
+                "href": "http://127.0.0.1:33401/fixture",
+                "width": 1280,
+                "height": 720
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "events": [
+            {
+              "type": 2,
+              "data": {
+                "node": {
+                  "type": 0,
+                  "childNodes": [
+                    {
+                      "type": 1,
+                      "name": "html",
+                      "publicId": "",
+                      "systemId": "",
+                      "id": 2
+                    },
+                    {
+                      "type": 2,
+                      "tagName": "html",
+                      "attributes": {},
+                      "childNodes": [
+                        {
+                          "type": 2,
+                          "tagName": "head",
+                          "attributes": {},
+                          "childNodes": [
+                            {
+                              "type": 2,
+                              "tagName": "meta",
+                              "attributes": {
+                                "charset": "utf-8"
+                              },
+                              "childNodes": [],
+                              "id": 5
+                            },
+                            {
+                              "type": 2,
+                              "tagName": "title",
+                              "attributes": {},
+                              "childNodes": [
+                                {
+                                  "type": 3,
+                                  "textContent": "******* ****",
+                                  "id": 7
+                                }
+                              ],
+                              "id": 6
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 8
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 9
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 10
+                            }
+                          ],
+                          "id": 4
+                        },
+                        {
+                          "type": 2,
+                          "tagName": "body",
+                          "attributes": {},
+                          "childNodes": [
+                            {
+                              "type": 2,
+                              "tagName": "main",
+                              "attributes": {
+                                "style": "height:2400px"
+                              },
+                              "childNodes": [
+                                {
+                                  "type": 2,
+                                  "tagName": "h1",
+                                  "attributes": {},
+                                  "childNodes": [
+                                    {
+                                      "type": 3,
+                                      "textContent": "****** ******** **** ****",
+                                      "id": 14
+                                    }
+                                  ],
+                                  "id": 13
+                                },
+                                {
+                                  "type": 2,
+                                  "tagName": "input",
+                                  "attributes": {
+                                    "id": "i",
+                                    "type": "text"
+                                  },
+                                  "childNodes": [],
+                                  "id": 15
+                                },
+                                {
+                                  "type": 2,
+                                  "tagName": "button",
+                                  "attributes": {
+                                    "id": "b"
+                                  },
+                                  "childNodes": [
+                                    {
+                                      "type": 3,
+                                      "textContent": "***",
+                                      "id": 17
+                                    }
+                                  ],
+                                  "id": 16
+                                }
+                              ],
+                              "id": 12
+                            }
+                          ],
+                          "id": 11
+                        }
+                      ],
+                      "id": 3
+                    }
+                  ],
+                  "id": 1
+                },
+                "initialOffset": {
+                  "left": 0,
+                  "top": 0
+                }
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "events": [
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 5,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "**",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "***",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "****",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*****",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "******",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*******",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "********",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*********",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "**********",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "***********",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "**************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "***************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "****************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*****************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "******************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 5,
+                "text": "*******************",
+                "isChecked": false,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 1,
+                "positions": [
+                  {
+                    "x": 180,
+                    "y": 90,
+                    "id": 16,
+                    "timeOffset": "<OFFSET_MS>"
+                  }
+                ]
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 1,
+                "id": 16,
+                "x": 180.49000549316406,
+                "y": 90.37000274658203
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 6,
+                "id": 15
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 5,
+                "id": 16
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 0,
+                "id": 16,
+                "x": 180.49000549316406,
+                "y": 90.37000274658203
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 2,
+                "id": 16,
+                "x": 180,
+                "y": 90,
+                "pointerType": 0
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 3,
+                "id": 1,
+                "x": 0,
+                "y": 1200
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "heatmap",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000002",
+          "events": [
+            {
+              "type": "scroll",
+              "url": "http://127.0.0.1:33401/fixture",
+              "scrollPct": 30,
+              "viewportW": 1280,
+              "viewportH": 720,
+              "pageW": 1280,
+              "pageH": 2429.4375,
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": "click",
+              "url": "http://127.0.0.1:33401/fixture",
+              "x": 180,
+              "y": 90,
+              "pageX": 180,
+              "pageY": 90,
+              "pageW": 1280,
+              "pageH": 2429.4375,
+              "viewportW": 1280,
+              "viewportH": 720,
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": "scroll",
+              "url": "http://127.0.0.1:33401/fixture",
+              "scrollPct": 79,
+              "viewportW": 1280,
+              "viewportH": 720,
+              "pageW": 1280,
+              "pageH": 2429.4375,
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "configuration enabled with strict masking",
+      "passed": true
+    },
+    {
+      "description": "replay chunks sent with cache token",
+      "passed": true
+    },
+    {
+      "description": "a full snapshot (rrweb type 2) was sent",
+      "passed": true
+    },
+    {
+      "description": "every chunk has at most 200 events",
+      "passed": true
+    },
+    {
+      "description": "heatmap click sent",
+      "passed": true
+    },
+    {
+      "description": "heatmap scroll sent",
+      "passed": true
+    },
+    {
+      "description": "upstream answered ok:true to every record post",
+      "passed": true
+    },
+    {
+      "description": "secret text never transmitted",
+      "passed": true
+    },
+    {
+      "description": "typed input never transmitted",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": true,
+  "validation_reason": "Captured from the real scripts talking to the official Umami 3.4.0 container; responses are upstream responses."
+}

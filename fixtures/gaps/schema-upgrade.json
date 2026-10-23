@@ -1,0 +1,126 @@
+{
+ "status": "adopted (decisions/0006-retention-clock-and-operations.md, Schema versions)",
+ "capability": "CAP-OPS-09",
+ "grounding": [
+  "decisions/0006-retention-clock-and-operations.md: Schema versions",
+  "docs/technical-briefing.md: back up schema versions; applied-batch entries carry schema metadata"
+ ],
+ "notation": "The binary declares a release pair (C, A) = (control_schema, analytics_schema) and the oldest pair it can upgrade from. Data pairs are written relative to it. Each integer starts at 1 and rises by one per migration.",
+ "startup_cases": [
+  {
+   "id": "su-current",
+   "data": "(C, A)",
+   "command": "serve",
+   "expect": "starts",
+   "exit": null
+  },
+  {
+   "id": "su-older",
+   "data": "(C-1, A-1)",
+   "command": "serve",
+   "exit": 3,
+   "code": "upgrade_required",
+   "note": "serve never migrates; nothing is written"
+  },
+  {
+   "id": "su-newer",
+   "data": "(C+1, A+1)",
+   "command": "serve",
+   "exit": 3,
+   "code": "data_newer_than_binary"
+  },
+  {
+   "id": "su-interrupted-sqlite-done",
+   "data": "SQLite at C, DuckDB at A-1",
+   "command": "serve",
+   "exit": 3,
+   "code": "upgrade_interrupted",
+   "note": "one engine migrated, the other not"
+  },
+  {
+   "id": "su-interrupted-duckdb-done",
+   "data": "SQLite at C-1, DuckDB at A",
+   "command": "serve",
+   "exit": 3,
+   "code": "upgrade_interrupted"
+  },
+  {
+   "id": "su-too-old",
+   "data": "older than the release's oldest upgradable pair",
+   "command": "upgrade",
+   "expect": "refused before any backup or write; the message names the intermediate release to install first",
+   "exit": 3,
+   "code": null,
+   "open": "0006 states the oldest-pair declaration but names no outcome for it"
+  }
+ ],
+ "upgrade_cases": [
+  {
+   "id": "up-ok",
+   "data": "(C-1, A-1)",
+   "expect": [
+    "verified pre-upgrade backup taken first",
+    "SQLite migrated, then DuckDB",
+    "progress recorded per migration",
+    "schema_info of each engine holds the new integer and the binary version",
+    "serve starts"
+   ],
+   "exit": 0
+  },
+  {
+   "id": "up-fail-sqlite",
+   "inject": "the SQLite migration fails",
+   "expect": [
+    "upgrade_failed",
+    "pre-upgrade backup left in place",
+    "the restore command is printed",
+    "DuckDB untouched"
+   ]
+  },
+  {
+   "id": "up-fail-duckdb",
+   "inject": "the DuckDB migration fails after SQLite completed",
+   "expect": [
+    "upgrade_failed",
+    "pre-upgrade backup left in place",
+    "serve reports upgrade_interrupted"
+   ]
+  },
+  {
+   "id": "up-resume",
+   "setup": "after up-fail-duckdb, fault removed",
+   "args": "rerun holocron upgrade",
+   "expect": "resumes from the last completed migration; does not repeat SQLite migrations; exit 0"
+  },
+  {
+   "id": "up-kill",
+   "inject": "kill -9 between any two migrations (each step)",
+   "expect": "rerun resumes and completes; serve between the kill and the rerun reports upgrade_interrupted"
+  },
+  {
+   "id": "up-restore",
+   "setup": "after up-fail-sqlite",
+   "args": "printed restore command",
+   "expect": "data directory back at (C-1, A-1), serve reports upgrade_required"
+  }
+ ],
+ "version_carriers": [
+  {
+   "id": "vc-inbox",
+   "check": "inbox records carry inbox_format; applied-batch ledger entries record analytics_schema and inbox_format"
+  },
+  {
+   "id": "vc-ledger-mismatch",
+   "setup": "replay an inbox batch whose ledger entry names another analytics_schema",
+   "expect": "detected and refused, not applied"
+  },
+  {
+   "id": "vc-backup",
+   "check": "a backup records control_schema, analytics_schema, inbox_format and binary version; restore into a binary whose pair differs follows the startup cases above"
+  }
+ ],
+ "open": [
+  "Exit code of `holocron upgrade` itself on upgrade_failed is not named in 0006 (the shared table gives 4 for storage failure and 1 for internal errors).",
+  "Outcome name for data older than the oldest upgradable pair is not named."
+ ]
+}

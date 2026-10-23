@@ -1,0 +1,31 @@
+{
+  "id": "script-recorder-get",
+  "surface": "script.asset",
+  "polarity": "positive",
+  "description": "GET /recorder.js serves the pinned 3.4.0 recorder with the same headers as the tracker.",
+  "upstream_ref": [
+    "next.config.ts:104-107",
+    "docker/proxy.ts:66-75",
+    "rollup.recorder.config.js:7-23"
+  ],
+  "request": {
+    "method": "GET",
+    "path": "/recorder.js"
+  },
+  "expected_upstream": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "public, max-age=86400, must-revalidate"
+    },
+    "body_sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6"
+  },
+  "expected_holocron": {
+    "outcome": "served",
+    "status": 200,
+    "decision": "confirmed",
+    "notes": "Serve the pinned recorder bytes."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

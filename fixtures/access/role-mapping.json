@@ -1,0 +1,223 @@
+{
+ "status": "adopted where a row cites a decision record; otherwise proposed (milestone 01)",
+ "upstream_revision": "ec0ff50388c264ed8ce46f00967e92f7e71476ae (Umami 3.4.0)",
+ "capabilities_by_holocron_role": {
+  "viewer": [
+   "workspace.read",
+   "site.read",
+   "site.export",
+   "site.recordings.read",
+   "account.self"
+  ],
+  "member": [
+   "workspace.read",
+   "site.read",
+   "site.export",
+   "site.recordings.read",
+   "workspace.write",
+   "site.definitions.write",
+   "site.configure",
+   "site.share",
+   "account.self"
+  ],
+  "admin": [
+   "workspace.read",
+   "site.read",
+   "site.export",
+   "site.recordings.read",
+   "workspace.write",
+   "site.definitions.write",
+   "site.configure",
+   "site.share",
+   "site.delete",
+   "team.manage",
+   "site.transfer",
+   "account.self"
+  ],
+  "owner": [
+   "workspace.read",
+   "site.read",
+   "site.export",
+   "site.recordings.read",
+   "workspace.write",
+   "site.definitions.write",
+   "site.configure",
+   "site.share",
+   "site.delete",
+   "team.manage",
+   "site.transfer",
+   "account.self"
+  ],
+  "owner_only_checks": [
+   "sites.transfer with direction to_user",
+   "teams.delete",
+   "removing or demoting an owner"
+  ],
+  "install_admin": [
+   "install.admin (users, teams, security policy, site metadata; no analytics, recordings or exports unless also a workspace member)",
+   "account.self"
+  ],
+  "user": [
+   "account.self",
+   "workspace.write in the personal workspace"
+  ]
+ },
+ "mapping": [
+  {
+   "upstream_role": "team-owner",
+   "holocron_role": "owner",
+   "upstream_permissions": [
+    "team:update",
+    "team:delete",
+    "website:create",
+    "website:update",
+    "website:delete",
+    "website:transfer-to-team",
+    "website:transfer-to-user"
+   ],
+   "source": [
+    "src/lib/constants.ts:212-220 ROLE_PERMISSIONS",
+    "src/lib/constants.ts:184-189 TEAM_ROLE_RANK (3)"
+   ],
+   "lossy": [
+    "site.transfer is one capability; the direction check (to_user) is an owner-only rule outside the capability table"
+   ]
+  },
+  {
+   "upstream_role": "team-manager",
+   "holocron_role": "admin",
+   "upstream_permissions": [
+    "team:update",
+    "website:create",
+    "website:update",
+    "website:delete",
+    "website:transfer-to-team"
+   ],
+   "source": [
+    "src/lib/constants.ts:221-227",
+    "src/permissions/website.ts:188-232 transfer checks"
+   ],
+   "lossy": [
+    "cannot transfer a site to a user or delete the team, same as upstream",
+    "'admin' in Holocron is a team role; upstream 'admin' is the installation role",
+    "admin gains site.delete and site.reset that members lack; upstream managers already had them"
+   ]
+  },
+  {
+   "upstream_role": "team-member",
+   "holocron_role": "member",
+   "upstream_permissions": [
+    "website:create",
+    "website:update",
+    "website:delete"
+   ],
+   "source": [
+    "src/lib/constants.ts:228-232",
+    "src/permissions/website.ts:160-185 canDeleteWebsite"
+   ],
+   "lossy": [
+    "upstream members can delete team sites. Holocron members lose site.delete and site.reset; they move to admin and owner (decision 0007, Member and site deletion). Imported members lose it and the import inventory says so.",
+    "upstream updates sites, segments, annotations and shares through one check (canUpdateWebsite); Holocron splits it into site.configure, site.definitions.write and site.share, all held by member"
+   ]
+  },
+  {
+   "upstream_role": "team-view-only",
+   "holocron_role": "viewer",
+   "upstream_permissions": [],
+   "source": [
+    "src/lib/constants.ts:233",
+    "src/permissions/website.ts:21-37 canViewWebsite (any team membership)",
+    "src/app/api/websites/[websiteId]/export/route.ts:25 and replays/route.ts:32 (canViewAuthenticatedWebsite)"
+   ],
+   "lossy": [
+    "upstream viewers can export and watch replays; mapped to site.export and site.recordings.read"
+   ]
+  },
+  {
+   "upstream_role": "admin (installation)",
+   "holocron_role": "install_admin",
+   "upstream_permissions": [
+    "all"
+   ],
+   "source": [
+    "src/lib/constants.ts:204",
+    "src/permissions/website.ts:9-11 and team.ts:9-11 (isAdmin short-circuit)",
+    "src/lib/auth.ts:61,137 (isAdmin = role === admin)"
+   ],
+   "lossy": [
+    "upstream admin reads and edits every site and team. Holocron install admins read no analytics unless they are also members of the workspace (decision 0007, Install admin analytics access). Kept on purpose.",
+    "upstream admin can modify any team role without rank check (teams/[teamId]/users/[userId]/route.ts:57-69)"
+   ]
+  },
+  {
+   "upstream_role": "user (installation)",
+   "holocron_role": "user",
+   "upstream_permissions": [
+    "website:create",
+    "website:update",
+    "website:delete",
+    "team:create"
+   ],
+   "source": [
+    "src/lib/constants.ts:205-210"
+   ],
+   "lossy": [
+    "upstream user can create personal sites and teams; Holocron keeps both via the personal workspace and teams.create"
+   ]
+  },
+  {
+   "upstream_role": "view-only (installation)",
+   "holocron_role": "user without workspace.write in the personal workspace",
+   "upstream_permissions": [],
+   "source": [
+    "src/lib/constants.ts:211",
+    "src/permissions/website.ts:139-141 (user-owned site update checks only ownership)"
+   ],
+   "lossy": [
+    "upstream view-only users can still update and delete a personal site they own, because canUpdateWebsite and canDeleteWebsite skip the role check for user-owned sites. Imported owned sites become read-only for them. Not covered by a decision record; the import inventory should flag it."
+   ]
+  }
+ ],
+ "other_lossy_points": [
+  {
+   "topic": "API keys",
+   "upstream": "A key acts as its whole user minus blocked path prefixes (src/lib/auth.ts:32-66, src/lib/api-key.ts:11-18).",
+   "holocron": "Keys carry operation and site grants and can never exceed the owner's capabilities. Account, auth, 2FA, key, user and admin operations cannot be granted. Imported keys are reissued, so nothing maps."
+  },
+  {
+   "topic": "Shares",
+   "upstream": "Share token covers website, link, pixel or board ids and 14 section toggles plus allowFilter; no lifetime, no measure, field or date limits (src/permissions/share.ts:5-50,53-98). Exports and replays refuse share tokens (share.ts:101-111).",
+   "holocron": "Shares carry measures, fields, actions, range limit (current plus comparison range), lifetime, pinned filter, and an optional recordings grant (decision 0007). Sections do not map one to one, so imported shares stay preserved-unmapped until the matrix decision on share continuity."
+  },
+  {
+   "topic": "Saved explorations",
+   "upstream": "Reports are visible to anyone who can view the site (src/permissions/report.ts:28-48).",
+   "holocron": "Visibility 'own' is author only; workspace admins and owners get not_found (decision 0007, Own explorations)."
+  },
+  {
+   "topic": "Role changes",
+   "upstream": "Actor must outrank the target (teams/[teamId]/users/[userId]/route.ts:56-69,100-109). The lines read do not compare the new role to the actor's rank, and owners cannot be removed by non-admins (route.ts:94-97).",
+   "holocron": "Actor must outrank the target and may not grant a role at or above their own. Raising to admin or owner needs reauthentication (decision 0007)."
+  },
+  {
+   "topic": "Team deletion and last owner",
+   "upstream": "team:delete belongs to owner only. Nothing read prevents an owner leaving a team ownerless.",
+   "holocron": "users.delete refuses while the user is the only owner of a workspace (decision 0007, User erasure scope). Leaving a team as last owner is not covered."
+  },
+  {
+   "topic": "Logins and sessions",
+   "upstream": "Sessions are invalidated when the password hash changes (src/lib/auth.ts:98-103). A partial token after the password step is never a session (auth.ts:81-86).",
+   "holocron": "Both kept as cases. Sessions are not imported."
+  },
+  {
+   "topic": "Reauthentication",
+   "upstream": "No fresh-login rule for sensitive actions.",
+   "holocron": "Eleven commands need a password check within 10 minutes (decision 0007, Reauthentication for sensitive commands)."
+  },
+  {
+   "topic": "User deletion",
+   "upstream": "deleteUser removes the user's personal websites, owned teams and their links, pixels and boards (src/queries/prisma/user.ts:121, per decision 0007).",
+   "holocron": "Refused while the user owns resources; otherwise account data is deleted and shared work is kept (decision 0007, User erasure scope)."
+  }
+ ]
+}

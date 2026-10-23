@@ -1,0 +1,824 @@
+{
+  "case": "Q02-30d-A-vienna",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "totals": {
+    "pageviews": 3750000,
+    "visitor_days": 500000
+  },
+  "row_count": 98600,
+  "page": {
+    "size": 100,
+    "index": 0
+  },
+  "rows": [
+    {
+      "path": {
+        "t": "string",
+        "v": "/"
+      },
+      "pageviews": 997193,
+      "visitor_days": 450434
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/pricing"
+      },
+      "pageviews": 123985,
+      "visitor_days": 111550
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/docs"
+      },
+      "pageviews": 82366,
+      "visitor_days": 76698
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/blog"
+      },
+      "pageviews": 62124,
+      "visitor_days": 58915
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/signup"
+      },
+      "pageviews": 49289,
+      "visitor_days": 47198
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/login"
+      },
+      "pageviews": 41171,
+      "visitor_days": 39686
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/features"
+      },
+      "pageviews": 34988,
+      "visitor_days": 33949
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/about"
+      },
+      "pageviews": 31171,
+      "visitor_days": 30364
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/contact"
+      },
+      "pageviews": 27424,
+      "visitor_days": 26793
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/changelog"
+      },
+      "pageviews": 24913,
+      "visitor_days": 24373
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/careers"
+      },
+      "pageviews": 22539,
+      "visitor_days": 22068
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/docs/getting-started"
+      },
+      "pageviews": 20499,
+      "visitor_days": 20151
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/docs/api"
+      },
+      "pageviews": 19148,
+      "visitor_days": 18831
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/blog/launch"
+      },
+      "pageviews": 17645,
+      "visitor_days": 17359
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/legal/privacy"
+      },
+      "pageviews": 16646,
+      "visitor_days": 16401
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/legal/terms"
+      },
+      "pageviews": 15745,
+      "visitor_days": 15528
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00016"
+      },
+      "pageviews": 14478,
+      "visitor_days": 14294
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00017"
+      },
+      "pageviews": 13603,
+      "visitor_days": 13453
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00018"
+      },
+      "pageviews": 12974,
+      "visitor_days": 12848
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00019"
+      },
+      "pageviews": 12441,
+      "visitor_days": 12319
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00020"
+      },
+      "pageviews": 11662,
+      "visitor_days": 11546
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00021"
+      },
+      "pageviews": 11214,
+      "visitor_days": 11115
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00022"
+      },
+      "pageviews": 10792,
+      "visitor_days": 10692
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00023"
+      },
+      "pageviews": 10301,
+      "visitor_days": 10216
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00024"
+      },
+      "pageviews": 9791,
+      "visitor_days": 9718
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00025"
+      },
+      "pageviews": 9487,
+      "visitor_days": 9412
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00026"
+      },
+      "pageviews": 9121,
+      "visitor_days": 9051
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00027"
+      },
+      "pageviews": 8830,
+      "visitor_days": 8763
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00028"
+      },
+      "pageviews": 8488,
+      "visitor_days": 8420
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00029"
+      },
+      "pageviews": 8283,
+      "visitor_days": 8227
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00030"
+      },
+      "pageviews": 8082,
+      "visitor_days": 8033
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00031"
+      },
+      "pageviews": 7826,
+      "visitor_days": 7769
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00032"
+      },
+      "pageviews": 7496,
+      "visitor_days": 7445
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00033"
+      },
+      "pageviews": 7221,
+      "visitor_days": 7173
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00034"
+      },
+      "pageviews": 6971,
+      "visitor_days": 6931
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00035"
+      },
+      "pageviews": 6717,
+      "visitor_days": 6681
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00036"
+      },
+      "pageviews": 6555,
+      "visitor_days": 6511
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00037"
+      },
+      "pageviews": 6484,
+      "visitor_days": 6436
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00038"
+      },
+      "pageviews": 6396,
+      "visitor_days": 6368
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00039"
+      },
+      "pageviews": 6221,
+      "visitor_days": 6187
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00040"
+      },
+      "pageviews": 5949,
+      "visitor_days": 5913
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00041"
+      },
+      "pageviews": 5909,
+      "visitor_days": 5878
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00042"
+      },
+      "pageviews": 5727,
+      "visitor_days": 5703
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00043"
+      },
+      "pageviews": 5723,
+      "visitor_days": 5697
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00044"
+      },
+      "pageviews": 5509,
+      "visitor_days": 5483
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00046"
+      },
+      "pageviews": 5274,
+      "visitor_days": 5249
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00045"
+      },
+      "pageviews": 5273,
+      "visitor_days": 5248
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00047"
+      },
+      "pageviews": 5191,
+      "visitor_days": 5170
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00048"
+      },
+      "pageviews": 4969,
+      "visitor_days": 4955
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00049"
+      },
+      "pageviews": 4867,
+      "visitor_days": 4849
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00051"
+      },
+      "pageviews": 4791,
+      "visitor_days": 4771
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00050"
+      },
+      "pageviews": 4714,
+      "visitor_days": 4700
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00052"
+      },
+      "pageviews": 4653,
+      "visitor_days": 4637
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00053"
+      },
+      "pageviews": 4639,
+      "visitor_days": 4609
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00054"
+      },
+      "pageviews": 4481,
+      "visitor_days": 4468
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00056"
+      },
+      "pageviews": 4421,
+      "visitor_days": 4406
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00057"
+      },
+      "pageviews": 4348,
+      "visitor_days": 4330
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00055"
+      },
+      "pageviews": 4293,
+      "visitor_days": 4277
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00058"
+      },
+      "pageviews": 4262,
+      "visitor_days": 4249
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00059"
+      },
+      "pageviews": 4145,
+      "visitor_days": 4135
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00061"
+      },
+      "pageviews": 4013,
+      "visitor_days": 3998
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00060"
+      },
+      "pageviews": 3945,
+      "visitor_days": 3931
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00063"
+      },
+      "pageviews": 3871,
+      "visitor_days": 3854
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00064"
+      },
+      "pageviews": 3871,
+      "visitor_days": 3860
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00062"
+      },
+      "pageviews": 3868,
+      "visitor_days": 3854
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00065"
+      },
+      "pageviews": 3795,
+      "visitor_days": 3782
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00066"
+      },
+      "pageviews": 3739,
+      "visitor_days": 3730
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00067"
+      },
+      "pageviews": 3718,
+      "visitor_days": 3707
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00068"
+      },
+      "pageviews": 3669,
+      "visitor_days": 3653
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00070"
+      },
+      "pageviews": 3485,
+      "visitor_days": 3479
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00069"
+      },
+      "pageviews": 3440,
+      "visitor_days": 3434
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00071"
+      },
+      "pageviews": 3433,
+      "visitor_days": 3425
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00072"
+      },
+      "pageviews": 3359,
+      "visitor_days": 3350
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00074"
+      },
+      "pageviews": 3335,
+      "visitor_days": 3326
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00073"
+      },
+      "pageviews": 3333,
+      "visitor_days": 3323
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00076"
+      },
+      "pageviews": 3231,
+      "visitor_days": 3223
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00078"
+      },
+      "pageviews": 3215,
+      "visitor_days": 3209
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00079"
+      },
+      "pageviews": 3171,
+      "visitor_days": 3160
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00077"
+      },
+      "pageviews": 3156,
+      "visitor_days": 3153
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00075"
+      },
+      "pageviews": 3117,
+      "visitor_days": 3108
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00080"
+      },
+      "pageviews": 3007,
+      "visitor_days": 2999
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00082"
+      },
+      "pageviews": 2994,
+      "visitor_days": 2987
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00085"
+      },
+      "pageviews": 2992,
+      "visitor_days": 2986
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00083"
+      },
+      "pageviews": 2990,
+      "visitor_days": 2984
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00081"
+      },
+      "pageviews": 2974,
+      "visitor_days": 2967
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00084"
+      },
+      "pageviews": 2934,
+      "visitor_days": 2929
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00086"
+      },
+      "pageviews": 2852,
+      "visitor_days": 2849
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00087"
+      },
+      "pageviews": 2800,
+      "visitor_days": 2789
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00090"
+      },
+      "pageviews": 2783,
+      "visitor_days": 2778
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00088"
+      },
+      "pageviews": 2759,
+      "visitor_days": 2752
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00089"
+      },
+      "pageviews": 2759,
+      "visitor_days": 2756
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00092"
+      },
+      "pageviews": 2737,
+      "visitor_days": 2733
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00093"
+      },
+      "pageviews": 2653,
+      "visitor_days": 2641
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00091"
+      },
+      "pageviews": 2647,
+      "visitor_days": 2639
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00094"
+      },
+      "pageviews": 2571,
+      "visitor_days": 2567
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00097"
+      },
+      "pageviews": 2541,
+      "visitor_days": 2536
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00095"
+      },
+      "pageviews": 2523,
+      "visitor_days": 2519
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00096"
+      },
+      "pageviews": 2515,
+      "visitor_days": 2511
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00098"
+      },
+      "pageviews": 2501,
+      "visitor_days": 2496
+    },
+    {
+      "path": {
+        "t": "string",
+        "v": "/p/00103"
+      },
+      "pageviews": 2471,
+      "visitor_days": 2469
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 4750000,
+    "eligible_events": 4750000,
+    "rate": 1.0
+  }
+}

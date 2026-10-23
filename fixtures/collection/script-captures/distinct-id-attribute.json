@@ -1,0 +1,101 @@
+{
+  "id": "capture-distinct-id-attribute",
+  "description": "data-distinct-id triggers identify immediately at script start, before the pageview.",
+  "upstream_ref": [
+    "src/tracker/index.ts:244",
+    "src/tracker/index.ts:648-650"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "official Umami 3.4.0 container (tools/collection-harness/compose.yaml)"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-distinct-id": "attr-user"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [],
+  "captured": [
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "identify",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "id": "attr-user"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "id": "attr-user"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "identify first",
+      "passed": true
+    },
+    {
+      "description": "pageview carries id",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": true,
+  "validation_reason": "Captured from the real scripts talking to the official Umami 3.4.0 container; responses are upstream responses."
+}

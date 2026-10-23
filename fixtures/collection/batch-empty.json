@@ -1,0 +1,34 @@
+{
+  "id": "batch-empty",
+  "surface": "batch",
+  "polarity": "positive",
+  "description": "Empty array. 200 with zero counts and cache null.",
+  "upstream_ref": [
+    "src/app/api/batch/route.ts:20",
+    "src/app/api/batch/route.ts:48-54"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/batch",
+    "body": []
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "size": 0,
+      "processed": 0,
+      "errors": 0,
+      "details": [],
+      "cache": null
+    },
+    "body_match": "exact"
+  },
+  "expected_holocron": {
+    "outcome": "accepted",
+    "status": 200,
+    "decision": "proposed",
+    "notes": "Nothing stored; same body."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

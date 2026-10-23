@@ -1,0 +1,1093 @@
+{
+ "status": "adopted (decisions/0004-exploration-state-and-limits.md, Segments)",
+ "capability": "CAP-EXPLORE-07",
+ "grounding": [
+  "decisions/0004-exploration-state-and-limits.md: Segments, Group, Condition, Operator, Value, PredicateId, limits, canonical form (RFC 8785)",
+  "docs/technical-briefing.md: upstream disables saving segments with event-property filters; Holocron must save them"
+ ],
+ "shape": "Segment = { name, site, filter: Group }. Scoped to one site, visible to everyone who can read the site, validated against that site's field catalog.",
+ "valid": [
+  {
+   "id": "seg_mobile",
+   "result": "accepted",
+   "segment": {
+    "name": "Mobile",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   },
+   "jcs": "{\"filter\":{\"items\":[{\"cmp\":\"eq\",\"field\":\"device\",\"id\":\"f1\",\"kind\":\"cond\",\"value\":{\"t\":\"string\",\"v\":\"mobile\"}}],\"kind\":\"group\",\"op\":\"and\"},\"name\":\"Mobile\",\"site\":\"site_x\"}",
+   "sha256": "c92b4133d38f27e7ca6fe2e9bb397fbd42099f8c0e2ec8e8d56db7d962f2090a"
+  },
+  {
+   "id": "seg_event_prop",
+   "result": "accepted",
+   "segment": {
+    "name": "Pro signups",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "event_name",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "signup"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f2",
+       "field": {
+        "scope": "event",
+        "key": "plan"
+       },
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "pro"
+       }
+      }
+     ]
+    }
+   },
+   "jcs": "{\"filter\":{\"items\":[{\"cmp\":\"eq\",\"field\":\"event_name\",\"id\":\"f1\",\"kind\":\"cond\",\"value\":{\"t\":\"string\",\"v\":\"signup\"}},{\"cmp\":\"eq\",\"field\":{\"key\":\"plan\",\"scope\":\"event\"},\"id\":\"f2\",\"kind\":\"cond\",\"value\":{\"t\":\"string\",\"v\":\"pro\"}}],\"kind\":\"group\",\"op\":\"and\"},\"name\":\"Pro signups\",\"site\":\"site_x\"}",
+   "sha256": "0b14cdefea80f1b246a2e548d54d3440f7bf11a4bea9f8df48a6c5f913fef0f9"
+  },
+  {
+   "id": "seg_repeat",
+   "result": "accepted",
+   "segment": {
+    "name": "Austria or Germany",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "group",
+       "op": "or",
+       "items": [
+        {
+         "kind": "cond",
+         "id": "f1",
+         "field": "country",
+         "cmp": "eq",
+         "value": {
+          "t": "string",
+          "v": "AT"
+         }
+        },
+        {
+         "kind": "cond",
+         "id": "f2",
+         "field": "country",
+         "cmp": "eq",
+         "value": {
+          "t": "string",
+          "v": "DE"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "jcs": "{\"filter\":{\"items\":[{\"items\":[{\"cmp\":\"eq\",\"field\":\"country\",\"id\":\"f1\",\"kind\":\"cond\",\"value\":{\"t\":\"string\",\"v\":\"AT\"}},{\"cmp\":\"eq\",\"field\":\"country\",\"id\":\"f2\",\"kind\":\"cond\",\"value\":{\"t\":\"string\",\"v\":\"DE\"}}],\"kind\":\"group\",\"op\":\"or\"}],\"kind\":\"group\",\"op\":\"and\"},\"name\":\"Austria or Germany\",\"site\":\"site_x\"}",
+   "sha256": "f5088afda9dbf637e1a79928955673a8dd3492f6dbd75e62e671938c6d368f70"
+  },
+  {
+   "id": "seg_typed",
+   "result": "accepted",
+   "segment": {
+    "name": "Big baskets",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": {
+        "scope": "event",
+        "key": "price"
+       },
+       "cmp": "gt",
+       "value": {
+        "t": "integer",
+        "v": 10
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f2",
+       "field": {
+        "scope": "event",
+        "key": "coupon"
+       },
+       "cmp": "is_not_set"
+      }
+     ]
+    }
+   },
+   "jcs": "{\"filter\":{\"items\":[{\"cmp\":\"gt\",\"field\":{\"key\":\"price\",\"scope\":\"event\"},\"id\":\"f1\",\"kind\":\"cond\",\"value\":{\"t\":\"integer\",\"v\":10}},{\"cmp\":\"is_not_set\",\"field\":{\"key\":\"coupon\",\"scope\":\"event\"},\"id\":\"f2\",\"kind\":\"cond\"}],\"kind\":\"group\",\"op\":\"and\"},\"name\":\"Big baskets\",\"site\":\"site_x\"}",
+   "sha256": "c405804458abc0b4f553fc2106bfc2648d03e32a519d3648cb7d0c58e899fad5"
+  }
+ ],
+ "validity_cases": [
+  {
+   "id": "seg_depth_3",
+   "result": "accepted",
+   "note": "depth 3 is the limit",
+   "segment": {
+    "name": "Depth 3",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "group",
+       "op": "or",
+       "items": [
+        {
+         "kind": "group",
+         "op": "and",
+         "items": [
+          {
+           "kind": "cond",
+           "id": "f1",
+           "field": "device",
+           "cmp": "eq",
+           "value": {
+            "t": "string",
+            "v": "mobile"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_depth_4",
+   "result": "refused",
+   "code": "filter_too_deep",
+   "segment": {
+    "name": "Depth 4",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "group",
+       "op": "or",
+       "items": [
+        {
+         "kind": "group",
+         "op": "and",
+         "items": [
+          {
+           "kind": "group",
+           "op": "or",
+           "items": [
+            {
+             "kind": "cond",
+             "id": "f1",
+             "field": "device",
+             "cmp": "eq",
+             "value": {
+              "t": "string",
+              "v": "mobile"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_33_conditions",
+   "result": "refused",
+   "code": "too_many_conditions",
+   "segment": {
+    "name": "Too many",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p1"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f2",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p2"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f3",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p3"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f4",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p4"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f5",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p5"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f6",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p6"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f7",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p7"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f8",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p8"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f9",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p9"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f10",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p10"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f11",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p11"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f12",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p12"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f13",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p13"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f14",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p14"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f15",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p15"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f16",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p16"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f17",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p17"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f18",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p18"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f19",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p19"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f20",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p20"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f21",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p21"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f22",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p22"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f23",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p23"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f24",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p24"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f25",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p25"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f26",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p26"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f27",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p27"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f28",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p28"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f29",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p29"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f30",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p30"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f31",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p31"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f32",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p32"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f33",
+       "field": "path",
+       "cmp": "neq",
+       "value": {
+        "t": "string",
+        "v": "/p33"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_dup_id",
+   "result": "refused",
+   "code": null,
+   "note": "predicate ids are unique within the state; no code is named",
+   "segment": {
+    "name": "Duplicate ids",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      },
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "tablet"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_51_in",
+   "result": "refused",
+   "code": null,
+   "note": "over the 50 item limit; no code is named",
+   "segment": {
+    "name": "Long list",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "path",
+       "cmp": "in",
+       "value": {
+        "t": "list",
+        "v": [
+         {
+          "t": "string",
+          "v": "/p0"
+         },
+         {
+          "t": "string",
+          "v": "/p1"
+         },
+         {
+          "t": "string",
+          "v": "/p2"
+         },
+         {
+          "t": "string",
+          "v": "/p3"
+         },
+         {
+          "t": "string",
+          "v": "/p4"
+         },
+         {
+          "t": "string",
+          "v": "/p5"
+         },
+         {
+          "t": "string",
+          "v": "/p6"
+         },
+         {
+          "t": "string",
+          "v": "/p7"
+         },
+         {
+          "t": "string",
+          "v": "/p8"
+         },
+         {
+          "t": "string",
+          "v": "/p9"
+         },
+         {
+          "t": "string",
+          "v": "/p10"
+         },
+         {
+          "t": "string",
+          "v": "/p11"
+         },
+         {
+          "t": "string",
+          "v": "/p12"
+         },
+         {
+          "t": "string",
+          "v": "/p13"
+         },
+         {
+          "t": "string",
+          "v": "/p14"
+         },
+         {
+          "t": "string",
+          "v": "/p15"
+         },
+         {
+          "t": "string",
+          "v": "/p16"
+         },
+         {
+          "t": "string",
+          "v": "/p17"
+         },
+         {
+          "t": "string",
+          "v": "/p18"
+         },
+         {
+          "t": "string",
+          "v": "/p19"
+         },
+         {
+          "t": "string",
+          "v": "/p20"
+         },
+         {
+          "t": "string",
+          "v": "/p21"
+         },
+         {
+          "t": "string",
+          "v": "/p22"
+         },
+         {
+          "t": "string",
+          "v": "/p23"
+         },
+         {
+          "t": "string",
+          "v": "/p24"
+         },
+         {
+          "t": "string",
+          "v": "/p25"
+         },
+         {
+          "t": "string",
+          "v": "/p26"
+         },
+         {
+          "t": "string",
+          "v": "/p27"
+         },
+         {
+          "t": "string",
+          "v": "/p28"
+         },
+         {
+          "t": "string",
+          "v": "/p29"
+         },
+         {
+          "t": "string",
+          "v": "/p30"
+         },
+         {
+          "t": "string",
+          "v": "/p31"
+         },
+         {
+          "t": "string",
+          "v": "/p32"
+         },
+         {
+          "t": "string",
+          "v": "/p33"
+         },
+         {
+          "t": "string",
+          "v": "/p34"
+         },
+         {
+          "t": "string",
+          "v": "/p35"
+         },
+         {
+          "t": "string",
+          "v": "/p36"
+         },
+         {
+          "t": "string",
+          "v": "/p37"
+         },
+         {
+          "t": "string",
+          "v": "/p38"
+         },
+         {
+          "t": "string",
+          "v": "/p39"
+         },
+         {
+          "t": "string",
+          "v": "/p40"
+         },
+         {
+          "t": "string",
+          "v": "/p41"
+         },
+         {
+          "t": "string",
+          "v": "/p42"
+         },
+         {
+          "t": "string",
+          "v": "/p43"
+         },
+         {
+          "t": "string",
+          "v": "/p44"
+         },
+         {
+          "t": "string",
+          "v": "/p45"
+         },
+         {
+          "t": "string",
+          "v": "/p46"
+         },
+         {
+          "t": "string",
+          "v": "/p47"
+         },
+         {
+          "t": "string",
+          "v": "/p48"
+         },
+         {
+          "t": "string",
+          "v": "/p49"
+         },
+         {
+          "t": "string",
+          "v": "/p50"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_between_1",
+   "result": "refused",
+   "code": null,
+   "note": "between takes exactly 2 values; no code is named",
+   "segment": {
+    "name": "Between one",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": {
+        "scope": "event",
+        "key": "price"
+       },
+       "cmp": "between",
+       "value": {
+        "t": "list",
+        "v": [
+         {
+          "t": "integer",
+          "v": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_trim",
+   "result": "accepted",
+   "note": "stored name is 'Mobile'",
+   "segment": {
+    "name": "  Mobile  ",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_empty",
+   "result": "refused",
+   "code": null,
+   "segment": {
+    "name": "   ",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_100",
+   "result": "accepted",
+   "segment": {
+    "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_101",
+   "result": "refused",
+   "code": null,
+   "segment": {
+    "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_case_dup",
+   "result": "refused",
+   "code": null,
+   "note": "'mobile' after 'Mobile' exists on the same site; unique after case folding",
+   "segment": {
+    "name": "mobile",
+    "site": "site_x",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_name_other_site",
+   "result": "accepted",
+   "note": "same name on another site is fine",
+   "segment": {
+    "name": "Mobile",
+    "site": "site_y",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": "device",
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "mobile"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "seg_unknown_property",
+   "result": "refused",
+   "code": null,
+   "note": "a property key absent from site_y's field catalog is refused when it only exists on site_x (setup: 'plan' observed on site_x only)",
+   "segment": {
+    "name": "Plan",
+    "site": "site_y",
+    "filter": {
+     "kind": "group",
+     "op": "and",
+     "items": [
+      {
+       "kind": "cond",
+       "id": "f1",
+       "field": {
+        "scope": "event",
+        "key": "plan"
+       },
+       "cmp": "eq",
+       "value": {
+        "t": "string",
+        "v": "pro"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "apply_case": {
+  "id": "seg_apply",
+  "state_filter_before": {
+   "kind": "group",
+   "op": "and",
+   "items": [
+    {
+     "kind": "cond",
+     "id": "f1",
+     "field": "country",
+     "cmp": "eq",
+     "value": {
+      "t": "string",
+      "v": "AT"
+     }
+    }
+   ]
+  },
+  "apply": "seg_repeat",
+  "assert": [
+   "the state's filter now holds the segment's conditions with new predicate ids that match ^[a-z0-9_]{1,16}$ and collide with no id already in the state",
+   "existing condition f1 keeps its id",
+   "the state holds no reference to the segment",
+   "editing the segment afterwards leaves the saved exploration unchanged"
+  ]
+ },
+ "jcs_note": "jcs is keys sorted by code point, no whitespace. For the ASCII content here that equals RFC 8785.",
+ "open": [
+  "Error codes for duplicate predicate ids, oversize lists, wrong between arity and the name rules are not named in 0004."
+ ]
+}

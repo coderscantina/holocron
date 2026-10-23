@@ -1,0 +1,378 @@
+{
+  "id": "capture-recorder-element-exclusion",
+  "description": "Recorder on a site whose block selector is .private: the blocked element, its attributes and its text never leave the browser; the rest of the page is still recorded.",
+  "upstream_ref": [
+    "src/recorder/index.js:479-495",
+    "src/app/api/websites/[websiteId]/recorder/route.ts:32-46"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "recorder_sha256": "21e6312866db01a71841b772c9882333231be1bc3fdbeeac1ed5193794ad80c6",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000005"
+    },
+    "recorder_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000005"
+    },
+    "body": "<main><h1>Checkout</h1><div class=\"private\" data-account=\"DE89-3704-0044-0532\"><span>Secret customer text 4711</span></div><button id=\"b\">Pay</button></main>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForTimeout(1500);",
+    "await page.click('#b');",
+    "await page.waitForTimeout(3000);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/api/websites/5e1a0000-0000-4000-8000-000000000005/recorder",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 200,
+        "body": {
+          "enabled": true,
+          "replayEnabled": true,
+          "heatmapEnabled": false,
+          "sampleRate": 1,
+          "heatmapSampleRate": 0.1,
+          "maskLevel": "strict",
+          "maxDuration": 300000,
+          "blockSelector": ".private"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000005",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000005",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000005",
+          "events": [
+            {
+              "type": 4,
+              "data": {
+                "href": "http://127.0.0.1:33401/fixture",
+                "width": 1280,
+                "height": 720
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000005",
+          "events": [
+            {
+              "type": 2,
+              "data": {
+                "node": {
+                  "type": 0,
+                  "childNodes": [
+                    {
+                      "type": 1,
+                      "name": "html",
+                      "publicId": "",
+                      "systemId": "",
+                      "id": 2
+                    },
+                    {
+                      "type": 2,
+                      "tagName": "html",
+                      "attributes": {},
+                      "childNodes": [
+                        {
+                          "type": 2,
+                          "tagName": "head",
+                          "attributes": {},
+                          "childNodes": [
+                            {
+                              "type": 2,
+                              "tagName": "meta",
+                              "attributes": {
+                                "charset": "utf-8"
+                              },
+                              "childNodes": [],
+                              "id": 5
+                            },
+                            {
+                              "type": 2,
+                              "tagName": "title",
+                              "attributes": {},
+                              "childNodes": [
+                                {
+                                  "type": 3,
+                                  "textContent": "******* ****",
+                                  "id": 7
+                                }
+                              ],
+                              "id": 6
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 8
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 9
+                            },
+                            {
+                              "type": 3,
+                              "textContent": "\n",
+                              "id": 10
+                            }
+                          ],
+                          "id": 4
+                        },
+                        {
+                          "type": 2,
+                          "tagName": "body",
+                          "attributes": {},
+                          "childNodes": [
+                            {
+                              "type": 2,
+                              "tagName": "main",
+                              "attributes": {},
+                              "childNodes": [
+                                {
+                                  "type": 2,
+                                  "tagName": "h1",
+                                  "attributes": {},
+                                  "childNodes": [
+                                    {
+                                      "type": 3,
+                                      "textContent": "********",
+                                      "id": 14
+                                    }
+                                  ],
+                                  "id": 13
+                                },
+                                {
+                                  "type": 2,
+                                  "tagName": "div",
+                                  "attributes": {
+                                    "class": "private",
+                                    "rr_width": "1264px",
+                                    "rr_height": "18px"
+                                  },
+                                  "childNodes": [],
+                                  "id": 15
+                                },
+                                {
+                                  "type": 2,
+                                  "tagName": "button",
+                                  "attributes": {
+                                    "id": "b"
+                                  },
+                                  "childNodes": [
+                                    {
+                                      "type": 3,
+                                      "textContent": "***",
+                                      "id": 17
+                                    }
+                                  ],
+                                  "id": 16
+                                }
+                              ],
+                              "id": 12
+                            }
+                          ],
+                          "id": 11
+                        }
+                      ],
+                      "id": 3
+                    }
+                  ],
+                  "id": 1
+                },
+                "initialOffset": {
+                  "left": 0,
+                  "top": 0
+                }
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/record",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>"
+      },
+      "request_body": {
+        "type": "record",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000005",
+          "events": [
+            {
+              "type": 3,
+              "data": {
+                "source": 1,
+                "positions": [
+                  {
+                    "x": 27,
+                    "y": 108,
+                    "id": 16,
+                    "timeOffset": "<OFFSET_MS>"
+                  }
+                ]
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 1,
+                "id": 16,
+                "x": 27.489999771118164,
+                "y": 108.37000274658203
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 5,
+                "id": 16
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 0,
+                "id": 16,
+                "x": 27.489999771118164,
+                "y": 108.37000274658203
+              },
+              "timestamp": "<UNIX_MS>"
+            },
+            {
+              "type": 3,
+              "data": {
+                "source": 2,
+                "type": 2,
+                "id": 16,
+                "x": 27,
+                "y": 108,
+                "pointerType": 0
+              },
+              "timestamp": "<UNIX_MS>"
+            }
+          ],
+          "timestamp": "<UNIX_S>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "configuration names the block selector",
+      "passed": true
+    },
+    {
+      "description": "replay chunks sent",
+      "passed": true
+    },
+    {
+      "description": "a full snapshot (rrweb type 2) was sent",
+      "passed": true
+    },
+    {
+      "description": "blocked attribute never transmitted",
+      "passed": true
+    },
+    {
+      "description": "blocked text never transmitted",
+      "passed": true
+    },
+    {
+      "description": "upstream answered ok:true to every record post",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

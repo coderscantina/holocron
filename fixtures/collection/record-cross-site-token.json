@@ -1,0 +1,65 @@
+{
+  "id": "record-cross-site-token",
+  "surface": "record.replay",
+  "polarity": "negative",
+  "description": "Token issued for website A used to record for website B. Upstream reads only sessionId/visitId from the token.",
+  "upstream_ref": [
+    "src/app/api/record/route.ts:139-152"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/record",
+    "headers": {
+      "x-umami-cache": "{{CACHE:5e1a0000-0000-4000-8000-000000000001}}"
+    },
+    "body": {
+      "type": "record",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000002",
+        "events": [
+          {
+            "type": 4,
+            "data": {
+              "href": "http://localhost:8080/",
+              "width": 1280,
+              "height": 720
+            },
+            "timestamp": 1790000000000
+          },
+          {
+            "type": 3,
+            "data": {
+              "source": 1,
+              "positions": [
+                {
+                  "x": 10,
+                  "y": 20,
+                  "id": 5,
+                  "timeOffset": 0
+                }
+              ]
+            },
+            "timestamp": 1790000000500
+          }
+        ],
+        "timestamp": "{{NOW_S}}"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 200,
+    "body": {
+      "ok": true
+    },
+    "body_match": "exact",
+    "notes": "Upstream stores the chunk under website B with A's session."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "adopted",
+    "notes": "A token for another website is refused with \"Invalid session token.\" (docs/decisions/0005, cache tokens bound to their website)."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

@@ -1,0 +1,824 @@
+{
+  "case": "Q02-12m-D-vienna",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2025-09-30T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z",
+    "retention_start": "2025-10-01T00:00:00.000Z"
+  },
+  "totals": {
+    "pageviews": 2399373,
+    "visitor_days": 299922
+  },
+  "row_count": 9029,
+  "page": {
+    "size": 100,
+    "index": 0
+  },
+  "rows": [
+    {
+      "referrer_domain": {
+        "t": "not_set"
+      },
+      "pageviews": 962600,
+      "visitor_days": 120325
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "google.com"
+      },
+      "pageviews": 534470,
+      "visitor_days": 66809
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "bing.com"
+      },
+      "pageviews": 50815,
+      "visitor_days": 6352
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "duckduckgo.com"
+      },
+      "pageviews": 34072,
+      "visitor_days": 4259
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "news.ycombinator.com"
+      },
+      "pageviews": 25224,
+      "visitor_days": 3153
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "github.com"
+      },
+      "pageviews": 20288,
+      "visitor_days": 2536
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "reddit.com"
+      },
+      "pageviews": 16880,
+      "visitor_days": 2110
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "linkedin.com"
+      },
+      "pageviews": 14792,
+      "visitor_days": 1849
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "t.co"
+      },
+      "pageviews": 13176,
+      "visitor_days": 1647
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00008.example"
+      },
+      "pageviews": 11760,
+      "visitor_days": 1470
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00009.example"
+      },
+      "pageviews": 10736,
+      "visitor_days": 1342
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00010.example"
+      },
+      "pageviews": 9568,
+      "visitor_days": 1196
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00011.example"
+      },
+      "pageviews": 8360,
+      "visitor_days": 1045
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00012.example"
+      },
+      "pageviews": 7584,
+      "visitor_days": 948
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00013.example"
+      },
+      "pageviews": 7248,
+      "visitor_days": 906
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00014.example"
+      },
+      "pageviews": 7080,
+      "visitor_days": 885
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00015.example"
+      },
+      "pageviews": 6312,
+      "visitor_days": 789
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00016.example"
+      },
+      "pageviews": 6104,
+      "visitor_days": 763
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00017.example"
+      },
+      "pageviews": 5920,
+      "visitor_days": 740
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00018.example"
+      },
+      "pageviews": 5848,
+      "visitor_days": 731
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00020.example"
+      },
+      "pageviews": 4984,
+      "visitor_days": 623
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00021.example"
+      },
+      "pageviews": 4856,
+      "visitor_days": 607
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00019.example"
+      },
+      "pageviews": 4576,
+      "visitor_days": 572
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00023.example"
+      },
+      "pageviews": 4456,
+      "visitor_days": 557
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00022.example"
+      },
+      "pageviews": 4400,
+      "visitor_days": 550
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00024.example"
+      },
+      "pageviews": 4288,
+      "visitor_days": 536
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00025.example"
+      },
+      "pageviews": 3912,
+      "visitor_days": 489
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00026.example"
+      },
+      "pageviews": 3808,
+      "visitor_days": 476
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00027.example"
+      },
+      "pageviews": 3640,
+      "visitor_days": 455
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00028.example"
+      },
+      "pageviews": 3608,
+      "visitor_days": 451
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00029.example"
+      },
+      "pageviews": 3368,
+      "visitor_days": 421
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00031.example"
+      },
+      "pageviews": 3320,
+      "visitor_days": 415
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00032.example"
+      },
+      "pageviews": 3152,
+      "visitor_days": 394
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00030.example"
+      },
+      "pageviews": 2968,
+      "visitor_days": 371
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00035.example"
+      },
+      "pageviews": 2960,
+      "visitor_days": 370
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00033.example"
+      },
+      "pageviews": 2936,
+      "visitor_days": 367
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00036.example"
+      },
+      "pageviews": 2912,
+      "visitor_days": 364
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00034.example"
+      },
+      "pageviews": 2880,
+      "visitor_days": 360
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00037.example"
+      },
+      "pageviews": 2784,
+      "visitor_days": 348
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00039.example"
+      },
+      "pageviews": 2744,
+      "visitor_days": 343
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00038.example"
+      },
+      "pageviews": 2656,
+      "visitor_days": 332
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00040.example"
+      },
+      "pageviews": 2456,
+      "visitor_days": 307
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00043.example"
+      },
+      "pageviews": 2432,
+      "visitor_days": 304
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00042.example"
+      },
+      "pageviews": 2384,
+      "visitor_days": 298
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00046.example"
+      },
+      "pageviews": 2384,
+      "visitor_days": 298
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00041.example"
+      },
+      "pageviews": 2296,
+      "visitor_days": 287
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00044.example"
+      },
+      "pageviews": 2200,
+      "visitor_days": 275
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00049.example"
+      },
+      "pageviews": 2112,
+      "visitor_days": 264
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00051.example"
+      },
+      "pageviews": 2104,
+      "visitor_days": 263
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00048.example"
+      },
+      "pageviews": 2024,
+      "visitor_days": 253
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00054.example"
+      },
+      "pageviews": 1976,
+      "visitor_days": 247
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00045.example"
+      },
+      "pageviews": 1952,
+      "visitor_days": 244
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00053.example"
+      },
+      "pageviews": 1864,
+      "visitor_days": 233
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00052.example"
+      },
+      "pageviews": 1840,
+      "visitor_days": 230
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00047.example"
+      },
+      "pageviews": 1832,
+      "visitor_days": 229
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00060.example"
+      },
+      "pageviews": 1800,
+      "visitor_days": 225
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00057.example"
+      },
+      "pageviews": 1792,
+      "visitor_days": 224
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00059.example"
+      },
+      "pageviews": 1792,
+      "visitor_days": 224
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00050.example"
+      },
+      "pageviews": 1736,
+      "visitor_days": 217
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00056.example"
+      },
+      "pageviews": 1656,
+      "visitor_days": 207
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00067.example"
+      },
+      "pageviews": 1640,
+      "visitor_days": 205
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00068.example"
+      },
+      "pageviews": 1640,
+      "visitor_days": 205
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00058.example"
+      },
+      "pageviews": 1632,
+      "visitor_days": 204
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00055.example"
+      },
+      "pageviews": 1608,
+      "visitor_days": 201
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00063.example"
+      },
+      "pageviews": 1576,
+      "visitor_days": 197
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00066.example"
+      },
+      "pageviews": 1576,
+      "visitor_days": 197
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00061.example"
+      },
+      "pageviews": 1520,
+      "visitor_days": 190
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00072.example"
+      },
+      "pageviews": 1512,
+      "visitor_days": 189
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00062.example"
+      },
+      "pageviews": 1496,
+      "visitor_days": 187
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00071.example"
+      },
+      "pageviews": 1432,
+      "visitor_days": 179
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00077.example"
+      },
+      "pageviews": 1432,
+      "visitor_days": 179
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00085.example"
+      },
+      "pageviews": 1424,
+      "visitor_days": 178
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00076.example"
+      },
+      "pageviews": 1408,
+      "visitor_days": 176
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00084.example"
+      },
+      "pageviews": 1408,
+      "visitor_days": 176
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00064.example"
+      },
+      "pageviews": 1376,
+      "visitor_days": 172
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00065.example"
+      },
+      "pageviews": 1352,
+      "visitor_days": 169
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00073.example"
+      },
+      "pageviews": 1344,
+      "visitor_days": 168
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00079.example"
+      },
+      "pageviews": 1336,
+      "visitor_days": 167
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00078.example"
+      },
+      "pageviews": 1328,
+      "visitor_days": 166
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00080.example"
+      },
+      "pageviews": 1328,
+      "visitor_days": 166
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00075.example"
+      },
+      "pageviews": 1312,
+      "visitor_days": 164
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00083.example"
+      },
+      "pageviews": 1312,
+      "visitor_days": 164
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00088.example"
+      },
+      "pageviews": 1272,
+      "visitor_days": 159
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00070.example"
+      },
+      "pageviews": 1248,
+      "visitor_days": 156
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00069.example"
+      },
+      "pageviews": 1232,
+      "visitor_days": 154
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00096.example"
+      },
+      "pageviews": 1200,
+      "visitor_days": 150
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00081.example"
+      },
+      "pageviews": 1192,
+      "visitor_days": 149
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00086.example"
+      },
+      "pageviews": 1192,
+      "visitor_days": 149
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00089.example"
+      },
+      "pageviews": 1192,
+      "visitor_days": 149
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00074.example"
+      },
+      "pageviews": 1176,
+      "visitor_days": 147
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00092.example"
+      },
+      "pageviews": 1160,
+      "visitor_days": 145
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00091.example"
+      },
+      "pageviews": 1152,
+      "visitor_days": 144
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00109.example"
+      },
+      "pageviews": 1136,
+      "visitor_days": 142
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00090.example"
+      },
+      "pageviews": 1112,
+      "visitor_days": 139
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00087.example"
+      },
+      "pageviews": 1096,
+      "visitor_days": 137
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00095.example"
+      },
+      "pageviews": 1072,
+      "visitor_days": 134
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00082.example"
+      },
+      "pageviews": 1056,
+      "visitor_days": 132
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00102.example"
+      },
+      "pageviews": 1040,
+      "visitor_days": 130
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00107.example"
+      },
+      "pageviews": 1040,
+      "visitor_days": 130
+    },
+    {
+      "referrer_domain": {
+        "t": "string",
+        "v": "ref-00097.example"
+      },
+      "pageviews": 1024,
+      "visitor_days": 128
+    }
+  ],
+  "identity_coverage": {
+    "with_identity": 2999216,
+    "eligible_events": 2999216,
+    "rate": 1.0
+  }
+}

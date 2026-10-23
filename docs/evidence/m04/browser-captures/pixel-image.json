@@ -1,0 +1,54 @@
+{
+  "id": "capture-pixel-image",
+  "description": "An <img> pointing at /p/{slug} gets the transparent GIF.",
+  "upstream_ref": [
+    "src/app/(collect)/p/[slug]/route.ts:10-73"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-auto-track": "false"
+    },
+    "body": "<img id=\"p\" src=\"http://127.0.0.1:33400/p/holocron-pixel\" alt=\"\">"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForFunction(() => document.getElementById('p').complete);"
+  ],
+  "captured": [
+    {
+      "method": "GET",
+      "path": "/p/holocron-pixel",
+      "request_headers": {},
+      "request_body": null,
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "image/gif"
+        },
+        "body": null
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "one pixel request",
+      "passed": true
+    },
+    {
+      "description": "200 image/gif",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

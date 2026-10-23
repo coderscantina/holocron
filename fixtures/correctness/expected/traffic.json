@@ -1,0 +1,368 @@
+{
+  "metric_version": 1,
+  "note": "Visitor-days are distinct daily pseudonyms over the range; the series counts per day bucket of the exploration timezone (0003 Visitors versus visitor-days). Spans are integer ms; the mean is rounded half to even to a whole ms (0003 Formulas). Ratios are rounded half to even to 4 places (0004 Encoding conventions).",
+  "cases": [
+    {
+      "id": "site-a-all",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2025-10-01",
+          "2026-10-03"
+        ],
+        "start": "2025-09-30T22:00:00.000Z",
+        "end": "2026-10-03T22:00:00.000Z",
+        "retention_start": "2025-10-02T22:00:00.000Z"
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "pageviews": 84,
+      "events": 54,
+      "events_by_name": {
+        "add_to_cart": 2,
+        "configure": 5,
+        "cta_click": 1,
+        "ping": 2,
+        "purchase": 12,
+        "refund": 1,
+        "signup": 25,
+        "signup_start": 6
+      },
+      "sessions": 68,
+      "visitor_days": {
+        "label": "visitor-days",
+        "value": 61
+      },
+      "identified_people": {
+        "value": 4,
+        "coverage": {
+          "linked_events": 11,
+          "eligible_events": 138,
+          "rate": 0.0797
+        }
+      },
+      "bounce_rate": {
+        "bounces": 24,
+        "denominator": 60,
+        "value": 0.4
+      },
+      "observed_span": {
+        "sessions": 60,
+        "sum_ms": 13304998,
+        "mean_ms": 221750,
+        "median_ms": 60000
+      },
+      "visitor_days_series_by_local_day": {
+        "2025-10-26": 1,
+        "2025-10-27": 1,
+        "2026-03-29": 1,
+        "2026-03-30": 1,
+        "2026-06-02": 4,
+        "2026-06-03": 1,
+        "2026-06-04": 1,
+        "2026-06-10": 1,
+        "2026-06-11": 2,
+        "2026-06-16": 7,
+        "2026-06-17": 1,
+        "2026-06-18": 5,
+        "2026-06-23": 5,
+        "2026-06-24": 1,
+        "2026-08-04": 1,
+        "2026-08-11": 1,
+        "2026-08-20": 1,
+        "2026-09-03": 1,
+        "2026-09-04": 1,
+        "2026-09-05": 1,
+        "2026-09-06": 1,
+        "2026-09-10": 1,
+        "2026-09-12": 1,
+        "2026-09-15": 2,
+        "2026-09-16": 1,
+        "2026-09-17": 1,
+        "2026-09-22": 1,
+        "2026-09-23": 1,
+        "2026-09-24": 1,
+        "2026-09-29": 2,
+        "2026-09-30": 2,
+        "2026-10-01": 1,
+        "2026-10-02": 1,
+        "2026-10-03": 7
+      },
+      "series_sum_differs": false,
+      "identity_coverage": {
+        "with_identity": 135,
+        "eligible_events": 138,
+        "rate": 0.9783
+      }
+    },
+    {
+      "id": "site-b-all",
+      "site": "B",
+      "range": {
+        "timezone": "UTC",
+        "days": [
+          "2026-06-01",
+          "2026-09-30"
+        ],
+        "start": "2026-06-01T00:00:00.000Z",
+        "end": "2026-10-01T00:00:00.000Z"
+      },
+      "session_policy_versions": [
+        1,
+        2
+      ],
+      "pageviews": 9,
+      "events": 2,
+      "events_by_name": {
+        "add_to_cart": 1,
+        "signup": 1
+      },
+      "sessions": 9,
+      "visitor_days": {
+        "label": "visitor-days",
+        "value": 8
+      },
+      "identified_people": {
+        "value": 0,
+        "coverage": {
+          "linked_events": 0,
+          "eligible_events": 11,
+          "rate": 0.0
+        }
+      },
+      "bounce_rate": {
+        "bounces": 7,
+        "denominator": 8,
+        "value": 0.875
+      },
+      "observed_span": {
+        "sessions": 8,
+        "sum_ms": 540000,
+        "mean_ms": 67500,
+        "median_ms": 0
+      },
+      "visitor_days_series_by_local_day": {
+        "2026-06-02": 1,
+        "2026-09-14": 2,
+        "2026-09-15": 4,
+        "2026-09-16": 1,
+        "2026-09-20": 1
+      },
+      "series_sum_differs": true,
+      "identity_coverage": {
+        "with_identity": 11,
+        "eligible_events": 11,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "dst-fall-2025",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2025-10-26",
+          "2025-10-27"
+        ],
+        "start": "2025-10-25T22:00:00.000Z",
+        "end": "2025-10-27T23:00:00.000Z"
+      },
+      "local_day_hours": {
+        "2025-10-26": 25,
+        "2025-10-27": 24
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "pageviews": 4,
+      "events": 0,
+      "sessions": 3,
+      "visitor_days": {
+        "label": "visitor-days",
+        "value": 2
+      },
+      "bounce_rate": {
+        "bounces": 2,
+        "denominator": 3,
+        "value": 0.6667
+      },
+      "observed_span": {
+        "sessions": 3,
+        "sum_ms": 1500000,
+        "mean_ms": 500000,
+        "median_ms": 0
+      },
+      "visitor_days_series_by_local_day": {
+        "2025-10-26": 1,
+        "2025-10-27": 1
+      },
+      "series_sum_differs": false,
+      "identity_coverage": {
+        "with_identity": 4,
+        "eligible_events": 4,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "dst-spring-2026",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-03-29",
+          "2026-03-30"
+        ],
+        "start": "2026-03-28T23:00:00.000Z",
+        "end": "2026-03-30T22:00:00.000Z"
+      },
+      "local_day_hours": {
+        "2026-03-29": 23,
+        "2026-03-30": 24
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "pageviews": 4,
+      "events": 0,
+      "sessions": 3,
+      "visitor_days": {
+        "label": "visitor-days",
+        "value": 2
+      },
+      "bounce_rate": {
+        "bounces": 2,
+        "denominator": 3,
+        "value": 0.6667
+      },
+      "observed_span": {
+        "sessions": 3,
+        "sum_ms": 1200000,
+        "mean_ms": 400000,
+        "median_ms": 0
+      },
+      "visitor_days_series_by_local_day": {
+        "2026-03-29": 1,
+        "2026-03-30": 1
+      },
+      "series_sum_differs": false,
+      "identity_coverage": {
+        "with_identity": 4,
+        "eligible_events": 4,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "day-2026-06-02",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-02",
+          "2026-06-02"
+        ],
+        "start": "2026-06-01T22:00:00.000Z",
+        "end": "2026-06-02T22:00:00.000Z"
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "pageviews": 7,
+      "events": 4,
+      "sessions": 5,
+      "visitors": {
+        "label": "visitors",
+        "value": 4
+      },
+      "bounce_rate": {
+        "bounces": 1,
+        "denominator": 4,
+        "value": 0.25
+      },
+      "observed_span": {
+        "sessions": 4,
+        "sum_ms": 1815999,
+        "mean_ms": 454000,
+        "median_ms": 5000
+      },
+      "identity_coverage": {
+        "with_identity": 9,
+        "eligible_events": 11,
+        "rate": 0.8182
+      }
+    },
+    {
+      "id": "day-2026-06-03",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-06-03",
+          "2026-06-03"
+        ],
+        "start": "2026-06-02T22:00:00.000Z",
+        "end": "2026-06-03T22:00:00.000Z"
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "pageviews": 4,
+      "events": 0,
+      "sessions": 1,
+      "visitors": {
+        "label": "visitors",
+        "value": 1
+      },
+      "bounce_rate": {
+        "bounces": 0,
+        "denominator": 1,
+        "value": 0.0
+      },
+      "observed_span": {
+        "sessions": 1,
+        "sum_ms": 1499000,
+        "mean_ms": 1499000,
+        "median_ms": 1499000
+      },
+      "identity_coverage": {
+        "with_identity": 4,
+        "eligible_events": 4,
+        "rate": 1.0
+      }
+    },
+    {
+      "id": "identified-2026-09-14-to-27",
+      "site": "A",
+      "range": {
+        "timezone": "Europe/Vienna",
+        "days": [
+          "2026-09-14",
+          "2026-09-27"
+        ],
+        "start": "2026-09-13T22:00:00.000Z",
+        "end": "2026-09-27T22:00:00.000Z"
+      },
+      "session_policy_versions": [
+        1
+      ],
+      "identified_people": {
+        "value": 3,
+        "coverage": {
+          "linked_events": 7,
+          "eligible_events": 9,
+          "rate": 0.7778
+        }
+      },
+      "visitor_days": {
+        "label": "visitor-days",
+        "value": 7
+      },
+      "identity_coverage": {
+        "with_identity": 9,
+        "eligible_events": 9,
+        "rate": 1.0
+      }
+    }
+  ]
+}

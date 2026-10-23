@@ -1,0 +1,6 @@
+{
+  "case": "postgresql-3.4.0",
+  "engine": "postgresql",
+  "migrationCount": 26,
+  "outcome": "accept"
+}

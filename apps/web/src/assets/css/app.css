@@ -1,0 +1,829 @@
+/* Adapted from Kit (github.com/coderscantina/kit, f447e797, MIT): resources/js/assets/css/app.css.
+   Holocron keeps the token ladder, type scale, shell geometry and focus rules unchanged. Removed:
+   AI styles, stacked tables and unused utilities. Added: chart series tokens, and accent presets
+   in more saturated shades with an `accent-text` token. The toast sheet (`vue-sonner.css`) is
+   copied unchanged. */
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+  --radius: 8px;
+  /* v2 radii extend the scale above; `--radius` stays for small controls. */
+  --radius-control: 10px;
+  --radius-panel: 14px;
+  --radius-canvas: 18px;
+
+  --color-blue-50: oklch(97.76% 0.011 234.81);
+  --color-blue-100: oklch(95.25% 0.023 237.64);
+  --color-blue-200: oklch(89.37% 0.053 237.01);
+  --color-blue-300: oklch(82.72% 0.086 238.13);
+  --color-blue-400: oklch(75.76% 0.121 240.02);
+  --color-blue-500: oklch(66.71% 0.161 245.54);
+  --color-blue-600: oklch(61.5% 0.156 246.57);
+  --color-blue-700: oklch(56.55% 0.143 246.33);
+  --color-blue-800: oklch(49.47% 0.123 246.18);
+  --color-blue-900: oklch(38.84% 0.094 245.39);
+  --color-blue-950: oklch(30.91% 0.071 243.7);
+
+  /* The gray ramp. The surfaces live in the two ends, so those ends are on a
+     fine grid and the middle, which only carries text, stays coarse.
+
+       25 - 200   light surfaces, 1.7 points of oklch L apart
+       250 - 700  text, 6 points apart at the top and widening
+       750 - 950  dark surfaces, 2.75 points apart
+
+     A rung and the fill or hairline that sits on it are one grid step apart,
+     so nothing in the shell jumps. */
+  --color-gray-25: oklch(98.3% 0.003 278.6);
+  --color-gray-50: oklch(96.6% 0.004 278.6);
+  --color-gray-75: oklch(94.9% 0.006 278.6);
+  --color-gray-100: oklch(93.2% 0.008 278.6);
+  --color-gray-125: oklch(91.5% 0.009 279);
+  --color-gray-150: oklch(89.8% 0.01 279.2);
+  --color-gray-175: oklch(88.1% 0.011 279.2);
+  --color-gray-200: oklch(86.4% 0.012 279);
+  --color-gray-250: oklch(80.3% 0.019 279.4);
+  --color-gray-300: oklch(74.2% 0.024 278.9);
+  --color-gray-400: oklch(65.24% 0.032 278.37);
+  --color-gray-500: oklch(55.99% 0.04 277.73);
+  --color-gray-600: oklch(47.78% 0.032 277.85);
+  --color-gray-700: oklch(39.21% 0.024 278.04);
+  --color-gray-750: oklch(34.38% 0.024 277.9);
+  --color-gray-800: oklch(31.63% 0.02 277.7);
+  --color-gray-825: oklch(28.88% 0.017 277.7);
+  --color-gray-850: oklch(26.13% 0.014 277.75);
+  --color-gray-875: oklch(23.38% 0.011 277.8);
+  --color-gray-900: oklch(20.63% 0.008 277.83);
+  --color-gray-925: oklch(17.89% 0.006 281);
+  --color-gray-950: oklch(15.15% 0.004 285.34);
+
+  --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-butter: cubic-bezier(0.42, 0, 0.28, 0.99);
+  --ease-micro-bounce: cubic-bezier(0, 0.44, 0.6, 1);
+  --ease-mini-bounce: cubic-bezier(0.17, 0.89, 0.47, 1.13);
+  --ease-bounce: cubic-bezier(0.8, -0.4, 0.219, 1.429);
+  --ease-embellishment: cubic-bezier(0.42, 0, 0, 1);
+
+  /* Type scale. The small rungs sit 1px above the kit's (base 16px instead of
+     15px) for legibility on dense screens, on the kit's line heights, so rows
+     and controls keep their height. */
+  --text-2xs: 11px;
+  --text-2xs--line-height: 14px;
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 14px;
+  --text-sm--line-height: 20px;
+  --text-base: 16px;
+  --text-base--line-height: 24px;
+  --text-lg: 18px;
+  --text-lg--line-height: 26px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 32px;
+  --text-3xl: 30px;
+  --text-3xl--line-height: 38px;
+
+  /* Elevation ladder. One rung per level of nesting, in the same order in
+     both modes: the frame sits furthest back, the canvas is the stage, and a
+     block that is boxed or floats sits one rung above whatever it is on.
+
+       L0 sidebar   the frame: sidebar, header, tab bar,       bg-sidebar
+                    mobile drawer
+       L1 surface   the canvas: body, main                     bg-surface
+       L2 card      a boxed block on the canvas: Card, Table,  bg-card border-border shadow-soft-sm
+                    Dialog, Sheet
+       L3 popover   floating: menu, select, tooltip, palette   bg-popover border-popover-border shadow-soft-lg
+       scrim        under a dialog                             bg-overlay
+
+     The header and the tab bar are the frame, not the canvas: they meet the
+     sidebar at a corner, and two tones meeting there put a seam through the
+     shell. One tone makes the chrome an L around a clean canvas.
+
+     The canvas is one inset panel on the frame. Light climbs toward white: a
+     gray-100 frame, a gray-50 canvas and white blocks on it, so a card is the
+     lightest thing on the page. The big shadow is for what floats.
+
+     Inside the frame (`data-frame`) a fill would match the frame's own tone,
+     so the frame swaps `fill`, `fill-strong` and `secondary` for its tints;
+     see the rule after the dark block. */
+  --sidebar: var(--color-gray-100);
+  --surface: var(--color-gray-50);
+  --card: var(--color-white);
+  --popover: var(--color-white);
+  --overlay: oklch(20.63% 0.008 277.83 / 0.45);
+
+  /* Fills are not rungs. They sit on a rung and tint it:
+       secondary         a control at rest, and the hover of a flat one
+       muted-background  a passive fill: table header, tab list, kbd, code
+       input             a field
+       elevated          a raised chip on a fill: the active tab, the switch thumb
+
+     A passive fill is one grid step off the canvas and two off a card; more
+     than that and a table header reads as a bar.
+     `elevated` is the exception: a chip has to be lighter than the fill it
+     rides on, so it goes to the top of the ramp. */
+  --secondary: var(--color-gray-100);
+  --secondary-foreground: var(--color-gray-800);
+  --muted-background: var(--color-gray-100);
+  --input: var(--color-white);
+  --input-border: var(--color-gray-200);
+  --elevated: var(--color-white);
+
+  /* v2 roles. `fill` is a control at rest and a passive fill (chip, search
+     field, segmented track, table head); `fill-strong` sits
+     one step above it (kbd, kind badge, meter track). `hairline` is the edge
+     of a card or table and every row and column divider. Controls are filled,
+     never outlined, and a card has a hairline instead of a shadow. */
+  --fill: var(--color-gray-100);
+  --fill-strong: var(--color-gray-150);
+  --hairline: var(--border);
+  /* The line between rows and columns inside a panel, a step softer than the
+     panel's own edge. Translucent, so it shows on a card, a filled header row
+     and a totals row alike. */
+  --divider: color-mix(in oklch, var(--color-gray-900) 8%, transparent);
+
+  /* Text, three steps: primary is a heading or a value, foreground is
+     body, muted is a label or a hint. Every step clears 4.5:1 on every rung. */
+  --primary: var(--color-gray-900);
+  --primary-foreground: var(--color-gray-50);
+  --foreground: var(--color-gray-700);
+  --card-foreground: var(--color-gray-700);
+  --popover-foreground: var(--color-gray-700);
+  /* --muted is a TEXT color (app-wide convention); --muted-background is the fill */
+  --muted: var(--color-gray-600);
+  /* Below the three steps: a dash for a value that is not there (0 events, no entry page). It
+     carries no reading of its own, so it may sit under 4.5:1; the cell names it for a screen
+     reader. */
+  --faint: var(--color-gray-300);
+
+  /* Hairlines, weakest to strongest: `popover-border`, `border`,
+     `input-border`, `border-strong`. `border` is the divider, `input-border`
+     the edge that makes a field a field, `border-strong` the one that has to
+     carry on its own (the switch track, the rule under a table header).
+     `popover-border` is the lightest because in light mode the shadow does
+     the floating, and a hard edge on top of it is what made menus look
+     heavy. */
+  --border: var(--color-gray-150);
+  --border-strong: var(--color-gray-250);
+  --popover-border: var(--color-gray-100);
+
+  /* The frame carries the same two text steps as the page. */
+  --sidebar-foreground: var(--color-gray-700);
+  --sidebar-muted: var(--color-gray-600);
+  --sidebar-accent: var(--color-gray-150);
+  --sidebar-accent-foreground: var(--color-gray-900);
+  /* The current page in a navigation list (the sidebar, the account nav): the
+     frame's strongest text on a tint. Hover only tints the row, so the two
+     never compete. */
+  --nav-active: var(--color-gray-175);
+  --nav-active-foreground: var(--sidebar-accent-foreground);
+  --sidebar-border: var(--color-gray-150);
+  --sidebar-ring: var(--ring);
+
+  --destructive: var(--color-red-600);
+  --destructive-foreground: var(--color-red-800);
+  --destructive-background: var(--color-red-200);
+
+  --success: var(--color-green-700);
+  --success-foreground: var(--color-green-50);
+  --success-background: var(--color-green-600);
+
+  --info: var(--color-blue-600);
+  --info-foreground: var(--color-blue-50);
+  --info-background: var(--color-blue-600);
+
+  --warning: var(--color-yellow-600);
+  --warning-foreground: var(--color-yellow-50);
+  --warning-background: var(--color-yellow-700);
+
+  --ai: var(--color-purple-600);
+  --ai-foreground: var(--color-purple-50);
+  --ai-background: var(--color-purple-600);
+
+  /* Shell geometry. The rail width is also the header's icon-button column,
+     so a collapsed sidebar lines up with the toggle above it. */
+  --shell-header-height: 3.5rem;
+  --shell-rail-width: 3.5rem;
+  --shell-gutter: 1.5rem;
+  /* The canvas is one panel inset from the frame by this much (top-bar row,
+     right and bottom edges). */
+  --shell-canvas-inset: 10px;
+  /* Top-bar chips, the user avatar and the sidebar search field. */
+  --shell-control-height: 38px;
+  --shell-nav-row: 44px;
+  /* The canvas's horizontal padding, separate from the vertical gutter so a
+     phone can give the content its two missing columns back without also
+     squashing it vertically. Reading length is set by the horizontal padding;
+     breathing room between blocks is not. */
+  --shell-page-x: 32px;
+  --shell-gutter-x: var(--shell-page-x);
+  --shell-row-height: var(--shell-nav-row);
+  --table-row: 48px;
+  /* A record with a second, muted line under its subject. */
+  --table-row-stacked: 58px;
+  --table-head: 42px;
+  --shell-row-gap: 0.125rem;
+  /* The phone's bottom tab bar. Safe-area inset is added where it is used. */
+  --shell-tabbar-height: 3.75rem;
+
+  /* Chart series. Shared by every chart and its legend, so a series keeps one colour across
+     screens. Marks and labels also differ (bar vs line, solid vs dashed), so colour is never the
+     only cue. */
+  --series-primary: var(--accent-text);
+  --series-secondary: var(--color-gray-300);
+  --series-comparison: var(--color-gray-400);
+  --series-grid: var(--border);
+  /* Estimates after now: the primary series as a dashed outline over a light fill. The
+     baseline (typical day or previous period) is a muted line, so measured, estimated and
+     baseline values differ by mark as well as tone. */
+  --series-projected: var(--series-primary);
+  --series-projected-fill: color-mix(in oklch, var(--series-primary) 14%, transparent);
+  --series-baseline: var(--color-gray-400);
+
+  /* Focus. Fields (input, select, textarea) turn their own edge `ring`; every
+     other control takes this 2px outline, offset against whatever it sits on. */
+  --ring-width: 2px;
+  --ring-offset-width: 2px;
+}
+
+/* Density is a shell-wide switch, set from `appConfig.density` onto <html>.
+   It moves geometry only: type, colour and radius do not change with it. */
+[data-density='compact'] {
+  --shell-gutter: 1.25rem;
+  --shell-canvas-inset: 8px;
+  --shell-control-height: 34px;
+  --shell-nav-row: 40px;
+  --shell-page-x: 1.5rem;
+  --shell-row-gap: 1px;
+  --table-row: 42px;
+  --table-row-stacked: 50px;
+  --table-head: 38px;
+}
+
+/* A phone is roughly 24 columns of text wide at this type size; a 24px gutter
+   on each side spends four of them on nothing. Horizontal only: the vertical
+   rhythm is what keeps a stack of sections readable, and cutting it makes the
+   page look crammed rather than roomy. */
+@media (width < 40rem) {
+  :root {
+    --shell-page-x: 1rem;
+  }
+}
+
+.dark {
+  /* Same ladder, read upward: what is closer to the viewer is lighter. 950
+     frame, 925 canvas, 900 card, 850 popover, so a menu over a card still
+     reads as in front of it. */
+  --sidebar: var(--color-gray-950);
+  --surface: var(--color-gray-925);
+  --card: var(--color-gray-900);
+  --popover: var(--color-gray-850);
+  --overlay: oklch(0% 0 0 / 0.6);
+
+  /* Fills sit one step lighter than the card, so a control reads on the
+     canvas and on a card alike; a raised segment is lighter again than its
+     track. `secondary` sits at 800, so a hover still shows on the popover. */
+  --secondary: var(--color-gray-800);
+  --secondary-foreground: var(--color-gray-100);
+  --muted-background: var(--color-gray-875);
+  --fill: var(--color-gray-875);
+  --fill-strong: var(--color-gray-850);
+  --hairline: var(--color-gray-850);
+  --divider: color-mix(in oklch, var(--color-white) 7%, transparent);
+  --input: var(--color-gray-875);
+  --input-border: var(--color-gray-750);
+  --elevated: var(--color-gray-800);
+
+  --primary: var(--color-gray-50);
+  --primary-foreground: var(--color-gray-950);
+  --foreground: var(--color-gray-200);
+  --card-foreground: var(--color-gray-200);
+  --popover-foreground: var(--color-gray-200);
+  --muted: var(--color-gray-400);
+  --faint: var(--color-gray-600);
+
+  /* Dark has no shadow to lean on, so the popover's border is stronger than
+     the divider rather than lighter. Same job as in light mode, opposite
+     direction. */
+  --border: var(--color-gray-850);
+  --border-strong: var(--color-gray-750);
+  --popover-border: var(--color-gray-800);
+
+  /* The frame's text sits a step above the page's. gray-500 on the frame was
+     4.2:1, which a 10px section label cannot afford. */
+  --sidebar-foreground: var(--color-gray-150);
+  --sidebar-muted: var(--color-gray-300);
+  --sidebar-accent: var(--color-gray-900);
+  --sidebar-accent-foreground: var(--color-gray-50);
+  --nav-active: var(--color-gray-850);
+  --sidebar-border: var(--color-gray-900);
+  --sidebar-ring: var(--ring);
+
+  --destructive: var(--color-red-500);
+  --destructive-foreground: var(--color-red-200);
+  --destructive-background: var(--color-red-800);
+
+  --success: var(--color-green-600);
+  --success-foreground: var(--color-green-200);
+  --success-background: var(--color-green-800);
+
+  --info: var(--color-blue-600);
+  --info-foreground: var(--color-blue-200);
+  --info-background: var(--color-blue-800);
+
+  --warning: var(--color-yellow-600);
+  --warning-foreground: var(--color-yellow-200);
+  --warning-background: var(--color-yellow-800);
+
+  --ai: var(--color-purple-500);
+  --ai-foreground: var(--color-purple-200);
+  --ai-background: var(--color-purple-800);
+
+  --series-secondary: var(--color-gray-500);
+  --series-comparison: var(--color-gray-500);
+  --series-baseline: var(--color-gray-500);
+}
+
+[data-frame] {
+  --fill: var(--sidebar-accent);
+  --fill-strong: var(--nav-active);
+  --secondary: var(--sidebar-accent);
+}
+
+/* The accent is the one saturated colour, used sparingly: the active state, a
+   primary action, the first chart series. It is a user preference, applied as
+   `data-accent` on <html> by src/composables/useAccentColor.ts and by the
+   inline script in index.html before first paint. Indigo is the default and
+   needs no attribute.
+
+   Each preset sets five tokens and nothing else:
+     accent             the fill: a primary button, the selected item
+     accent-hover       the fill under the pointer
+     accent-foreground  text on the fill, white or near-black, at 4.5:1 or more
+     accent-text        the accent as text, an icon or a line on the canvas
+     ring               the focus ring, at 3:1 or more on the canvas
+
+   Every shade is the most saturated one sRGB has at its lightness, and every
+   pair clears WCAG AA: a label on the fill and on its hover at 4.5:1, the
+   accent as text at 4.5:1 on each surface it can sit on (card, canvas, frame
+   and fill; popover too in dark), the ring at 3:1 on the same.
+
+   Indigo, blue, violet, rose and orange carry white and keep the same fill in
+   dark mode, where only their text and ring lift. Lifting the fill instead,
+   so near-black text fits, caps chroma near 0.17 and reads as pastel. Amber,
+   emerald and cyan are only vivid when light, so their label is near-black.
+   In light mode the accent as text is always a darker shade than the fill,
+   because the fill alone misses 4.5:1 on the gray-100 frame.
+
+   The selectors also match a descendant, so a swatch can carry its own
+   `data-accent` and paint itself with `bg-accent`. */
+
+:root,
+[data-accent='indigo'] {
+  --accent: oklch(56% 0.244 277);
+  --accent-hover: oklch(51% 0.278 277);
+  --accent-foreground: var(--color-white);
+  --accent-text: oklch(54% 0.258 277);
+  --ring: oklch(54% 0.258 277);
+}
+
+.dark,
+.dark [data-accent='indigo'] {
+  --accent-text: oklch(64% 0.194 277);
+  --ring: oklch(64% 0.194 277);
+}
+
+[data-accent='blue'] {
+  --accent: oklch(55% 0.202 258);
+  --accent-hover: oklch(50% 0.184 258);
+  --accent-foreground: var(--color-white);
+  --accent-text: oklch(52% 0.192 258);
+  --ring: oklch(52% 0.192 258);
+}
+
+.dark[data-accent='blue'],
+.dark [data-accent='blue'] {
+  --accent-text: oklch(64% 0.194 258);
+  --ring: oklch(64% 0.194 258);
+}
+
+[data-accent='violet'] {
+  --accent: oklch(57% 0.266 295);
+  --accent-hover: oklch(52% 0.284 295);
+  --accent-foreground: var(--color-white);
+  --accent-text: oklch(55% 0.28 295);
+  --ring: oklch(55% 0.28 295);
+}
+
+.dark[data-accent='violet'],
+.dark [data-accent='violet'] {
+  --accent-text: oklch(64% 0.216 295);
+  --ring: oklch(64% 0.216 295);
+}
+
+[data-accent='rose'] {
+  --accent: oklch(59% 0.234 12);
+  --accent-hover: oklch(54% 0.214 12);
+  --accent-foreground: var(--color-white);
+  --accent-text: oklch(54% 0.214 12);
+  --ring: oklch(54% 0.214 12);
+}
+
+.dark[data-accent='rose'],
+.dark [data-accent='rose'] {
+  --accent-text: oklch(65.5% 0.236 12);
+  --ring: oklch(65.5% 0.236 12);
+}
+
+[data-accent='orange'] {
+  --accent: oklch(58% 0.182 40);
+  --accent-hover: oklch(54% 0.168 40);
+  --accent-foreground: var(--color-white);
+  --accent-text: oklch(53% 0.166 40);
+  --ring: oklch(53% 0.166 40);
+}
+
+.dark[data-accent='orange'],
+.dark [data-accent='orange'] {
+  --accent-text: oklch(66% 0.206 40);
+  --ring: oklch(66% 0.206 40);
+}
+
+[data-accent='amber'] {
+  --accent: oklch(82% 0.168 80);
+  --accent-hover: oklch(77% 0.158 80);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(51.5% 0.106 80);
+  --ring: oklch(51.5% 0.106 80);
+}
+
+.dark[data-accent='amber'],
+.dark [data-accent='amber'] {
+  --accent: oklch(82% 0.168 80);
+  --accent-hover: oklch(88% 0.112 80);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(82% 0.168 80);
+  --ring: oklch(82% 0.168 80);
+}
+
+[data-accent='emerald'] {
+  --accent: oklch(78% 0.17 162);
+  --accent-hover: oklch(73% 0.16 162);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(50% 0.108 162);
+  --ring: oklch(50% 0.108 162);
+}
+
+.dark[data-accent='emerald'],
+.dark [data-accent='emerald'] {
+  --accent: oklch(78% 0.17 162);
+  --accent-hover: oklch(84% 0.184 162);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(78% 0.17 162);
+  --ring: oklch(78% 0.17 162);
+}
+
+[data-accent='cyan'] {
+  --accent: oklch(80% 0.138 212);
+  --accent-hover: oklch(75% 0.13 212);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(50.5% 0.088 212);
+  --ring: oklch(50.5% 0.088 212);
+}
+
+.dark[data-accent='cyan'],
+.dark [data-accent='cyan'] {
+  --accent: oklch(80% 0.138 212);
+  --accent-hover: oklch(86% 0.12 212);
+  --accent-foreground: var(--color-gray-950);
+  --accent-text: oklch(80% 0.138 212);
+  --ring: oklch(80% 0.138 212);
+}
+
+/* Flips foreground/primary so a light-on-dark island reads correctly inside a
+   light page, and the reverse in dark mode. */
+.inverse {
+  --foreground: var(--color-gray-400);
+  --primary: var(--color-gray-50);
+  --primary-foreground: var(--color-gray-950);
+}
+
+.dark .inverse {
+  --foreground: var(--color-gray-700);
+  --primary: var(--color-gray-950);
+  --primary-foreground: var(--color-gray-50);
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-overlay: var(--overlay);
+  --color-elevated: var(--elevated);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-card-foreground: var(--card-foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-text: var(--accent-text);
+  --color-text-muted: var(--muted);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-muted-background: var(--muted-background);
+  --color-input: var(--input);
+  --color-input-border: var(--input-border);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-hairline: var(--hairline);
+  --color-divider: var(--divider);
+  --color-ring: var(--ring);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover-border: var(--popover-border);
+
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-nav-active: var(--nav-active);
+  --color-nav-active-foreground: var(--nav-active-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-background: var(--destructive-background);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-background: var(--success-background);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-background: var(--warning-background);
+
+  --color-ai: var(--ai);
+  --color-ai-foreground: var(--ai-foreground);
+  --color-ai-background: var(--ai-background);
+
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-background: var(--info-background);
+
+  --color-series-primary: var(--series-primary);
+  --color-series-secondary: var(--series-secondary);
+  --color-series-comparison: var(--series-comparison);
+  --color-series-grid: var(--series-grid);
+  --color-series-projected: var(--series-projected);
+  --color-series-projected-fill: var(--series-projected-fill);
+  --color-series-baseline: var(--series-baseline);
+
+  --spacing-shell-header: var(--shell-header-height);
+  --spacing-shell-rail: var(--shell-rail-width);
+  --spacing-shell-gutter: var(--shell-gutter);
+  --spacing-shell-gutter-x: var(--shell-gutter-x);
+  --spacing-shell-row: var(--shell-row-height);
+  --spacing-shell-gap: var(--shell-row-gap);
+  --spacing-shell-tabbar: var(--shell-tabbar-height);
+  --spacing-shell-inset: var(--shell-canvas-inset);
+  --spacing-shell-control: var(--shell-control-height);
+  --spacing-shell-nav: var(--shell-nav-row);
+  --spacing-shell-page-x: var(--shell-page-x);
+  --spacing-table-row: var(--table-row);
+  --spacing-table-row-stacked: var(--table-row-stacked);
+  --spacing-table-head: var(--table-head);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* What sits under a card and a table: two tight layers, felt more than
+     seen, so the hairline stays the edge and the shadow only settles it. */
+  --shadow-soft-sm: 0px 1px 1px rgba(3, 7, 18, 0.03);
+  --shadow-soft:
+    0px 1px 1px rgba(3, 7, 18, 0.01), 0px 3px 5px rgba(3, 7, 18, 0.02),
+    0px 6px 12px rgba(3, 7, 18, 0.04), 0px 10px 21px rgba(3, 7, 18, 0.05),
+    0px 16px 33px rgba(3, 7, 18, 0.06);
+  /* What lifts a menu off a white page. Four layers instead of six and half
+     the total ink: the old stack reached 33px at 6% and read as a smudge under
+     every dropdown. */
+  --shadow-soft-lg:
+    0px 1px 1px rgba(3, 7, 18, 0.02), 0px 4px 6px rgba(3, 7, 18, 0.03),
+    0px 9px 14px rgba(3, 7, 18, 0.04), 0px 16px 24px rgba(3, 7, 18, 0.04);
+}
+
+@layer base {
+  /* No blanket `outline-ring/50` here: a half-transparent ring is the reason
+     focus is hard to see, and the focus-visible rule below owns the ring. */
+  * {
+    @apply border-border;
+  }
+
+  html {
+    /* The tap flash is the browser's own feedback; the components have theirs. */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply h-full bg-surface text-base text-foreground antialiased;
+  }
+
+  /* Installed to the home screen: no rubber-band past the top, because there
+     is no browser chrome to bounce into, and no long-press callout on the
+     shell's own controls. Text stays selectable. */
+  @media (display-mode: standalone) {
+    body {
+      overscroll-behavior-y: none;
+    }
+
+    nav,
+    button,
+    a {
+      -webkit-touch-callout: none;
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+}
+
+/* Safe-area padding for the notch and the home indicator. Zero on anything
+   that has neither, so the shell's geometry holds on a desk. */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@utility px-safe {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* A page arriving: a short rise and fade, entry only. Nothing leaves
+   animated, so two pages never overlap and the focus move lands on a page
+   that is already in place. */
+.page-enter {
+  animation: page-enter 220ms var(--ease-butter) both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Horizontal scroller that hides its scrollbar and fades out clipped content
+   at the edges. The fades are driven by the scroll position, so they only
+   appear when there is content to scroll to on that side; browsers without
+   scroll-timeline support get a plain scroller without fades. */
+@utility scroll-fade-x {
+  --scroll-fade-size: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  @supports (animation-timeline: scroll(self x)) {
+    animation: scroll-fade-x linear both;
+    animation-timeline: scroll(self x);
+  }
+}
+
+@keyframes scroll-fade-x {
+  0% {
+    mask-image: linear-gradient(
+      to right,
+      black,
+      black var(--scroll-fade-size, 1.5rem),
+      black calc(100% - var(--scroll-fade-size, 1.5rem)),
+      transparent
+    );
+  }
+  15%,
+  85% {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--scroll-fade-size, 1.5rem),
+      black calc(100% - var(--scroll-fade-size, 1.5rem)),
+      transparent
+    );
+  }
+  100% {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black var(--scroll-fade-size, 1.5rem),
+      black calc(100% - var(--scroll-fade-size, 1.5rem)),
+      black
+    );
+  }
+}
+
+/* Scrollbar width. `scrollbar-none` hides it; `scrollbar-thin` keeps it but
+   out of the way, and `scrollbar-gutter-stable` reserves the track so content
+   does not shift when it appears. */
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* One focus treatment for the whole app: a 2px ring offset from whatever it
+   sits on, so it reads on a card, on the sidebar and on the accent button
+   alike. `:where()` keeps specificity at zero, so a component that needs a
+   different ring only has to say so. */
+@layer base {
+  :where(
+    a[href],
+    button,
+    summary,
+    input,
+    select,
+    textarea,
+    [role='button'],
+    [role='link'],
+    [tabindex]:not([tabindex='-1'])
+  ):focus-visible {
+    outline: var(--ring-width) solid var(--color-ring);
+    outline-offset: var(--ring-offset-width);
+  }
+
+  /* A page opts out of the shell gutter by marking its root, instead of the
+     shell exporting a second "bleed" layout wrapper for pages to nest in. */
+  main:has(> [data-bleed]) {
+    padding: 0;
+  }
+}
+
+/* Motion is decoration. Under `prefers-reduced-motion` everything that moves
+   collapses to an instant state change; opacity fades stay, because losing
+   them makes overlays pop in and out harder than the motion they replace. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse,
+  .page-enter {
+    animation: none;
+  }
+}
+
+@layer components {
+  @import './vue-sonner.css';
+}

@@ -1,0 +1,659 @@
+CREATE OR REPLACE TEMP TABLE x_scope AS WITH scoped AS (SELECT e.seq, e.kind, e.event_time, e.daily_id, e.profile_id, m.session_id FROM events e LEFT JOIN session_members m ON m.site = e.site AND m.seq = e.seq AND m.role = 1
+              WHERE e.site = ? AND e.kind IN (1, 2) AND e.event_time >= epoch_ms(?) AND e.event_time <= epoch_ms(?)), touch AS (SELECT session_id FROM scoped WHERE session_id IS NOT NULL GROUP BY session_id), r AS (SELECT s.seq, s.kind, s.event_time, s.daily_id, s.profile_id, s.session_id FROM scoped s LEFT JOIN touch ON touch.session_id = s.session_id) SELECT r.seq, r.kind, epoch_ms(r.event_time) AS t, r.daily_id, r.profile_id, r.session_id, p0.t AS f0_t, p0.s AS f0_s, p0.i AS f0_i, p0.d AS f0_d, p0.b AS f0_b, p0.dt AS f0_dt, p0.a AS f0_a, p1.t AS f1_t, p1.s AS f1_s, p1.i AS f1_i, p1.d AS f1_d, p1.b AS f1_b, p1.dt AS f1_dt, p1.a AS f1_a FROM r LEFT JOIN (SELECT m.session_id, arg_max_null(p.type, (p.event_time, p.seq)) AS t, arg_max_null(p.v_string, (p.event_time, p.seq)) AS s, arg_max_null(p.v_integer, (p.event_time, p.seq)) AS i, arg_max_null(p.v_decimal, (p.event_time, p.seq)) AS d, arg_max_null(p.v_bool, (p.event_time, p.seq)) AS b, epoch_ms(arg_max_null(p.v_date, (p.event_time, p.seq))) AS dt, arg_max_null(p.v_array, (p.event_time, p.seq)) AS a
+                     FROM session_members m JOIN session_properties p ON p.site = m.site AND p.seq = m.seq
+                     WHERE m.site = ? AND m.role = 3 AND p.key = ? GROUP BY m.session_id) p0 ON p0.session_id = r.session_id LEFT JOIN (SELECT m.session_id, arg_max_null(p.type, (p.event_time, p.seq)) AS t, arg_max_null(p.v_string, (p.event_time, p.seq)) AS s, arg_max_null(p.v_integer, (p.event_time, p.seq)) AS i, arg_max_null(p.v_decimal, (p.event_time, p.seq)) AS d, arg_max_null(p.v_bool, (p.event_time, p.seq)) AS b, epoch_ms(arg_max_null(p.v_date, (p.event_time, p.seq))) AS dt, arg_max_null(p.v_array, (p.event_time, p.seq)) AS a
+                     FROM session_members m JOIN session_properties p ON p.site = m.site AND p.seq = m.seq
+                     WHERE m.site = ? AND m.role = 3 AND p.key = ? GROUP BY m.session_id) p1 ON p1.session_id = r.session_id
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│            CTE            │
+│    ────────────────────   │
+│      CTE Name: scoped     │
+│       Table Index: 0      ├───────────────────────────────────────────┐
+│                           │                                           │
+│        ~97,481 rows       │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         PROJECTION        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: LEFT      │                             │            seq            │
+│                           │                             │            kind           │
+│        Conditions:        │                             │             t             │
+│        site = site        │                             │          daily_id         │
+│         seq = seq         │                             │         profile_id        │
+│                           │                             │         session_id        │
+│                           │                             │            f0_t           │
+│                           │                             │            f0_s           │
+│                           │                             │            f0_i           │
+│                           │                             │            f0_d           │
+│                           ├──────────────┐              │            f0_b           │
+│                           │              │              │           f0_dt           │
+│                           │              │              │            f0_a           │
+│                           │              │              │            f1_t           │
+│                           │              │              │            f1_s           │
+│                           │              │              │            f1_i           │
+│                           │              │              │            f1_d           │
+│                           │              │              │            f1_b           │
+│                           │              │              │           f1_dt           │
+│                           │              │              │            f1_a           │
+│                           │              │              │                           │
+│        ~97,481 rows       │              │              │        ~97,481 rows       │
+└─────────────┬─────────────┘              │              └─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         ││         HASH_JOIN         │
+│    ────────────────────   ││    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          ││      Join Type: LEFT      │
+│   analytics.main.events   ││       analytics.main      ││                           │
+│                           ││      .session_members     ││        Conditions:        │
+│   Type: Sequential Scan   ││                           ││  session_id = session_id  │
+│                           ││   Type: Sequential Scan   ││                           │
+│        Projections:       ││                           ││                           │
+│            site           ││        Projections:       ││                           │
+│            seq            ││            site           ││                           │
+│            kind           ││            seq            ││                           ├─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│         event_time        ││         session_id        ││                           │                                                                                                     │
+│          daily_id         ││                           ││                           │                                                                                                     │
+│         profile_id        ││          Filters:         ││                           │                                                                                                     │
+│                           ││site=1198808858014540920149││                           │                                                                                                     │
+│          Filters:         ││     39663769085192113     ││                           │                                                                                                     │
+│site=1198808858014540920149││           role=1          ││                           │                                                                                                     │
+│     39663769085192113     ││                           ││                           │                                                                                                     │
+│    kind>=1 AND kind<=2    ││                           ││                           │                                                                                                     │
+│                           ││                           ││                           │                                                                                                     │
+│        ~92,308 rows       ││        ~97,481 rows       ││        ~97,481 rows       │                                                                                                     │
+└───────────────────────────┘└───────────────────────────┘└─────────────┬─────────────┘                                                                                                     │
+                                                          ┌─────────────┴─────────────┐                                                                                       ┌─────────────┴─────────────┐
+                                                          │         HASH_JOIN         │                                                                                       │         PROJECTION        │
+                                                          │    ────────────────────   │                                                                                       │    ────────────────────   │
+                                                          │      Join Type: LEFT      │                                                                                       │         session_id        │
+                                                          │                           │                                                                                       │             t             │
+                                                          │        Conditions:        │                                                                                       │             s             │
+                                                          │  session_id = session_id  │                                                                                       │             i             │
+                                                          │                           ├───────────────────────────────────────────┐                                           │             d             │
+                                                          │                           │                                           │                                           │             b             │
+                                                          │                           │                                           │                                           │             dt            │
+                                                          │                           │                                           │                                           │             a             │
+                                                          │                           │                                           │                                           │                           │
+                                                          │        ~97,481 rows       │                                           │                                           │         ~228 rows         │
+                                                          └─────────────┬─────────────┘                                           │                                           └─────────────┬─────────────┘
+                                                          ┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                          │         PROJECTION        │                             │         PROJECTION        │                             │         PROJECTION        │
+                                                          │    ────────────────────   │                             │    ────────────────────   │                             │    ────────────────────   │
+                                                          │            seq            │                             │         session_id        │                             │__internal_decompress_integ│
+                                                          │            kind           │                             │             t             │                             │     ral_bigint(#0, 1)     │
+                                                          │         event_time        │                             │             s             │                             │             #1            │
+                                                          │          daily_id         │                             │             i             │                             │             #2            │
+                                                          │         profile_id        │                             │             d             │                             │             #3            │
+                                                          │         session_id        │                             │             b             │                             │             #4            │
+                                                          │                           │                             │             dt            │                             │             #5            │
+                                                          │                           │                             │             a             │                             │             #6            │
+                                                          │                           │                             │                           │                             │             #7            │
+                                                          │                           │                             │                           │                             │                           │
+                                                          │        ~97,481 rows       │                             │         ~228 rows         │                             │         ~228 rows         │
+                                                          └─────────────┬─────────────┘                             └─────────────┬─────────────┘                             └─────────────┬─────────────┘
+                                                          ┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                          │         HASH_JOIN         │                             │         PROJECTION        │                             │       HASH_GROUP_BY       │
+                                                          │    ────────────────────   │                             │    ────────────────────   │                             │    ────────────────────   │
+                                                          │      Join Type: LEFT      │                             │__internal_decompress_integ│                             │         Groups: #0        │
+                                                          │                           │                             │     ral_bigint(#0, 1)     │                             │                           │
+                                                          │        Conditions:        │                             │             #1            │                             │        Aggregates:        │
+                                                          │  session_id = session_id  │                             │             #2            │                             │    arg_max_null(#1, #2)   │
+                                                          │                           │                             │             #3            │                             │    arg_max_null(#3, #4)   │
+                                                          │                           ├──────────────┐              │             #4            │                             │    arg_max_null(#5, #6)   │
+                                                          │                           │              │              │             #5            │                             │    arg_max_null(#7, #8)   │
+                                                          │                           │              │              │             #6            │                             │   arg_max_null(#9, #10)   │
+                                                          │                           │              │              │             #7            │                             │   arg_max_null(#11, #12)  │
+                                                          │                           │              │              │                           │                             │   arg_max_null(#13, #14)  │
+                                                          │                           │              │              │                           │                             │                           │
+                                                          │        ~97,481 rows       │              │              │         ~228 rows         │                             │         ~228 rows         │
+                                                          └─────────────┬─────────────┘              │              └─────────────┬─────────────┘                             └─────────────┬─────────────┘
+                                                          ┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                          │          CTE_SCAN         ││       HASH_GROUP_BY       ││       HASH_GROUP_BY       │                             │         PROJECTION        │
+                                                          │    ────────────────────   ││    ────────────────────   ││    ────────────────────   │                             │    ────────────────────   │
+                                                          │        CTE Index: 0       ││         Groups: #0        ││         Groups: #0        │                             │         session_id        │
+                                                          │                           ││                           ││                           │                             │            type           │
+                                                          │                           ││                           ││        Aggregates:        │                             │             #2            │
+                                                          │                           ││                           ││    arg_max_null(#1, #2)   │                             │          v_string         │
+                                                          │                           ││                           ││    arg_max_null(#3, #4)   │                             │             #2            │
+                                                          │                           ││                           ││    arg_max_null(#5, #6)   │                             │         v_integer         │
+                                                          │                           ││                           ││    arg_max_null(#7, #8)   │                             │             #2            │
+                                                          │                           ││                           ││   arg_max_null(#9, #10)   │                             │         v_decimal         │
+                                                          │                           ││                           ││   arg_max_null(#11, #12)  │                             │             #2            │
+                                                          │                           ││                           ││   arg_max_null(#13, #14)  │                             │           v_bool          │
+                                                          │                           ││                           ││                           │                             │             #2            │
+                                                          │                           ││                           ││                           │                             │           v_date          │
+                                                          │                           ││                           ││                           │                             │             #2            │
+                                                          │                           ││                           ││                           │                             │          v_array          │
+                                                          │                           ││                           ││                           │                             │             #2            │
+                                                          │                           ││                           ││                           │                             │                           │
+                                                          │        ~97,481 rows       ││        ~92,176 rows       ││         ~228 rows         │                             │         ~229 rows         │
+                                                          └───────────────────────────┘└─────────────┬─────────────┘└─────────────┬─────────────┘                             └─────────────┬─────────────┘
+                                                                                       ┌─────────────┴─────────────┐┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                                                       │         PROJECTION        ││         PROJECTION        │                             │         PROJECTION        │
+                                                                                       │    ────────────────────   ││    ────────────────────   │                             │    ────────────────────   │
+                                                                                       │         session_id        ││         session_id        │                             │__internal_compress_integra│
+                                                                                       │                           ││            type           │                             │     l_uinteger(#0, 1)     │
+                                                                                       │                           ││             #2            │                             │             #1            │
+                                                                                       │                           ││          v_string         │                             │             #2            │
+                                                                                       │                           ││             #2            │                             │             #3            │
+                                                                                       │                           ││         v_integer         │                             │             #4            │
+                                                                                       │                           ││             #2            │                             │             #5            │
+                                                                                       │                           ││         v_decimal         │                             │             #6            │
+                                                                                       │                           ││             #2            │                             │             #7            │
+                                                                                       │                           ││           v_bool          │                             │             #8            │
+                                                                                       │                           ││             #2            │                             │                           │
+                                                                                       │                           ││           v_date          │                             │                           │
+                                                                                       │                           ││             #2            │                             │                           │
+                                                                                       │                           ││          v_array          │                             │                           │
+                                                                                       │                           ││             #2            │                             │                           │
+                                                                                       │                           ││                           │                             │                           │
+                                                                                       │        ~97,481 rows       ││         ~229 rows         │                             │         ~229 rows         │
+                                                                                       └─────────────┬─────────────┘└─────────────┬─────────────┘                             └─────────────┬─────────────┘
+                                                                                       ┌─────────────┴─────────────┐┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                                                       │         PROJECTION        ││         PROJECTION        │                             │         PROJECTION        │
+                                                                                       │    ────────────────────   ││    ────────────────────   │                             │    ────────────────────   │
+                                                                                       │             #5            ││__internal_compress_integra│                             │         session_id        │
+                                                                                       │                           ││     l_uinteger(#0, 1)     │                             │            type           │
+                                                                                       │                           ││             #1            │                             │   "row"(event_time, seq)  │
+                                                                                       │                           ││             #2            │                             │          v_string         │
+                                                                                       │                           ││             #3            │                             │         v_integer         │
+                                                                                       │                           ││             #4            │                             │         v_decimal         │
+                                                                                       │                           ││             #5            │                             │           v_bool          │
+                                                                                       │                           ││             #6            │                             │           v_date          │
+                                                                                       │                           ││             #7            │                             │          v_array          │
+                                                                                       │                           ││             #8            │                             │                           │
+                                                                                       │                           ││                           │                             │                           │
+                                                                                       │        ~97,481 rows       ││         ~229 rows         │                             │         ~229 rows         │
+                                                                                       └─────────────┬─────────────┘└─────────────┬─────────────┘                             └─────────────┬─────────────┘
+                                                                                       ┌─────────────┴─────────────┐┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+                                                                                       │           FILTER          ││         PROJECTION        │                             │         HASH_JOIN         │
+                                                                                       │    ────────────────────   ││    ────────────────────   │                             │    ────────────────────   │
+                                                                                       │  (session_id IS NOT NULL) ││         session_id        │                             │      Join Type: INNER     │
+                                                                                       │                           ││            type           │                             │                           │
+                                                                                       │                           ││   "row"(event_time, seq)  │                             │        Conditions:        │
+                                                                                       │                           ││          v_string         │                             │        site = site        │
+                                                                                       │                           ││         v_integer         │                             │         seq = seq         ├──────────────┐
+                                                                                       │                           ││         v_decimal         │                             │                           │              │
+                                                                                       │                           ││           v_bool          │                             │                           │              │
+                                                                                       │                           ││           v_date          │                             │                           │              │
+                                                                                       │                           ││          v_array          │                             │                           │              │
+                                                                                       │                           ││                           │                             │                           │              │
+                                                                                       │        ~97,481 rows       ││         ~229 rows         │                             │         ~229 rows         │              │
+                                                                                       └─────────────┬─────────────┘└─────────────┬─────────────┘                             └─────────────┬─────────────┘              │
+                                                                                       ┌─────────────┴─────────────┐┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                                                                                       │          CTE_SCAN         ││         HASH_JOIN         │                             │           FILTER          ││          SEQ_SCAN         │
+                                                                                       │    ────────────────────   ││    ────────────────────   │                             │    ────────────────────   ││    ────────────────────   │
+                                                                                       │        CTE Index: 0       ││      Join Type: INNER     │                             │    (seq BETWEEN 421 AND   ││           Table:          │
+                                                                                       │                           ││                           │                             │          1239998)         ││       analytics.main      │
+                                                                                       │                           ││        Conditions:        │                             │                           ││    .session_properties    │
+                                                                                       │                           ││        site = site        │                             │                           ││                           │
+                                                                                       │                           ││         seq = seq         │                             │                           ││   Type: Sequential Scan   │
+                                                                                       │                           ││                           │                             │                           ││                           │
+                                                                                       │                           ││                           │                             │                           ││        Projections:       │
+                                                                                       │                           ││                           │                             │                           ││            site           │
+                                                                                       │                           ││                           │                             │                           ││            seq            │
+                                                                                       │                           ││                           │                             │                           ││            type           │
+                                                                                       │                           ││                           │                             │                           ││         event_time        │
+                                                                                       │                           ││                           ├──────────────┐              │                           ││          v_string         │
+                                                                                       │                           ││                           │              │              │                           ││         v_integer         │
+                                                                                       │                           ││                           │              │              │                           ││         v_decimal         │
+                                                                                       │                           ││                           │              │              │                           ││           v_bool          │
+                                                                                       │                           ││                           │              │              │                           ││           v_date          │
+                                                                                       │                           ││                           │              │              │                           ││          v_array          │
+                                                                                       │                           ││                           │              │              │                           ││                           │
+                                                                                       │                           ││                           │              │              │                           ││          Filters:         │
+                                                                                       │                           ││                           │              │              │                           ││site=1198808858014540920149│
+                                                                                       │                           ││                           │              │              │                           ││     39663769085192113     │
+                                                                                       │                           ││                           │              │              │                           ││     key='account_tier'    │
+                                                                                       │                           ││                           │              │              │                           ││                           │
+                                                                                       │        ~97,481 rows       ││         ~229 rows         │              │              │        ~97,481 rows       ││        ~6,156 rows        │
+                                                                                       └───────────────────────────┘└─────────────┬─────────────┘              │              └─────────────┬─────────────┘└───────────────────────────┘
+                                                                                                                    ┌─────────────┴─────────────┐┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                                                                                                                    │           FILTER          ││          SEQ_SCAN         ││          SEQ_SCAN         │
+                                                                                                                    │    ────────────────────   ││    ────────────────────   ││    ────────────────────   │
+                                                                                                                    │    (seq BETWEEN 421 AND   ││           Table:          ││           Table:          │
+                                                                                                                    │          1239998)         ││       analytics.main      ││       analytics.main      │
+                                                                                                                    │                           ││    .session_properties    ││      .session_members     │
+                                                                                                                    │                           ││                           ││                           │
+                                                                                                                    │                           ││   Type: Sequential Scan   ││   Type: Sequential Scan   │
+                                                                                                                    │                           ││                           ││                           │
+                                                                                                                    │                           ││        Projections:       ││        Projections:       │
+                                                                                                                    │                           ││            site           ││            site           │
+                                                                                                                    │                           ││            seq            ││            seq            │
+                                                                                                                    │                           ││            type           ││         session_id        │
+                                                                                                                    │                           ││         event_time        ││                           │
+                                                                                                                    │                           ││          v_string         ││          Filters:         │
+                                                                                                                    │                           ││         v_integer         ││site=1198808858014540920149│
+                                                                                                                    │                           ││         v_decimal         ││     39663769085192113     │
+                                                                                                                    │                           ││           v_bool          ││           role=3          │
+                                                                                                                    │                           ││           v_date          ││                           │
+                                                                                                                    │                           ││          v_array          ││                           │
+                                                                                                                    │                           ││                           ││                           │
+                                                                                                                    │                           ││          Filters:         ││                           │
+                                                                                                                    │                           ││site=1198808858014540920149││                           │
+                                                                                                                    │                           ││     39663769085192113     ││                           │
+                                                                                                                    │                           ││   key='account_created'   ││                           │
+                                                                                                                    │                           ││                           ││                           │
+                                                                                                                    │        ~97,481 rows       ││        ~6,156 rows        ││        ~97,481 rows       │
+                                                                                                                    └─────────────┬─────────────┘└───────────────────────────┘└───────────────────────────┘
+                                                                                                                    ┌─────────────┴─────────────┐
+                                                                                                                    │          SEQ_SCAN         │
+                                                                                                                    │    ────────────────────   │
+                                                                                                                    │           Table:          │
+                                                                                                                    │       analytics.main      │
+                                                                                                                    │      .session_members     │
+                                                                                                                    │                           │
+                                                                                                                    │   Type: Sequential Scan   │
+                                                                                                                    │                           │
+                                                                                                                    │        Projections:       │
+                                                                                                                    │            site           │
+                                                                                                                    │            seq            │
+                                                                                                                    │         session_id        │
+                                                                                                                    │                           │
+                                                                                                                    │          Filters:         │
+                                                                                                                    │site=1198808858014540920149│
+                                                                                                                    │     39663769085192113     │
+                                                                                                                    │           role=3          │
+                                                                                                                    │                           │
+                                                                                                                    │        ~97,481 rows       │
+                                                                                                                    └───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE x_ev AS SELECT * EXCLUDE (session_id) FROM x_scope WHERE t >= ? AND t < ? AND ((f0_t = 4 AND f0_dt < ?))
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│            f0_t           │
+│            f0_s           │
+│            f0_i           │
+│            f0_d           │
+│            f0_b           │
+│           f0_dt           │
+│            f0_a           │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│    "temp".main.x_scope    │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│             t             │
+│            f0_t           │
+│           f0_dt           │
+│            seq            │
+│            kind           │
+│          daily_id         │
+│         profile_id        │
+│            f0_s           │
+│            f0_i           │
+│            f0_d           │
+│            f0_b           │
+│            f0_a           │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│                           │
+│          Filters:         │
+│   t>=1759276800000 AND t  │
+│       <1790812800000      │
+│           f0_t=4          │
+│    f0_dt<1735689600000    │
+│                           │
+│          ~0 rows          │
+└───────────────────────────┘
+
+
+----
+
+CREATE OR REPLACE TEMP TABLE x_se AS
+             SELECT x.*, s.pageviews AS pv, s.custom_events AS ce,
+                    epoch_ms(s.last_time) - epoch_ms(s.start_time) AS span, epoch_ms(s.start_time) AS st
+             FROM x_scope x JOIN sessions s ON s.site = ? AND s.session_id = x.session_id WHERE s.start_time >= epoch_ms(?) AND s.start_time < epoch_ms(?) AND ((f0_t = 4 AND f0_dt < ?))
+
+┌───────────────────────────┐
+│      CREATE_TABLE_AS      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            f0_t           │
+│            f0_s           │
+│            f0_i           │
+│            f0_d           │
+│            f0_b           │
+│           f0_dt           │
+│            f0_a           │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│             pv            │
+│             ce            │
+│            span           │
+│             st            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            seq            │
+│            kind           │
+│             t             │
+│          daily_id         │
+│         profile_id        │
+│         session_id        │
+│            f0_t           │
+│            f0_s           │
+│            f0_i           │
+│            f0_d           │
+│            f0_b           │
+│           f0_dt           │
+│            f0_a           │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│             pv            │
+│             ce            │
+│         last_time         │
+│    epoch_ms(start_time)   │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├──────────────┐
+│  session_id = session_id  │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││          SEQ_SCAN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│  analytics.main.sessions  ││    "temp".main.x_scope    │
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│         session_id        ││         session_id        │
+│         start_time        ││            f0_t           │
+│         pageviews         ││           f0_dt           │
+│       custom_events       ││            seq            │
+│         last_time         ││            kind           │
+│                           ││             t             │
+│          Filters:         ││          daily_id         │
+│site=1198808858014540920149││         profile_id        │
+│     39663769085192113     ││            f0_s           │
+│                           ││            f0_i           │
+│                           ││            f0_d           │
+│                           ││            f0_b           │
+│                           ││            f0_a           │
+│                           ││            f1_t           │
+│                           ││            f1_s           │
+│                           ││            f1_i           │
+│                           ││            f1_d           │
+│                           ││            f1_b           │
+│                           ││           f1_dt           │
+│                           ││            f1_a           │
+│                           ││                           │
+│                           ││          Filters:         │
+│                           ││           f0_t=4          │
+│                           ││    f0_dt<1735689600000    │
+│                           ││                           │
+│        ~9,759 rows        ││          ~0 rows          │
+└───────────────────────────┘└───────────────────────────┘
+
+
+----
+
+WITH ea AS (SELECT f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a, count(DISTINCT daily_id) AS a0 FROM x_ev GROUP BY f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a), sa AS (SELECT f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a, count(*) AS a1 FROM (SELECT DISTINCT f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a, session_id, pv, ce, span FROM x_se) GROUP BY f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a), j AS (SELECT coalesce(ea.f1_t, sa.f1_t) AS f1_t, coalesce(ea.f1_s, sa.f1_s) AS f1_s, coalesce(ea.f1_i, sa.f1_i) AS f1_i, coalesce(ea.f1_d, sa.f1_d) AS f1_d, coalesce(ea.f1_b, sa.f1_b) AS f1_b, coalesce(ea.f1_dt, sa.f1_dt) AS f1_dt, coalesce(ea.f1_a, sa.f1_a) AS f1_a, a0, a1 FROM ea FULL JOIN sa ON ea.f1_t IS NOT DISTINCT FROM sa.f1_t AND ea.f1_s IS NOT DISTINCT FROM sa.f1_s AND ea.f1_i IS NOT DISTINCT FROM sa.f1_i AND ea.f1_d IS NOT DISTINCT FROM sa.f1_d AND ea.f1_b IS NOT DISTINCT FROM sa.f1_b AND ea.f1_dt IS NOT DISTINCT FROM sa.f1_dt AND ea.f1_a IS NOT DISTINCT FROM sa.f1_a) SELECT f1_t, f1_s, f1_i, f1_d, f1_b, f1_dt, f1_a, a0, a1, count(*) OVER () AS n FROM j ORDER BY a0 DESC NULLS LAST, (f1_t IS NULL), (f1_t = 0), f1_t ASC NULLS LAST, f1_s ASC NULLS LAST, f1_i ASC NULLS LAST, f1_d ASC NULLS LAST, f1_b ASC NULLS LAST, f1_dt ASC NULLS LAST, f1_a ASC NULLS LAST LIMIT ? OFFSET ?
+
+┌───────────────────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #5            │
+│             #6            │
+│             #7            │
+│             #8            │
+│             #9            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           TOP_N           │
+│    ────────────────────   │
+│          Top: 50          │
+│                           │
+│         Order By:         │
+│         j.a0 DESC         │
+│          #10 ASC          │
+│          #11 ASC          │
+│         j.f1_t ASC        │
+│         j.f1_s ASC        │
+│         j.f1_i ASC        │
+│         j.f1_d ASC        │
+│         j.f1_b ASC        │
+│        j.f1_dt ASC        │
+│         j.f1_a ASC        │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│             a0            │
+│             a1            │
+│             n             │
+│       (f1_t IS NULL)      │
+│         (f1_t = 0)        │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #5            │
+│             #6            │
+│             #7            │
+│             #8            │
+│             #9            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           WINDOW          │
+│    ────────────────────   │
+│        Projections:       │
+│      count() OVER ()      │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            f1_t           │
+│            f1_s           │
+│            f1_i           │
+│            f1_d           │
+│            f1_b           │
+│           f1_dt           │
+│            f1_a           │
+│             a0            │
+│             a1            │
+│                           │
+│          ~0 rows          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: FULL      │
+│                           │
+│        Conditions:        │
+│ f1_t IS NOT DISTINCT FROM │
+│            f1_t           │
+│ f1_s IS NOT DISTINCT FROM │
+│            f1_s           │
+│ f1_i IS NOT DISTINCT FROM │
+│            f1_i           ├──────────────┐
+│ f1_d IS NOT DISTINCT FROM │              │
+│            f1_d           │              │
+│ f1_b IS NOT DISTINCT FROM │              │
+│            f1_b           │              │
+│ f1_dt IS NOT DISTINCT FROM│              │
+│            f1_dt          │              │
+│ f1_a IS NOT DISTINCT FROM │              │
+│            f1_a           │              │
+│                           │              │
+│          ~0 rows          │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       ││       HASH_GROUP_BY       │
+│    ────────────────────   ││    ────────────────────   │
+│          Groups:          ││          Groups:          │
+│             #0            ││             #0            │
+│             #1            ││             #1            │
+│             #2            ││             #2            │
+│             #3            ││             #3            │
+│             #4            ││             #4            │
+│             #5            ││             #5            │
+│             #6            ││             #6            │
+│                           ││                           │
+│        Aggregates:        ││        Aggregates:        │
+│     count(DISTINCT #7)    ││        count_star()       │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         PROJECTION        ││         PROJECTION        │
+│    ────────────────────   ││    ────────────────────   │
+│            f1_t           ││            f1_t           │
+│            f1_s           ││            f1_s           │
+│            f1_i           ││            f1_i           │
+│            f1_d           ││            f1_d           │
+│            f1_b           ││            f1_b           │
+│           f1_dt           ││           f1_dt           │
+│            f1_a           ││            f1_a           │
+│          daily_id         ││                           │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└─────────────┬─────────────┘└─────────────┬─────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││       HASH_GROUP_BY       │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││          Groups:          │
+│      "temp".main.x_ev     ││             #0            │
+│                           ││             #1            │
+│   Type: Sequential Scan   ││             #2            │
+│                           ││             #3            │
+│        Projections:       ││             #4            │
+│            f1_t           ││             #5            │
+│            f1_s           ││             #6            │
+│            f1_i           ││             #7            │
+│            f1_d           ││             #8            │
+│            f1_b           ││             #9            │
+│           f1_dt           ││            #10            │
+│            f1_a           ││                           │
+│          daily_id         ││                           │
+│                           ││                           │
+│          ~0 rows          ││          ~0 rows          │
+└───────────────────────────┘└─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         PROJECTION        │
+                             │    ────────────────────   │
+                             │            f1_t           │
+                             │            f1_s           │
+                             │            f1_i           │
+                             │            f1_d           │
+                             │            f1_b           │
+                             │           f1_dt           │
+                             │            f1_a           │
+                             │         session_id        │
+                             │             pv            │
+                             │             ce            │
+                             │            span           │
+                             │                           │
+                             │          ~0 rows          │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │          SEQ_SCAN         │
+                             │    ────────────────────   │
+                             │           Table:          │
+                             │      "temp".main.x_se     │
+                             │                           │
+                             │   Type: Sequential Scan   │
+                             │                           │
+                             │        Projections:       │
+                             │            f1_t           │
+                             │            f1_s           │
+                             │            f1_i           │
+                             │            f1_d           │
+                             │            f1_b           │
+                             │           f1_dt           │
+                             │            f1_a           │
+                             │         session_id        │
+                             │             pv            │
+                             │             ce            │
+                             │            span           │
+                             │                           │
+                             │          ~0 rows          │
+                             └───────────────────────────┘

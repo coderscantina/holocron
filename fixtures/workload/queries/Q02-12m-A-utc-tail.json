@@ -1,0 +1,104 @@
+{
+  "format_version": 1,
+  "id": "Q02-12m-A-utc-tail",
+  "family": "Q02",
+  "title": "High-cardinality path tail filter",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "12m",
+  "latency": {
+    "gate": "exploration_12m",
+    "target_p95_ms": 10000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "UTC",
+  "resolved": {
+    "start": "2025-10-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "path"
+    ],
+    "filter": {
+      "kind": "group",
+      "op": "and",
+      "items": [
+        {
+          "kind": "cond",
+          "id": "f1",
+          "field": "path",
+          "cmp": "starts_with",
+          "value": {
+            "t": "string",
+            "v": "/p/999"
+          }
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2025-10-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "UTC",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 100,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {},
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 100,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "selective",
+  "expected": {
+    "row_count": 100,
+    "matched_records": 3761,
+    "golden_result_hash": "bde2ffeaedb8397fe1a8d54831c29df675bc182a5e65e6d69bf8c13fe49974de",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q02-12m-A-utc-tail.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

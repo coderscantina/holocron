@@ -1,0 +1,35 @@
+{
+  "id": "holocron-send-admission-budget-full",
+  "surface": "send.event",
+  "polarity": "negative",
+  "description": "Inbox byte or record budget is exhausted.",
+  "upstream_ref": [],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "event",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article"
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": null,
+    "notes": "No equivalent. Upstream has no admission budget."
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 429,
+    "decision": "adopted",
+    "notes": "429 with Retry-After (docs/decisions/0005, backpressure and lost client events). The unchanged tracker and recorder never retry, so the event is lost on the client; refusals count in refused_backpressure{route, reason} and show as lost client events. Retry-After helps only server integrations. One such refusal during the agreed 500 events/s burst fails the capacity gate."
+  },
+  "validated_against_upstream": false,
+  "validation_reason": "Holocron-only behaviour. No upstream equivalent to compare."
+}

@@ -1,0 +1,37 @@
+{
+  "note": "Fixed classification for the four user agents in events.jsonl, each always sent with the screen listed here.",
+  "user_agents": [
+    {
+      "label": "desk_chrome",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+      "screen": "2560x1440",
+      "browser": "chrome",
+      "os": "Windows 10",
+      "device": "desktop"
+    },
+    {
+      "label": "mac_firefox",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.6; rv:131.0) Gecko/20100101 Firefox/131.0",
+      "screen": "2560x1600",
+      "browser": "firefox",
+      "os": "Mac OS",
+      "device": "desktop"
+    },
+    {
+      "label": "iphone_safari",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+      "screen": "390x844",
+      "browser": "ios",
+      "os": "iOS",
+      "device": "mobile"
+    },
+    {
+      "label": "android_chrome",
+      "user_agent": "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+      "screen": "412x915",
+      "browser": "chrome",
+      "os": "Android OS",
+      "device": "mobile"
+    }
+  ]
+}

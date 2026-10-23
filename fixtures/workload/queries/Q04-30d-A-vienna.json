@@ -1,0 +1,206 @@
+{
+  "format_version": 1,
+  "id": "Q04-30d-A-vienna",
+  "family": "Q04",
+  "title": "Nested AND/OR, repeated country and path conditions, is_not_set",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": true,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "Europe/Vienna",
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "events",
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "device"
+    ],
+    "filter": {
+      "kind": "group",
+      "op": "and",
+      "items": [
+        {
+          "kind": "group",
+          "op": "or",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "f1",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "US"
+              }
+            },
+            {
+              "kind": "cond",
+              "id": "f2",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "DE"
+              }
+            },
+            {
+              "kind": "cond",
+              "id": "f3",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "FR"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "or",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "f4",
+              "field": "device",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "mobile"
+              }
+            },
+            {
+              "kind": "group",
+              "op": "and",
+              "items": [
+                {
+                  "kind": "cond",
+                  "id": "f5",
+                  "field": "browser",
+                  "cmp": "eq",
+                  "value": {
+                    "t": "string",
+                    "v": "chrome"
+                  }
+                },
+                {
+                  "kind": "cond",
+                  "id": "f6",
+                  "field": {
+                    "scope": "event",
+                    "key": "plan"
+                  },
+                  "cmp": "eq",
+                  "value": {
+                    "t": "string",
+                    "v": "pro"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "cond",
+          "id": "f7",
+          "field": "path",
+          "cmp": "neq",
+          "value": {
+            "t": "string",
+            "v": "/"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f8",
+          "field": "path",
+          "cmp": "not_contains",
+          "value": {
+            "t": "string",
+            "v": "/legal"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f9",
+          "field": {
+            "scope": "event",
+            "key": "variant"
+          },
+          "cmp": "is_not_set"
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "Europe/Vienna",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {},
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 3,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "medium",
+  "expected": {
+    "row_count": 3,
+    "matched_records": 447825,
+    "golden_result_hash": "cf1b5e6bc6cb82db1f7306e3f9aaa745c7219d754f0eaf9c3998665854c81e5b",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q04-30d-A-vienna.json",
+    "literal_change": "f3 changed from AT to FR by milestone 02 before hashes were fixed: with AT the case matched 10.37% (A 12m), 10.35% (D 12m), 10.37% (A 30d) and 10.52% (D 30d) of in-range events, above the 10% medium bound"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

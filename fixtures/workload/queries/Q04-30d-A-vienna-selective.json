@@ -1,0 +1,218 @@
+{
+  "format_version": 1,
+  "id": "Q04-30d-A-vienna-selective",
+  "family": "Q04",
+  "title": "Grouped predicates plus a tail sku value",
+  "operation": "analytics.explore",
+  "operation_names": "proposed names from docs/contracts/capability-matrix.md; milestone 03 fixes the registry",
+  "window": "30d",
+  "latency": {
+    "gate": "report_30d",
+    "target_p95_ms": 2000
+  },
+  "early_gate": true,
+  "cold": false,
+  "site": "A",
+  "authorized_sites": [
+    "5a303801-78f6-5a96-82f9-d5c40398a7b1"
+  ],
+  "timezone": "Europe/Vienna",
+  "resolved": {
+    "start": "2026-08-31T22:00:00.000Z",
+    "end": "2026-09-30T22:00:00.000Z"
+  },
+  "versions": {
+    "exploration_state": 1,
+    "metric_version": 1,
+    "session_policy_versions": [
+      1
+    ],
+    "identity_policy_version": 1,
+    "report": null
+  },
+  "state": {
+    "v": 1,
+    "site": "5a303801-78f6-5a96-82f9-d5c40398a7b1",
+    "measures": [
+      "events",
+      "pageviews",
+      "visitor_days"
+    ],
+    "dimensions": [
+      "device"
+    ],
+    "filter": {
+      "kind": "group",
+      "op": "and",
+      "items": [
+        {
+          "kind": "group",
+          "op": "or",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "f1",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "US"
+              }
+            },
+            {
+              "kind": "cond",
+              "id": "f2",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "DE"
+              }
+            },
+            {
+              "kind": "cond",
+              "id": "f3",
+              "field": "country",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "AT"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "group",
+          "op": "or",
+          "items": [
+            {
+              "kind": "cond",
+              "id": "f4",
+              "field": "device",
+              "cmp": "eq",
+              "value": {
+                "t": "string",
+                "v": "mobile"
+              }
+            },
+            {
+              "kind": "group",
+              "op": "and",
+              "items": [
+                {
+                  "kind": "cond",
+                  "id": "f5",
+                  "field": "browser",
+                  "cmp": "eq",
+                  "value": {
+                    "t": "string",
+                    "v": "chrome"
+                  }
+                },
+                {
+                  "kind": "cond",
+                  "id": "f6",
+                  "field": {
+                    "scope": "event",
+                    "key": "plan"
+                  },
+                  "cmp": "eq",
+                  "value": {
+                    "t": "string",
+                    "v": "pro"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "cond",
+          "id": "f7",
+          "field": "path",
+          "cmp": "neq",
+          "value": {
+            "t": "string",
+            "v": "/"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f8",
+          "field": "path",
+          "cmp": "not_contains",
+          "value": {
+            "t": "string",
+            "v": "/legal"
+          }
+        },
+        {
+          "kind": "cond",
+          "id": "f9",
+          "field": {
+            "scope": "event",
+            "key": "variant"
+          },
+          "cmp": "is_not_set"
+        },
+        {
+          "kind": "cond",
+          "id": "f10",
+          "field": {
+            "scope": "event",
+            "key": "sku"
+          },
+          "cmp": "eq",
+          "value": {
+            "t": "string",
+            "v": "SKU-049321"
+          }
+        }
+      ]
+    },
+    "range": {
+      "kind": "days",
+      "start": "2026-09-01",
+      "end": "2026-09-30"
+    },
+    "timezone": "Europe/Vienna",
+    "granularity": "day",
+    "compare": "none",
+    "metric_version": 1,
+    "sort": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "page": {
+      "size": 50,
+      "index": 0
+    },
+    "visualization": "table"
+  },
+  "parameters": {},
+  "sort": {
+    "order": [
+      {
+        "by": "pageviews",
+        "dir": "desc"
+      }
+    ],
+    "ties": "dimension values ascending in UTF-8 byte order (0004)"
+  },
+  "output_bound": {
+    "max_rows": 3,
+    "max_response_bytes": 1048576
+  },
+  "selectivity": "selective",
+  "expected": {
+    "row_count": 0,
+    "matched_records": 0,
+    "golden_result_hash": "08a4fa78ab696f79548258b2495b33c156cc29db9dca4ade4a4fb82c5a97d0ab",
+    "hash_method": "sha256 hex of the RFC 8785 (JCS) canonical result document; rows sorted by the case's sort order",
+    "status": "fixed by milestone 02 first generation; a changed hash is a failure",
+    "golden_document": "fixtures/workload/golden/Q04-30d-A-vienna-selective.json"
+  },
+  "retention_clock": "application clock local date 2026-10-01 in the site timezone; cutoffs per 0006"
+}

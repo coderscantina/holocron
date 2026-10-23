@@ -1,0 +1,34 @@
+{
+  "id": "capture-local-storage-disabled",
+  "description": "localStorage \"umami.disabled\" set disables tracking.",
+  "upstream_ref": [
+    "src/tracker/index.ts:228-233",
+    "src/tracker/index.ts:380"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "official Umami 3.4.0 container (tools/collection-harness/compose.yaml)"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080",
+    "init": "() => localStorage.setItem('umami.disabled', '1')"
+  },
+  "actions": [],
+  "captured": [],
+  "assertions": [
+    {
+      "description": "no /api/send request",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": true,
+  "validation_reason": "Captured from the real scripts talking to the official Umami 3.4.0 container; responses are upstream responses."
+}

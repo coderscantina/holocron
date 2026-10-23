@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "vue", "oxc", "import"],
+  "categories": {
+    "correctness": "warn"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-unsafe-optional-chaining": "warn",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-unsafe-declaration-merging": "warn",
+    "unicorn/prefer-string-starts-ends-with": "warn",
+    "unicorn/no-useless-spread": "warn",
+    "import/no-cycle": "warn",
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "fetch",
+        "message": "Network calls go through the transport in src/api/client.ts. Pages and components use resources from src/api."
+      }
+    ]
+  },
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": ["**/node_modules", "dist", "src/generated/**", "src/auto-imports.d.ts"],
+  "overrides": [
+    {
+      "files": ["src/api/client.ts", "src/services/runtime-config.ts", "src/**/*.test.ts", "e2e/**"],
+      "rules": {
+        "no-restricted-globals": "off"
+      }
+    }
+  ]
+}

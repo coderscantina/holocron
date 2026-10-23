@@ -1,0 +1,121 @@
+{
+  "metric_version": 1,
+  "site": "A",
+  "population": "consented persistent profiles",
+  "cohort_period": "week",
+  "timezone": "Europe/Vienna",
+  "cohort_range": {
+    "days": [
+      "2026-09-14",
+      "2026-09-27"
+    ],
+    "start": "2026-09-13T22:00:00.000Z",
+    "end": "2026-09-27T22:00:00.000Z"
+  },
+  "watermark": "2026-10-03T10:00:00.000Z",
+  "note": "Every cohort period in range is a row and every requested offset a column. An interval that has not started shows 0 with complete: false (0003 Retention and cohorts).",
+  "cohorts": [
+    {
+      "cohort": "2026-09-14",
+      "size": 2,
+      "members": {
+        "anna": "con-07",
+        "ben": "con-10"
+      },
+      "coverage": {
+        "consented_events": 5,
+        "eligible_events": 6,
+        "rate": 0.8333
+      },
+      "intervals": [
+        {
+          "week": 0,
+          "start": "2026-09-13T22:00:00.000Z",
+          "end": "2026-09-20T22:00:00.000Z",
+          "active": 2,
+          "rate": 1.0,
+          "complete": true
+        },
+        {
+          "week": 1,
+          "start": "2026-09-20T22:00:00.000Z",
+          "end": "2026-09-27T22:00:00.000Z",
+          "active": 1,
+          "rate": 0.5,
+          "complete": true
+        },
+        {
+          "week": 2,
+          "start": "2026-09-27T22:00:00.000Z",
+          "end": "2026-10-04T22:00:00.000Z",
+          "active": 2,
+          "rate": 1.0,
+          "complete": false
+        }
+      ]
+    },
+    {
+      "cohort": "2026-09-21",
+      "size": 1,
+      "members": {
+        "cleo": "con-15"
+      },
+      "coverage": {
+        "consented_events": 2,
+        "eligible_events": 3,
+        "rate": 0.6667
+      },
+      "intervals": [
+        {
+          "week": 0,
+          "start": "2026-09-20T22:00:00.000Z",
+          "end": "2026-09-27T22:00:00.000Z",
+          "active": 1,
+          "rate": 1.0,
+          "complete": true
+        },
+        {
+          "week": 1,
+          "start": "2026-09-27T22:00:00.000Z",
+          "end": "2026-10-04T22:00:00.000Z",
+          "active": 1,
+          "rate": 1.0,
+          "complete": false
+        },
+        {
+          "week": 2,
+          "start": "2026-10-04T22:00:00.000Z",
+          "end": "2026-10-11T22:00:00.000Z",
+          "active": 0,
+          "rate": 0.0,
+          "complete": false
+        }
+      ]
+    }
+  ],
+  "average_over_complete": {
+    "week 0": {
+      "active": 3,
+      "size": 3,
+      "rate": 1.0
+    },
+    "week 1": {
+      "active": 1,
+      "size": 2,
+      "rate": 0.5
+    },
+    "week 2": {
+      "rate": null,
+      "reason": "no_denominator"
+    }
+  },
+  "excluded": {
+    "dora": "cohort entry 2026-08-11 is outside the cohort range",
+    "con-05": "anonymous event before anna's consent; not part of the profile"
+  },
+  "report": {
+    "kind": "retention",
+    "v": 1,
+    "intervals": 3
+  }
+}

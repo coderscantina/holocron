@@ -1,0 +1,56 @@
+{
+  "id": "send-performance-negative",
+  "surface": "send.performance",
+  "polarity": "negative",
+  "description": "Negative ttfb.",
+  "upstream_ref": [
+    "src/app/api/send/route.ts:56-60"
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/api/send",
+    "body": {
+      "type": "performance",
+      "payload": {
+        "website": "5e1a0000-0000-4000-8000-000000000001",
+        "hostname": "localhost",
+        "language": "en-US",
+        "screen": "1920x1080",
+        "title": "Fixture page",
+        "url": "http://localhost/fixture?utm_source=newsletter",
+        "referrer": "https://referrer.example/article",
+        "lcp": 1200.5,
+        "inp": 80,
+        "cls": 0.05,
+        "fcp": 900,
+        "ttfb": -1
+      }
+    }
+  },
+  "expected_upstream": {
+    "status": 400,
+    "body": {
+      "error": {
+        "code": "bad-request",
+        "status": 400,
+        "properties": {
+          "payload": {
+            "properties": {
+              "ttfb": {
+                "errors": "<array>"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "expected_holocron": {
+    "outcome": "refused",
+    "status": 400,
+    "decision": "proposed",
+    "notes": "Keep the {error:{message,code,status}} envelope. Zod tree details are not part of the contract."
+  },
+  "validated_against_upstream": true,
+  "validation_reason": "Replayed against official Umami 3.4.0 by tools/collection-harness/replay.mjs. Result in docs/evidence/m01-collection-validation.md."
+}

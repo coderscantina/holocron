@@ -1,0 +1,148 @@
+{
+  "id": "capture-identify",
+  "description": "umami.identify(id, data) sends type identify with an empty x-umami-cache header; later events carry payload.id.",
+  "upstream_ref": [
+    "src/tracker/index.ts:442-460",
+    "src/tracker/index.ts:292",
+    "src/tracker/index.ts:406"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "official Umami 3.4.0 container (tools/collection-harness/compose.yaml)"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001"
+    }
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.waitForTimeout(300);",
+    "await page.evaluate(async () => {",
+    "await window.umami.identify('user-123', { plan: 'pro' });",
+    "await window.umami.track('after-identify');",
+    "});"
+  ],
+  "captured": [
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": ""
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "identify",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "id": "user-123",
+          "data": {
+            "plan": "pro"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/send",
+      "request_headers": {
+        "content-type": "application/json",
+        "x-umami-cache": "<CACHE_TOKEN>",
+        "x-umami-website-id": "5e1a0000-0000-4000-8000-000000000001",
+        "x-umami-hostname": "127.0.0.1"
+      },
+      "request_body": {
+        "type": "event",
+        "payload": {
+          "website": "5e1a0000-0000-4000-8000-000000000001",
+          "screen": "1920x1080",
+          "language": "en-US",
+          "title": "Capture page",
+          "hostname": "127.0.0.1",
+          "url": "http://127.0.0.1:33401/fixture",
+          "referrer": "",
+          "id": "user-123",
+          "name": "after-identify"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "cache": "<CACHE_TOKEN>",
+          "sessionId": "<SESSION_ID>",
+          "visitId": "<VISIT_ID>"
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "description": "identify request present",
+      "passed": true
+    },
+    {
+      "description": "identify sends an empty cache header",
+      "passed": true
+    },
+    {
+      "description": "identify payload has id and data",
+      "passed": true
+    },
+    {
+      "description": "next event carries id",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": true,
+  "validation_reason": "Captured from the real scripts talking to the official Umami 3.4.0 container; responses are upstream responses."
+}

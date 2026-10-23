@@ -1,0 +1,37 @@
+{
+  "id": "capture-before-send-cancel",
+  "description": "data-before-send names a global function; returning null cancels the request.",
+  "upstream_ref": [
+    "src/tracker/index.ts:243",
+    "src/tracker/index.ts:387-395"
+  ],
+  "script": {
+    "tracker_sha256": "654f12c7548be726eba5b71d5ef8bffc2a41a39a0053e2a49a847869ccd7ac3f",
+    "served_by": "server at http://127.0.0.1:33400"
+  },
+  "page": {
+    "url": "http://127.0.0.1:33401/fixture",
+    "tracker_attributes": {
+      "data-website-id": "5e1a0000-0000-4000-8000-000000000001",
+      "data-before-send": "cancelAll"
+    },
+    "head": "<script>window.cancelAll = () => null;</script>"
+  },
+  "browser": {
+    "engine": "chromium (Playwright 1.63.0, headless)",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "screen": "1920x1080"
+  },
+  "actions": [
+    "await page.evaluate(() => window.umami.track('cancelled'));"
+  ],
+  "captured": [],
+  "assertions": [
+    {
+      "description": "no /api/send request",
+      "passed": true
+    }
+  ],
+  "validated_against_upstream": false,
+  "validation_reason": "Captured from the real scripts talking to http://127.0.0.1:33400; responses are that server's responses."
+}

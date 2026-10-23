@@ -1,0 +1,336 @@
+{
+  "case": "Q01-30d-D-utc",
+  "metric_version": 1,
+  "resolved": {
+    "start": "2026-09-01T00:00:00.000Z",
+    "end": "2026-10-01T00:00:00.000Z",
+    "compare_start": "2026-08-02T00:00:00.000Z",
+    "compare_end": "2026-09-01T00:00:00.000Z"
+  },
+  "totals": {
+    "pageviews": {
+      "current": 200000,
+      "previous": 193544,
+      "change": 6456,
+      "relative_change": 0.0334
+    },
+    "visitor_days": {
+      "current": 25000,
+      "previous": 24193,
+      "change": 807,
+      "relative_change": 0.0334
+    },
+    "sessions": {
+      "current": 25000,
+      "previous": 24193,
+      "change": 807,
+      "relative_change": 0.0334
+    },
+    "bounce_rate": {
+      "current": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 25000
+      },
+      "previous": {
+        "value": 0.0,
+        "numerator": 0,
+        "denominator": 24193
+      }
+    },
+    "span_mean": {
+      "current": {
+        "value": 270000,
+        "sum_ms": 6750000000,
+        "sessions": 25000
+      },
+      "previous": {
+        "value": 270000,
+        "sum_ms": 6532110000,
+        "sessions": 24193
+      }
+    },
+    "span_median": {
+      "current": 270000,
+      "previous": 270000
+    }
+  },
+  "series": [
+    {
+      "start": "2026-09-01T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-02T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-03T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-04T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-05T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-06T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-07T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-08T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-09T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-10T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-11T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-12T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-13T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-14T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-15T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-16T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-17T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-18T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-19T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-20T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-21T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-22T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-23T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-24T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-25T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-26T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-27T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-28T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    },
+    {
+      "start": "2026-09-29T00:00:00.000Z",
+      "pageviews": 6672,
+      "visitor_days": 834,
+      "sessions": 834,
+      "bounces": 0,
+      "engaged_sessions": 834,
+      "span_sum_ms": 225180000
+    },
+    {
+      "start": "2026-09-30T00:00:00.000Z",
+      "pageviews": 6664,
+      "visitor_days": 833,
+      "sessions": 833,
+      "bounces": 0,
+      "engaged_sessions": 833,
+      "span_sum_ms": 224910000
+    }
+  ],
+  "series_sum_differs": false,
+  "identity_coverage": {
+    "with_identity": 250000,
+    "eligible_events": 250000,
+    "rate": 1.0
+  }
+}
