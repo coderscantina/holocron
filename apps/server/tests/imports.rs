@@ -29,7 +29,7 @@ use holocron_server::imports::{self, ImportState, Options, RunArgs};
 use holocron_server::init::{self, InitArgs};
 use holocron_server::setup::{self, Outcome};
 use holocron_server::{AppState, router};
-use holocron_storage::{Dimensions, Event, EventKind, Lane, Record, Storage};
+use holocron_storage::{Budgets, Dimensions, Event, EventKind, Lane, Record, Storage};
 use http_body_util::BodyExt;
 use serde_json::{Value, json};
 use sqlx::{Connection, Executor, MySqlConnection, PgConnection, Row};
@@ -477,6 +477,23 @@ async fn a_source_url_that_asks_for_tls_is_read_over_tls() {
         .unwrap();
     assert_eq!(report["outcome"], "accept", "{report}");
     assert!(outcome.is_ok());
+}
+
+/// The dashboard's read limit doesn't bound an import: on a slow host the reconciliation's one
+/// read over the whole import outlasted it and stopped the import at its last step.
+#[tokio::test]
+#[ignore = "needs the databases of tools/import-rehearsal/test.sh"]
+async fn an_import_is_not_bound_by_the_dashboards_read_limit() {
+    let source = snapshot(Engine::My, &[]).await;
+    let dir = data_dir().await;
+    let budgets = Budgets {
+        query_timeout: Duration::ZERO,
+        ..test_budgets()
+    };
+    let manifest = imports::run(args(dir.path(), &source.read_only, None), budgets, now_ms())
+        .await
+        .unwrap();
+    assert_eq!(manifest["status"], "reconciled", "{manifest:#}");
 }
 
 #[tokio::test]

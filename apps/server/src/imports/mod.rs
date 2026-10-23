@@ -433,6 +433,9 @@ pub struct Job {
     pub two_factor_key: Option<[u8; 32]>,
 }
 
+/// The read limit of an import. Its reads, the reconciliation above all, scan the whole import.
+const IMPORT_QUERY_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(60 * 60);
+
 /// [`run`] without the lock, for setup mode, which holds it while the wizard runs. Reports each
 /// checkpoint to `progress`.
 pub async fn import(
@@ -441,6 +444,12 @@ pub async fn import(
     now_ms: i64,
     progress: Reporter,
 ) -> Result<Value, Failure> {
+    // The dashboard's 30 s read limit (0004) is for interactive reports. The reconciliation
+    // counts and hashes the whole import in one read, which takes longer on large sources.
+    let budgets = Budgets {
+        query_timeout: IMPORT_QUERY_TIMEOUT,
+        ..budgets
+    };
     let timezone = parse_timezone(&job.options.timezone)?;
     let dir = &job.data_dir;
     let db = Db::open(dir).await.map_err(storage)?;
