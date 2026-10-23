@@ -3,6 +3,19 @@
 All notable changes to Holocron are documented here.
 Commits follow the [Gitmoji](https://gitmoji.dev/) convention.
 
+## 26.10.23.2
+
+Fixes an Umami import that stopped at its reconciliation step with "read cancelled after the query timeout" on larger sources or slower hosts. Resume the stopped import after updating, or discard it and start again if the source kept collecting.
+
+### Fixes
+
+- 🐛 keep the dashboard's 30 s read limit from stopping an import at reconciliation
+
+### Other changes
+
+- 📝 record the first release in the status
+- 👷 number a second release on the same day yy.m.d.2
+
 ## 26.10.23
 
 The first public release, in beta.
