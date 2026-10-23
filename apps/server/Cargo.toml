@@ -22,21 +22,21 @@ dev-clock = []
 holocron-analytics = { path = "../../crates/analytics" }
 holocron-protocol = { path = "../../crates/protocol" }
 holocron-storage = { path = "../../crates/storage" }
-aes-gcm = "0.10"
+aes-gcm = "0.11"
 anyhow = "1"
 argon2 = "0.6"
 axum = { workspace = true, features = ["macros"] }
-base64 = "0.22"
+base64 = "0.23"
 bcrypt = "0.19"
 blake3 = "1"
-chacha20poly1305 = { version = "0.10", default-features = false, features = ["alloc"] }
+chacha20poly1305 = { version = "0.11", default-features = false, features = ["alloc"] }
 chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
 chrono-tz = "0.10"
 clap = { version = "4", features = ["derive", "env"] }
 data-encoding = "2"
 flate2 = "1"
 futures-util = { version = "0.3", default-features = false }
-getrandom = "0.3"
+getrandom = "0.4"
 hmac = "0.13"
 http-body-util = "0.1"
 ipnet = "2"
@@ -45,10 +45,10 @@ libc = "0.2"
 # `mmap` maps the downloaded GeoIP file instead of copying it to the heap (decision 0018).
 maxminddb = { version = "0.32", features = ["mmap"] }
 serde.workspace = true
-serde_html_form = "0.2"
+serde_html_form = "0.4"
 serde_json = { workspace = true, features = ["raw_value", "unbounded_depth"] }
 sha1 = "0.11"
-sha2 = "0.10"
+sha2 = "0.11"
 # PostgreSQL and MySQL only read Umami sources in `imports`; `any` gives both one row type.
 sqlx = { workspace = true, features = ["postgres", "mysql", "mysql-rsa", "any", "tls-rustls-ring-webpki"] }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "signal", "fs"] }
@@ -60,7 +60,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 ureq = { version = "3", default-features = false, features = ["rustls"] }
 url = "2"
 uuid = { version = "1", features = ["v4", "serde"] }
-zstd = "0.13"
+zstd = "0.14"
 
 [dev-dependencies]
 # The gate fixture and explore suite for the `summary_load` and `collect_burst` examples.
