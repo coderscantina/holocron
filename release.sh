@@ -45,7 +45,17 @@ done
 
 # ─── Version and changelog section ───────────────────────────────────────────
 
-version=$(date +%y.%-m.%-d)
+# A second release on the same day is YY.M.D.2, then .3. Cargo takes only semver, so the crate
+# and package versions spell it YY.M.D-2.
+day=$(date +%y.%-m.%-d)
+earlier=$(git tag -l "v$day-*" "v$day.*-*" | wc -l | tr -d ' ')
+if [ "$earlier" -eq 0 ]; then
+  version=$day
+  crate_version=$day
+else
+  version="$day.$((earlier + 1))"
+  crate_version="$day-$((earlier + 1))"
+fi
 last_tag=$(git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*-*' 2>/dev/null || true)
 # Oldest first, without earlier release commits.
 subjects=$(git log --no-merges --reverse --format='%s' ${last_tag:+"$last_tag"..HEAD} | grep -v '^🔖' || true)
@@ -145,9 +155,9 @@ on_exit() {
 }
 trap on_exit EXIT
 
-perl -0pi -e "s/(\[workspace\.package\]\nversion = )\"[^\"]*\"/\${1}\"$version\"/" Cargo.toml
-perl -pi -e "s/^  \"version\": \"[^\"]*\"/  \"version\": \"$version\"/" apps/web/package.json
-grep -q "^version = \"$version\"" Cargo.toml || fail "could not set the version in Cargo.toml"
+perl -0pi -e "s/(\[workspace\.package\]\nversion = )\"[^\"]*\"/\${1}\"$crate_version\"/" Cargo.toml
+perl -pi -e "s/^  \"version\": \"[^\"]*\"/  \"version\": \"$crate_version\"/" apps/web/package.json
+grep -q "^version = \"$crate_version\"" Cargo.toml || fail "could not set the version in Cargo.toml"
 cargo update --workspace --quiet
 cargo run --quiet -p holocron-protocol --bin export-types
 

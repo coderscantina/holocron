@@ -1,9 +1,9 @@
 name: Release
 
 # Runs on release tags that `release.sh` creates: vYY.M.D-<short commit>, e.g.
-# v26.10.19-1a2b3c4. Waits for CI on the release commit, builds the Docker image on a
-# native runner per platform, and creates a GitHub release whose notes are the version's
-# CHANGELOG.md section.
+# v26.10.19-1a2b3c4, or vYY.M.D.N-<short commit> for the Nth release of a day. Waits for
+# CI on the release commit, builds the Docker image on a native runner per platform, and
+# creates a GitHub release whose notes are the version's CHANGELOG.md section.
 on:
   push:
     tags:
@@ -46,8 +46,10 @@ jobs:
           version="${release%-*}"
           sha="${release##*-}"
           crate=$(sed -n 's/^version = "\(.*\)"$/\1/p' Cargo.toml | head -n1)
-          if [ "$release" = "$version" ] || [ "$version" != "$crate" ]; then
-            echo "::error::tag $GITHUB_REF_NAME does not match v$crate-<short commit>"
+          # A same-day release YY.M.D.N has the crate version YY.M.D-N; release.sh sets both.
+          expected=$(printf '%s' "$crate" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$/\1.\2/')
+          if [ "$release" = "$version" ] || [ "$version" != "$expected" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match v$expected-<short commit>"
             exit 1
           fi
           if [ "$(git rev-parse --short="${#sha}" HEAD)" != "$sha" ]; then

@@ -7,7 +7,7 @@ Holocron ships as one Docker image, `ghcr.io/coderscantina/holocron`, for linux/
 | Tag | Use |
 | --- | --- |
 | `:latest` | The newest release |
-| `:YY.M.D`, for example `:26.10.19` | A release by date. Pin this in production |
+| `:YY.M.D`, for example `:26.10.19` | A release by date. Pin this in production. A second release on the same day is `:YY.M.D.2` |
 | `:YY.M.D-<shorthash>`, for example `:26.10.19-1a2b3c4` | The same release, named with its commit |
 
 The image runs as a non-root user (uid 10001), keeps its data in the `/data` volume and listens on port 8080. Its entrypoint is `holocron` and its default command is `serve`, so anything after the image name is a `holocron` command. It has a healthcheck on `/health`.
