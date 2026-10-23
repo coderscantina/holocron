@@ -1394,7 +1394,7 @@ dependencies = [
 
 [[package]]
 name = "holocron-analytics"
-version = "0.1.0"
+version = "26.10.23"
 dependencies = [
  "chrono",
  "chrono-tz",
@@ -1408,7 +1408,7 @@ dependencies = [
 
 [[package]]
 name = "holocron-protocol"
-version = "0.1.0"
+version = "26.10.23"
 dependencies = [
  "schemars",
  "serde",
@@ -1419,7 +1419,7 @@ dependencies = [
 
 [[package]]
 name = "holocron-server"
-version = "0.1.0"
+version = "26.10.23"
 dependencies = [
  "aes-gcm",
  "anyhow",
@@ -1466,7 +1466,7 @@ dependencies = [
 
 [[package]]
 name = "holocron-storage"
-version = "0.1.0"
+version = "26.10.23"
 dependencies = [
  "duckdb",
  "getrandom 0.3.4",
@@ -1482,7 +1482,7 @@ dependencies = [
 
 [[package]]
 name = "holocron-workload"
-version = "0.1.0"
+version = "26.10.23"
 dependencies = [
  "blake3",
  "chrono",
