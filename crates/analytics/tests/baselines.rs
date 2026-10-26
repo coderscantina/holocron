@@ -26,10 +26,10 @@ use common::{Site, Who, correct, ingest, ms, open};
 use holocron_analytics::explore::{Context, explore, validate};
 use holocron_analytics::jobs;
 use holocron_protocol::exploration::{
-    Comparison, ExplorationState, ExploreResult, GoalResult, Metric, Panel, Projection, Reason,
-    ReportResult,
+    Comparison, ExplorationState, ExploreResult, GoalResult, Metric, MoneyProjection, Panel,
+    Projection, Reason, ReportResult,
 };
-use holocron_storage::{EventKind, Lane, Record, Storage};
+use holocron_storage::{EventKind, Lane, Record, Revenue, Storage};
 use serde_json::{Value, json};
 
 /// Tuesday 2026-10-13, 15:20 in Vienna (CEST).
@@ -754,4 +754,204 @@ async fn goals_compare_with_the_median_tuesday_and_project_completions() {
         Metric::Count { v: 72 }
     );
     assert_eq!(past.projection, None);
+}
+
+const R: u128 = 0x11;
+
+/// A local date, its weight and an extra sale's currency and minor units.
+type RevenueDay = (&'static str, usize, Option<(&'static str, i64)>);
+
+/// Revenue sites, each a list of `(local date, weight, extra sale)`. A day of weight `w` has,
+/// in every hour, `w` sales of 10.00 EUR at `:05`, one refund of 2.50 EUR at 01:05, and the
+/// extra sale at 10:05. So until 15:20 a day has `16w + 1` EUR records netting
+/// `16,000w − 250` cents, and after it `8,000w` more.
+async fn load_revenue(sites: &[(u128, Vec<RevenueDay>)]) -> (tempfile::TempDir, Storage) {
+    let (dir, storage) = open().await;
+    let now = ms(NOW);
+    let mut records = Vec::new();
+    for (id, days) in sites {
+        let mut site = Site::new(*id, Vienna);
+        jobs::record_policies(&storage, *id, site.policies.clone())
+            .await
+            .unwrap();
+        for (d, w, extra) in days {
+            let start = local_start(date(d));
+            let mut sale = |at: i64, currency: &str, minor_units: i64| {
+                if at < now {
+                    let label = format!("r{at}-{}", records.len());
+                    let mut record =
+                        site.event_at(EventKind::CustomEvent, at, at, Who::Anon(&label));
+                    if let Record::Event(event) = &mut record {
+                        event.revenue = Some(Revenue {
+                            currency: currency.into(),
+                            minor_units,
+                        });
+                    }
+                    records.push(record);
+                }
+            };
+            for h in 0..24 {
+                for _ in 0..*w {
+                    sale(start + h * HOUR + 5 * MINUTE, "EUR", 1000);
+                }
+            }
+            sale(start + HOUR + 5 * MINUTE, "EUR", -250);
+            if let Some((currency, minor_units)) = extra {
+                sale(start + 10 * HOUR + 5 * MINUTE, currency, *minor_units);
+            }
+        }
+    }
+    ingest(&storage, &records).await;
+    correct(&storage).await;
+    (dir, storage)
+}
+
+/// Site R: site A's Tuesday weights from 08-18. USD sales of 1.00 to 5.00 on the first five
+/// baseline Tuesdays and 10.00 today; ¥300 on the last three baseline Tuesdays.
+fn site_r() -> Vec<RevenueDay> {
+    vec![
+        ("2026-08-18", 1, Some(("USD", 100))),
+        ("2026-08-25", 2, Some(("USD", 200))),
+        ("2026-09-01", 3, Some(("USD", 300))),
+        ("2026-09-08", 4, Some(("USD", 400))),
+        ("2026-09-15", 50, Some(("USD", 500))),
+        ("2026-09-22", 5, Some(("JPY", 300))),
+        ("2026-09-29", 6, Some(("JPY", 300))),
+        ("2026-10-06", 7, Some(("JPY", 300))),
+        ("2026-10-13", 5, Some(("USD", 1000))),
+    ]
+}
+
+fn revenue_state() -> ExplorationState {
+    let mut state = state(
+        ("2026-10-13", "2026-10-13"),
+        "hour",
+        "typical_weekday",
+        Value::Null,
+    );
+    state.measures = serde_json::from_value(json!(["revenue_net", "revenue_count"])).unwrap();
+    state
+}
+
+/// The minor units of a revenue amount per currency.
+fn money(metric: &Metric) -> Vec<(&str, i128)> {
+    match metric {
+        Metric::Money { v } => v
+            .iter()
+            .map(|m| (m.currency.as_str(), m.minor_units))
+            .collect(),
+        other => panic!("{other:?}"),
+    }
+}
+
+fn money_estimate(v: &[(&str, u8, [f64; 3])], basis_days: u32) -> Option<Projection> {
+    let v = v
+        .iter()
+        .map(|(currency, exponent, [value, low, high])| MoneyProjection {
+            currency: (*currency).to_owned(),
+            exponent: *exponent,
+            value: *value,
+            low: *low,
+            high: *high,
+        })
+        .collect();
+    Some(Projection::MoneyEstimate { v, basis_days })
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn money_compares_with_the_median_tuesday_per_currency() {
+    let (_dir, storage) = load_revenue(&[(R, site_r())]).await;
+    let result = run(&storage, R, revenue_state(), vec![], NOW).await;
+    let t = totals(&result);
+    // Until 15:20, EUR nets 16,000w − 250 at the median w = 4. USD is missing on three days,
+    // which count 0: 0 0 0 100 200 300 400 500, median 100 (300 if they were skipped). JPY
+    // on three days has median 0 and is left out.
+    assert_eq!(money(&t[0].previous), [("EUR", 63_750), ("USD", 100)]);
+    // Two currencies never compare, as under the previous period.
+    assert_eq!(
+        (money(&result.main.totals[0]), t[0].change, t[0].reason),
+        (vec![("EUR", 79_750), ("USD", 1000)], None, None)
+    );
+    // Records until 15:20, sorted: 18 34 50 66 82 98 114 802; today 81 EUR and 1 USD.
+    assert_eq!((previous(&t[1]), t[1].change), (66, Some(16.0)));
+
+    // Buckets take the median per currency too: hour 1 nets 1000w − 250, hour 10 adds USD.
+    let series = result.main.series.as_ref().unwrap();
+    let typical = |hour: usize| money(&series.points[hour].compare.as_ref().unwrap()[0].previous);
+    assert_eq!(typical(1), [("EUR", 3750)]);
+    assert_eq!(typical(10), [("EUR", 4000), ("USD", 100)]);
+    assert_eq!(typical(16), [("EUR", 4000)]);
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn money_projects_per_currency_scaled_by_its_records() {
+    let (_dir, storage) = load_revenue(&[(R, site_r())]).await;
+    let result = run(&storage, R, revenue_state(), vec![], NOW).await;
+    // EUR: u_k = 16w + 1 records, today 81, so w = 1 is under the floor; a_k = 8,000w and
+    // o = 79,750 cents. p_k = 79,750 + 81 × 8,000w / (16w + 1), and 87,750 for w = 1; sorted
+    // 87750 119022.7273 119423.4694 119626.9231 119750 119832.4742 119891.5929 120199.4382.
+    // USD: every sale is before now, so each p_k is today's 1000. JPY adds nothing: left out.
+    let projection = result.main.projection.as_ref().unwrap();
+    assert_eq!(
+        projection[0],
+        money_estimate(
+            &[
+                ("EUR", 2, [119626.9231, 119022.7273, 119832.4742]),
+                ("USD", 2, [1000.0; 3])
+            ],
+            8
+        )
+    );
+    // The count projects as before: records u_k = 16w + 2 with the extra sale, a_k = 8w.
+    assert!(matches!(
+        projection[1],
+        Some(Projection::Estimate { basis_days: 8, .. })
+    ));
+    // Hour 16 is all after now: o = 0 and a_k = 1000w, so p_k = 81,000w / (16w + 1), 1000
+    // for w = 1. Hour 15 measured its 15:05 sales and its basis days add nothing after now.
+    let projected = result
+        .main
+        .series
+        .as_ref()
+        .unwrap()
+        .projection
+        .as_ref()
+        .unwrap();
+    assert_eq!(
+        projected[1].values[0],
+        money_estimate(&[("EUR", 2, [4984.6154, 4909.0909, 5010.3093])], 8)
+    );
+    assert_eq!(
+        projected[0].values[0],
+        money_estimate(&[("EUR", 2, [5000.0; 3])], 8)
+    );
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn money_without_four_baseline_days_has_no_baseline_or_projection() {
+    const YOUNG: u128 = 0x12;
+    let young = site_r().split_off(5);
+    let (_dir, storage) = load_revenue(&[(YOUNG, young)]).await;
+    let result = run(&storage, YOUNG, revenue_state(), vec![], NOW).await;
+    assert_eq!(result.resolved.compare_days.as_ref().unwrap().len(), 3);
+    let t = totals(&result);
+    assert_eq!(
+        (&t[0].previous, t[0].reason),
+        (
+            &Metric::Unavailable {
+                reason: Reason::InsufficientHistory
+            },
+            Some(Reason::InsufficientHistory)
+        )
+    );
+    assert_eq!(result.main.projection.as_deref().unwrap(), [UNPROJECTED; 2]);
+    let projected = result
+        .main
+        .series
+        .as_ref()
+        .unwrap()
+        .projection
+        .as_ref()
+        .unwrap();
+    assert!(projected.iter().all(|p| p.values[0] == UNPROJECTED));
 }

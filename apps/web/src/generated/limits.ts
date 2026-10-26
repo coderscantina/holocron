@@ -72,7 +72,7 @@ export const TYPICAL_WEEKDAY_DAYS_MIN = 4
 /** Longest range a typical-weekday comparison accepts, in days; longer ones are refused with `compare_unsupported`. */
 export const TYPICAL_WEEKDAY_RANGE_DAYS_MAX = 31
 
-/** Counted units a baseline day needs before now for a projection to scale it; below this the scale is 1. */
+/** Counted units a baseline day needs before now for a projection to scale it, for money its revenue records of the currency; below this the scale is 1. */
 export const PROJECTION_SCALING_FLOOR = 20
 
 /** Sites one `summaries.forSites` call names. */

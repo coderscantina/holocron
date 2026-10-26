@@ -668,8 +668,9 @@ pub fn is_money(measure: &Measure) -> bool {
 
 const PERF_METRIC: Field = Field::Dimension(DimensionField::PerfMetric);
 
-/// A typical-weekday baseline is a median for counts and a pooled population for rates and
-/// spans (0015). Money, percentiles, identified people and property statistics have none.
+/// A typical-weekday baseline is a median for counts and money (per currency) and a pooled
+/// population for rates and spans (0015). Percentiles, identified people and property
+/// statistics have none.
 fn typical_weekday(query: &Query) -> Result<(), Refusal> {
     if query.state.compare != Compare::TypicalWeekday {
         return Ok(());
@@ -684,6 +685,9 @@ fn typical_weekday(query: &Query) -> Result<(), Refusal> {
                     | NamedMeasure::VisitorDays
                     | NamedMeasure::Sessions
                     | NamedMeasure::RevenueCount
+                    | NamedMeasure::RevenueNet
+                    | NamedMeasure::RevenueGross
+                    | NamedMeasure::RevenueRefunds
                     | NamedMeasure::BounceRate
                     | NamedMeasure::SpanMean
                     | NamedMeasure::SpanMedian

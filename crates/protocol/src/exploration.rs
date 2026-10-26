@@ -488,8 +488,8 @@ pub struct Series {
     pub projection: Option<Vec<ProjectedPoint>>,
 }
 
-/// A labelled estimate of where a count measure ends (0015 Pace projection). Never a measured
-/// value: it stays out of `totals`, `rows` and `points`.
+/// A labelled estimate of where a count or money measure ends (0015 Pace projection). Never a
+/// measured value: it stays out of `totals`, `rows` and `points`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
 #[serde(tag = "t", rename_all = "snake_case")]
 pub enum Projection {
@@ -500,9 +500,26 @@ pub enum Projection {
         high: f64,
         basis_days: u32,
     },
+    /// Per currency, for money measures: the median projection in minor units with its band.
+    MoneyEstimate {
+        v: Vec<MoneyProjection>,
+        basis_days: u32,
+    },
     Unavailable {
         reason: Reason,
     },
+}
+
+/// One currency's projection in minor units, never converted (0003 Revenue).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
+pub struct MoneyProjection {
+    /// ISO 4217 code.
+    pub currency: String,
+    /// Minor-unit digits of the currency: 2 for EUR, 0 for JPY.
+    pub exponent: u8,
+    pub value: f64,
+    pub low: f64,
+    pub high: f64,
 }
 
 /// One projected series bucket.
@@ -512,7 +529,7 @@ pub struct ProjectedPoint {
     pub start: i64,
     /// Bucket start as local wall time `YYYY-MM-DDTHH:MM` in the state's timezone.
     pub local: String,
-    /// One entry per measure; `null` for a measure that is not a count.
+    /// One entry per measure; `null` for a measure that is neither a count nor money.
     pub values: Vec<Option<Projection>>,
 }
 
@@ -533,7 +550,7 @@ pub struct Cut {
     #[ts(optional)]
     pub compare: Option<Vec<Comparison>>,
     /// Where each total ends when the range ends after now: one entry per measure, `null` for a
-    /// measure that is not a count.
+    /// measure that is neither a count nor money.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub projection: Option<Vec<Option<Projection>>>,

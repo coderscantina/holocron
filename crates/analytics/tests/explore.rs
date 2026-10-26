@@ -312,9 +312,6 @@ async fn typical_weekday_refuses_measures_without_a_baseline_and_ranges_over_31_
     let perf = group("and", vec![cond("p1", "perf_metric", "eq", Some("LCP"))]);
     let property = json!({ "stat": "sum", "field": { "scope": "event", "key": "plan" } });
     for (measures, filter) in [
-        (json!(["revenue_net"]), Value::Null),
-        (json!(["revenue_gross"]), Value::Null),
-        (json!(["revenue_refunds"]), Value::Null),
         (json!(["p75"]), perf),
         (json!(["pageviews", "identified_people"]), Value::Null),
         (json!(["pageviews", property]), Value::Null),
@@ -338,12 +335,14 @@ async fn typical_weekday_refuses_measures_without_a_baseline_and_ranges_over_31_
     ]);
     let accepted = typical(counts, Value::Null, "2026-09-01");
     validate(&accepted, &[]).unwrap();
-    let money: Panel = serde_json::from_value(
-        json!({ "measures": ["revenue_net"], "dimensions": [], "sort": [], "page": { "size": 50, "index": 0 } }),
+    let money = json!(["revenue_net", "revenue_gross", "revenue_refunds"]);
+    validate(&typical(money, Value::Null, "2026-09-01"), &[]).unwrap();
+    let people: Panel = serde_json::from_value(
+        json!({ "measures": ["identified_people"], "dimensions": [], "sort": [], "page": { "size": 50, "index": 0 } }),
     )
     .unwrap();
     assert_eq!(
-        refused(validate(&accepted, &[money]).unwrap_err()),
+        refused(validate(&accepted, &[people]).unwrap_err()),
         unsupported
     );
 

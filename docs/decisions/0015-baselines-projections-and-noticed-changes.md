@@ -1,6 +1,6 @@
 # 0015: Typical-weekday baseline, pace projections, and noticed changes
 
-Status: Adopted by Mike on 2026-10-15 for the [dashboard v2](../ux-v2/README.md) overhaul, as proposed plus the cross-family ranking and the fallback cadence below. Decisions records each answer.
+Status: Adopted by Mike on 2026-10-15 for the [dashboard v2](../ux-v2/README.md) overhaul, as proposed plus the cross-family ranking and the fallback cadence below. Decisions records each answer. Amended by Mike on 2026-10-26 for money measures, see [Amendment 2026-10-26](#amendment-2026-10-26-money-measures).
 
 ## Problem
 
@@ -26,7 +26,8 @@ New comparison variant `compare: "typical_weekday"`.
 - When the range contains now, the comparison value of a total uses each baseline day only up to the same local time, so "12 % above a typical Tuesday" at 15:20 compares 00:00 to 15:20 with 00:00 to 15:20. The rest of each baseline day feeds only the chart's baseline line and the projection. Today `previous_period` compares today so far with all of yesterday ([v01](../ux-v2/v01-baseline-and-projection.md) lists this as a separate fix).
 - Rates and spans (`bounce_rate`, `span_mean`, `span_median`): computed over the pooled baseline days, as one population. A median of eight rates would weight a quiet day like a busy one.
 - The `goals` report kind accepts it: completions are counts and get a median baseline per goal; the rate is pooled. This is what the overview's goal rows need. Every other report kind keeps `compare: "none"`.
-- Refused with `compare_unsupported`: money measures, percentiles, `identified_people`, the other report kinds, and ranges longer than 31 days. A 12-month range would need 14 months of history, which retention removes.
+- Money measures (`revenue_net`, `revenue_gross`, `revenue_refunds`) get a median baseline per currency, see [Amendment 2026-10-26](#amendment-2026-10-26-money-measures).
+- Refused with `compare_unsupported`: percentiles, `identified_people`, the other report kinds, and ranges longer than 31 days. A 12-month range would need 14 months of history, which retention removes.
 - Series gain comparison points (today `Series` has none, so the chart cannot draw a baseline line). The same field serves `previous_period`.
 - Fewer than 4 baseline days for a bucket: baseline `null` with `reason: "insufficient_history"`. The UI says "not enough history yet".
 - Resolved bounds echo `compare_days` (the local dates used) instead of `compare_start`/`compare_end`.
@@ -39,7 +40,7 @@ Rejected:
 
 ### Pace projection
 
-A projection exists only when the resolved range ends after the application clock's now, and only for count measures.
+A projection exists only when the resolved range ends after the application clock's now, and only for count measures and, per currency, money measures ([Amendment 2026-10-26](#amendment-2026-10-26-money-measures)).
 
 - `observed` is the exact value up to now. For each baseline day `k`, `scale_k = observed_today / baseline_k(start of today, now)` and `projection_k = observed + scale_k × baseline_k(now, end)`. If a baseline day has fewer than 20 counted units before now, `scale_k = 1`, so a quiet morning does not multiply noise.
 - The result is `{ value: median(projection_k), low, high, basis_days }`, where `low` and `high` are the 25th and 75th percentiles of the `projection_k`. The series carries projected buckets the same way, in a separate array.
@@ -89,6 +90,17 @@ Decided by Mike on 2026-10-15.
 3. All four rule families ship in the first set: dimension mover, goal pace, funnel step and performance. The thresholds in the table are the starting values. Findings rank by family priority, then within a family as above.
 4. The overview defaults to today with hour granularity and `typical_weekday`. The hourly chart in the Kit contract is the default view. Existing URLs and saved views keep their state.
 5. The summary step keeps the proposed cadence (10 minutes, idle queue, stale after 30 minutes), with the hourly fallback for performance and funnel step.
+
+## Amendment 2026-10-26: money measures
+
+Adopted by Mike on 2026-10-26 for the Revenue page, which reads `revenue_net` and `revenue_count` under `typical_weekday` over a range that contains now.
+
+- Baseline: `revenue_net`, `revenue_gross` and `revenue_refunds` follow the count rule per currency, never converted ([0003](0003-metric-formulas.md) Revenue). A series bucket's baseline is the nearest-rank median of that currency's minor units over the baseline days, and coarser buckets and totals add up the days. A baseline day without records of a currency counts as 0 for it. A currency whose baseline is 0 is left out, as a currency without records is, so one payment in another currency weeks ago does not turn the baseline into two currencies.
+- Comparison: as under `previous_period`. One currency on both sides gives a change and relative change in minor units; two or more currencies give neither.
+- Projection: the pace method above, per currency, in minor units, as `money_estimate` with one entry per currency (`currency`, `exponent`, `value`, `low`, `high`) and `basis_days`. The scale and the 20-unit floor count that currency's revenue records, not its amounts: `scale_k = records_today / records_k(start of today, now)`, and `scale_k = 1` below 20 records. Refunds can make an amount up to now 0 or negative, so an amount cannot set a scale, and 20 minor units would be 20 cents in EUR but 20 yen in JPY. A currency is projected when it was measured or lies in what the basis days add; one projected at 0 throughout is left out.
+- Fewer than 4 baseline or basis days: baseline `null` and projection unavailable with `reason: "insufficient_history"`, for every currency at once.
+- Exports carry a money projection in the separately named projection columns, one amount per currency like the measured cell, rounded to the currency's minor unit.
+- Percentiles, `identified_people`, property statistics and the other report kinds stay refused.
 
 ## Consequences
 

@@ -70,7 +70,7 @@ limits! {
         TYPICAL_WEEKDAY_DAYS_MIN: u32 = 4;
         /// Longest range a typical-weekday comparison accepts, in days; longer ones are refused with `compare_unsupported`.
         TYPICAL_WEEKDAY_RANGE_DAYS_MAX: u32 = 31;
-        /// Counted units a baseline day needs before now for a projection to scale it; below this the scale is 1.
+        /// Counted units a baseline day needs before now for a projection to scale it, for money its revenue records of the currency; below this the scale is 1.
         PROJECTION_SCALING_FLOOR: i64 = 20;
         /// Sites one `summaries.forSites` call names.
         SUMMARY_SITES_MAX: usize = 100;

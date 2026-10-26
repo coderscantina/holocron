@@ -5,26 +5,31 @@
 //! the range itself, in the same snapshot.
 //!
 //! Counts take the nearest-rank median over a day's baseline days, per series bucket, and add
-//! up the days of a coarser bucket or of the totals. Rates and spans pool every baseline day
+//! up the days of a coarser bucket or of the totals. Money does the same per currency, a
+//! baseline day without the currency counting 0 (0015 Amendment). Rates and spans pool every baseline day
 //! into one population. A total, row or bucket with a day of fewer than
 //! [`TYPICAL_WEEKDAY_DAYS_MIN`] baseline days has no baseline (`insufficient_history`).
 //!
 //! When the range contains now, totals and rows read today's baseline days only up to now's
 //! local time and skip the days after today. Series buckets always read whole baseline days.
 //!
-//! A range containing now also projects each count to its end (0015 Pace projection, [`pace`]).
+//! A range containing now also projects each count to its end (0015 Pace projection, [`pace`]),
+//! and each money measure per currency ([`pace_money`]).
 //! Basis day `k` is the range shifted back `k` weeks: today's baseline day `k` up to now gives
 //! the scale, and what the baseline days `k` of today and the later range days add after now
 //! is scaled onto the observed value. Whole minus up to now is what a day adds after now, also
 //! for distinct counts, so a projection at scale 1 ends at the basis day's own total.
+//!
+//! [`pace`]: Windows::pace
+//! [`pace_money`]: Windows::pace_money
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use chrono::{NaiveDate, Timelike};
 use chrono_tz::Tz;
 use holocron_protocol::exploration::{
-    Cell, Field, Granularity, Measure, Metric, NamedMeasure, ProjectedPoint, Projection, Reason,
-    Series,
+    Cell, Field, Granularity, Measure, Metric, Money, MoneyProjection, NamedMeasure,
+    ProjectedPoint, Projection, Reason, Series, currency_exponent,
 };
 use holocron_protocol::limits::{PROJECTION_SCALING_FLOOR, TYPICAL_WEEKDAY_DAYS_MIN};
 use holocron_storage::duckdb::types::Value;
@@ -176,6 +181,36 @@ impl Windows {
             .collect()
     }
 
+    /// One projection per basis day over `dates`: `observed` is the value measured so far and
+    /// `today` the units today counted so far. Per window, `until` is its units up to now, which
+    /// set the scale, and `within` its value inside what is projected.
+    fn projections(
+        &self,
+        dates: &[NaiveDate],
+        basis: &[(usize, Vec<usize>)],
+        (observed, today): (i128, i64),
+        until: impl Fn(usize) -> i64,
+        within: impl Fn(usize) -> i128,
+    ) -> Vec<f64> {
+        let has_today = self
+            .today
+            .is_some_and(|t| dates.contains(&self.days[t].date));
+        basis
+            .iter()
+            .map(|(up_to_now, whole)| {
+                let before = until(*up_to_now);
+                let after = whole.iter().map(|&p| within(p)).sum::<i128>()
+                    - if has_today { within(*up_to_now) } else { 0 };
+                let scale = if before < PROJECTION_SCALING_FLOOR {
+                    1.0
+                } else {
+                    today as f64 / before as f64
+                };
+                observed as f64 + scale * after as f64
+            })
+            .collect()
+    }
+
     /// 0015 Pace projection of one count over `dates`: `observed` is what it measured so far
     /// (the range's total or one bucket's value) and `today` what today measured so far. Per
     /// basis day, `until` is a window's count up to now, which sets the scale, and `within` a
@@ -187,25 +222,79 @@ impl Windows {
         until: impl Fn(usize) -> i64,
         within: impl Fn(usize) -> i64,
     ) -> Projection {
-        let has_today = self
-            .today
-            .is_some_and(|t| dates.contains(&self.days[t].date));
-        let projections = self
-            .basis(dates)
+        let basis = self.basis(dates);
+        let measured = (i128::from(observed), today);
+        estimate(self.projections(dates, &basis, measured, until, |p| i128::from(within(p))))
+    }
+
+    /// [`Self::pace`] of the money `part` per currency, in minor units (0015 Amendment). A
+    /// currency's scale and its floor count its revenue records, as refunds can make an amount
+    /// up to now 0 or negative. `observed` is the amount measured so far and `today` today's
+    /// aggregates so far; per window, `until` gives its aggregates up to now and `within` those
+    /// inside what is projected. A currency is projected when it was measured or lies inside
+    /// what is projected; one projected at 0 throughout is left out, as in [`typical_money`].
+    pub fn pace_money(
+        &self,
+        dates: &[NaiveDate],
+        (observed, today): (&[Money], &Aggs),
+        part: usize,
+        until: impl Fn(usize) -> Aggs,
+        within: impl Fn(usize) -> Aggs,
+    ) -> Projection {
+        let basis = self.basis(dates);
+        if basis.len() < TYPICAL_WEEKDAY_DAYS_MIN as usize {
+            return Projection::Unavailable {
+                reason: Reason::InsufficientHistory,
+            };
+        }
+        let read: BTreeSet<usize> = basis
+            .iter()
+            .flat_map(|(up_to_now, whole)| std::iter::once(*up_to_now).chain(whole.clone()))
+            .collect();
+        let windows: HashMap<usize, (Aggs, Aggs)> =
+            read.iter().map(|&p| (p, (until(p), within(p)))).collect();
+        let currencies: BTreeSet<&str> = observed
+            .iter()
+            .map(|m| m.currency.as_str())
+            .chain(
+                windows
+                    .values()
+                    .flat_map(|(_, inside)| &inside.money)
+                    .map(|(code, _)| code.as_str()),
+            )
+            .collect();
+        let v = currencies
             .into_iter()
-            .map(|(up_to_now, whole)| {
-                let before = until(up_to_now);
-                let after = whole.iter().map(|&p| within(p)).sum::<i64>()
-                    - if has_today { within(up_to_now) } else { 0 };
-                let scale = if before < PROJECTION_SCALING_FLOOR {
-                    1.0
-                } else {
-                    today as f64 / before as f64
-                };
-                observed as f64 + scale * after as f64
+            .filter_map(|code| {
+                let measured = observed
+                    .iter()
+                    .find(|m| m.currency == code)
+                    .map_or(0, |m| m.minor_units);
+                let today = amount(today, code, RECORDS) as i64;
+                let projections = self.projections(
+                    dates,
+                    &basis,
+                    (measured, today),
+                    |p| amount(&windows[&p].0, code, RECORDS) as i64,
+                    |p| amount(&windows[&p].1, code, part),
+                );
+                let [value, low, high] = band(projections);
+                if [value, low, high] == [0.0; 3] {
+                    return None;
+                }
+                Some(MoneyProjection {
+                    currency: code.to_owned(),
+                    exponent: currency_exponent(code)?,
+                    value,
+                    low,
+                    high,
+                })
             })
             .collect();
-        estimate(projections)
+        Projection::MoneyEstimate {
+            v,
+            basis_days: basis.len() as u32,
+        }
     }
 }
 
@@ -571,6 +660,14 @@ impl Baseline {
                 let today = self.today(conn, plan, spec, observed)?;
                 let fields = &plan.fields;
                 let projections = spec.measures.iter().map(|m| {
+                    if let Some(part) = money_part(m) {
+                        let Metric::Money { v } = run::metric(m, observed, fields) else {
+                            unreachable!("money measures measure money")
+                        };
+                        let of = |p: usize| totals[&p].clone();
+                        let measured = (v.as_slice(), &today);
+                        return Some(self.windows.pace_money(&remaining, measured, part, of, of));
+                    }
                     (!pooled(m)).then(|| {
                         let of = |p: usize| count(m, &totals[&p], fields);
                         let measured = (count(m, observed, fields), count(m, &today, fields));
@@ -733,6 +830,15 @@ impl Baseline {
                 .iter()
                 .zip(&point.values)
                 .map(|(m, measured)| {
+                    if let (Some(part), Metric::Money { v }) = (money_part(m), measured) {
+                        let up_to_now = |p: usize| until[&p].clone();
+                        let inside = |p: usize| within(p, i);
+                        let measured = (v.as_slice(), &today);
+                        return Some(
+                            self.windows
+                                .pace_money(&dates, measured, part, up_to_now, inside),
+                        );
+                    }
                     let Metric::Count { v } = measured else {
                         return None;
                     };
@@ -832,13 +938,58 @@ fn pooled(measure: &Measure) -> bool {
     )
 }
 
+/// The part of [`Aggs::money`] a money measure reads: gross, refunds or net.
+fn money_part(measure: &Measure) -> Option<usize> {
+    match measure {
+        Measure::Named(NamedMeasure::RevenueGross) => Some(0),
+        Measure::Named(NamedMeasure::RevenueRefunds) => Some(1),
+        Measure::Named(NamedMeasure::RevenueNet) => Some(2),
+        _ => None,
+    }
+}
+
+/// The part of [`Aggs::money`] counting a currency's revenue records.
+const RECORDS: usize = 3;
+
+/// One part of a currency's money in some aggregates; 0 without its records.
+fn amount(aggs: &Aggs, currency: &str, part: usize) -> i128 {
+    aggs.money
+        .iter()
+        .find(|(code, _)| code == currency)
+        .map_or(0, |(_, parts)| parts[part])
+}
+
+/// The typical amount of a money part per currency: each range day's nearest-rank median over
+/// its baseline days, a day without the currency's records counting 0, added up over the days.
+/// A currency whose typical amount is 0 is left out, like one without records, so a stray
+/// payment weeks ago does not make the baseline hold two currencies.
+fn typical_money(days: &[Vec<Aggs>], part: usize) -> Metric {
+    let currencies: BTreeSet<&str> = days
+        .iter()
+        .flatten()
+        .flat_map(|aggs| aggs.money.iter().map(|(code, _)| code.as_str()))
+        .collect();
+    let v = currencies
+        .into_iter()
+        .filter_map(|code| {
+            let typical: i128 = days
+                .iter()
+                .map(|d| median(d.iter().map(|aggs| amount(aggs, code, part)).collect()))
+                .sum();
+            (typical != 0).then(|| Money::new(code, typical)).flatten()
+        })
+        .collect();
+    Metric::Money { v }
+}
+
 fn spans_median(measures: &[Measure]) -> bool {
     measures.contains(&Measure::Named(NamedMeasure::SpanMedian))
 }
 
-/// One baseline per measure from the aggregates of each range day's baseline days: counts add
-/// up the per-day medians, rates and spans pool every baseline day, with `span_median` the
-/// pooled median span. A day with fewer than the minimum of baseline days leaves no baseline.
+/// One baseline per measure from the aggregates of each range day's baseline days: counts and
+/// money add up the per-day medians, rates and spans pool every baseline day, with
+/// `span_median` the pooled median span. A day with fewer than the minimum of baseline days
+/// leaves no baseline.
 fn value(
     measures: &[Measure],
     fields: &[Field],
@@ -869,6 +1020,9 @@ fn value(
             if pooled(measure) {
                 return run::metric(measure, &pool, fields);
             }
+            if let Some(part) = money_part(measure) {
+                return typical_money(days, part);
+            }
             let v = days
                 .iter()
                 .map(|d| median(d.iter().map(|aggs| count(measure, aggs, fields)).collect()))
@@ -886,7 +1040,7 @@ fn count(measure: &Measure, aggs: &Aggs, fields: &[Field]) -> i64 {
 }
 
 /// Nearest-rank median: the lower middle value of an even count, as 0003 ranks percentiles.
-fn median(mut values: Vec<i64>) -> i64 {
+fn median<T: Ord + Copy>(mut values: Vec<T>) -> T {
     values.sort_unstable();
     values[values.len().div_ceil(2) - 1]
 }
@@ -894,21 +1048,28 @@ fn median(mut values: Vec<i64>) -> i64 {
 /// The median of the basis days' projections with their 25th and 75th percentiles as the band,
 /// nearest-rank like [`median`], rounded to 4 places. Fewer than the minimum of basis days
 /// project nothing.
-fn estimate(mut projections: Vec<f64>) -> Projection {
+fn estimate(projections: Vec<f64>) -> Projection {
     let n = projections.len();
     if n < TYPICAL_WEEKDAY_DAYS_MIN as usize {
         return Projection::Unavailable {
             reason: Reason::InsufficientHistory,
         };
     }
-    projections.sort_by(f64::total_cmp);
-    let rank = |percent: usize| (projections[(percent * n).div_ceil(100) - 1] * 1e4).round() / 1e4;
+    let [value, low, high] = band(projections);
     Projection::Estimate {
-        value: rank(50),
-        low: rank(25),
-        high: rank(75),
+        value,
+        low,
+        high,
         basis_days: n as u32,
     }
+}
+
+/// The median, 25th and 75th percentile of some projections, as [`estimate`] ranks them.
+fn band(mut projections: Vec<f64>) -> [f64; 3] {
+    projections.sort_by(f64::total_cmp);
+    let n = projections.len();
+    let rank = |percent: usize| (projections[(percent * n).div_ceil(100) - 1] * 1e4).round() / 1e4;
+    [rank(50), rank(25), rank(75)]
 }
 
 #[cfg(test)]

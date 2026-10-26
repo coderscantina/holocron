@@ -121,13 +121,25 @@ fn csv(state: &ExplorationState, result: &ExploreResult) -> String {
 /// Column suffixes of a projection: its value and the 25th to 75th percentile band.
 const PROJECTION_COLUMNS: [&str; 3] = ["projection", "projection_low", "projection_high"];
 
-/// A projection's cells, empty when there is none or it is unavailable.
+/// A projection's cells, empty when there is none or it is unavailable. Money lists one
+/// amount per currency, as its measured cell does, rounded to the currency's minor unit.
 fn projection_cells(projection: Option<&Projection>) -> [String; 3] {
     match projection {
         Some(Projection::Estimate {
             value, low, high, ..
         }) => [value, low, high].map(|v| v.to_string()),
-        _ => Default::default(),
+        Some(Projection::MoneyEstimate { v, .. }) => [0, 1, 2].map(|i| {
+            v.iter()
+                .map(|m| {
+                    let minor = [m.value, m.low, m.high][i];
+                    let digits = usize::from(m.exponent);
+                    let amount = minor / 10_f64.powi(i32::from(m.exponent));
+                    format!("{amount:.digits$} {}", m.currency)
+                })
+                .collect::<Vec<_>>()
+                .join("; ")
+        }),
+        Some(Projection::Unavailable { .. }) | None => Default::default(),
     }
 }
 

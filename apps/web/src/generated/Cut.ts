@@ -17,7 +17,7 @@ export type Cut = { cut: Panel,
 totals: Array<Metric>, compare?: Array<Comparison>, 
 /**
  * Where each total ends when the range ends after now: one entry per measure, `null` for a
- * measure that is not a count.
+ * measure that is neither a count nor money.
  */
 projection?: Array<Projection | null>, 
 /**

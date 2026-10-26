@@ -14,6 +14,6 @@ start: number,
  */
 local: string, 
 /**
- * One entry per measure; `null` for a measure that is not a count.
+ * One entry per measure; `null` for a measure that is neither a count nor money.
  */
 values: Array<Projection | null>, };

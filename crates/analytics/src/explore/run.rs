@@ -118,8 +118,8 @@ pub struct Aggs {
     pub span_sum: i64,
     pub span_median: Option<i64>,
     pub revenue_count: i64,
-    /// Per currency in code order: gross, refunds and net minor units.
-    pub money: Vec<(String, [i128; 3])>,
+    /// Per currency in code order: gross, refunds and net minor units, and its revenue records.
+    pub money: Vec<(String, [i128; 4])>,
     /// p50, p75 and p95 of the observations, `cls` scaled by 10^4.
     pub percentiles: [Option<i64>; 3],
     /// Distinct performance metrics among the observations, and the first of them.
@@ -881,18 +881,20 @@ pub fn totals_by(
     Ok(out)
 }
 
-/// Gross, refunds and net of the revenue records of a group, exactly (0003 Revenue).
+/// Gross, refunds and net of the revenue records of a group, exactly (0003 Revenue), and their
+/// count.
 const MONEY_SUMS: &str = "coalesce(sum(rev) FILTER (WHERE rev > 0), 0)::HUGEINT AS g, \
-     coalesce(sum(rev) FILTER (WHERE rev < 0), 0)::HUGEINT AS r, sum(rev)::HUGEINT AS n";
+     coalesce(sum(rev) FILTER (WHERE rev < 0), 0)::HUGEINT AS r, sum(rev)::HUGEINT AS n, \
+     count(rev)::HUGEINT AS k";
 
-fn money_parts(row: &duckdb::Row, from: usize) -> duckdb::Result<[i128; 3]> {
+fn money_parts(row: &duckdb::Row, from: usize) -> duckdb::Result<[i128; 4]> {
     let part = |i: usize| -> duckdb::Result<i128> {
         Ok(match row.get::<_, Value>(from + i)? {
             Value::HugeInt(n) => n,
             other => panic!("unexpected sum {other:?}"),
         })
     };
-    Ok([part(0)?, part(1)?, part(2)?])
+    Ok([part(0)?, part(1)?, part(2)?, part(3)?])
 }
 
 /// The rows of one page: their cells, raw key values (to look the same cells up in another
@@ -1007,19 +1009,20 @@ pub fn rows_by(
         parts.push(format!("j0 AS ({joined})"));
         parts.push(format!(
             "ma AS (SELECT {keys_sql}, list(cur ORDER BY cur) AS mc, list(g ORDER BY cur) AS mg,
-                    list(r ORDER BY cur) AS mr, list(n ORDER BY cur) AS mn
+                    list(r ORDER BY cur) AS mr, list(n ORDER BY cur) AS mn,
+                    list(k ORDER BY cur) AS mk
              FROM (SELECT {keys_sql}, cur, {} FROM {prefix}_ev WHERE rev IS NOT NULL GROUP BY ALL)
              GROUP BY {keys_sql})",
             MONEY_SUMS
         ));
         parts.push(format!(
-            "j AS (SELECT j0.*, ma.mc, ma.mg, ma.mr, ma.mn FROM j0 LEFT JOIN ma ON {})",
+            "j AS (SELECT j0.*, ma.mc, ma.mg, ma.mr, ma.mn, ma.mk FROM j0 LEFT JOIN ma ON {})",
             on.join(" AND ")
         ));
     } else {
         parts.push(format!("j AS ({joined})"));
     }
-    let money_columns = if money { ", mc, mg, mr, mn" } else { "" };
+    let money_columns = if money { ", mc, mg, mr, mn, mk" } else { "" };
     // The common table expressions carry no parameters, so the row count can reuse them.
     let with = format!("WITH {}", parts.join(", "));
     let mut sql = Sql::default();
@@ -1101,7 +1104,7 @@ pub fn rows_by(
         let mut next = key_columns.len() + aggs.len();
         if money {
             values.money = money_lists(row, next)?;
-            next += 4;
+            next += 5;
         }
         row_count = row.get(next)?;
         let mut offset = lead;
@@ -1137,8 +1140,8 @@ fn money_list(measure: NamedMeasure) -> &'static str {
     }
 }
 
-/// Decodes the `mc, mg, mr, mn` lists of a row from column `from`.
-fn money_lists(row: &duckdb::Row, from: usize) -> duckdb::Result<Vec<(String, [i128; 3])>> {
+/// Decodes the `mc, mg, mr, mn, mk` lists of a row from column `from`.
+fn money_lists(row: &duckdb::Row, from: usize) -> duckdb::Result<Vec<(String, [i128; 4])>> {
     let list = |i: usize| -> duckdb::Result<Vec<Value>> {
         Ok(match row.get::<_, Value>(from + i)? {
             Value::List(items) => items,
@@ -1150,7 +1153,7 @@ fn money_lists(row: &duckdb::Row, from: usize) -> duckdb::Result<Vec<(String, [i
         Value::HugeInt(n) => *n,
         other => panic!("unexpected sum {other:?}"),
     };
-    let (codes, gross, refunds, net) = (list(0)?, list(1)?, list(2)?, list(3)?);
+    let (codes, gross, refunds, net, records) = (list(0)?, list(1)?, list(2)?, list(3)?, list(4)?);
     Ok(codes
         .iter()
         .enumerate()
@@ -1160,7 +1163,12 @@ fn money_lists(row: &duckdb::Row, from: usize) -> duckdb::Result<Vec<(String, [i
             };
             (
                 code.clone(),
-                [huge(&gross[i]), huge(&refunds[i]), huge(&net[i])],
+                [
+                    huge(&gross[i]),
+                    huge(&refunds[i]),
+                    huge(&net[i]),
+                    huge(&records[i]),
+                ],
             )
         })
         .collect())

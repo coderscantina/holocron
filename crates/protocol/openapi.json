@@ -8404,7 +8404,7 @@
                 }
               ]
             },
-            "description": "Where each total ends when the range ends after now: one entry per measure, `null` for a\nmeasure that is not a count."
+            "description": "Where each total ends when the range ends after now: one entry per measure, `null` for a\nmeasure that is neither a count nor money."
           },
           "rows": {
             "type": "array",
@@ -8964,6 +8964,32 @@
             "properties": {
               "t": {
                 "type": "string",
+                "const": "money_estimate"
+              },
+              "v": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MoneyProjection"
+                }
+              },
+              "basis_days": {
+                "type": "integer",
+                "format": "uint32",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "t",
+              "v",
+              "basis_days"
+            ],
+            "description": "Per currency, for money measures: the median projection in minor units with its band."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
                 "const": "unavailable"
               },
               "reason": {
@@ -8976,7 +9002,43 @@
             ]
           }
         ],
-        "description": "A labelled estimate of where a count measure ends (0015 Pace projection). Never a measured\nvalue: it stays out of `totals`, `rows` and `points`."
+        "description": "A labelled estimate of where a count or money measure ends (0015 Pace projection). Never a\nmeasured value: it stays out of `totals`, `rows` and `points`."
+      },
+      "MoneyProjection": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 code."
+          },
+          "exponent": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0,
+            "maximum": 255,
+            "description": "Minor-unit digits of the currency: 2 for EUR, 0 for JPY."
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          },
+          "low": {
+            "type": "number",
+            "format": "double"
+          },
+          "high": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "currency",
+          "exponent",
+          "value",
+          "low",
+          "high"
+        ],
+        "description": "One currency's projection in minor units, never converted (0003 Revenue)."
       },
       "Row": {
         "type": "object",
@@ -9223,7 +9285,7 @@
                 }
               ]
             },
-            "description": "One entry per measure; `null` for a measure that is not a count."
+            "description": "One entry per measure; `null` for a measure that is neither a count nor money."
           }
         },
         "required": [
