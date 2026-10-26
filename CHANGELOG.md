@@ -3,6 +3,16 @@
 All notable changes to Holocron are documented here.
 Commits follow the [Gitmoji](https://gitmoji.dev/) convention.
 
+## 26.10.26
+
+Dependency updates for the web app, the server and CI. No change in behavior.
+
+### Other changes
+
+- ⬆️ update web dependencies, vueuse 15 and vitest 5
+- ⬆️ update rust dependencies
+- ⬆️ update github actions and ci's bun to 1.4.4
+
 ## 26.10.23.2
 
 Fixes an Umami import that stopped at its reconciliation step with "read cancelled after the query timeout" on larger sources or slower hosts. Resume the stopped import after updating, or discard it and start again if the source kept collecting.
