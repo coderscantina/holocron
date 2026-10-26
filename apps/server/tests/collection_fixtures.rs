@@ -414,7 +414,7 @@ fn compare_upstream(expected: &Value, answer: &Answer, problems: &mut Vec<String
         }
     }
     if let Some(sha) = expected["body_sha256"].as_str() {
-        let got = format!("{:x}", Sha256::digest(&answer.bytes));
+        let got = data_encoding::HEXLOWER.encode(&Sha256::digest(&answer.bytes));
         if got != sha {
             problems.push(format!("body sha256 {got}"));
         }

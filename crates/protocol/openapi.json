@@ -7767,15 +7767,15 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "workspace"
+              },
               "id": {
                 "$ref": "#/components/schemas/WorkspaceId"
               },
               "name": {
                 "type": "string"
-              },
-              "kind": {
-                "type": "string",
-                "const": "workspace"
               }
             },
             "required": [
@@ -7787,15 +7787,15 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "site"
+              },
               "id": {
                 "$ref": "#/components/schemas/SiteId"
               },
               "name": {
                 "type": "string"
-              },
-              "kind": {
-                "type": "string",
-                "const": "site"
               }
             },
             "required": [
@@ -8016,6 +8016,10 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "relative"
+              },
               "unit": {
                 "$ref": "#/components/schemas/RangeUnit"
               },
@@ -8024,10 +8028,6 @@
                 "format": "uint16",
                 "minimum": 0,
                 "maximum": 65535
-              },
-              "kind": {
-                "type": "string",
-                "const": "relative"
               }
             },
             "required": [
@@ -8040,15 +8040,15 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "days"
+              },
               "start": {
                 "type": "string"
               },
               "end": {
                 "type": "string"
-              },
-              "kind": {
-                "type": "string",
-                "const": "days"
               }
             },
             "required": [
@@ -8701,13 +8701,13 @@
           {
             "type": "object",
             "properties": {
-              "v": {
-                "type": "integer",
-                "format": "int64"
-              },
               "t": {
                 "type": "string",
                 "const": "count"
+              },
+              "v": {
+                "type": "integer",
+                "format": "int64"
               }
             },
             "required": [
@@ -8718,6 +8718,10 @@
           {
             "type": "object",
             "properties": {
+              "t": {
+                "type": "string",
+                "const": "ratio"
+              },
               "v": {
                 "type": "number",
                 "format": "double"
@@ -8729,10 +8733,6 @@
               "denominator": {
                 "type": "integer",
                 "format": "int64"
-              },
-              "t": {
-                "type": "string",
-                "const": "ratio"
               }
             },
             "required": [
@@ -8746,13 +8746,13 @@
           {
             "type": "object",
             "properties": {
-              "v": {
-                "type": "integer",
-                "format": "int64"
-              },
               "t": {
                 "type": "string",
                 "const": "millis"
+              },
+              "v": {
+                "type": "integer",
+                "format": "int64"
               }
             },
             "required": [
@@ -8764,12 +8764,12 @@
           {
             "type": "object",
             "properties": {
-              "v": {
-                "type": "string"
-              },
               "t": {
                 "type": "string",
                 "const": "decimal"
+              },
+              "v": {
+                "type": "string"
               }
             },
             "required": [
@@ -8781,15 +8781,15 @@
           {
             "type": "object",
             "properties": {
+              "t": {
+                "type": "string",
+                "const": "money"
+              },
               "v": {
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/Money"
                 }
-              },
-              "t": {
-                "type": "string",
-                "const": "money"
               }
             },
             "required": [
@@ -8801,12 +8801,12 @@
           {
             "type": "object",
             "properties": {
-              "reason": {
-                "$ref": "#/components/schemas/Reason"
-              },
               "t": {
                 "type": "string",
                 "const": "unavailable"
+              },
+              "reason": {
+                "$ref": "#/components/schemas/Reason"
               }
             },
             "required": [
@@ -8928,6 +8928,10 @@
           {
             "type": "object",
             "properties": {
+              "t": {
+                "type": "string",
+                "const": "estimate"
+              },
               "value": {
                 "type": "number",
                 "format": "double"
@@ -8944,10 +8948,6 @@
                 "type": "integer",
                 "format": "uint32",
                 "minimum": 0
-              },
-              "t": {
-                "type": "string",
-                "const": "estimate"
               }
             },
             "required": [
@@ -8962,12 +8962,12 @@
           {
             "type": "object",
             "properties": {
-              "reason": {
-                "$ref": "#/components/schemas/Reason"
-              },
               "t": {
                 "type": "string",
                 "const": "unavailable"
+              },
+              "reason": {
+                "$ref": "#/components/schemas/Reason"
               }
             },
             "required": [
@@ -10066,15 +10066,15 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "only"
+              },
               "sites": {
                 "type": "array",
                 "items": {
                   "$ref": "#/components/schemas/SiteId"
                 }
-              },
-              "kind": {
-                "type": "string",
-                "const": "only"
               }
             },
             "required": [
@@ -10221,12 +10221,12 @@
           {
             "type": "object",
             "properties": {
-              "account": {
-                "$ref": "#/components/schemas/Account"
-              },
               "status": {
                 "type": "string",
                 "const": "signed_in"
+              },
+              "account": {
+                "$ref": "#/components/schemas/Account"
               }
             },
             "required": [
@@ -10251,12 +10251,12 @@
           {
             "type": "object",
             "properties": {
-              "account": {
-                "$ref": "#/components/schemas/Account"
-              },
               "status": {
                 "type": "string",
                 "const": "enrollment_required"
+              },
+              "account": {
+                "$ref": "#/components/schemas/Account"
               }
             },
             "required": [
@@ -10295,12 +10295,12 @@
           {
             "type": "object",
             "properties": {
-              "code": {
-                "type": "string"
-              },
               "kind": {
                 "type": "string",
                 "const": "totp"
+              },
+              "code": {
+                "type": "string"
               }
             },
             "required": [
@@ -10312,12 +10312,12 @@
           {
             "type": "object",
             "properties": {
-              "code": {
-                "type": "string"
-              },
               "kind": {
                 "type": "string",
                 "const": "recovery_code"
+              },
+              "code": {
+                "type": "string"
               }
             },
             "required": [
@@ -10857,6 +10857,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "funnel"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -10878,10 +10882,6 @@
               },
               "scope": {
                 "$ref": "#/components/schemas/IdentityScope"
-              },
-              "kind": {
-                "type": "string",
-                "const": "funnel"
               }
             },
             "required": [
@@ -10896,6 +10896,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "journey"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -10914,10 +10918,6 @@
               },
               "scope": {
                 "$ref": "#/components/schemas/PopulationScope"
-              },
-              "kind": {
-                "type": "string",
-                "const": "journey"
               }
             },
             "required": [
@@ -10932,6 +10932,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "attribution"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -10961,10 +10965,6 @@
                   "$ref": "#/components/schemas/Conversion"
                 },
                 "description": "1 to 4."
-              },
-              "kind": {
-                "type": "string",
-                "const": "attribution"
               }
             },
             "required": [
@@ -10981,6 +10981,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "retention"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -10993,10 +10997,6 @@
                 "minimum": 0,
                 "maximum": 255,
                 "description": "Offsets 0 to `intervals − 1`: 1 to 32 for day cohorts, 1 to 53 for week cohorts."
-              },
-              "kind": {
-                "type": "string",
-                "const": "retention"
               }
             },
             "required": [
@@ -11010,6 +11010,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "session_list"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -11025,10 +11029,6 @@
               },
               "order": {
                 "$ref": "#/components/schemas/SessionOrder"
-              },
-              "kind": {
-                "type": "string",
-                "const": "session_list"
               }
             },
             "required": [
@@ -11042,6 +11042,10 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "goals"
+              },
               "v": {
                 "type": "integer",
                 "format": "uint8",
@@ -11054,10 +11058,6 @@
                   "$ref": "#/components/schemas/GoalDefinition"
                 },
                 "description": "1 to 8, each stored inline."
-              },
-              "kind": {
-                "type": "string",
-                "const": "goals"
               }
             },
             "required": [
@@ -11134,12 +11134,12 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-              "goal": {
-                "$ref": "#/components/schemas/GoalDefinition"
-              },
               "kind": {
                 "type": "string",
                 "const": "goal"
+              },
+              "goal": {
+                "$ref": "#/components/schemas/GoalDefinition"
               }
             },
             "required": [
@@ -12170,12 +12170,12 @@
           {
             "type": "object",
             "properties": {
-              "reason": {
-                "$ref": "#/components/schemas/GeoipFailure"
-              },
               "state": {
                 "type": "string",
                 "const": "failed"
+              },
+              "reason": {
+                "$ref": "#/components/schemas/GeoipFailure"
               }
             },
             "required": [
@@ -13228,16 +13228,16 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "levels_off"
+              },
               "size_bytes": {
                 "type": "integer",
                 "format": "int64"
               },
               "on": {
                 "type": "string"
-              },
-              "kind": {
-                "type": "string",
-                "const": "levels_off"
               }
             },
             "required": [
@@ -13250,12 +13250,12 @@
           {
             "type": "object",
             "properties": {
-              "on": {
-                "type": "string"
-              },
               "kind": {
                 "type": "string",
                 "const": "reaches_reserve"
+              },
+              "on": {
+                "type": "string"
               }
             },
             "required": [
@@ -13267,13 +13267,13 @@
           {
             "type": "object",
             "properties": {
-              "days": {
-                "type": "integer",
-                "format": "int64"
-              },
               "kind": {
                 "type": "string",
                 "const": "not_enough_history"
+              },
+              "days": {
+                "type": "integer",
+                "format": "int64"
               }
             },
             "required": [
@@ -14340,12 +14340,12 @@
           {
             "type": "object",
             "properties": {
-              "workspace": {
-                "$ref": "#/components/schemas/WorkspaceId"
-              },
               "scope": {
                 "type": "string",
                 "const": "team"
+              },
+              "workspace": {
+                "$ref": "#/components/schemas/WorkspaceId"
               }
             },
             "required": [
@@ -14356,12 +14356,12 @@
           {
             "type": "object",
             "properties": {
-              "user": {
-                "$ref": "#/components/schemas/UserId"
-              },
               "scope": {
                 "type": "string",
                 "const": "user"
+              },
+              "user": {
+                "$ref": "#/components/schemas/UserId"
               }
             },
             "required": [
@@ -14843,6 +14843,10 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "exploration"
+              },
               "state": {
                 "$ref": "#/components/schemas/ExplorationState"
               },
@@ -14859,10 +14863,6 @@
               },
               "limits": {
                 "$ref": "#/components/schemas/ExplorationLimits"
-              },
-              "kind": {
-                "type": "string",
-                "const": "exploration"
               }
             },
             "required": [
@@ -14875,6 +14875,10 @@
           {
             "type": "object",
             "properties": {
+              "kind": {
+                "type": "string",
+                "const": "board"
+              },
               "board": {
                 "$ref": "#/components/schemas/BoardId"
               },
@@ -14883,10 +14887,6 @@
                 "items": {
                   "$ref": "#/components/schemas/SiteId"
                 }
-              },
-              "kind": {
-                "type": "string",
-                "const": "board"
               }
             },
             "required": [
@@ -15504,12 +15504,12 @@
           {
             "type": "object",
             "properties": {
-              "team": {
-                "$ref": "#/components/schemas/WorkspaceId"
-              },
               "direction": {
                 "type": "string",
                 "const": "to_team"
+              },
+              "team": {
+                "$ref": "#/components/schemas/WorkspaceId"
               }
             },
             "required": [
@@ -15520,12 +15520,12 @@
           {
             "type": "object",
             "properties": {
-              "user": {
-                "$ref": "#/components/schemas/UserId"
-              },
               "direction": {
                 "type": "string",
                 "const": "to_user"
+              },
+              "user": {
+                "$ref": "#/components/schemas/UserId"
               }
             },
             "required": [
