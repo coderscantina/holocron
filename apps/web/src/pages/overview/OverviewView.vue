@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import { queryKeys } from '~/api/query-keys'
 import { summariesResource } from '~/api/resources/summaries'
@@ -78,7 +78,7 @@ const annotations = useAnnotations(
   () => (resolved.value ? { start: resolved.value.start, end: resolved.value.end } : null)
 )
 
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 
 /**
  * The headline's state and result as one pair. While a new result loads, the sentence keeps

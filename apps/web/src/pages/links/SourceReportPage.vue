@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { keepPreviousData, useQuery } from '@tanstack/vue-query'
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import { queryKeys } from '~/api/query-keys'
 import { hasUrl, linksResource, sourcePath, type SourceKind } from '~/api/resources/links'
@@ -88,7 +88,7 @@ const query = useQuery({
 })
 const result = computed(() => query.data.value ?? null)
 
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 const selected = ref(0)
 const series = computed(() => {
   const source = result.value?.main.series

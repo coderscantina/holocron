@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import CountryFlag from '~/components/CountryFlag.vue'
 import Globe, { type GlobeMarker } from '~/components/globe/Globe.vue'
@@ -28,7 +28,7 @@ const ping = useLivePing()
 
 /** Ages count on the server's clock: the snapshot's `now` against this browser's, kept per read. */
 const skew = computed(() => props.data.now - Date.now())
-const now = useNow({ interval: 1000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 1000) })
 const relative = computed(() => new Intl.RelativeTimeFormat(locale.value, { style: 'narrow', numeric: 'always' }))
 const ageText = (at: number) => {
   const elapsed = age(now.value.getTime() + skew.value - at)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import PageHeader from '~/components/PageHeader.vue'
 import { chartClock } from '~/components/exploration/trend'
@@ -44,7 +44,7 @@ const words = useFindingText(() => props.site)
 watch(findings.computedAt, (next, previous) => {
   if (previous !== null && next !== previous) explore.refresh()
 })
-const now = useNow({ interval: 60_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 60_000) })
 const listing = computed(() => listState(findings.computedAt.value, now.value.getTime()))
 const shown = computed(() => findings.findings.value.slice(0, SHOWN).map((finding) => ({ finding, text: words.text(finding) })))
 

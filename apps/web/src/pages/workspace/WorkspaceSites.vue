@@ -57,7 +57,7 @@ useIntervalFn(() => {
   if (view.value === 'tiles' && visibility.value === 'visible') refreshIfStale()
 }, 60_000)
 
-const now = useNow({ interval: 15_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 15_000) })
 const clock = computed(() => new Intl.DateTimeFormat(locale.value, { timeStyle: 'short' }).format(now.value))
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import Icon from '~/components/Icon.vue'
 import { Button } from '~/components/ui/button'
@@ -28,7 +28,7 @@ const emit = defineEmits<{ filter: [filter: Group] }>()
 const SHOWN = 3
 
 const { t } = useI18n()
-const now = useNow({ interval: 60_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 60_000) })
 const { query, findings, stale, computedAt } = useSiteFindings(() => props.site.id, FINDINGS_MAX)
 const words = useFindingText(() => props.site)
 

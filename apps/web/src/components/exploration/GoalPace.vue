@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 import { Translation } from 'vue-i18n'
 
 import Icon from '~/components/Icon.vue'
@@ -32,7 +32,7 @@ const props = defineProps<{
 const { t } = useI18n()
 const numbers = useFormat()
 const { message } = useErrorMessage()
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 const id = useId()
 
 const goals = useGoals(() => props.site.id)

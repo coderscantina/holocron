@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useMediaQuery, useNow } from '@vueuse/core'
+import { useIntervalFn, useMediaQuery, useNow } from '@vueuse/core'
 import { PopoverContent } from 'reka-ui'
 
 import TopBarScope from '~/components/app/TopBarScope.vue'
@@ -62,7 +62,7 @@ const emit = defineEmits<{
 
 const { t, locale } = useI18n()
 const format = useExplorationFormat()
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 
 /**
  * The bounds the chips read: the shown result's, or while a new result loads, the last ones

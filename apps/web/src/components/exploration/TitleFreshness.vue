@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 
 import Icon from '~/components/Icon.vue'
 import { SimpleTooltip } from '~/components/ui/tooltip'
@@ -18,7 +18,7 @@ import { chartClock } from './trend'
 const props = defineProps<{ result: ExploreResult | null }>()
 
 const { t, locale } = useI18n()
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 const facts = useFreshnessFacts(() => props.result)
 
 const text = computed(() => {

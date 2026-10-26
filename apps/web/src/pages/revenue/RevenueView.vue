@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useNow } from '@vueuse/core'
+import { useIntervalFn, useNow } from '@vueuse/core'
 import { toast } from 'vue-sonner'
 
 import Icon from '~/components/Icon.vue'
@@ -50,7 +50,7 @@ const route = useRoute()
 const router = useRouter()
 const format = useExplorationFormat()
 const numbers = useFormat()
-const now = useNow({ interval: 30_000 })
+const now = useNow({ scheduler: (update) => useIntervalFn(update, 30_000) })
 
 const byCurrency: Pick<Panel, 'measures' | 'dimensions' | 'sort'> = {
   measures: ['revenue_net', 'revenue_gross', 'revenue_refunds', 'revenue_count'],
