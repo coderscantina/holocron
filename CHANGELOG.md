@@ -3,6 +3,14 @@
 All notable changes to Holocron are documented here.
 Commits follow the [Gitmoji](https://gitmoji.dev/) convention.
 
+## 26.10.26.2
+
+Dependency updates for the web app, the server and CI, with DuckDB kept on 1.5. Release 26.10.26 was tagged but never published: its CI failed on DuckDB 2.0, which the update had picked up. This release replaces it and carries its updates.
+
+### Other changes
+
+- 📌 keep duckdb on 1.5 until the engine upgrade is its own change
+
 ## 26.10.26
 
 Dependency updates for the web app, the server and CI. No change in behavior.
