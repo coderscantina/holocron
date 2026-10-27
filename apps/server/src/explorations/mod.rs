@@ -9,6 +9,7 @@ mod boards;
 mod export;
 mod goals;
 pub mod live;
+mod report;
 
 use holocron_analytics::explore::{self, Context, Query, Refusal};
 use holocron_analytics::{catalog, freshness, realtime};
@@ -270,6 +271,14 @@ impl ExplorationsHandlers for AppState {
             topic: Topic::site(scope.site()),
             data: result,
         })
+    }
+
+    async fn analytics_report(
+        &self,
+        ctx: &mut QueryCtx,
+        args: holocron_protocol::report_query::ReportQuery,
+    ) -> Result<Snapshot<holocron_protocol::report_query::ReportQueryResult>, ApiError> {
+        self.report_query(ctx, args).await
     }
 
     async fn analytics_export(

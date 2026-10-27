@@ -13,6 +13,7 @@ pub mod freshness;
 pub mod identity;
 pub mod jobs;
 pub mod realtime;
+pub mod report_query;
 pub mod traffic;
 
 pub use holocron_protocol::country_centroids;

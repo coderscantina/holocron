@@ -12,6 +12,7 @@ failpoints = ["holocron-storage/failpoints", "dep:tempfile"]
 [dependencies]
 holocron-storage = { path = "../storage" }
 holocron-protocol = { path = "../protocol" }
+serde.workspace = true
 serde_json.workspace = true
 chrono = { version = "0.4", default-features = false, features = ["std"] }
 chrono-tz = "0.10"

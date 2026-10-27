@@ -191,8 +191,25 @@ pub trait ArgsSource: Sync {
 pub struct JsonArgs(pub serde_json::Value);
 
 impl ArgsSource for JsonArgs {
+    /// Errors name the path they occurred at, as `blocks.2.body: unknown field ...`.
     fn parse<T: DeserializeOwned>(&self) -> Result<T, String> {
-        T::deserialize(&self.0).map_err(|error| error.to_string())
+        serde_path_to_error::deserialize(&self.0).map_err(|error| {
+            let path = error
+                .path()
+                .iter()
+                .map(|segment| match segment {
+                    serde_path_to_error::Segment::Seq { index } => index.to_string(),
+                    serde_path_to_error::Segment::Map { key } => key.clone(),
+                    serde_path_to_error::Segment::Enum { variant } => variant.clone(),
+                    serde_path_to_error::Segment::Unknown => "?".to_owned(),
+                })
+                .collect::<Vec<_>>()
+                .join(".");
+            match path.as_str() {
+                "" => error.into_inner().to_string(),
+                _ => format!("{path}: {}", error.into_inner()),
+            }
+        })
     }
 }
 

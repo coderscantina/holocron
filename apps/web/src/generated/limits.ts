@@ -57,6 +57,27 @@ export const GLOB_MAX_BYTES = 500
 /** Wildcards (`*` or `**`) in one `matches` glob. */
 export const GLOB_WILDCARDS_MAX = 8
 
+/** Blocks in one report query (decision 0022). */
+export const REPORT_QUERY_BLOCKS_MAX = 16
+
+/** Sub-queries in one report query: one per block, one per `for_each` value. */
+export const REPORT_QUERY_SUBQUERIES_MAX = 200
+
+/** Values one `for_each` runs a block for. */
+export const REPORT_QUERY_FOR_EACH_MAX = 50
+
+/** Derived columns of one report query block. */
+export const REPORT_QUERY_DERIVED_MAX = 8
+
+/** Default rows of a report query cut. */
+export const REPORT_QUERY_CUT_LIMIT_DEFAULT = 100
+
+/** Most rows of a report query cut. */
+export const REPORT_QUERY_CUT_LIMIT_MAX = 1000
+
+/** Longest block or derived column name, in bytes. */
+export const REPORT_QUERY_NAME_MAX_BYTES = 32
+
 /** Longest property key, in bytes. */
 export const EXPLORATION_PROPERTY_KEY_MAX_BYTES = 500
 
@@ -293,3 +314,6 @@ export const COLLECTION_KEY_SCHEME = 'Bearer'
 
 /** `Authorization` scheme of share viewers: `Share <token>`. Unknown, revoked and expired tokens answer `not_found` for every operation. */
 export const SHARE_SCHEME = 'Share'
+
+/** Names of report query blocks and derived columns. */
+export const REPORT_QUERY_NAME_PATTERN = '^[a-z][a-z0-9_]{0,31}$'

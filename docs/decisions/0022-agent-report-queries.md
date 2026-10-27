@@ -41,11 +41,13 @@ Block {
 Cut    = { kind: "cut", measures: Measure[] 1..8, dimensions: Field[] 0..3,
            granularity?: Granularity, series?: bool, compare?: Compare,
            sort?: Sort[] 0..2, limit?: 1..1000 (default 100) }
-Report = { kind: "report", report: ReportDefinition }    funnel, journey, attribution, retention, goals;
-                                                         session_list is refused (Privacy)
+Report = { kind: "report", report: ReportDefinition,    funnel, journey, attribution, retention, goals;
+           granularity?: "day" | "week" }                session_list is refused (Privacy);
+                                                         granularity is the retention cohort period
 
 Ref     = { ref: { block: string, column: string, limit?: 1..1000 } }
-          the distinct values of a dimension column of an earlier block, in that block's row order
+          the distinct values of a dimension or for_each column of an earlier block, in that block's
+          row order, without null and not-set cells; in for_each the limit is 1..50 (default 50)
 
 Derived = { name: string, op: "ratio" | "difference", a: Operand, b: Operand }
         | { name: string, op: "share", a: Operand }        a / total of the same column
@@ -54,28 +56,33 @@ Operand = { column: string } | { block: string, column: string, total: true }
 
 - **Order.** Blocks run in the order given. A `Ref` or a derived operand names only an earlier block. A cycle cannot be written.
 - **Fan-out.** `for_each` runs the block once per value with an added `eq` condition on `field`, and puts the value in a leading column named after the field. A value list longer than 50 is refused. Prefer a dimension or a funnel `group_by` where one exists: they run in one pass.
-- **Derived columns.** `ratio` and `share` are ratios as in 0004 (4 decimals, `null` with `reason: "zero_denominator"`). `difference` keeps the operand type. Money operands must have the same currency per cell; otherwise the cell is `null` with `reason: "mixed_currencies"`.
-- **Strict parsing.** Unknown fields and versions are refused. Every refusal names its path, `blocks.2.filter.f3` or `blocks.0.derive.1.b`, with a message written for an agent to fix the request.
+- **Refs.** A ref fills only an `in` or `not_in` list or the `for_each` values. A ref that finds no values skips its block, which answers no rows and the note `ref_empty`.
+- **Cuts.** `compare` adds a `<measure>_previous` column after each measure. `series: true` makes the rows the time buckets of the totals in a leading `time` column, and takes no dimensions. A cut without dimensions or series answers its totals as its one row, so `for_each` runs line up as rows.
+- **Derived columns.** Operands are measure columns other than ratios. `ratio` and `share` are ratios as in 0004 (4 decimals, `null` with `reason: "no_denominator"`, the 0003 name). `difference` keeps the operand type and needs two columns of the same type. Money operands pair only with money and must have the same currency per cell; otherwise the cell is `null` with `reason: "mixed_currencies"`. A `total` operand names a cut block without `for_each`. `for_each` blocks have no `totals`, since visitors do not add up across runs; `share` there divides by the total of the same run.
+- **Strict parsing.** Unknown fields and versions are refused. Every refusal names its path, `blocks.2.filter.f3` or `blocks.0.derive.1.b`, with a message written for an agent to fix the request. A body that does not parse is `malformed_request` with the path leading its message (`blocks.0.body: unknown field ...`).
 
 ### Budget
 
 - One request shares the 30 s budget of 0004. Blocks run one after another on one snapshot, so every block reports the same watermark.
-- At most 16 blocks and 200 sub-queries in total, counting each `for_each` value as one. Both are checked before anything runs; a request over the limit is refused (`report_too_large`) and never returns partial results.
+- At most 16 blocks and 200 sub-queries in total, counting each `for_each` value as one and a `for_each` ref at its limit. Both are checked before anything runs, also before authorization; a request over the limit is refused (`report_too_large`) and never returns partial results.
+- A cut's `limit` above 100 widens the first page after validation, as an export does, so it stays inside the 10,000 addressable rows.
 
 ### Result
 
 Each block returns a typed table and its provenance, so an agent can cite method notes.
 
 ```text
-ReportQueryResult { v: 1, watermark, metric_version, blocks: BlockResult[] }
+ReportQueryResult { v: 1, watermark: { batch, sequence, at, stale }, metric_version, blocks: BlockResult[] }
 
 BlockResult {
-  name, site, resolved: ResolvedRange, timezone
+  name, site, resolved?: ResolvedRange, timezone
+  freshness?: Freshness             as on an exploration; resolved and freshness are absent for a skipped block
   columns: { name, type, role }[]   type: string | integer | decimal | money | ratio | duration_ms | date | instant | bool
                                     role: for_each | dimension | time | measure | derived
-  rows: Cell[][]                    Cell as in 0004; a money cell is Money[] in currency code order
-  totals?: Cell[]                   cuts only, one per column, null for dimensions
-  notes: { code, message, path? }[] coverage, daily_limit, groups_truncated, rows_truncated, ...
+  rows: (Cell | Metric)[][]         keys are 0004 cells, values 0004 metrics; a money cell is
+                                    { t: "money", v: Money[] } in currency code order
+  totals?: (Cell | Metric)[]        cuts without for_each, one per column, null for dimensions
+  notes: { code, message, path? }[] coverage, daily_limit, groups_truncated, rows_truncated, ref_empty, visitor_days
 }
 ```
 
@@ -83,11 +90,11 @@ Reports flatten into rows:
 
 | Kind | Columns |
 | --- | --- |
-| `funnel` | group (with `group_by`), step, reached, drop, conversion from step 1, p25/median/p75 duration from the previous step, five bucket counts |
-| `journey` | sequence, identities |
-| `attribution` | conversion, touch, conversions, revenue |
-| `retention` | cohort, offset, cohort size, retained, rate |
-| `goals` | goal, count, conversion rate |
+| `funnel` | `group` (with `group_by`), `step`, `from_step`, `reached`, `drop`, `conversion` from step 1, `p25_ms`/`median_ms`/`p75_ms` from the previous step, five `bucket_*` counts. Steps count from 1. After the step rows comes one row from step 1 to the last step with the time to convert. With `group_by` the rows are per group only |
+| `journey` | `step_1` to `step_<length>` (not set past the end of a sequence), `identities` |
+| `attribution` | `conversion` (from 1), `touch`, `direct`, `conversions`, `revenue`; per conversion the touch rows, then the direct row |
+| `retention` | `cohort` (local date), `offset`, `cohort_size`, `retained`, `rate`, `complete` |
+| `goals` | `goal` (from 1), `completions`, `denominator`, `rate` |
 
 ### Funnel v2 and glob matching (0004 amendment)
 

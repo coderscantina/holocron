@@ -35,6 +35,13 @@ crate::domain! {
         /// `invalid_arguments`, `duplicate_predicate_id`, `filter_too_deep`,
         /// `too_many_conditions`, `page_out_of_range`, `report_missing`.
         "analytics.explore" => analytics_explore (Person, key, share_read): ExploreArgs => crate::exploration::ExploreResult;
+        /// Answers a report query for agents (decision 0022): named blocks, each a cut or a
+        /// report on one site, as typed tables from one analytical snapshot. Send it as the JSON
+        /// body of `POST /api/queries/analytics.report`. Needs `site.read` on every block's
+        /// site. Refusals name the path, as `blocks.2.filter.f3`: `invalid_arguments`,
+        /// `report_too_large` (over 16 blocks or 200 sub-queries, before anything runs),
+        /// `report_field_unsupported` (session lists).
+        "analytics.report" => analytics_report (Person, key): crate::report_query::ReportQuery => crate::report_query::ReportQueryResult;
         /// Every row of an exploration (up to 10,000) as a file, with the state, resolved range
         /// and versions it was computed from. Needs `site.export`.
         "analytics.export" => analytics_export (Person, key, share_export): ExportArgs => ExportFile;

@@ -10,6 +10,7 @@ publish.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_html_form = "0.4"
+serde_path_to_error = "0.1"
 # preserve_order keeps generated documents in schema order, whatever else the build enables.
 serde_json = { workspace = true, features = ["preserve_order"] }
 ts-rs.workspace = true

@@ -60,6 +60,20 @@ limits! {
         GLOB_MAX_BYTES: usize = 500;
         /// Wildcards (`*` or `**`) in one `matches` glob.
         GLOB_WILDCARDS_MAX: usize = 8;
+        /// Blocks in one report query (decision 0022).
+        REPORT_QUERY_BLOCKS_MAX: usize = 16;
+        /// Sub-queries in one report query: one per block, one per `for_each` value.
+        REPORT_QUERY_SUBQUERIES_MAX: usize = 200;
+        /// Values one `for_each` runs a block for.
+        REPORT_QUERY_FOR_EACH_MAX: usize = 50;
+        /// Derived columns of one report query block.
+        REPORT_QUERY_DERIVED_MAX: usize = 8;
+        /// Default rows of a report query cut.
+        REPORT_QUERY_CUT_LIMIT_DEFAULT: u32 = 100;
+        /// Most rows of a report query cut.
+        REPORT_QUERY_CUT_LIMIT_MAX: u32 = 1_000;
+        /// Longest block or derived column name, in bytes.
+        REPORT_QUERY_NAME_MAX_BYTES: usize = 32;
         /// Longest property key, in bytes.
         EXPLORATION_PROPERTY_KEY_MAX_BYTES: usize = 500;
         /// Default rows per exploration page.
@@ -223,5 +237,7 @@ limits! {
         /// `Authorization` scheme of share viewers: `Share <token>`. Unknown, revoked and
         /// expired tokens answer `not_found` for every operation.
         SHARE_SCHEME = "Share";
+        /// Names of report query blocks and derived columns.
+        REPORT_QUERY_NAME_PATTERN = "^[a-z][a-z0-9_]{0,31}$";
     }
 }

@@ -421,6 +421,8 @@ pub enum Reason {
     MixedMetrics,
     /// Fewer than 4 baseline days for a typical-weekday baseline or projection (0015).
     InsufficientHistory,
+    /// A report query's derived money cell whose operands carry different currencies (0022).
+    MixedCurrencies,
 }
 
 /// The previous period's or the typical weekday's value and the change to it (0003 Comparison

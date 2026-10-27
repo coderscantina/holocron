@@ -184,6 +184,7 @@ fn key_need(name: &str) -> Option<Need> {
     use WorkspaceCapability::{Read, Write};
     Some(match name {
         "analytics.explore"
+        | "analytics.report"
         | "analytics.freshness"
         | "fields.catalog"
         | "fields.values"
@@ -200,7 +201,9 @@ fn key_need(name: &str) -> Option<Need> {
         | "goals.get"
         | "summaries.forSites"
         | "summaries.findings"
-        | "sites.get" => Need::Site(SiteRead),
+        | "sites.get"
+        // Lists only the sites the key reaches.
+        | "sites.list" => Need::Site(SiteRead),
         "analytics.export" => Need::Site(SiteExport),
         "recordings.list" | "recordings.get" | "recordings.save" | "recordings.unsave"
         | "heatmaps.pages" | "heatmaps.cells" => Need::Site(SiteRecordingsRead),

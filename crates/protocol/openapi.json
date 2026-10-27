@@ -758,6 +758,154 @@
         }
       }
     },
+    "/api/queries/analytics.report": {
+      "get": {
+        "operationId": "analytics.report",
+        "description": "Answers a report query for agents (decision 0022): named blocks, each a cut or a\n report on one site, as typed tables from one analytical snapshot. Send it as the JSON\n body of `POST /api/queries/analytics.report`. Needs `site.read` on every block's\n site. Refusals name the path, as `blocks.2.filter.f3`: `invalid_arguments`,\n `report_too_large` (over 16 blocks or 200 sub-queries, before anything runs),\n `report_field_unsupported` (session lists).",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "v",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0,
+              "maximum": 255,
+              "description": "Always 1."
+            }
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Range"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Range of blocks that name none."
+            }
+          },
+          {
+            "name": "timezone",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "IANA timezone of blocks that name none. Without either, a block reads its site's timezone."
+            }
+          },
+          {
+            "name": "blocks",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Block"
+              },
+              "description": "1 to 16, names unique."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ReportQueryResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "analytics.report.post",
+        "description": "Answers a report query for agents (decision 0022): named blocks, each a cut or a\n report on one site, as typed tables from one analytical snapshot. Send it as the JSON\n body of `POST /api/queries/analytics.report`. Needs `site.read` on every block's\n site. Refusals name the path, as `blocks.2.filter.f3`: `invalid_arguments`,\n `report_too_large` (over 16 blocks or 200 sub-queries, before anything runs),\n `report_field_unsupported` (session lists).\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportQuery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ReportQueryResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/commands/annotations.create": {
       "post": {
         "operationId": "annotations.create",
@@ -11590,6 +11738,11 @@
             "type": "string",
             "const": "insufficient_history",
             "description": "Fewer than 4 baseline days for a typical-weekday baseline or projection (0015)."
+          },
+          {
+            "type": "string",
+            "const": "mixed_currencies",
+            "description": "A report query's derived money cell whose operands carry different currencies (0022)."
           }
         ]
       },
@@ -12744,6 +12897,1477 @@
           "end"
         ]
       },
+      "ReportQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "v": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0,
+            "maximum": 255,
+            "description": "Always 1."
+          },
+          "range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Range"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Range of blocks that name none."
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "IANA timezone of blocks that name none. Without either, a block reads its site's timezone."
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Block"
+            },
+            "description": "1 to 16, names unique."
+          }
+        },
+        "required": [
+          "v",
+          "blocks"
+        ],
+        "description": "Named blocks run in order on one snapshot. At most 16 blocks and 200 sub-queries in total,\ncounting each `for_each` value as one; a larger request is refused with `report_too_large`\nbefore anything runs."
+      },
+      "Block": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "`^[a-z][a-z0-9_]{0,31}$`, unique in the query. Later blocks refer to it by this name."
+          },
+          "site": {
+            "$ref": "#/components/schemas/SiteId",
+            "description": "The site this block reads; blocks may name different sites. Needs `site.read` on it."
+          },
+          "range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Range"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required unless the query has a range."
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "filter": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BlockGroup"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Which events the block reads, as an exploration filter. `in` and `not_in` lists hold up to\n1,000 values and may take them from an earlier block with a [`Ref`]."
+          },
+          "for_each": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ForEach"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Runs the block once per value with an added `eq` condition on the field, and puts the\nvalue in a leading column named after the field. Prefer a dimension or a funnel\n`group_by` where one exists: they run in one pass."
+          },
+          "body": {
+            "$ref": "#/components/schemas/BlockBody"
+          },
+          "derive": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Derived"
+            },
+            "description": "0 to 8 columns computed from this block's measure columns. Cuts only.",
+            "default": []
+          }
+        },
+        "required": [
+          "name",
+          "site",
+          "body"
+        ],
+        "description": "One table of the answer: a cut or a report over one site."
+      },
+      "BlockGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/GroupKind"
+          },
+          "op": {
+            "$ref": "#/components/schemas/GroupOp"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlockNode"
+            },
+            "description": "1 to 32 entries; groups nest at most three levels deep."
+          }
+        },
+        "required": [
+          "kind",
+          "op",
+          "items"
+        ],
+        "description": "A filter group as in an exploration state, whose list values may be a [`Ref`]."
+      },
+      "GroupKind": {
+        "type": "string",
+        "enum": [
+          "group"
+        ]
+      },
+      "GroupOp": {
+        "type": "string",
+        "enum": [
+          "and",
+          "or"
+        ]
+      },
+      "BlockNode": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BlockGroup"
+          },
+          {
+            "$ref": "#/components/schemas/BlockCondition"
+          }
+        ]
+      },
+      "BlockCondition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/CondKind"
+          },
+          "id": {
+            "type": "string",
+            "description": "`^[a-z0-9_]{1,16}$`, unique within the block; refusals name it, as `blocks.0.filter.f3`."
+          },
+          "field": {
+            "$ref": "#/components/schemas/Field"
+          },
+          "cmp": {
+            "$ref": "#/components/schemas/Operator"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BlockValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "field",
+          "cmp"
+        ]
+      },
+      "CondKind": {
+        "type": "string",
+        "enum": [
+          "cond"
+        ]
+      },
+      "Operator": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "contains",
+              "not_contains",
+              "starts_with",
+              "in",
+              "not_in",
+              "gt",
+              "gte",
+              "lt",
+              "lte",
+              "is_set",
+              "is_not_set",
+              "is_null",
+              "not_matches"
+            ]
+          },
+          {
+            "type": "string",
+            "const": "between",
+            "description": "Both ends inclusive."
+          },
+          {
+            "type": "string",
+            "const": "matches",
+            "description": "A glob over the whole value, case-sensitive: `*` any run without `/`, `**` any run,\n`\\` escapes the next character. 1 to 500 bytes, at most 8 wildcards."
+          }
+        ]
+      },
+      "BlockValue": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Ref"
+          },
+          {
+            "$ref": "#/components/schemas/Value"
+          }
+        ],
+        "description": "A literal value, or for `in` and `not_in` the values of an earlier block's column."
+      },
+      "Ref": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ref": {
+            "$ref": "#/components/schemas/RefSource"
+          }
+        },
+        "required": [
+          "ref"
+        ],
+        "description": "The distinct values of a `dimension` or `for_each` column of an earlier block, in that\nblock's row order. Not-set and null cells are skipped. A ref that finds no values skips the\nblock, which then answers no rows and the note `ref_empty`."
+      },
+      "RefSource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "block": {
+            "type": "string",
+            "description": "The name of an earlier block."
+          },
+          "column": {
+            "type": "string",
+            "description": "A column of that block."
+          },
+          "limit": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint32",
+            "minimum": 0,
+            "description": "The first values to take: 1 to 1,000 in a filter (default 1,000), 1 to 50 in `for_each`\n(default 50)."
+          }
+        },
+        "required": [
+          "block",
+          "column"
+        ]
+      },
+      "Value": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "string"
+              },
+              "v": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "integer"
+              },
+              "v": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "decimal"
+              },
+              "v": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ],
+            "description": "Decimal string with up to 4 fractional digits."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "date"
+              },
+              "v": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ],
+            "description": "RFC 3339 instant."
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "bool"
+              },
+              "v": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "t": {
+                "type": "string",
+                "const": "list"
+              },
+              "v": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Value"
+                }
+              }
+            },
+            "required": [
+              "t",
+              "v"
+            ],
+            "description": "For `in`, `not_in` (up to 50 items, 1,000 in a report query) and `between` (exactly 2)."
+          }
+        ],
+        "description": "A typed comparison value."
+      },
+      "ForEach": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "$ref": "#/components/schemas/Field",
+            "description": "An event, session or property field; not one of the cut's dimensions."
+          },
+          "values": {
+            "$ref": "#/components/schemas/ForEachValues",
+            "description": "1 to 50 values, or a [`Ref`] with a limit of at most 50."
+          }
+        },
+        "required": [
+          "field",
+          "values"
+        ]
+      },
+      "ForEachValues": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Ref"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Value"
+            }
+          }
+        ]
+      },
+      "BlockBody": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "cut"
+              },
+              "measures": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Measure"
+                },
+                "description": "1 to 8, unique. Columns are named after them: `pageviews`, `sum(event.amount)`."
+              },
+              "dimensions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Field"
+                },
+                "description": "0 to 3, unique. Columns are named after them: `path`, `event.checkout_id`. Without\ndimensions or a series, the one row holds the totals.",
+                "default": []
+              },
+              "granularity": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Granularity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Bucket size of the series, default `day`."
+              },
+              "series": {
+                "type": "boolean",
+                "description": "Rows are the time buckets of the totals, in a leading `time` column. Needs no dimensions.",
+                "default": false
+              },
+              "compare": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Compare"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Adds a `<measure>_previous` column after each measure. Default `none`."
+              },
+              "sort": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Sort"
+                },
+                "description": "0 to 2 keys. Ties fall back to the dimension values ascending.",
+                "default": []
+              },
+              "limit": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "format": "uint32",
+                "minimum": 0,
+                "description": "Rows to return, 1 to 1,000, default 100. The note `rows_truncated` says when more exist."
+              }
+            },
+            "required": [
+              "kind",
+              "measures"
+            ],
+            "description": "Measures by up to three dimensions, as in an exploration."
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "report"
+              },
+              "report": {
+                "$ref": "#/components/schemas/ReportDefinition"
+              },
+              "granularity": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Granularity"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The cohort period of a retention report, `day` (default) or `week`. Other kinds read `day`."
+              }
+            },
+            "required": [
+              "kind",
+              "report"
+            ],
+            "description": "A funnel, journey, attribution, retention or goals report, flattened into rows. Session\nlists are refused: report queries answer aggregates only."
+          }
+        ],
+        "description": "What a block computes: one cut of measures by dimensions, or one report."
+      },
+      "Compare": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "none",
+              "previous_period"
+            ]
+          },
+          {
+            "type": "string",
+            "const": "typical_weekday",
+            "description": "The median of the same local weekday over the previous 8 weeks (0015)."
+          }
+        ]
+      },
+      "ReportDefinition": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "funnel"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255,
+                "description": "1, or 2 with `group_by`."
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Group"
+                },
+                "description": "2 to 8 ordered step predicates."
+              },
+              "window_seconds": {
+                "type": "integer",
+                "format": "uint32",
+                "minimum": 0,
+                "description": "60 seconds to 30 days from the step-1 event, half-open."
+              },
+              "scope": {
+                "$ref": "#/components/schemas/IdentityScope"
+              },
+              "group_by": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Field"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Version 2: split identities by this field's value on their entering step-1 event."
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "steps",
+              "window_seconds",
+              "scope"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "journey"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "value": {
+                "$ref": "#/components/schemas/JourneyValue"
+              },
+              "length": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255,
+                "description": "2 to 7 steps, counted after loop compression."
+              },
+              "scope": {
+                "$ref": "#/components/schemas/PopulationScope"
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "value",
+              "length",
+              "scope"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "attribution"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "model": {
+                "$ref": "#/components/schemas/AttributionModel"
+              },
+              "lookback_days": {
+                "type": "integer",
+                "format": "uint16",
+                "minimum": 0,
+                "maximum": 65535,
+                "description": "Always 30 in version 1."
+              },
+              "scope": {
+                "$ref": "#/components/schemas/IdentityScope"
+              },
+              "touch_field": {
+                "$ref": "#/components/schemas/TouchField",
+                "description": "The session field a touch is grouped by."
+              },
+              "conversions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Conversion"
+                },
+                "description": "1 to 4."
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "model",
+              "lookback_days",
+              "scope",
+              "touch_field",
+              "conversions"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "retention"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "intervals": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255,
+                "description": "Offsets 0 to `intervals − 1`: 1 to 32 for day cohorts, 1 to 53 for week cohorts."
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "intervals"
+            ],
+            "description": "Cohorts by the state's `granularity`, `day` or `week`."
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "session_list"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "columns": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SessionColumn"
+                },
+                "description": "1 to 16, unique."
+              },
+              "order": {
+                "$ref": "#/components/schemas/SessionOrder"
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "columns",
+              "order"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "goals"
+              },
+              "v": {
+                "type": "integer",
+                "format": "uint8",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "goals": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GoalDefinition"
+                },
+                "description": "1 to 8, each stored inline."
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "goals"
+            ],
+            "description": "Conversion of one or more goals over the range (0003 Goals)."
+          }
+        ],
+        "description": "Settings of one report kind (0004 Report definitions). Each kind carries its own version `v`."
+      },
+      "Group": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/GroupKind"
+          },
+          "op": {
+            "$ref": "#/components/schemas/GroupOp"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Node"
+            },
+            "description": "1 to 32 entries."
+          }
+        },
+        "required": [
+          "kind",
+          "op",
+          "items"
+        ]
+      },
+      "Node": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Group"
+          },
+          {
+            "$ref": "#/components/schemas/Condition"
+          }
+        ],
+        "description": "One entry of a group: a nested group or a condition."
+      },
+      "Condition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/CondKind"
+          },
+          "id": {
+            "type": "string",
+            "description": "`^[a-z0-9_]{1,16}$`, unique within the state, never renumbered."
+          },
+          "field": {
+            "$ref": "#/components/schemas/Field"
+          },
+          "cmp": {
+            "$ref": "#/components/schemas/Operator"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Value"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "field",
+          "cmp"
+        ]
+      },
+      "IdentityScope": {
+        "oneOf": [
+          {
+            "type": "string",
+            "const": "daily",
+            "description": "The daily pseudonym: one local day, no consent needed."
+          },
+          {
+            "type": "string",
+            "const": "person",
+            "description": "The persistent profile: consented population only."
+          }
+        ],
+        "description": "Which identity a report follows across events."
+      },
+      "JourneyValue": {
+        "oneOf": [
+          {
+            "type": "string",
+            "const": "path",
+            "description": "Page path of pageviews."
+          },
+          {
+            "type": "string",
+            "const": "event_name",
+            "description": "Event name of custom events."
+          }
+        ],
+        "description": "The step value of a journey."
+      },
+      "PopulationScope": {
+        "type": "string",
+        "enum": [
+          "session",
+          "person"
+        ],
+        "description": "What a report counts: sessions, or the persistent profiles of consented people."
+      },
+      "AttributionModel": {
+        "type": "string",
+        "enum": [
+          "last_touch",
+          "first_touch"
+        ]
+      },
+      "TouchField": {
+        "type": "string",
+        "enum": [
+          "channel",
+          "referrer_domain",
+          "utm_source",
+          "utm_medium",
+          "utm_campaign",
+          "utm_content",
+          "utm_term",
+          "click_id"
+        ]
+      },
+      "Conversion": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "goal"
+              },
+              "goal": {
+                "$ref": "#/components/schemas/GoalDefinition"
+              }
+            },
+            "required": [
+              "kind",
+              "goal"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "revenue"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "description": "Each event with a revenue record; currencies stay apart."
+          }
+        ],
+        "description": "What counts as a conversion: a goal completion or a revenue event."
+      },
+      "GoalDefinition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "predicate": {
+            "$ref": "#/components/schemas/Group"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/PopulationScope"
+          },
+          "counting": {
+            "$ref": "#/components/schemas/GoalCounting"
+          },
+          "ref": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoalRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The saved goal version this definition was copied from."
+          }
+        },
+        "required": [
+          "predicate",
+          "scope",
+          "counting"
+        ],
+        "description": "A goal stored inline, so a saved report keeps the exact goal it was built with (0003 Goals)."
+      },
+      "GoalCounting": {
+        "oneOf": [
+          {
+            "type": "string",
+            "const": "once",
+            "description": "The first matching event per session or profile."
+          },
+          {
+            "type": "string",
+            "const": "every",
+            "description": "Every matching event."
+          }
+        ]
+      },
+      "GoalRef": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/GoalId"
+          },
+          "version": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0,
+            "description": "1 or higher."
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ]
+      },
+      "GoalId": {
+        "type": "string",
+        "description": "A saved, versioned goal definition of one site."
+      },
+      "SessionColumn": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "session_id",
+              "identity_kind",
+              "start",
+              "end",
+              "pageviews",
+              "custom_events",
+              "entry_path",
+              "exit_path",
+              "referrer_domain",
+              "channel",
+              "utm_source",
+              "utm_campaign",
+              "country",
+              "city",
+              "device",
+              "browser",
+              "os"
+            ]
+          },
+          {
+            "type": "string",
+            "const": "span",
+            "description": "Integer milliseconds."
+          }
+        ]
+      },
+      "SessionOrder": {
+        "type": "string",
+        "enum": [
+          "start_desc",
+          "start_asc"
+        ],
+        "description": "Session start order; ties by session ID ascending."
+      },
+      "Derived": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "ratio"
+              },
+              "name": {
+                "type": "string",
+                "description": "The column name, `^[a-z][a-z0-9_]{0,31}$`, unique in the block."
+              },
+              "a": {
+                "$ref": "#/components/schemas/Operand"
+              },
+              "b": {
+                "$ref": "#/components/schemas/Operand"
+              }
+            },
+            "required": [
+              "op",
+              "name",
+              "a",
+              "b"
+            ],
+            "description": "`a / b`, rounded half to even to 4 places; unavailable with `no_denominator` when `b` is 0."
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "difference"
+              },
+              "name": {
+                "type": "string",
+                "description": "The column name, `^[a-z][a-z0-9_]{0,31}$`, unique in the block."
+              },
+              "a": {
+                "$ref": "#/components/schemas/Operand"
+              },
+              "b": {
+                "$ref": "#/components/schemas/Operand"
+              }
+            },
+            "required": [
+              "op",
+              "name",
+              "a",
+              "b"
+            ],
+            "description": "`a − b`, of the operands' type. Both operands have the same column type."
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "share"
+              },
+              "name": {
+                "type": "string"
+              },
+              "a": {
+                "$ref": "#/components/schemas/ColumnOperand"
+              }
+            },
+            "required": [
+              "op",
+              "name",
+              "a"
+            ],
+            "description": "`a` over the total of the same column, a ratio. In a `for_each` block the total is that\nvalue's total."
+          }
+        ],
+        "description": "A column computed per row, and for the totals, from measure columns."
+      },
+      "Operand": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/TotalOperand"
+          },
+          {
+            "$ref": "#/components/schemas/ColumnOperand"
+          }
+        ],
+        "description": "A measure column of this block, or the total of a measure column of an earlier cut block\nwithout `for_each`. Count, duration, decimal and money columns qualify; ratios do not."
+      },
+      "TotalOperand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "block": {
+            "type": "string"
+          },
+          "column": {
+            "type": "string"
+          },
+          "total": {
+            "type": "boolean",
+            "description": "Always `true`."
+          }
+        },
+        "required": [
+          "block",
+          "column",
+          "total"
+        ]
+      },
+      "ColumnOperand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "column": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "column"
+        ]
+      },
+      "ReportQueryResult": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0,
+            "maximum": 255,
+            "description": "Always 1."
+          },
+          "watermark": {
+            "$ref": "#/components/schemas/ReportWatermark",
+            "description": "The snapshot every block read."
+          },
+          "metric_version": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0,
+            "description": "Formula version of every number (decision 0003)."
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BlockResult"
+            },
+            "description": "One per block, in request order."
+          }
+        },
+        "required": [
+          "v",
+          "watermark",
+          "metric_version",
+          "blocks"
+        ]
+      },
+      "ReportWatermark": {
+        "type": "object",
+        "properties": {
+          "batch": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Last applied batch and the last accepted inbox sequence it contains."
+          },
+          "sequence": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Every record received before this instant is visible, Unix milliseconds."
+          },
+          "stale": {
+            "type": "boolean",
+            "description": "Analytics is over a minute behind collection."
+          }
+        },
+        "required": [
+          "batch",
+          "sequence",
+          "at",
+          "stale"
+        ],
+        "description": "The analytical snapshot of a report query."
+      },
+      "BlockResult": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "site": {
+            "$ref": "#/components/schemas/SiteId"
+          },
+          "resolved": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResolvedRange"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The range the block read; absent when it did not run (`ref_empty`)."
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "freshness": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Freshness"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Watermark, correction state, session policy and imported history of the block's range;\nabsent when it did not run."
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Column"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ReportCell"
+              }
+            },
+            "description": "One cell per column. Keys are typed cells (`{\"t\":\"string\",\"v\":\"/a\"}`), values are metrics\n(`{\"t\":\"count\",\"v\":12}`, `{\"t\":\"money\",\"v\":[...]}` in currency code order)."
+          },
+          "totals": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/ReportCell"
+            },
+            "description": "Cuts without `for_each`: one cell per column over every matching row, `null` for\ndimension and time columns."
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Note"
+            },
+            "description": "Method notes to cite: identity coverage, daily limits, truncation."
+          }
+        },
+        "required": [
+          "name",
+          "site",
+          "timezone",
+          "columns",
+          "rows",
+          "notes"
+        ],
+        "description": "One block's table and its provenance."
+      },
+      "Column": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ColumnType"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ColumnRole"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "role"
+        ]
+      },
+      "ColumnType": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "string",
+              "integer",
+              "bool"
+            ]
+          },
+          {
+            "type": "string",
+            "const": "decimal",
+            "description": "Decimal string with 4 places."
+          },
+          {
+            "type": "string",
+            "const": "money",
+            "description": "Amounts per currency."
+          },
+          {
+            "type": "string",
+            "const": "ratio",
+            "description": "Rounded half to even to 4 places, with the exact parts."
+          },
+          {
+            "type": "string",
+            "const": "duration_ms",
+            "description": "Integer milliseconds."
+          },
+          {
+            "type": "string",
+            "const": "date",
+            "description": "Local date `YYYY-MM-DD` in the block's timezone."
+          },
+          {
+            "type": "string",
+            "const": "instant",
+            "description": "RFC 3339 instant."
+          }
+        ]
+      },
+      "ColumnRole": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "dimension",
+              "measure",
+              "derived"
+            ]
+          },
+          {
+            "type": "string",
+            "const": "for_each",
+            "description": "The value a `for_each` run filtered on."
+          },
+          {
+            "type": "string",
+            "const": "time",
+            "description": "The bucket of a series."
+          }
+        ]
+      },
+      "ReportCell": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Cell"
+          },
+          {
+            "$ref": "#/components/schemas/Metric"
+          }
+        ],
+        "description": "A result cell: a typed key as in an exploration row key, or a computed metric."
+      },
+      "Note": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/NoteCode"
+          },
+          "message": {
+            "type": "string",
+            "description": "English text for the reader of the report."
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The block or part the note is about, as `blocks.1`."
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "NoteCode": {
+        "oneOf": [
+          {
+            "type": "string",
+            "const": "coverage",
+            "description": "Not every eligible event carries an identity, so visitor and identity counts cover less\nthan all traffic (0003)."
+          },
+          {
+            "type": "string",
+            "const": "daily_limit",
+            "description": "A daily-scope funnel: the pseudonym changes at local midnight, so nobody progresses across it."
+          },
+          {
+            "type": "string",
+            "const": "groups_truncated",
+            "description": "A grouped funnel had more than 50 groups; the rest are left out."
+          },
+          {
+            "type": "string",
+            "const": "rows_truncated",
+            "description": "More rows exist than the block returns."
+          },
+          {
+            "type": "string",
+            "const": "ref_empty",
+            "description": "A ref found no values, so the block did not run."
+          },
+          {
+            "type": "string",
+            "const": "visitor_days",
+            "description": "The range spans several identity days, so `visitors` counts visitor-days."
+          }
+        ]
+      },
       "AnnotationsCreateArgs": {
         "type": "object",
         "properties": {
@@ -13459,253 +15083,6 @@
           "visualization"
         ]
       },
-      "Group": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "kind": {
-            "$ref": "#/components/schemas/GroupKind"
-          },
-          "op": {
-            "$ref": "#/components/schemas/GroupOp"
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Node"
-            },
-            "description": "1 to 32 entries."
-          }
-        },
-        "required": [
-          "kind",
-          "op",
-          "items"
-        ]
-      },
-      "GroupKind": {
-        "type": "string",
-        "enum": [
-          "group"
-        ]
-      },
-      "GroupOp": {
-        "type": "string",
-        "enum": [
-          "and",
-          "or"
-        ]
-      },
-      "Node": {
-        "anyOf": [
-          {
-            "$ref": "#/components/schemas/Group"
-          },
-          {
-            "$ref": "#/components/schemas/Condition"
-          }
-        ],
-        "description": "One entry of a group: a nested group or a condition."
-      },
-      "Condition": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "kind": {
-            "$ref": "#/components/schemas/CondKind"
-          },
-          "id": {
-            "type": "string",
-            "description": "`^[a-z0-9_]{1,16}$`, unique within the state, never renumbered."
-          },
-          "field": {
-            "$ref": "#/components/schemas/Field"
-          },
-          "cmp": {
-            "$ref": "#/components/schemas/Operator"
-          },
-          "value": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Value"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        },
-        "required": [
-          "kind",
-          "id",
-          "field",
-          "cmp"
-        ]
-      },
-      "CondKind": {
-        "type": "string",
-        "enum": [
-          "cond"
-        ]
-      },
-      "Operator": {
-        "oneOf": [
-          {
-            "type": "string",
-            "enum": [
-              "eq",
-              "neq",
-              "contains",
-              "not_contains",
-              "starts_with",
-              "in",
-              "not_in",
-              "gt",
-              "gte",
-              "lt",
-              "lte",
-              "is_set",
-              "is_not_set",
-              "is_null",
-              "not_matches"
-            ]
-          },
-          {
-            "type": "string",
-            "const": "between",
-            "description": "Both ends inclusive."
-          },
-          {
-            "type": "string",
-            "const": "matches",
-            "description": "A glob over the whole value, case-sensitive: `*` any run without `/`, `**` any run,\n`\\` escapes the next character. 1 to 500 bytes, at most 8 wildcards."
-          }
-        ]
-      },
-      "Value": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "string"
-              },
-              "v": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "integer"
-              },
-              "v": {
-                "type": "integer",
-                "format": "int64"
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "decimal"
-              },
-              "v": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ],
-            "description": "Decimal string with up to 4 fractional digits."
-          },
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "date"
-              },
-              "v": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ],
-            "description": "RFC 3339 instant."
-          },
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "bool"
-              },
-              "v": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "t": {
-                "type": "string",
-                "const": "list"
-              },
-              "v": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Value"
-                }
-              }
-            },
-            "required": [
-              "t",
-              "v"
-            ],
-            "description": "For `in`, `not_in` (up to 50 items, 1,000 in a report query) and `between` (exactly 2)."
-          }
-        ],
-        "description": "A typed comparison value."
-      },
-      "Compare": {
-        "oneOf": [
-          {
-            "type": "string",
-            "enum": [
-              "none",
-              "previous_period"
-            ]
-          },
-          {
-            "type": "string",
-            "const": "typical_weekday",
-            "description": "The median of the same local weekday over the previous 8 weeks (0015)."
-          }
-        ]
-      },
       "Visualization": {
         "oneOf": [
           {
@@ -13726,438 +15103,6 @@
             "description": "Needs exactly the dimensions `weekday` and `hour`."
           }
         ]
-      },
-      "ReportDefinition": {
-        "oneOf": [
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "funnel"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255,
-                "description": "1, or 2 with `group_by`."
-              },
-              "steps": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Group"
-                },
-                "description": "2 to 8 ordered step predicates."
-              },
-              "window_seconds": {
-                "type": "integer",
-                "format": "uint32",
-                "minimum": 0,
-                "description": "60 seconds to 30 days from the step-1 event, half-open."
-              },
-              "scope": {
-                "$ref": "#/components/schemas/IdentityScope"
-              },
-              "group_by": {
-                "anyOf": [
-                  {
-                    "$ref": "#/components/schemas/Field"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ],
-                "description": "Version 2: split identities by this field's value on their entering step-1 event."
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "steps",
-              "window_seconds",
-              "scope"
-            ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "journey"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255
-              },
-              "value": {
-                "$ref": "#/components/schemas/JourneyValue"
-              },
-              "length": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255,
-                "description": "2 to 7 steps, counted after loop compression."
-              },
-              "scope": {
-                "$ref": "#/components/schemas/PopulationScope"
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "value",
-              "length",
-              "scope"
-            ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "attribution"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255
-              },
-              "model": {
-                "$ref": "#/components/schemas/AttributionModel"
-              },
-              "lookback_days": {
-                "type": "integer",
-                "format": "uint16",
-                "minimum": 0,
-                "maximum": 65535,
-                "description": "Always 30 in version 1."
-              },
-              "scope": {
-                "$ref": "#/components/schemas/IdentityScope"
-              },
-              "touch_field": {
-                "$ref": "#/components/schemas/TouchField",
-                "description": "The session field a touch is grouped by."
-              },
-              "conversions": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Conversion"
-                },
-                "description": "1 to 4."
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "model",
-              "lookback_days",
-              "scope",
-              "touch_field",
-              "conversions"
-            ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "retention"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255
-              },
-              "intervals": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255,
-                "description": "Offsets 0 to `intervals − 1`: 1 to 32 for day cohorts, 1 to 53 for week cohorts."
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "intervals"
-            ],
-            "description": "Cohorts by the state's `granularity`, `day` or `week`."
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "session_list"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255
-              },
-              "columns": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/SessionColumn"
-                },
-                "description": "1 to 16, unique."
-              },
-              "order": {
-                "$ref": "#/components/schemas/SessionOrder"
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "columns",
-              "order"
-            ]
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "goals"
-              },
-              "v": {
-                "type": "integer",
-                "format": "uint8",
-                "minimum": 0,
-                "maximum": 255
-              },
-              "goals": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/GoalDefinition"
-                },
-                "description": "1 to 8, each stored inline."
-              }
-            },
-            "required": [
-              "kind",
-              "v",
-              "goals"
-            ],
-            "description": "Conversion of one or more goals over the range (0003 Goals)."
-          }
-        ],
-        "description": "Settings of one report kind (0004 Report definitions). Each kind carries its own version `v`."
-      },
-      "IdentityScope": {
-        "oneOf": [
-          {
-            "type": "string",
-            "const": "daily",
-            "description": "The daily pseudonym: one local day, no consent needed."
-          },
-          {
-            "type": "string",
-            "const": "person",
-            "description": "The persistent profile: consented population only."
-          }
-        ],
-        "description": "Which identity a report follows across events."
-      },
-      "JourneyValue": {
-        "oneOf": [
-          {
-            "type": "string",
-            "const": "path",
-            "description": "Page path of pageviews."
-          },
-          {
-            "type": "string",
-            "const": "event_name",
-            "description": "Event name of custom events."
-          }
-        ],
-        "description": "The step value of a journey."
-      },
-      "PopulationScope": {
-        "type": "string",
-        "enum": [
-          "session",
-          "person"
-        ],
-        "description": "What a report counts: sessions, or the persistent profiles of consented people."
-      },
-      "AttributionModel": {
-        "type": "string",
-        "enum": [
-          "last_touch",
-          "first_touch"
-        ]
-      },
-      "TouchField": {
-        "type": "string",
-        "enum": [
-          "channel",
-          "referrer_domain",
-          "utm_source",
-          "utm_medium",
-          "utm_campaign",
-          "utm_content",
-          "utm_term",
-          "click_id"
-        ]
-      },
-      "Conversion": {
-        "oneOf": [
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "goal"
-              },
-              "goal": {
-                "$ref": "#/components/schemas/GoalDefinition"
-              }
-            },
-            "required": [
-              "kind",
-              "goal"
-            ]
-          },
-          {
-            "type": "object",
-            "properties": {
-              "kind": {
-                "type": "string",
-                "const": "revenue"
-              }
-            },
-            "required": [
-              "kind"
-            ],
-            "description": "Each event with a revenue record; currencies stay apart."
-          }
-        ],
-        "description": "What counts as a conversion: a goal completion or a revenue event."
-      },
-      "GoalDefinition": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "predicate": {
-            "$ref": "#/components/schemas/Group"
-          },
-          "scope": {
-            "$ref": "#/components/schemas/PopulationScope"
-          },
-          "counting": {
-            "$ref": "#/components/schemas/GoalCounting"
-          },
-          "ref": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/GoalRef"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "The saved goal version this definition was copied from."
-          }
-        },
-        "required": [
-          "predicate",
-          "scope",
-          "counting"
-        ],
-        "description": "A goal stored inline, so a saved report keeps the exact goal it was built with (0003 Goals)."
-      },
-      "GoalCounting": {
-        "oneOf": [
-          {
-            "type": "string",
-            "const": "once",
-            "description": "The first matching event per session or profile."
-          },
-          {
-            "type": "string",
-            "const": "every",
-            "description": "Every matching event."
-          }
-        ]
-      },
-      "GoalRef": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/GoalId"
-          },
-          "version": {
-            "type": "integer",
-            "format": "uint32",
-            "minimum": 0,
-            "description": "1 or higher."
-          }
-        },
-        "required": [
-          "id",
-          "version"
-        ]
-      },
-      "GoalId": {
-        "type": "string",
-        "description": "A saved, versioned goal definition of one site."
-      },
-      "SessionColumn": {
-        "oneOf": [
-          {
-            "type": "string",
-            "enum": [
-              "session_id",
-              "identity_kind",
-              "start",
-              "end",
-              "pageviews",
-              "custom_events",
-              "entry_path",
-              "exit_path",
-              "referrer_domain",
-              "channel",
-              "utm_source",
-              "utm_campaign",
-              "country",
-              "city",
-              "device",
-              "browser",
-              "os"
-            ]
-          },
-          {
-            "type": "string",
-            "const": "span",
-            "description": "Integer milliseconds."
-          }
-        ]
-      },
-      "SessionOrder": {
-        "type": "string",
-        "enum": [
-          "start_desc",
-          "start_asc"
-        ],
-        "description": "Session start order; ties by session ID ascending."
       },
       "ExplorationId": {
         "type": "string",

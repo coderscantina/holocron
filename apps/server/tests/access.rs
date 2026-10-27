@@ -181,6 +181,9 @@ impl World {
                 .header(header::ORIGIN, ORIGIN)
                 .header("x-holocron-request", "1")
                 .header(header::CONTENT_TYPE, "application/json"),
+            // A report query is too big for a query string; it is sent as a JSON body.
+            Kind::Query if op == "analytics.report" => Request::post(format!("/api/queries/{op}"))
+                .header(header::CONTENT_TYPE, "application/json"),
             Kind::Query => Request::get(format!("/api/queries/{op}?{}", form(&args))),
         }
         .header(header::HOST, HOST);
@@ -197,6 +200,7 @@ impl World {
                 );
                 Body::from(body.to_string())
             }
+            Kind::Query if op == "analytics.report" => Body::from(args.to_string()),
             Kind::Query => Body::empty(),
         };
         self.h.send(request.body(body).unwrap()).await
@@ -699,6 +703,9 @@ impl World {
         };
         match op {
             "analytics.explore" => json!({ "state": state().to_string() }),
+            "analytics.report" => json!({ "v": 1, "blocks": [{ "name": "views", "site": site,
+                "range": { "kind": "relative", "unit": "day", "count": 7 },
+                "body": { "kind": "cut", "measures": ["pageviews"] } }] }),
             // One repeated query key is a list of one.
             "summaries.forSites" => json!({ "sites": site }),
             "summaries.findings" => json!({ "site": site, "limit": 3 }),

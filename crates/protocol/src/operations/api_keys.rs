@@ -29,8 +29,8 @@ crate::domain! {
 
 /// The "Read analytics" grant preset for agent keys (decision 0012): reports, exports, field
 /// lookups, freshness and site metadata. No session timelines, realtime or recordings.
-/// `analytics.report` joins the list when wave 3 of milestone 15 adds the operation.
 pub const READ_ANALYTICS_PRESET: &[&str] = &[
+    "analytics.report",
     "analytics.export",
     "fields.catalog",
     "fields.values",

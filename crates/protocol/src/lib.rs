@@ -19,5 +19,6 @@ pub mod ids;
 pub mod limits;
 pub mod operations;
 pub mod registry;
+pub mod report_query;
 pub mod retention;
 pub mod setup;

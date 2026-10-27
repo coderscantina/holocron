@@ -46,6 +46,8 @@ import type { RecordingSiteArgs } from './RecordingSiteArgs'
 import type { RecordingsGetArgs } from './RecordingsGetArgs'
 import type { RecordingsListArgs } from './RecordingsListArgs'
 import type { ReplayPage } from './ReplayPage'
+import type { ReportQuery } from './ReportQuery'
+import type { ReportQueryResult } from './ReportQueryResult'
 import type { RetentionDefaultArgs } from './RetentionDefaultArgs'
 import type { RetentionPreview } from './RetentionPreview'
 import type { RetentionSettings } from './RetentionSettings'
@@ -89,6 +91,7 @@ export interface Queries {
   'analytics.explore': { args: ExploreArgs; result: ExploreResult; access: 'person' }
   'analytics.export': { args: ExportArgs; result: ExportFile; access: 'person' }
   'analytics.freshness': { args: FreshnessArgs; result: Freshness; access: 'person' }
+  'analytics.report': { args: ReportQuery; result: ReportQueryResult; access: 'person' }
   'annotations.list': { args: AnnotationsListArgs; result: AnnotationList; access: 'person' }
   'apiKeys.list': { args: Empty; result: ApiKeyList; access: 'person' }
   'auth.session': { args: Empty; result: SessionState; access: 'anonymous' }
@@ -140,10 +143,10 @@ export interface Queries {
   'workspaces.list': { args: Empty; result: WorkspaceList; access: 'person' }
 }
 
-export const queryNames = ['account.get', 'account.preferences', 'analytics.explore', 'analytics.export', 'analytics.freshness', 'annotations.list', 'apiKeys.list', 'auth.session', 'boards.get', 'boards.list', 'collection.status', 'collectionKeys.list', 'explorations.get', 'explorations.list', 'fields.catalog', 'fields.values', 'geoip.settings', 'goals.get', 'goals.list', 'heatmaps.cells', 'heatmaps.pages', 'links.explore', 'links.list', 'operator.status', 'pixels.explore', 'pixels.list', 'realtime.snapshot', 'recalculations.status', 'recordings.budget', 'recordings.get', 'recordings.list', 'recordings.policy', 'retention.previewDefault', 'retention.settings', 'security.policy', 'segments.list', 'sessions.get', 'sessions.timeline', 'sharing.list', 'sharing.resolve', 'sites.get', 'sites.identityPolicy', 'sites.list', 'sites.retentionPreview', 'sites.trackingCode', 'summaries.findings', 'summaries.forSites', 'teams.get', 'teams.invitations', 'teams.list', 'twoFactor.status', 'users.get', 'users.list', 'workspaces.list'] as const satisfies readonly (keyof Queries)[]
+export const queryNames = ['account.get', 'account.preferences', 'analytics.explore', 'analytics.export', 'analytics.freshness', 'analytics.report', 'annotations.list', 'apiKeys.list', 'auth.session', 'boards.get', 'boards.list', 'collection.status', 'collectionKeys.list', 'explorations.get', 'explorations.list', 'fields.catalog', 'fields.values', 'geoip.settings', 'goals.get', 'goals.list', 'heatmaps.cells', 'heatmaps.pages', 'links.explore', 'links.list', 'operator.status', 'pixels.explore', 'pixels.list', 'realtime.snapshot', 'recalculations.status', 'recordings.budget', 'recordings.get', 'recordings.list', 'recordings.policy', 'retention.previewDefault', 'retention.settings', 'security.policy', 'segments.list', 'sessions.get', 'sessions.timeline', 'sharing.list', 'sharing.resolve', 'sites.get', 'sites.identityPolicy', 'sites.list', 'sites.retentionPreview', 'sites.trackingCode', 'summaries.findings', 'summaries.forSites', 'teams.get', 'teams.invitations', 'teams.list', 'twoFactor.status', 'users.get', 'users.list', 'workspaces.list'] as const satisfies readonly (keyof Queries)[]
 
 /** Operations an API key may hold in its grants. */
-export const keyGrantableQueries = ['analytics.explore', 'analytics.export', 'analytics.freshness', 'annotations.list', 'boards.get', 'boards.list', 'explorations.get', 'explorations.list', 'fields.catalog', 'fields.values', 'goals.get', 'goals.list', 'heatmaps.cells', 'heatmaps.pages', 'links.explore', 'links.list', 'pixels.explore', 'pixels.list', 'realtime.snapshot', 'recalculations.status', 'recordings.budget', 'recordings.get', 'recordings.list', 'recordings.policy', 'segments.list', 'sessions.get', 'sessions.timeline', 'sites.get', 'sites.identityPolicy', 'sites.list', 'summaries.findings', 'summaries.forSites'] as const satisfies readonly (keyof Queries)[]
+export const keyGrantableQueries = ['analytics.explore', 'analytics.export', 'analytics.freshness', 'analytics.report', 'annotations.list', 'boards.get', 'boards.list', 'explorations.get', 'explorations.list', 'fields.catalog', 'fields.values', 'goals.get', 'goals.list', 'heatmaps.cells', 'heatmaps.pages', 'links.explore', 'links.list', 'pixels.explore', 'pixels.list', 'realtime.snapshot', 'recalculations.status', 'recordings.budget', 'recordings.get', 'recordings.list', 'recordings.policy', 'segments.list', 'sessions.get', 'sessions.timeline', 'sites.get', 'sites.identityPolicy', 'sites.list', 'summaries.findings', 'summaries.forSites'] as const satisfies readonly (keyof Queries)[]
 
 /** The "Read analytics" grants for agent keys. */
-export const readAnalyticsPreset = ['analytics.export', 'fields.catalog', 'fields.values', 'analytics.freshness', 'sites.get', 'sites.list'] as const satisfies readonly (typeof keyGrantableQueries[number])[]
+export const readAnalyticsPreset = ['analytics.report', 'analytics.export', 'fields.catalog', 'fields.values', 'analytics.freshness', 'sites.get', 'sites.list'] as const satisfies readonly (typeof keyGrantableQueries[number])[]
