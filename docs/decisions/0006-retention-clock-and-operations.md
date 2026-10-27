@@ -106,6 +106,10 @@ Not decided here. The chunk format and playback isolation belong to milestone 09
 - Automatic migration on `serve`: an upgrade then runs without its backup, at an unplanned moment.
 - One combined schema number: the engines migrate separately, and a half-finished upgrade must be detectable.
 
+## Amendment (2026-10-27)
+
+Mike decided to allow the rejected "Automatic migration on `serve`" as an opt-in, because the two reasons against it no longer hold when the backup is kept and the moment is the deliberate image update. `HOLOCRON_UPGRADE_ON_START=1` (or `serve --upgrade-on-start`) makes `serve` run the `holocron upgrade` path when it finds `upgrade_required` or `upgrade_interrupted`: a verified pre-upgrade backup into `HOLOCRON_BACKUP_DIR` (none for an interrupted upgrade, which resumes), then it starts. Without the flag nothing changes. It refuses with the existing exit codes, before it touches data, when the backup directory is not writable, when its volume cannot hold the backup (plus the disk reserve if it is the data volume), or when the data is newer than the binary. The backup stays after the upgrade.
+
 ## Consequences
 
 - Milestone 02 implements the cutoff predicate and the `Clock`; the workload's `retention_advance.cutoff` moves from "proposed oracle rule" to this record.

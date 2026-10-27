@@ -101,7 +101,7 @@ Never copy single engine files into a data directory. `serve` refuses a mixed di
 2. `holocron upgrade --data-dir /var/lib/holocron --backup-to /mnt/backups/holocron`
 3. Start the server.
 
-`serve` never migrates. On data from an older release it exits 3 `upgrade_required`. The upgrade takes and verifies a backup first, then migrates the SQLite files, then DuckDB.
+By default `serve` never migrates. On data from an older release it exits 3 `upgrade_required`. The upgrade takes and verifies a backup first, then migrates the SQLite files, then DuckDB.
 
 If a step fails, the command exits 1 `upgrade_failed` and prints both ways out:
 
@@ -109,6 +109,14 @@ If a step fails, the command exits 1 `upgrade_failed` and prints both ways out:
 - Or restore the pre-upgrade backup into a new directory with the printed `holocron restore` command and run the old release on it.
 
 Until one of them succeeds, `serve` exits 3 `upgrade_interrupted`.
+
+### Upgrade on start
+
+With `HOLOCRON_UPGRADE_ON_START=1` (set in both compose files) steps 2 and 3 happen inside `serve`: backup into `HOLOCRON_BACKUP_DIR` (`/backups`), migration, start. It resumes an interrupted upgrade without a second backup. The info log has each step and the backup path (`pre-upgrade backup verified`, `upgrade finished`).
+
+- Exit 3 `upgrade_backup_unavailable`: the backup directory is missing, not writable (uid 10001 in the image) or too small. Nothing was changed. Fix the mount or free space and restart.
+- Exit 3 `data_newer_than_binary`: the image is older than the data. Run the matching or a newer image. There is no automatic downgrade.
+- Exit 1 `upgrade_failed`: the restart loop retries and resumes. Fix the cause, or roll back: `holocron restore --from /backups/holocron-backup-<stamp> --data-dir <new directory>` with the old image, then point the container at the new directory.
 
 ## Retention and erasure
 

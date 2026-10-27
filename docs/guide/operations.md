@@ -104,7 +104,7 @@ It runs the same code as `holocron restore` and `holocron upgrade`, so the check
 
 ## Upgrade
 
-`serve` never migrates. On data from an older release it exits 3 with `upgrade_required`.
+By default `serve` never migrates. On data from an older release it exits 3 with `upgrade_required`. Set `HOLOCRON_UPGRADE_ON_START=1` to let it upgrade on start instead, see [Upgrade on start](#upgrade-on-start).
 
 1. Pull the new image or install the new release. Stop the server.
 2. Back up and migrate:
@@ -128,6 +128,19 @@ It runs the same code as `holocron restore` and `holocron upgrade`, so the check
 `upgrade` takes and checks a backup first, then migrates the SQLite files, then DuckDB. On current data it changes nothing.
 
 If a step fails, the command exits 1 with `upgrade_failed` and prints both ways out: fix the cause and run the same command again, which resumes with the backup it already took, or restore that backup into a new directory and run the old release on it. Until one of them succeeds, `serve` exits 3 with `upgrade_interrupted`.
+
+### Upgrade on start
+
+The compose files set `HOLOCRON_UPGRADE_ON_START=1`, so pulling a new image and restarting is the whole upgrade. When `serve` finds data from an older release, it takes a verified backup into `HOLOCRON_BACKUP_DIR` (`/backups` in the compose files), migrates, and starts. The log names each step and the backup path. The backup stays; delete old ones yourself.
+
+It refuses with exit 3 and changes nothing when:
+
+- the backup directory is not writable (`upgrade_backup_unavailable`), or its volume cannot hold the data files plus, on the data volume, the disk reserve. Mount writable backup storage and restart;
+- the data comes from a newer release (`data_newer_than_binary`). It never downgrades.
+
+A failed step exits 1 with `upgrade_failed`. A container restart loop is safe: the next start finds the interrupted upgrade and resumes it with the backup already taken. To go back, restore that backup into a new directory with the old image, as the error message prints (`holocron restore --from <backup> --data-dir <new directory>`).
+
+Without the variable `serve` behaves as before and you run `holocron upgrade` yourself.
 
 ## Retention
 

@@ -54,6 +54,8 @@ docker compose up -d
 docker compose logs holocron | grep 'setup token'
 ```
 
+The compose file mounts `HOLOCRON_BACKUP_DIR` (default `/srv/holocron-backups` on the host) at `/backups` and sets `HOLOCRON_UPGRADE_ON_START=1`: a new image takes a verified backup there and upgrades older data when it starts. Let the container's user write to the directory: `sudo install -d -o 10001 -m 0700 /srv/holocron-backups`. See [Upgrade on start](operations.md#upgrade-on-start).
+
 The compose file publishes port 8080 on `127.0.0.1` only, for a reverse proxy on the same host. Set `HOLOCRON_IMAGE` to pin a release tag, for example `ghcr.io/coderscantina/holocron:26.10.19`, and `HOLOCRON_INSTANCE_NAME` to name the instance.
 
 It trusts `172.16.0.0/12` as a proxy, because a proxy on the host reaches the container through Docker's bridge network. See [Proxies and visitor addresses](configuration.md#proxies-and-visitor-addresses) before you change that.
@@ -72,7 +74,7 @@ Without CloudFront, remove `HOLOCRON_COLLECT_CLIENT_IP_HEADER` so the default `x
 
 ### Back up on Coolify
 
-The compose file mounts `HOLOCRON_BACKUP_DIR` (default `/srv/holocron-backups` on the host) at `/backups`. Put it on other storage than Docker's volumes if the host has any, and let the container's user write to it: `sudo install -d -o 10001 -m 0700 /srv/holocron-backups`.
+The compose file mounts `HOLOCRON_BACKUP_DIR` (default `/srv/holocron-backups` on the host) at `/backups`. Put it on other storage than Docker's volumes if the host has any, and let the container's user write to it: `sudo install -d -o 10001 -m 0700 /srv/holocron-backups`. A new image uses it for the pre-upgrade backup too (`HOLOCRON_UPGRADE_ON_START=1`, see [Upgrade on start](operations.md#upgrade-on-start)).
 
 Add a scheduled task to the `holocron` service, for example daily at `0 3 * * *`, that takes a backup and keeps the newest 7:
 
