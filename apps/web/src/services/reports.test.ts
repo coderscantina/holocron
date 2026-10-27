@@ -12,8 +12,10 @@ import {
   goalsOf,
   goalsState,
   moveStep,
+  pickGroup,
   replaceGoal,
   sessionsFor,
+  setSplit,
   upgradeFor,
 } from './reports'
 
@@ -91,5 +93,39 @@ describe('report states', () => {
     expect(sessions.report?.kind).toBe('session_list')
     expect(sessions.range).toEqual(state.range)
     expect(conditions(sessions.filter).map((c) => c.field)).toEqual(['device', 'event_name'])
+  })
+})
+
+describe('funnel split', () => {
+  const plain = funnelState(site, 'Europe/Vienna')
+
+  it('stays version 1 without a split and becomes version 2 with one', () => {
+    expect(funnelOf(plain)?.v).toBe(1)
+    expect(JSON.stringify(plain.report)).not.toContain('group_by')
+    const split = setSplit(plain, 'country')
+    expect(funnelOf(split)).toMatchObject({ v: 2, group_by: 'country' })
+    expect(encodeState(setSplit(split, null))).toBe(encodeState(plain))
+  })
+
+  it('keeps the split through a URL round trip', () => {
+    const split = setSplit(plain, { scope: 'event', key: 'plan' })
+    const decoded = decodeState(encodeState(split))
+    expect(decoded.ok && funnelOf(decoded.state)).toMatchObject({ v: 2, group_by: { scope: 'event', key: 'plan' } })
+  })
+
+  it('reads a picked group without the split, filtered to its value with a fresh ID', () => {
+    const split = setSplit(plain, 'country')
+    const picked = pickGroup(split, { t: 'string', v: 'AT' })
+    expect(funnelOf(picked)).toMatchObject({ v: 1 })
+    expect(funnelOf(picked)?.group_by).toBeUndefined()
+    const added = conditions(picked.filter)
+    expect(added).toMatchObject([{ field: 'country', cmp: 'eq', value: { t: 'string', v: 'AT' } }])
+    expect(ids(picked)).toHaveLength(new Set(ids(picked)).size)
+    expect(ids(split)).not.toContain(added[0]?.id)
+  })
+
+  it('filters the not-set group with is_not_set', () => {
+    const picked = pickGroup(setSplit(plain, 'country'), { t: 'not_set' })
+    expect(conditions(picked.filter)).toMatchObject([{ field: 'country', cmp: 'is_not_set' }])
   })
 })

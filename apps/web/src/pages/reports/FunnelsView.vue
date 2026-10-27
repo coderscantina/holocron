@@ -11,11 +11,16 @@ import { Panel } from '~/components/ui/panel'
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
 import { useExplorationScreen } from '~/composables/useExplorationScreen'
 import { useFilterFields } from '~/composables/useFilterFields'
+import { useExplore } from '~/composables/useExplore'
 import { useViewMode } from '~/composables/useViewMode'
-import type { ExplorationState, IdentityScope, ReportResult, Site } from '~/generated'
+import type { Cell, ExplorationState, Field, IdentityScope, ReportResult, Site } from '~/generated'
 import { useI18n } from '~/plugins/i18n'
-import { complete, eventsFor, funnelOf, funnelState, sessionsFor, setFunnel } from '~/services/reports'
+import { canonical } from '~/services/exploration'
+import { complete, eventsFor, funnelOf, funnelState, pickGroup, sessionsFor, setFunnel, setSplit } from '~/services/reports'
 
+import FunnelSplit from './FunnelSplit.vue'
+import FunnelSplitChip from './FunnelSplitChip.vue'
+import FunnelSplitDetails from './FunnelSplitDetails.vue'
 import FunnelStage from './FunnelStage.vue'
 
 /**
@@ -60,6 +65,29 @@ const commit = (patch: Parameters<typeof setFunnel>[1]) => {
   if (screen.state.value) void screen.commit(setFunnel(screen.state.value, patch))
 }
 
+/**
+ * The group picked in the split table. View state only: the URL keeps the split, and this
+ * reads the funnel again without it, filtered to the group. It ends with any change of state.
+ */
+const picked = ref<Cell | null>(null)
+watch(
+  () => (screen.state.value ? canonical(screen.state.value) : null),
+  () => {
+    picked.value = null
+  }
+)
+const pickedState = computed(() => (screen.state.value && picked.value ? pickGroup(screen.state.value, picked.value) : null))
+const pickedRead = useExplore(pickedState)
+const pickedReport = computed(() => {
+  const report = pickedRead.query.data.value?.report
+  return report?.kind === 'funnel' ? report : null
+})
+/** What is on screen, which is what Pin to board stores. */
+const onScreen = computed(() => pickedState.value ?? screen.state.value)
+const split = (field: Field | null) => {
+  if (screen.state.value) void screen.commit(setSplit(screen.state.value, field))
+}
+
 const rows = (state: ExplorationState, report: ReportResult) => {
   if (report.kind !== 'funnel') return []
   const first = report.steps[0]?.reached ?? 0
@@ -82,6 +110,7 @@ const rows = (state: ExplorationState, report: ReportResult) => {
     :site="site"
     :screen="screen"
     :title="t('reports.funnel.title')"
+    :pinned="onScreen"
   >
     <template #context>
       <ChoiceGroup
@@ -104,6 +133,11 @@ const rows = (state: ExplorationState, report: ReportResult) => {
             })
           }}
         </p>
+        <FunnelSplitChip
+          :field="funnel.group_by"
+          :fields="fields"
+          @pick="split"
+        />
         <Button
           variant="outline"
           size="sm"
@@ -139,6 +173,11 @@ const rows = (state: ExplorationState, report: ReportResult) => {
               @update:model-value="(value) => commit({ window_seconds: value })"
             />
           </div>
+          <FunnelSplitChip
+            :field="funnel.group_by"
+            :fields="fields"
+            @pick="split"
+          />
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-sm text-muted">{{ t('reports.scope.label') }}</span>
             <ChoiceGroup
@@ -154,10 +193,25 @@ const rows = (state: ExplorationState, report: ReportResult) => {
     <template #result="{ state, result, report }">
       <FunnelStage
         v-if="report.kind === 'funnel' && view === 'ribbon'"
-        :state="state"
-        :report="report"
+        :state="pickedState && pickedReport ? pickedState : state"
+        :report="pickedReport ?? report"
         :resolved="result.resolved"
-      />
+        :group="funnel?.group_by && picked && pickedReport ? { field: funnel.group_by, cell: picked, overall: report.conversion } : undefined"
+        :class="pickedRead.previous.value ? 'opacity-60' : ''"
+        @clear="picked = null"
+      >
+        <template
+          v-if="funnel?.group_by"
+          #below
+        >
+          <FunnelSplit
+            :result="report"
+            :field="funnel.group_by"
+            :picked="picked"
+            @pick="(cell) => (picked = cell)"
+          />
+        </template>
+      </FunnelStage>
       <template v-else-if="report.kind === 'funnel'">
         <Panel
           :title="t('reports.funnel.conversion')"
@@ -177,7 +231,14 @@ const rows = (state: ExplorationState, report: ReportResult) => {
               }}
             </p>
           </div>
+          <FunnelSplitDetails
+            v-if="funnel?.group_by"
+            :state="state"
+            :result="report"
+            :field="funnel.group_by"
+          />
           <ReportBars
+            v-else
             :caption="t('reports.funnel.table')"
             :columns="[t('reports.funnel.step'), t('reports.funnel.reached'), t('reports.funnel.fromFirst'), t('reports.funnel.drop')]"
             :rows="rows(state, report)"

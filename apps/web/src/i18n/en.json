@@ -1498,6 +1498,49 @@
         "flowLabel": "{count} stopped after step {step}: {where}. Show this step's leak",
         "summary": "{steps} steps · {window} window · {scope}",
         "edit": "Edit steps"
+      },
+      "duration": {
+        "under": "under 1 s",
+        "d": "{value} d",
+        "h": "{value} h",
+        "min": "{value} min",
+        "s": "{value} s",
+        "median": "median {time}",
+        "after": "{time} after step {step}",
+        "gap": "Median {time} from step {from} to step {to}. Show the spread",
+        "popTitle": "Step {from} to {to} · {count} visitors",
+        "p25": "A quarter by",
+        "p50": "Median",
+        "p75": "Three quarters by",
+        "buckets": {
+          "under1h": "Under 1 h",
+          "h1to24": "1 to 24 h",
+          "d1to7": "1 to 7 d",
+          "d7to30": "7 to 30 d",
+          "d30": "30 d or more"
+        },
+        "toConvert": "Time to convert {median}, half within {from} to {to}"
+      },
+      "split": {
+        "label": "Split by",
+        "remove": "Remove the split by {field}",
+        "title": "By {field}",
+        "count": "{count} group | {count} groups",
+        "truncated": "More groups entered; the table lists the top {count}.",
+        "all": "All traffic",
+        "entered": "Entered",
+        "reach": "Reach by step",
+        "conversion": "Conversion",
+        "toConvert": "Time to convert",
+        "showAll": "Show all {count} groups",
+        "showTop": "Show the top {count}",
+        "pick": "Show the funnel for {group}",
+        "reachStep": "Step {step}: {share}, all traffic {overall}",
+        "above": "{points} points above all traffic, {overall}",
+        "below": "{points} points below all traffic, {overall}",
+        "same": "Same as all traffic, {overall}",
+        "detailsCaption": "Funnel by {field}: visitors per step, conversion and time to convert",
+        "splitBy": "split by {field}"
       }
     },
     "journey": {

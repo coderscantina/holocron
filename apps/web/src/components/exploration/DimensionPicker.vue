@@ -2,18 +2,13 @@
 import Icon from '~/components/Icon.vue'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
 import type { FilterField } from '~/composables/useFilterFields'
 import type { ExplorationState, Field } from '~/generated'
 import { useI18n } from '~/plugins/i18n'
 import { canSplit, canonical, removeDimension, splitBy } from '~/services/exploration'
+
+import DimensionMenu from './DimensionMenu.vue'
 
 /** The state's dimensions as removable badges, and a menu to add one (three at most). */
 const props = defineProps<{
@@ -67,32 +62,20 @@ const remove = (field: Field) => emit('commit', removeDimension(props.state, fie
     >
       {{ t('explore.noDimensions') }}
     </span>
-    <DropdownMenu v-if="choices.length > 0">
-      <DropdownMenuTrigger as-child>
-        <Button
-          variant="ghost"
-          size="xs"
-        >
-          <Icon
-            name="lucide:plus"
-            aria-hidden="true"
-          />
-          {{ t('explore.addDimension') }}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        class="max-h-80 w-60 overflow-y-auto"
+    <DimensionMenu
+      :fields="choices"
+      @pick="(field) => emit('commit', splitBy(state, field))"
+    >
+      <Button
+        variant="ghost"
+        size="xs"
       >
-        <DropdownMenuLabel>{{ t('explore.dimensionsPicker') }}</DropdownMenuLabel>
-        <DropdownMenuItem
-          v-for="field in choices"
-          :key="canonical(field)"
-          @select="emit('commit', splitBy(state, field))"
-        >
-          {{ format.fieldLabel(field) }}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <Icon
+          name="lucide:plus"
+          aria-hidden="true"
+        />
+        {{ t('explore.addDimension') }}
+      </Button>
+    </DimensionMenu>
   </div>
 </template>

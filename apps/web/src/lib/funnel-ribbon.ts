@@ -25,7 +25,8 @@ export type RibbonLeak = {
 
 export type Ribbon = { width: number; height: number; steps: RibbonStep[]; bands: string[]; leaks: RibbonLeak[] }
 
-export type RibbonOptions = { width: number; height: number; column?: number; gap?: number; minFlow?: number }
+/** `top` is the room above the columns for their labels. */
+export type RibbonOptions = { width: number; height: number; column?: number; gap?: number; minFlow?: number; top?: number }
 
 const TOP = 52
 /** Room under the ribbon before the leak flows start. */
@@ -49,7 +50,7 @@ function band(x0: number, top0: number, bottom0: number, x1: number, top1: numbe
 }
 
 export function ribbon(reached: readonly number[], leaks: readonly FunnelLeak[], options: RibbonOptions): Ribbon {
-  const { width, height, column = 10, gap = 22, minFlow = 2 } = options
+  const { width, height, column = 10, gap = 22, minFlow = 2, top: headroom = TOP } = options
   const first = reached[0] ?? 0
   const count = reached.length
   const pitch = count > 1 ? (width - column) / (count - 1) : 0
@@ -57,12 +58,12 @@ export function ribbon(reached: readonly number[], leaks: readonly FunnelLeak[],
   // The ribbon and the tallest stack of leak flows share the height below the step labels.
   const deepest = Math.max(0, ...reached.slice(0, -1).map((n, i) => (first > 0 ? (n - reached[i + 1]!) / first : 0)))
   const spacing = Math.max(0, ...flowsPerStep.map((flows) => flows.length - 1)) * gap
-  const scale = Math.max(0, (height - TOP - LEAK_MARGIN - spacing - minFlow) / (1 + deepest))
+  const scale = Math.max(0, (height - headroom - LEAK_MARGIN - spacing - minFlow) / (1 + deepest))
   const tall = (n: number) => (first > 0 ? (n / first) * scale : 0)
 
   const steps: RibbonStep[] = reached.map((n, i) => ({
     x: i * pitch,
-    y: TOP,
+    y: headroom,
     width: column,
     height: Math.max(n > 0 ? minFlow : 0, tall(n)),
     reached: n,
@@ -70,14 +71,14 @@ export function ribbon(reached: readonly number[], leaks: readonly FunnelLeak[],
   }))
   const bands = steps.slice(1).map((next, i) => {
     const from = steps[i]!
-    return band(from.x + column, TOP, TOP + next.height, next.x, TOP, TOP + next.height)
+    return band(from.x + column, headroom, headroom + next.height, next.x, headroom, headroom + next.height)
   })
   const peeled = flowsPerStep.map((flows, i): RibbonLeak => {
     const from = steps[i]!
     const kept = steps[i + 1]!.height
     const dropped = from.reached - steps[i + 1]!.reached
-    let source = TOP + kept
-    let target = TOP + scale + LEAK_MARGIN
+    let source = headroom + kept
+    let target = headroom + scale + LEAK_MARGIN
     const x0 = from.x + column
     const x1 = from.x + column + Math.min(pitch * 0.45, 160)
     return {

@@ -1,14 +1,29 @@
 <script setup lang="ts">
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
-import type { ReportResult } from '~/generated'
+import type { Field, ReportResult } from '~/generated'
 import { useI18n } from '~/plugins/i18n'
 
-/** A report result in one line and its headline number, for board cards. */
-const props = defineProps<{ report: ReportResult }>()
+/**
+ * A report result in one line and its headline number, for board cards. A split funnel adds
+ * "split by {field}" and its top three groups by visitors entered.
+ */
+const props = defineProps<{ report: ReportResult; splitBy?: Field }>()
 
 const { t } = useI18n()
 const format = useExplorationFormat()
 const count = (v: number) => format.metric({ t: 'count', v }, true)
+
+const GROUPS_ON_CARD = 3
+const groups = computed(() => {
+  const report = props.report
+  if (report.kind !== 'funnel' || !props.splitBy) return []
+  const field = props.splitBy
+  return report.groups.slice(0, GROUPS_ON_CARD).map((group) => ({
+    label: format.cellLabel(field, group.value),
+    entered: count(group.steps[0]?.reached ?? 0),
+    conversion: format.metric(group.conversion),
+  }))
+})
 
 const summary = computed<{ headline: string; text: string } | null>(() => {
   const report = props.report
@@ -54,5 +69,19 @@ const summary = computed<{ headline: string; text: string } | null>(() => {
   >
     <p class="text-lg font-semibold text-primary tabular-nums">{{ summary.headline }}</p>
     <p class="text-xs text-muted">{{ summary.text }}</p>
+    <template v-if="splitBy && report.kind === 'funnel'">
+      <p class="mt-1 text-xs text-muted">{{ t('reports.funnel.split.splitBy', { field: format.fieldLabel(splitBy) }) }}</p>
+      <ul class="text-xs">
+        <li
+          v-for="group in groups"
+          :key="group.label"
+          class="flex items-baseline gap-2 border-t border-divider py-1"
+        >
+          <span class="min-w-0 flex-1 truncate text-foreground">{{ group.label }}</span>
+          <span class="text-muted tabular-nums">{{ group.entered }}</span>
+          <span class="w-12 text-right font-medium text-primary tabular-nums">{{ group.conversion }}</span>
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
