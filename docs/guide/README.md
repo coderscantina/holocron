@@ -10,10 +10,10 @@ This guide is for the people who install and run an instance, and for the admins
 | --- | --- |
 | [Install](install.md) | Docker, docker compose, Coolify, a reverse proxy with Caddy, `holocron init` and the first sign-in |
 | [Configuration](configuration.md) | Every command, flag and `HOLOCRON_*` environment variable, proxies and location, the secrets key |
-| [Migrate from Umami](umami-migration.md) | `holocron import inspect` and `run`, the tracker cutover, what comes over and what doesn't, rollback |
+| [Migrate from Umami](umami-migration.md) | `holocron import inspect` and `run`, the tracker cutover, a shadow run with its comparison, what comes over and what doesn't, rollback |
 | [Tracking](tracking.md) | The tracker script, data attributes, custom events, identify, revenue, consented profiles, replays and heatmaps |
-| [Teams and access](teams-and-access.md) | Workspaces, roles, install admins, two-factor sign-in, API keys, collection keys and share links |
-| [Operations](operations.md) | Backup, restore, upgrade, retention, profile erasure, diagnostics, health, logs, the data directory and disk |
+| [Teams and access](teams-and-access.md) | Workspaces, roles, install admins, two-factor sign-in, API keys, collection keys, share links and AI agents over MCP |
+| [Operations](operations.md) | Backup, restore (also in the setup wizard), upgrade and upgrade on start, retention, profile erasure, diagnostics, report queries from a shell, health, logs, the data directory and disk |
 
 The development docs go deeper. The [operator runbook](../operations/runbook.md) and the [import and cutover runbook](../operations/import-and-cutover.md) are the reference for commands and refusal codes. The [decision records](../decisions/) explain why things work the way they do.
 

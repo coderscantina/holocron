@@ -30,13 +30,14 @@ Keep your Umami tracker and your history, and get the analysis Umami doesn't hav
 
 - **Overview.** Today's pace against a typical weekday, a labelled projection for the rest of the day, and findings computed in the background.
 - **Realtime.** Active visitors on a globe and a live event list.
-- **Explore.** Measures, fields, grouped AND/OR filters, property filters, splits, period comparison, saved views, boards and annotations. Export as CSV or JSON.
-- **Reports.** Events and typed properties, sessions with a timeline, funnels, journeys, goals, campaigns, attribution, retention cohorts, revenue per currency and Core Web Vitals.
+- **Explore.** Measures, fields, grouped AND/OR filters, property filters, path patterns like `/*/events/**`, splits by any field including the entry page, period comparison, saved views, boards and annotations. Export as CSV or JSON.
+- **Reports.** A board of the busiest events, typed properties, sessions with a timeline, funnels split by any field with the time between steps, journeys, goals, campaigns, attribution, retention cohorts, revenue per currency with its pace and the traffic that pays, and Core Web Vitals.
 - **Replays and heatmaps.** Off until a site turns them on. Strict masking, sampling, element and page exclusions, a storage cap, and playback in a frame that can't load anything.
 - **Privacy.** No cookies. Anonymous visitors get a pseudonym from a key that changes daily per site and is deleted a day later. IP addresses are never stored. Persistent profiles only for visitors who consented.
 - **Teams and access.** Workspaces with owner, admin, member and viewer roles. TOTP two-factor sign-in with recovery codes, scoped API keys, and share links with limits and an expiry. Install admins read a site's analytics only as members of its workspace.
+- **AI agents.** An MCP endpoint at `/mcp` and report queries of up to 16 named blocks, so an agent with a read-only API key can write a report from your data. `holocron query` sends the same queries from a shell.
 - **Umami import.** Accounts, teams, sites, events, replays, heatmaps, segments, reports and share links, with a dry run, resume after interruption and a manifest.
-- **Operations.** `backup`, `restore`, `upgrade`, `retention`, `erase-profile` and `diagnostics` commands, `/health` and `/health/ready` endpoints, and a Docker image for amd64 and arm64.
+- **Operations.** `backup`, `restore`, `upgrade`, `retention`, `erase-profile` and `diagnostics` commands, restore of a backup in the setup wizard, an opt-in upgrade on start that backs up first, `/health` and `/health/ready` endpoints, and a Docker image for amd64 and arm64.
 - **Languages.** The dashboard ships in English and German.
 
 <table>
