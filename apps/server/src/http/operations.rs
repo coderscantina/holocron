@@ -203,7 +203,7 @@ async fn run_query_with_body(
 }
 
 /// Runs an admitted query in one read transaction within the request budget.
-async fn read(
+pub(crate) async fn read(
     state: &AppState,
     op: &'static OperationInfo,
     caller: Caller,
@@ -241,23 +241,30 @@ pub(crate) fn check_origin(config: &Config, headers: &HeaderMap) -> Result<(), A
     let origin = headers
         .get(header::ORIGIN)
         .and_then(|v| v.to_str().ok())
-        .map(str::to_lowercase)
         .ok_or_else(rejected)?;
-    let allowed = match &config.public_origin {
-        Some(public) => origin == *public,
-        None => {
-            let host = headers
-                .get(header::HOST)
-                .and_then(|v| v.to_str().ok())
-                .ok_or_else(rejected)?;
-            let host = host.to_lowercase();
-            origin == format!("http://{host}") || origin == format!("https://{host}")
-        }
-    };
-    if allowed { Ok(()) } else { Err(rejected()) }
+    if is_own_origin(config, headers, origin) {
+        Ok(())
+    } else {
+        Err(rejected())
+    }
 }
 
-async fn caller(state: &AppState, parts: &Parts) -> Result<Caller, ApiError> {
+/// Whether `origin` names this server: the configured public origin, else the request's Host.
+pub(crate) fn is_own_origin(config: &Config, headers: &HeaderMap, origin: &str) -> bool {
+    let origin = origin.to_lowercase();
+    match &config.public_origin {
+        Some(public) => origin == *public,
+        None => headers
+            .get(header::HOST)
+            .and_then(|v| v.to_str().ok())
+            .map(str::to_lowercase)
+            .is_some_and(|host| {
+                origin == format!("http://{host}") || origin == format!("https://{host}")
+            }),
+    }
+}
+
+pub(crate) async fn caller(state: &AppState, parts: &Parts) -> Result<Caller, ApiError> {
     let address = parts
         .extensions
         .get::<ConnectInfo<SocketAddr>>()

@@ -44,6 +44,8 @@ isbot = "0.1"
 libc = "0.2"
 # `mmap` maps the downloaded GeoIP file instead of copying it to the heap (decision 0018).
 maxminddb = { version = "0.32", features = ["mmap"] }
+# Input schemas of the MCP tools, from the protocol types.
+schemars.workspace = true
 serde.workspace = true
 serde_html_form = "0.4"
 serde_json = { workspace = true, features = ["raw_value", "unbounded_depth"] }

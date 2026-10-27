@@ -18,6 +18,7 @@ pub mod imports;
 pub mod init;
 pub mod links;
 pub mod maintenance;
+pub mod mcp;
 pub mod pseudonyms;
 pub mod query_cli;
 pub mod recordings;

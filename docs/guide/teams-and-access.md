@@ -81,6 +81,25 @@ The sensitive actions listed under [Sign-in and sessions](#sign-in-and-sessions)
 
 The API is the one the dashboard uses: named queries at `GET /api/queries/<name>` and named commands at `POST /api/commands/<name>`. [`crates/protocol/openapi.json`](../../crates/protocol/openapi.json) describes every operation, its arguments and its result.
 
+### Connect an AI agent over MCP
+
+Holocron serves the [Model Context Protocol](https://modelcontextprotocol.io) at `/mcp`, so an agent such as Claude Code can write reports from your analytics. Create a key with the "Read analytics" preset, limited to the sites the agent should see, then add the server to the client. For Claude Code:
+
+```sh
+claude mcp add --transport http holocron https://stats.example.com/mcp \
+  --header "Authorization: Bearer $HOLOCRON_API_KEY"
+```
+
+Every request needs the key. The agent can do what the key can, nothing more: each tool runs one of the key's operations with your current role, and the same 30 second limit applies as in the dashboard. Exports also need export permission on the site.
+
+The agent gets:
+
+- tools: `list_sites`, `catalog` (custom property keys), `field_values`, `query` (a report query of up to 16 tables) and `export` (up to 10,000 rows)
+- resources: the report query schema and [the report query guide](../../apps/server/src/mcp/guide.md), with worked examples
+- prompts for an event or product sales report, a campaign report, a monthly site report and content performance
+
+Holocron answers aggregates only. The agent joins external data, such as ticket sales, itself, and writes the report in your language. Revoke the key to cut the agent off at its next request.
+
 ## Collection keys
 
 Collection keys are for your own servers sending events. They are per site, up to 20 active at once, and created by anyone who can change the site's settings. See [Server-side events](tracking.md#server-side-events).

@@ -123,6 +123,7 @@ These change the shared planner, so the dashboard gets them too.
   - Tools: `list_sites`, `catalog`, `field_values`, `query` (a report query), `export` (`analytics.export`, up to 10,000 rows).
   - Resources: the report query JSON schema, generated from the protocol types, and a guide with worked examples.
   - Prompts, one per recipe: event or product sales, campaign, monthly site report, content performance. They are written in English; the agent writes the report in its reader's language.
+  - As built: revision 2026-07-28, stateless, with `_meta` and its mirrored headers checked on every request. Clients of 2025-03-26 to 2025-11-25 open with `initialize` and are served by their revision without a session ID. No OAuth and no protected resource metadata: the spec makes authorization optional, keys are pre-shared, and a 401 carries `WWW-Authenticate: Bearer realm="holocron"`. A present `Origin` other than this server gets 403. `field_values` and `export` take the field and the exploration state as JSON objects, which the server turns into the operations' JSON text arguments. Refusals are tool results with `isError: true` and the error code, message and field paths as text. The guide is `apps/server/src/mcp/guide.md`.
 - **CLI.** `holocron query --url <origin> <file|->` posts a report query to a running server with the key from `HOLOCRON_API_KEY` and prints the result. It does not open the data directory.
 
 ## Rejected alternatives

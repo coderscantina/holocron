@@ -1,5 +1,5 @@
-//! The router: collection routes, dashboard API under `/api`, health, runtime config and the
-//! web app.
+//! The router: collection routes, dashboard API under `/api`, MCP at `/mcp`, health, runtime
+//! config and the web app.
 
 pub(crate) mod operations;
 pub(crate) mod web;
@@ -43,6 +43,7 @@ pub fn router(state: AppState) -> Router {
         .route("/health", get(health))
         .merge(crate::maintenance::health::router(state.clone()))
         .merge(crate::collect::router(state.clone()))
+        .merge(crate::mcp::router(state.clone()))
         .merge(crate::recordings::frame::router(web_dir.as_deref()))
         .nest("/api", api)
         .merge(web::router(state, web_dir.as_deref()))
