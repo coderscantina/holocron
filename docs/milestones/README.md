@@ -32,7 +32,7 @@ Importer inspection and fixture preparation may begin after 01. Final mapping an
 
 Decisions waiting for Mike. Remove a line once its record says Adopted.
 
-- [0022](../decisions/0022-agent-report-queries.md) report queries for agents: settled question by question on 2026-10-27, waiting to be marked Adopted.
+None.
 
 ## Assigning tasks
 

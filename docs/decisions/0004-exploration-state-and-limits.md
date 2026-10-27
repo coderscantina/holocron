@@ -192,7 +192,7 @@ Limits live in the generated protocol as constants so the Vue client can validat
 
 ### Amendment: glob matching and funnel v2
 
-Proposed in [0022](0022-agent-report-queries.md), which holds the full rules.
+Adopted in [0022](0022-agent-report-queries.md) on 2026-10-27, which holds the full rules.
 
 - String operators gain `matches` and `not_matches` with a glob value: `*` any run without `/`, `**` any run, `\` escapes. Whole value, case-sensitive, 1 to 500 bytes, at most 8 wildcards. `not_matches` is the exact complement of `matches`, like the other negative operators.
 - `Funnel` v2 adds `group_by?: Field`: an identity's group is the value of its entering step-1 event, at most 50 groups by step 1 reached, `groups_truncated` beyond that. v1 funnels stay valid.

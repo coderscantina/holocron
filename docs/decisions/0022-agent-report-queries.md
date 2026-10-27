@@ -1,6 +1,6 @@
 # 0022: Report queries for agents
 
-Status: Proposed. Settled with Mike question by question on 2026-10-27; it becomes Adopted when he marks it. It amends [0004](0004-exploration-state-and-limits.md) (glob operator, funnel v2), [0009](0009-protocol-envelope.md) (POST queries) and [0012](0012-access-implementation.md) (read preset), and moves the MCP endpoint in the [capability matrix](../contracts/capability-matrix.md) from deferred to milestone 15.
+Status: Adopted by Mike on 2026-10-27, settled question by question the same day. It amends [0004](0004-exploration-state-and-limits.md) (glob operator, funnel v2), [0009](0009-protocol-envelope.md) (POST queries) and [0012](0012-access-implementation.md) (read preset), and moves the MCP endpoint in the [capability matrix](../contracts/capability-matrix.md) from deferred to milestone 15.
 
 ## Problem
 

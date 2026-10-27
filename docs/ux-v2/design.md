@@ -302,6 +302,20 @@ In Flow, the step editor folds into one line ("2 steps · 1 hour window · Daily
 - Under it the focused leak: its destinations with counts, the 20 latest sessions that stopped there, each opening the session page, and a link to all sessions that reached the step.
 - Destinations come from `leaks` on the funnel result: per step, the next page view in the same session as the step event, within the funnel's read span.
 
+### Split and step durations
+
+Settled by Mike on 2026-10-27 ([0022](../decisions/0022-agent-report-queries.md) funnel v2).
+
+- A "Split by" chip sits in the folded step-editor line. It opens Explore's dimension picker, limited to the fields `group_by` accepts, event and session properties included. Removing the chip removes the split.
+- With a split, the overall ribbon stays the hero. Under it a panel, "By {field}", lists "All traffic" first, then the top 10 groups by visitors entered, with "Show all" expanding in place to every returned group (up to 50). The panel meta says when the server left groups out. Columns: the group, entered, reach per step as a bar with a marker, conversion, and median time to convert. The not-set group is labelled "(none)", as in Explore.
+- Picking a row reads the funnel again without the split, filtered to that value (`is_not_set` for "(none)"), so ribbon, leaks, latest sessions and durations are exact for that group. The picked row has an accent edge; "All traffic" returns to the overall result.
+- Step durations are exact values. The median from the previous step sits in the gap between two ribbon columns ("median 2 min 39 s"). Hover or focus opens a popover above the ribbon, never over the leak flows, with p25, median, p75 and the five bucket counts (under 1 h, 1 to 24 h, 1 to 7 d, 7 to 30 d, 30 d or more). The rail adds one line under the conversion: time to convert, median and the middle half.
+- Below `md`, the median moves under each step label ("2 min 39 s after step 1") and opens the same popover on tap.
+- Durations read "under 1 s" below a second, otherwise in the two largest units ("2 min 39 s", "3 d 4 h"). A step nobody reached shows no duration.
+- Details shows a split funnel as one table: a row per group, "All traffic" first, per step reached and its share of step 1, then conversion and median time to convert, with the cell drill menus of the step table.
+- The split is part of the funnel state, so URLs, Back and saved explorations keep it. Pin to board pins what is on screen: with a picked row, that group's filtered funnel without the split; without one, the split funnel, whose card shows the overall ribbon, "split by {field}" and the top 3 groups.
+- Rejected on 2026-10-27: small multiples per group (with low conversion every mini ribbon looks the same, and 50 do not fit), the top groups as stacked bands in one ribbon (bands thinner than a pixel after step 1), and durations as a rail section (it pushes the focused leak below the fold).
+
 ## Revenue
 
 `/sites/:site/revenue` has two views of the same state, Summary and Details, picked in the title row beside the currency switch and remembered in the browser. Summary is the default. Details is the earlier page with the measure strip, chart and breakdown. Range, filter and currency apply to both. The globe was dropped on 2026-10-26: for most shops one or two countries hold the money, so it answered a question nobody asked.

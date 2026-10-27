@@ -49,7 +49,7 @@ A key acts as its owner with the owner's current role, limited to its operations
 
 Adopted (Mike, 2026-10-06): a key that reaches a site may follow its `analytics:<site>` watermark topic without an operation grant. The topic says only that newer data is visible. The fixture lists `realtime.site` as a grant; that topic does not exist yet and will need one.
 
-Proposed in [0022](0022-agent-report-queries.md): the protocol exports a "Read analytics" preset, the operations an agent key needs: `analytics.report`, `analytics.export`, `fields.catalog`, `fields.values`, `analytics.freshness`, `sites.get` and the workspace site list. The key dialog offers it as one choice. It is a list of grants, not a new kind of key, and it leaves out session timelines, realtime and recordings.
+Adopted (Mike, 2026-10-27) in [0022](0022-agent-report-queries.md): the protocol exports a "Read analytics" preset, the operations an agent key needs: `analytics.report`, `analytics.export`, `fields.catalog`, `fields.values`, `analytics.freshness`, `sites.get` and the workspace site list. The key dialog offers it as one choice. It is a list of grants, not a new kind of key, and it leaves out session timelines, realtime and recordings.
 
 ### Shares
 
