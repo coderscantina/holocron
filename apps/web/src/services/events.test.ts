@@ -4,6 +4,8 @@ import type { ExplorationState, Group } from '~/generated'
 
 import {
   analyse,
+  boardState,
+  eventSeriesState,
   eventsState,
   pivotOf,
   propertyOf,
@@ -14,6 +16,7 @@ import {
   showProperties,
   statsPanel,
   tabOf,
+  trafficState,
 } from './events'
 import { conditions, decodeState, encodeState } from './exploration'
 
@@ -70,5 +73,20 @@ describe('events states', () => {
     expect(pivotOf(pivoted)).toEqual(qty)
     expect(setPivot(pivoted, null).sort).toEqual([])
     expect(setPivot(pivoted, plan)).toBe(pivoted)
+  })
+})
+
+describe('event board states', () => {
+  const filtered = selectEvent(eventsState(site, 'UTC'), 'signup')
+
+  it('lists the top events without an event selection', () => {
+    const board = boardState(filtered)
+    expect(board).toMatchObject({ dimensions: ['event_name'], measures: ['events', 'visitor_days', 'revenue_net'], page: { size: 12 } })
+    expect(selectedEvent(board)).toBeNull()
+  })
+
+  it('reads all traffic for reach and one event for a row', () => {
+    expect(conditions(trafficState(eventsState(site, 'UTC')).filter)).toEqual([])
+    expect(selectedEvent(eventSeriesState(filtered, 'purchase'))).toBe('purchase')
   })
 })

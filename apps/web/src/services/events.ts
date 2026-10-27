@@ -147,3 +147,34 @@ export function statsPanel(state: ExplorationState, types: PropertyType[] | null
     },
   ]
 }
+
+/** Events the board shows, one series read each. */
+export const BOARD_ROWS = 12
+
+/** The board's list: the top events with counts, visitors and the revenue they carry. */
+export function boardState(state: ExplorationState): ExplorationState {
+  return { ...showEvents(state), measures: ['events', 'visitor_days', 'revenue_net'], page: { size: BOARD_ROWS, index: 0 } }
+}
+
+/** Every visitor of the range under the person's own filter, without the custom-events condition: reach's denominator. */
+export function trafficState(state: ExplorationState): ExplorationState {
+  const base = showEvents(state)
+  const items =
+    base.filter?.op === 'and'
+      ? base.filter.items.filter((item) => item.kind !== 'cond' || item.field !== 'event_name' || item.cmp !== 'is_set')
+      : (base.filter?.items ?? [])
+  return normalize({
+    ...base,
+    filter: base.filter ? { ...base.filter, items } : null,
+    measures: ['visitor_days'],
+    dimensions: [],
+    sort: [],
+    compare: 'none',
+    visualization: 'table',
+  })
+}
+
+/** One event's counts over the range, a row of the board. */
+export function eventSeriesState(state: ExplorationState, name: string): ExplorationState {
+  return { ...selectEvent(showEvents(state), name), measures: ['events'], dimensions: [], sort: [], compare: 'none', visualization: 'bar' }
+}

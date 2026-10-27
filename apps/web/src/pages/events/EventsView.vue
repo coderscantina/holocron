@@ -13,21 +13,28 @@ import { useAnnotations } from '~/composables/useDefinitions'
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
 import { useExplorationScreen } from '~/composables/useExplorationScreen'
 import { useFilterFields } from '~/composables/useFilterFields'
+import { useViewMode } from '~/composables/useViewMode'
 import type { ExplorationState, PropertyType, Site } from '~/generated'
 import { granularities } from '~/lib/exploration-labels'
 import { useI18n } from '~/plugins/i18n'
-import { setGranularity } from '~/services/exploration'
+import { encodeState, normalize, setGranularity } from '~/services/exploration'
 import { eventsState, propertyOf, showEvents, showProperties, statsPanel, tabOf, type EventsTab } from '~/services/events'
 
+import EventsBoard from './EventsBoard.vue'
 import PropertiesView from './PropertiesView.vue'
 
 /**
  * Custom events (CAP-TRAFFIC-06): names with counts and the series over the range. The
- * properties view (CAP-TRAFFIC-07) analyses the data sent with one event or all of them.
+ * properties view (CAP-TRAFFIC-07) analyses the data sent with one event or all of them. Two
+ * views of the same state: the board of the top events (default) and these details; the choice
+ * is remembered in this browser. A board row opens its properties in Details through the `view`
+ * parameter, so Back returns to the board.
  */
 const props = defineProps<{ site: Site }>()
 
 const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 const format = useExplorationFormat()
 const { fields, catalog } = useFilterFields(() => props.site.id)
 
@@ -53,6 +60,23 @@ const annotations = useAnnotations(
   () => props.site.id,
   () => (resolved.value ? { start: resolved.value.start, end: resolved.value.end } : null)
 )
+
+const stored = useViewMode('events', ['board', 'details'])
+const view = computed(() => (route.query.view === 'details' ? 'details' : stored.value))
+const views = computed(() => [
+  { value: 'board' as const, label: t('events.board.view') },
+  { value: 'details' as const, label: t('events.detailsView') },
+])
+const chooseView = (mode: 'board' | 'details') => {
+  stored.value = mode
+  if (route.query.view !== undefined) void router.replace({ query: { ...route.query, view: undefined } })
+}
+/** A board row: its properties in Details, one history entry. */
+const openEvent = (name: string) => {
+  const current = state.value
+  if (!current) return
+  void router.push({ query: { ...route.query, s: encodeState(normalize(showProperties(current, name))), view: 'details' } })
+}
 
 const tab = computed<EventsTab>(() => (state.value ? tabOf(state.value) : 'events'))
 const tabs = computed(() => [
@@ -98,8 +122,15 @@ const empty = computed(() => !!result.value && result.value.main.row_count === 0
       #context
     >
       <ChoiceGroup
-        :model-value="tab"
+        :model-value="view"
         :label="t('events.view')"
+        :options="views"
+        @update:model-value="chooseView"
+      />
+      <ChoiceGroup
+        v-if="view === 'details'"
+        :model-value="tab"
+        :label="t('events.tabs.label')"
         :options="tabs"
         @update:model-value="choose"
       />
@@ -107,8 +138,15 @@ const empty = computed(() => !!result.value && result.value.main.row_count === 0
   </ExplorationHeader>
 
   <template v-if="state && !screen.refusal.value">
+    <EventsBoard
+      v-if="view === 'board'"
+      :state="state"
+      :annotations="annotations.list.data.value?.annotations ?? []"
+      @open="openEvent"
+      @details="chooseView('details')"
+    />
 
-    <template v-if="tab === 'events'">
+    <template v-else-if="tab === 'events'">
       <MeasureCards
         class="mb-4"
         :measures="state.measures"

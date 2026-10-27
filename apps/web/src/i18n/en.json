@@ -268,7 +268,8 @@
     "view": "View",
     "tabs": {
       "events": "Events",
-      "properties": "Properties"
+      "properties": "Properties",
+      "label": "Show"
     },
     "chart": {
       "title": "Events over time"
@@ -296,7 +297,23 @@
     "noValuesHint": "The chosen events carry no value for this property in this range.",
     "arrayNote": "Arrays count as whole values. To count one element, add a filter with \"contains\".",
     "dateNote": "Each date is its own value, listed in date order.",
-    "sessionNote": "Session properties count sessions. Sum and mean exist for event properties only."
+    "sessionNote": "Session properties count sessions. Sum and mean exist for event properties only.",
+    "detailsView": "Details",
+    "board": {
+      "view": "Board",
+      "title": "Top events",
+      "meta": "{shown} of {total} · {range}",
+      "fewer": "Fewer",
+      "more": "more, per event",
+      "change": "Change",
+      "reach": "Reach",
+      "perVisitor": "Per visitor",
+      "perVisitorDay": "Per visitor-day",
+      "open": "Properties of {name}",
+      "peak": "Busiest {when} with {count}",
+      "rest": "{count} more events with {events} events in total",
+      "openDetails": "Open Details"
+    }
   },
   "findings": {
     "label": "Noticed changes",

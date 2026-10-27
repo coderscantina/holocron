@@ -317,6 +317,17 @@ Summary has a left column and a canvas, like the other visual views, but grows w
 - Visitors here are what the range's visitor measure counts: visitor-days for any range longer than one identity day ([0003](../decisions/0003-metric-formulas.md)), and the labels say so.
 - The summary's cuts are separate reads without comparison: net by currency and hour; net, records and visitors by currency and source over revenue records only; visitors by source over all traffic; and, while the range contains now, the same range under the typical-weekday comparison for the projection.
 
+## Events board
+
+`/sites/:site/events` has two views, Board and Details, picked beside the title and remembered in the browser. Board is the default. Details is the earlier page with its Events and Properties tabs.
+
+- One panel, "Top events", lists the 12 custom events with the most events in range, with "12 of 31 · Last 30 days" as its meta and a fewer-to-more legend.
+- Each row: the event name, a strip of its counts per bucket over the range, the count, its change against the comparison (the measures strip's tones, muted within 5%), reach (visitors who sent it over all visitors, with a thin bar), events per visitor, and the net revenue it carries.
+- The strip's cells are accent squares whose opacity follows the count squared, scaled from zero to the row's own busiest bucket, so a small event's rhythm shows as clearly as a large one's and ordinary days recede. Rows share their buckets, so a day that moves several events reads down the board. Annotations put their text above the strip's column and a dashed line through every row.
+- Clicking a row opens Details with that event's properties, through the `view=details` URL parameter, so Back returns to the board. A last line says how many events are not listed and opens Details.
+- Below `md` a row keeps name, count and change, with the strip on its own line under them.
+- The board reads the list once, all traffic once for reach, and one series per listed event.
+
 ## Sessions timeline
 
 `/sites/:site/sessions` has two views, picked with a segmented Timeline / Details control beside the title and remembered in the browser. Timeline is the default; Details is the paged session list. A second control on the right picks the window: 1 hour, 6 hours (default) or 24 hours.

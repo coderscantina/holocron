@@ -268,7 +268,8 @@
     "view": "Ansicht",
     "tabs": {
       "events": "Ereignisse",
-      "properties": "Eigenschaften"
+      "properties": "Eigenschaften",
+      "label": "Zeigen"
     },
     "chart": {
       "title": "Ereignisse im Zeitverlauf"
@@ -296,7 +297,23 @@
     "noValuesHint": "Die gewählten Ereignisse haben in diesem Zeitraum keinen Wert für diese Eigenschaft.",
     "arrayNote": "Listen zählen als ganzer Wert. Um ein Element zu zählen, filtere mit \"enthält\".",
     "dateNote": "Jedes Datum ist ein eigener Wert, nach Datum sortiert.",
-    "sessionNote": "Sitzungseigenschaften zählen Sitzungen. Summe und Mittelwert gibt es nur für Ereigniseigenschaften."
+    "sessionNote": "Sitzungseigenschaften zählen Sitzungen. Summe und Mittelwert gibt es nur für Ereigniseigenschaften.",
+    "detailsView": "Details",
+    "board": {
+      "view": "Board",
+      "title": "Top-Ereignisse",
+      "meta": "{shown} von {total} · {range}",
+      "fewer": "Weniger",
+      "more": "mehr, je Ereignis",
+      "change": "Veränderung",
+      "reach": "Reichweite",
+      "perVisitor": "Je Besucher",
+      "perVisitorDay": "Je Besuchertag",
+      "open": "Eigenschaften von {name}",
+      "peak": "Am stärksten {when} mit {count}",
+      "rest": "{count} weitere Ereignisse mit insgesamt {events} Ereignissen",
+      "openDetails": "Details öffnen"
+    }
   },
   "findings": {
     "label": "Aufgefallene Änderungen",
