@@ -64,7 +64,7 @@ Operand = { column: string } | { block: string, column: string, total: true }
 ### Budget
 
 - One request shares the 30 s budget of 0004. Blocks run one after another on one snapshot, so every block reports the same watermark.
-- At most 16 blocks and 200 sub-queries in total, counting each `for_each` value as one and a `for_each` ref at its limit. Both are checked before anything runs, also before authorization; a request over the limit is refused (`report_too_large`) and never returns partial results.
+- At most 16 blocks and 200 sub-queries in total, counting each `for_each` value as one. A `for_each` ref counts at the most it can return: its `limit`, the `limit` of the plain cut it reads, or 50, whichever is lowest. That is an upper bound, so the real count never passes it and nothing is rechecked once refs resolve. Both are checked before anything runs, also before authorization; a request over the limit is refused (`report_too_large`) and never returns partial results.
 - A cut's `limit` above 100 widens the first page after validation, as an export does, so it stays inside the 10,000 addressable rows.
 
 ### Result

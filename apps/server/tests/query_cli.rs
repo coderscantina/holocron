@@ -53,7 +53,7 @@ async fn query_names_the_refusal_and_exits_non_zero() {
     let key = key.strip_prefix("Bearer ").unwrap();
 
     let output = holocron(&harness, Some(key), "sites.list").await;
-    assert_eq!(output.status.code(), Some(3), "{output:?}");
+    assert_eq!(output.status.code(), Some(5), "{output:?}");
     assert!(output.stdout.is_empty());
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(

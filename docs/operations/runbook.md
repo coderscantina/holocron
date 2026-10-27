@@ -9,6 +9,7 @@ For one-server operators. Every command takes `--data-dir` (or `HOLOCRON_DATA_DI
 | 2 | usage error |
 | 3 | refused by the state of the data directory |
 | 4 | storage unavailable: path not writable, disk full, or another holocron process holds the directory |
+| 5 | `holocron query` only: the server answered with an error envelope |
 
 Decisions behind this: [0006](../decisions/0006-retention-clock-and-operations.md) and [0014](../decisions/0014-operations-and-recovery.md). Importing from Umami: [import and cutover](import-and-cutover.md).
 
@@ -53,7 +54,7 @@ Run `serve` under a supervisor that sends SIGTERM and waits at least 30 s before
 
 `holocron diagnostics --data-dir D` prints versions, file sizes, inbox depth and age, watermark, transfer failures, correction backlog, recording budget, collection counters, recent jobs and settings as counts. It holds no addresses, user agents, event data, identify IDs or credentials, so it can go into a bug report. It works with the server running or stopped.
 
-`holocron query --url https://stats.example.com query.json` posts a JSON query from a file (or `-` for stdin) to a running server and prints the answer. It calls `analytics.report` unless you pass `--operation <name>`. The API key comes from `HOLOCRON_API_KEY`, never from a flag, and `--url` can come from `HOLOCRON_URL`. It does not open the data directory. A refusal prints `error: <error_code>: <message>` with one line per rejected field and exits 3; a missing key or a query that is not a JSON object under 1 MiB exits 2.
+`holocron query --url https://stats.example.com query.json` posts a JSON query from a file (or `-` for stdin) to a running server and prints the answer. It calls `analytics.report` unless you pass `--operation <name>`. The API key comes from `HOLOCRON_API_KEY`, never from a flag, and `--url` can come from `HOLOCRON_URL`. It does not open the data directory. A refusal prints `error: <error_code>: <message>` with one line per rejected field and exits 5 (1 when the server is unreachable); a missing key or a query that is not a JSON object under 1 MiB exits 2.
 
 ## Back up
 
