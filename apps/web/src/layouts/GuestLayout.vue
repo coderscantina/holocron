@@ -30,7 +30,7 @@ const bars = ['h-[46%] bg-fill', 'h-full bg-fill', 'h-[68%] bg-accent/15', 'h-[8
       </div>
     </main>
     <div
-      class="pointer-events-none absolute top-1/2 -right-16 hidden h-[min(70vh,520px)] -translate-y-1/2 items-end gap-8 lg:flex"
+      class="pointer-events-none absolute top-1/2 -right-16 hidden h-[min(70vh,520px)] -translate-y-1/2 items-end gap-8 xl:flex"
       aria-hidden="true"
     >
       <span

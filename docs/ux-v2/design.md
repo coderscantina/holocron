@@ -380,6 +380,7 @@ Details is the earlier list. "All sites in {workspace}" lists every site the per
 Variant A, the guest column (Mike, 2026-10-21): the sign-in page grown into a wizard, in the guest layout without the app shell. Rejected: B, the app frame with the steps in a rail, and C, a single document page.
 
 - One step per screen in the guest column (`max-w-sm`), with the step bar on top. Steps that show tables, progress or the report mark themselves `data-wide` and widen the column to `max-w-xl`.
+- The decorative logo bars beside the column show from `xl` (1280 px) on. At 1024 px they would run under a wide column (2026-10-27).
 - Each step opens with the page-title pattern: the question in large type, a muted second line with what it's for. One accent button moves on; secondary actions are ghost buttons below it.
 - The path choice is a radio group of filled cards with an icon tile; the chosen card turns to the surface with an accent inset ring. Paths not in the build stay visible, disabled, with "Not in this build yet."
 - Server check rows and import warnings are warnings, never blocks: each names the setting that fixes it, and the accent button stays.
