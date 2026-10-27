@@ -25,7 +25,7 @@ async function siteId(page: Page, which: 'commerce' | 'anonymous'): Promise<stri
   await page.waitForURL(/\/sites\//)
   const answer = await page.request.get('/api/queries/workspaces.list', { headers: { 'x-holocron-request': '1' } })
   const { workspaces } = (await answer.json()) as { workspaces: Array<{ sites: Array<{ id: string; name: string }> }> }
-  const name = which === 'commerce' ? /^Roadhouse Konzertagentur/ : /^roadhouse\.at$/
+  const name = which === 'commerce' ? /^Roadhouse Konzertagentur/ : /^roadhouse\.test$/
   const site = workspaces.flatMap((w) => w.sites).find((s) => name.test(s.name))
   if (!site) throw new Error('seed_demo did not run')
   return site.id

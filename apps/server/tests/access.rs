@@ -1548,3 +1548,39 @@ async fn erasing_a_member_keeps_shared_work() {
         .send(Kind::Command, "sharing.revoke", &admin, revoke, None)
         .await);
 }
+
+/// Decision 0012, API keys: an install admin's session lists every site, their key only the
+/// sites of workspaces they are a member of.
+#[tokio::test]
+async fn an_install_admin_key_lists_member_sites_only() {
+    let world = World::new(false).await;
+    let key = world
+        .h
+        .api_key("p_install_admin_member", &["sites.list"], None)
+        .await;
+    let session = Credential::Cookie(world.h.session("p_install_admin_member").await);
+    let key = Credential::Header(key);
+    let site_ids = |answer: Answer| {
+        let mut ids: Vec<String> = ok(answer)["sites"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|site| site["id"].as_str().unwrap().to_owned())
+            .collect();
+        ids.sort();
+        ids
+    };
+    let all = site_ids(
+        world
+            .send(Kind::Query, "sites.list", &session, json!({}), None)
+            .await,
+    );
+    let member_sites = site_ids(
+        world
+            .send(Kind::Query, "sites.list", &key, json!({}), None)
+            .await,
+    );
+    assert!(all.contains(&world.site("site_b1")));
+    assert!(!member_sites.contains(&world.site("site_b1")));
+    assert!(member_sites.contains(&world.site("site_a1")));
+}

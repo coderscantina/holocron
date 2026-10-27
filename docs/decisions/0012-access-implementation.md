@@ -51,6 +51,8 @@ Adopted (Mike, 2026-10-06): a key that reaches a site may follow its `analytics:
 
 Adopted (Mike, 2026-10-27) in [0022](0022-agent-report-queries.md): the protocol exports a "Read analytics" preset, the operations an agent key needs: `analytics.report`, `analytics.export`, `fields.catalog`, `fields.values`, `analytics.freshness`, `sites.get` and the workspace site list. The key dialog offers it as one choice. It is a list of grants, not a new kind of key, and it leaves out session timelines, realtime and recordings.
 
+Adopted (Mike, 2026-10-27): `sites.list` called with a key lists only the sites of workspaces its owner is a member of and the key reaches, even when the owner is an install admin; the admin's session in the dashboard keeps the full list.
+
 ### Shares
 
 A share stores a copy of the shared state and its limits, so it survives edits to or deletion of the saved exploration and its author. Every share expires, at most 366 days ahead. Limits are named measures, dimensions, properties, `range_max_days` (current plus comparison range), a pinned filter and whether viewers may narrow. Outside a share every refusal is `not_found`, including a missing capability; widening inside it is `share_scope_exceeded`.
@@ -84,7 +86,7 @@ Absolute lifetime 30 days (unchanged), idle timeout 7 days, `last_seen_at` writt
 
 Adopted (Mike, 2026-10-06): owners may make other owners (by role change or invitation), otherwise a team could never gain a second owner, and owners may demote other owners, an exception to R-RANK. The last owner cannot leave or be demoted, so no team is left ownerless.
 
-Open for Mike: an owner still cannot remove another owner from the team (`members.remove` follows R-RANK). Demotion followed by removal reaches the same result in two steps.
+Adopted (Mike, 2026-10-27): an owner cannot remove another owner (`members.remove` follows R-RANK). Removing an owner takes two steps, demote and then remove.
 
 ## Consequences
 

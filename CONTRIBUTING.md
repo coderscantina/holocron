@@ -107,7 +107,7 @@ bun run lint
 bun run test
 ```
 
-Browser journeys (`bun run e2e`) don't run in CI. They run locally with Playwright against a packaged server whose data directory was seeded within the hour with the `seed_demo`, `seed_traffic` and `seed_commerce` examples, in that order (`cargo run --release -p holocron-server --example <name> -- <data-dir> ...`). Reset the data before every run: journeys write to it. [`apps/web/playwright.config.ts`](apps/web/playwright.config.ts) says how. Run them when you change a screen.
+Browser journeys (`bun run e2e`) don't run in CI. Run them locally with `scripts/e2e.sh`: it packages the server into a temporary directory, seeds a fresh data directory with `seed_demo`, `seed_traffic` and `seed_commerce`, serves it, waits for the first summary round and runs Playwright, then stops the server and removes everything (`--keep` leaves the directory, extra arguments go to Playwright, e.g. `scripts/e2e.sh e2e/shell.spec.ts`). Journeys write to the data, so every run starts from a new directory. Without the script, [`apps/web/playwright.config.ts`](apps/web/playwright.config.ts) and the header of each spec say which environment they need. Run them when you change a screen.
 
 ### 6. Read the decision first
 
