@@ -77,6 +77,9 @@ async function everyLayout(page: Page, name: string): Promise<void> {
   await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))))
   for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme })
+    // The scheme switch starts color transitions; capture the settled page, not the fade.
+    await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))))
+    await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))))
     for (const width of [1440, 1024, 768, 390]) {
       await page.setViewportSize({ width, height: 900 })
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
