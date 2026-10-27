@@ -24,7 +24,26 @@ struct Marker {
     from: Versions,
 }
 
+/// The backup that protects an upgrade.
+#[derive(Clone, Copy)]
+enum PreUpgrade<'a> {
+    /// Take one into this directory, which `holocron upgrade --backup-to` names.
+    TakeInto(Option<&'a Path>),
+    /// A verified backup that exists: the one a restore just copied from.
+    Existing(&'a Path),
+}
+
 pub async fn upgrade(data_dir: &Path, backup_to: Option<&Path>) -> Result<Value, Failure> {
+    upgrade_with(data_dir, PreUpgrade::TakeInto(backup_to)).await
+}
+
+/// Upgrades a directory that `backup` was just restored into. The backup is the pre-upgrade
+/// backup: the restore verified it and the data is unchanged, so no second copy is taken.
+pub async fn upgrade_restored(data_dir: &Path, backup: &Path) -> Result<Value, Failure> {
+    upgrade_with(data_dir, PreUpgrade::Existing(backup)).await
+}
+
+async fn upgrade_with(data_dir: &Path, pre: PreUpgrade<'_>) -> Result<Value, Failure> {
     check_initialized(data_dir)?;
     let _lock = DataLock::acquire(data_dir)?;
     let release = versions::release();
@@ -63,14 +82,19 @@ pub async fn upgrade(data_dir: &Path, backup_to: Option<&Path>) -> Result<Value,
                     ),
                 ));
             }
-            let to = backup_to.ok_or_else(|| {
-                Failure::new(
-                    Exit::Usage,
-                    "usage",
-                    "--backup-to is required: the upgrade takes a backup first",
-                )
-            })?;
-            let (backup, _) = backup::take(Source::Stopped(data_dir), to).await?;
+            let backup = match pre {
+                PreUpgrade::Existing(backup) => backup.to_owned(),
+                PreUpgrade::TakeInto(to) => {
+                    let to = to.ok_or_else(|| {
+                        Failure::new(
+                            Exit::Usage,
+                            "usage",
+                            "--backup-to is required: the upgrade takes a backup first",
+                        )
+                    })?;
+                    backup::take(Source::Stopped(data_dir), to).await?.0
+                }
+            };
             let marker = Marker {
                 backup,
                 from: stored,

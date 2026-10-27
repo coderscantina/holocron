@@ -91,6 +91,17 @@ holocron serve --data-dir /var/lib/holocron-restored
 | `data_newer_than_binary` | Install the release that took the backup, or a newer one |
 | `directory_not_empty`, `already_initialized` | Restore into a new, empty directory |
 
+### Restore in the browser
+
+On a new install the setup wizard restores a backup instead of the shell. Mount the backup storage into the container at `/backups` (the compose files do), or set `HOLOCRON_BACKUP_DIR` to where it is. Then:
+
+1. Open the public URL, enter the setup token and pick Restore a backup.
+2. Pick a backup from the list, which shows its date, size and release, or enter the full path of any other backup folder on the server. There is no upload.
+3. Confirm. The wizard names the backup and, if it comes from an older release, says it is upgraded right after.
+4. Wait while it shows Restoring and, for an older backup, Upgrading. Then sign in with an account from the backup. Setup creates no new admin.
+
+It runs the same code as `holocron restore` and `holocron upgrade`, so the checks and refusals are the same: a damaged backup or one from a newer release is refused with the reason, and you can pick another. The backup stays as it is and is the one the upgrade falls back on. If the server stops during a restore, it starts in setup mode again and offers the restore, which starts over.
+
 ## Upgrade
 
 `serve` never migrates. On data from an older release it exits 3 with `upgrade_required`.

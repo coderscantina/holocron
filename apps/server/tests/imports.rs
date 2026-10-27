@@ -312,6 +312,7 @@ impl App {
             public_origin: None,
             instance_name: "Import test".into(),
             setup_token: None,
+            backup_dir: "/backups".into(),
             collect: CollectConfig::default(),
             disk_reserve_bytes: 0,
         };
@@ -1057,6 +1058,7 @@ async fn both_snapshots_import_through_the_wizard_with_the_digests_of_the_cli() 
             public_origin: None,
             instance_name: "Import test".into(),
             setup_token: None,
+            backup_dir: "/backups".into(),
             collect: CollectConfig::default(),
             disk_reserve_bytes: 0,
         };

@@ -12,6 +12,8 @@ use holocron_protocol::access::InstallRole;
 use holocron_server::clock::Clock;
 use holocron_server::config::{Config, ServeArgs};
 use holocron_server::db::Db;
+use holocron_server::init::{self, InitArgs};
+use holocron_server::maintenance::backup::{self, MANIFEST_FILE, Source};
 use holocron_server::setup::{self, Outcome};
 use serde_json::{Value, json};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -137,6 +139,11 @@ struct Running {
 
 /// Setup mode on `data` with the test token, ready for requests.
 async fn start(data: &Path) -> Running {
+    start_with_backups(data, Path::new("/nonexistent/backups")).await
+}
+
+/// [`start`] with `backups` as the backup directory the wizard lists.
+async fn start_with_backups(data: &Path, backups: &Path) -> Running {
     let args = Cli::try_parse_from([
         "holocron",
         "--data-dir",
@@ -145,6 +152,8 @@ async fn start(data: &Path) -> Running {
         TOKEN,
         "--disk-reserve-mib",
         "0",
+        "--backup-dir",
+        backups.to_str().unwrap(),
     ])
     .unwrap()
     .args;
@@ -199,7 +208,10 @@ async fn the_import_path_stays_in_setup_mode_and_returns_to_it_after_a_restart()
 
     // The phase is public; the import is the admin's.
     let anonymous = wire::request(addr, "GET", "/api/setup/status", None, None).await;
-    assert_eq!(anonymous.body, json!({ "phase": "import" }));
+    assert_eq!(
+        anonymous.body,
+        json!({ "phase": "import", "restore_incomplete": false })
+    );
     let status = wire::request(addr, "GET", "/api/setup/status", None, Some(&cookie)).await;
     assert_eq!(status.body["account"]["email"], "ops@example.org");
     assert_eq!(status.body["import"]["state"], "none");
@@ -367,4 +379,211 @@ async fn discarding_the_import_keeps_the_admin_and_setup_can_continue_without_on
         Ok(Outcome::Initialized)
     ));
     assert!(!setup::needed(&data).unwrap());
+}
+
+const ADMIN: &str = "restored@example.org";
+const PASSWORD: &str = "restored admin password";
+
+/// A backup of a stopped installation with its own admin, in `root/backups`. Returns the backup
+/// directory and the backup inside it.
+async fn make_backup(root: &Path) -> (std::path::PathBuf, std::path::PathBuf) {
+    let (source, backups) = (root.join("source"), root.join("backups"));
+    init::init(InitArgs {
+        data_dir: source.clone(),
+        admin_email: ADMIN.into(),
+        admin_password: Some(PASSWORD.into()),
+    })
+    .await
+    .unwrap();
+    let (path, _) = backup::take(Source::Stopped(&source), &backups)
+        .await
+        .unwrap();
+    (backups, path)
+}
+
+async fn post(addr: SocketAddr, path: &str, body: Value) -> wire::Reply {
+    wire::request(addr, "POST", path, Some(body), None).await
+}
+
+/// Restores `backup` through the wizard into `data` and waits for setup mode to end.
+async fn restore_through_the_wizard(data: &Path, backups: &Path, backup: &Path) {
+    let server = start_with_backups(data, backups).await;
+    let started = post(
+        server.addr,
+        "/api/setup/restore/start",
+        json!({ "token": TOKEN, "path": backup }),
+    )
+    .await;
+    assert_eq!(started.body["state"], "running", "{}", started.body);
+    let outcome = tokio::time::timeout(std::time::Duration::from_secs(120), server.run)
+        .await
+        .expect("restore finishes")
+        .unwrap();
+    assert!(matches!(outcome, Ok(Outcome::Initialized)));
+}
+
+#[tokio::test]
+async fn the_wizard_lists_backups_with_their_manifest_and_reads_any_path() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    // Neighbours that are not backups stay out of the list.
+    std::fs::create_dir(backups.join("holocron-backup-empty")).unwrap();
+    std::fs::create_dir(backups.join("notes")).unwrap();
+    let server = start_with_backups(&root.path().join("data"), &backups).await;
+
+    let listed = post(
+        server.addr,
+        "/api/setup/restore/backups",
+        json!({ "token": TOKEN }),
+    )
+    .await;
+    assert_eq!(listed.status, 200, "{}", listed.body);
+    let entries = listed.body["backups"].as_array().unwrap();
+    assert_eq!(entries.len(), 1);
+    assert_eq!(entries[0]["path"], path.display().to_string());
+    assert_eq!(entries[0]["release"], env!("CARGO_PKG_VERSION"));
+    assert_eq!(entries[0]["upgrade"], false);
+    assert!(entries[0]["bytes"].as_u64().unwrap() > 0);
+    assert!(entries[0]["created_at_ms"].as_i64().unwrap() > 0);
+    assert_eq!(listed.body["restore"]["state"], "idle");
+
+    // Any other host path, from outside the backup directory.
+    let moved = root.path().join("elsewhere");
+    std::fs::rename(&path, &moved).unwrap();
+    let inspected = post(
+        server.addr,
+        "/api/setup/restore/inspect",
+        json!({ "token": TOKEN, "path": moved }),
+    )
+    .await;
+    assert_eq!(
+        inspected.body["backup"]["path"],
+        moved.display().to_string()
+    );
+    let nothing = post(
+        server.addr,
+        "/api/setup/restore/inspect",
+        json!({ "token": TOKEN, "path": root.path().join("none") }),
+    )
+    .await;
+    assert_eq!(nothing.body["refusal"]["code"], "backup_invalid");
+    server.stop().await;
+}
+
+#[tokio::test]
+async fn a_restore_ends_setup_and_the_restored_admin_signs_in() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    let data = root.path().join("data");
+    restore_through_the_wizard(&data, &backups, &path).await;
+
+    init::check_initialized(&data).unwrap();
+    assert!(!setup::needed(&data).unwrap());
+    holocron_server::maintenance::versions::check_dir(&data)
+        .await
+        .unwrap();
+    let db = Db::connect(&data).await.unwrap();
+    let hash: String = sqlx::query_scalar("SELECT password_hash FROM users WHERE email = ?")
+        .bind(ADMIN)
+        .fetch_one(&db.reader)
+        .await
+        .unwrap();
+    db.close().await;
+    assert!(holocron_server::identity::verify_password(hash, PASSWORD.into()).await);
+}
+
+#[tokio::test]
+async fn setup_modes_lock_file_does_not_block_a_restore() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    let data = root.path().join("data");
+    std::fs::create_dir(&data).unwrap();
+    std::fs::write(data.join("holocron.lock"), b"").unwrap();
+    assert!(setup::needed(&data).unwrap());
+    restore_through_the_wizard(&data, &backups, &path).await;
+    init::check_initialized(&data).unwrap();
+}
+
+#[tokio::test]
+async fn a_backup_from_a_newer_release_is_refused() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    let manifest = path.join(MANIFEST_FILE);
+    let mut text: Value = serde_json::from_slice(&std::fs::read(&manifest).unwrap()).unwrap();
+    text["versions"]["analytics"] = json!(text["versions"]["analytics"].as_i64().unwrap() + 1);
+    std::fs::write(&manifest, text.to_string()).unwrap();
+    let data = root.path().join("data");
+    let server = start_with_backups(&data, &backups).await;
+
+    let inspected = post(
+        server.addr,
+        "/api/setup/restore/inspect",
+        json!({ "token": TOKEN, "path": path }),
+    )
+    .await;
+    assert_eq!(inspected.body["refusal"]["code"], "data_newer_than_binary");
+    let started = post(
+        server.addr,
+        "/api/setup/restore/start",
+        json!({ "token": TOKEN, "path": path }),
+    )
+    .await;
+    assert_eq!(started.body["state"], "failed");
+    assert_eq!(started.body["error"]["code"], "data_newer_than_binary");
+    assert!(!data.join("holocron.restore-in-progress").exists());
+    server.stop().await;
+}
+
+#[tokio::test]
+async fn restore_operations_need_the_token_and_end_with_setup() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    let server = start_with_backups(&root.path().join("data"), &backups).await;
+    let addr = server.addr;
+    let operations = [
+        ("backups", json!({})),
+        ("inspect", json!({ "path": path })),
+        ("start", json!({ "path": path })),
+    ];
+    for (name, mut body) in operations.clone() {
+        body["token"] = json!("not the token");
+        let refused = post(addr, &format!("/api/setup/restore/{name}"), body).await;
+        assert_eq!(
+            (refused.status, refused.code()),
+            (401, Some("setup_token_invalid")),
+            "{name}"
+        );
+    }
+
+    // An admin spends the token.
+    import_admin(addr).await;
+    for (name, mut body) in operations {
+        body["token"] = json!(TOKEN);
+        let spent = post(addr, &format!("/api/setup/restore/{name}"), body).await;
+        assert_eq!(
+            (spent.status, spent.code()),
+            (503, Some("setup_required")),
+            "{name}"
+        );
+    }
+    server.stop().await;
+}
+
+#[tokio::test]
+async fn an_interrupted_restore_starts_setup_mode_and_can_be_repeated() {
+    let root = tempfile::tempdir().unwrap();
+    let (backups, path) = make_backup(root.path()).await;
+    let data = root.path().join("data");
+    std::fs::create_dir(&data).unwrap();
+    std::fs::write(data.join("holocron.restore-in-progress"), b"").unwrap();
+    std::fs::write(data.join("control.sqlite"), b"half a copy").unwrap();
+    assert!(setup::needed(&data).unwrap());
+
+    let server = start_with_backups(&data, &backups).await;
+    let status = wire::request(server.addr, "GET", "/api/setup/status", None, None).await;
+    assert_eq!(status.body["restore_incomplete"], true);
+    server.stop().await;
+
+    restore_through_the_wizard(&data, &backups, &path).await;
+    init::check_initialized(&data).unwrap();
 }

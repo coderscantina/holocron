@@ -7,7 +7,7 @@ const shared = ['token', 'check', 'path'] as const
 export const setupSteps = {
   fresh: [...shared, 'admin', 'site'],
   import: [...shared, 'admin', 'source', 'options', 'import', 'report'],
-  restore: [...shared, 'backup', 'restore'],
+  restore: [...shared, 'backup', 'confirm', 'restore'],
 } as const satisfies Record<SetupPath, readonly string[]>
 
 export type SetupStep = (typeof setupSteps)[SetupPath][number]

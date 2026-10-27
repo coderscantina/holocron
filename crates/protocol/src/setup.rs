@@ -84,6 +84,10 @@ pub enum SetupPhase {
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 pub struct SetupStatus {
     pub phase: SetupPhase,
+    /// A restore stopped partway and left its directory behind. The wizard offers the restore
+    /// step again; running it starts over.
+    #[serde(default)]
+    pub restore_incomplete: bool,
     /// The signed-in install admin.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
@@ -327,4 +331,96 @@ pub struct SetupInventoryCount {
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 pub struct SetupDiscardArgs {
     pub confirm: String,
+}
+
+/// `POST /api/setup/restore/backups`: the backups in the mounted backup directory
+/// (`HOLOCRON_BACKUP_DIR`, `/backups` in the compose files), newest first.
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupBackups {
+    /// The directory that was read.
+    pub directory: String,
+    /// Backups with a readable manifest. Their files are checked when the restore starts.
+    pub backups: Vec<SetupBackup>,
+    /// A restore in progress, so a reloaded wizard can attach to it.
+    pub restore: SetupRestoreProgress,
+}
+
+/// A backup as its manifest describes it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupBackup {
+    /// Absolute path on the server's host.
+    pub path: String,
+    pub created_at_ms: i64,
+    /// Size of its files.
+    pub bytes: u64,
+    /// The release that took it.
+    pub release: String,
+    /// It comes from an older release and is upgraded right after the restore.
+    pub upgrade: bool,
+}
+
+/// `POST /api/setup/restore/inspect`: reads the manifest of a backup at any absolute host path.
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupRestoreInspectArgs {
+    pub token: String,
+    pub path: String,
+}
+
+/// The backup, or why it can't be restored here.
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupRestoreInspection {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub backup: Option<SetupBackup>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub refusal: Option<SetupImportError>,
+}
+
+/// `POST /api/setup/restore/start`: checks every file of the backup against its manifest,
+/// restores it into the data directory and upgrades it when it comes from an older release.
+/// Progress follows on `GET /api/setup/restore/progress`. When it finishes, the server leaves
+/// setup mode and the restored accounts sign in. Answers the first progress frame.
+#[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupRestoreArgs {
+    pub token: String,
+    pub path: String,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, TS, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum SetupRestoreState {
+    #[default]
+    Idle,
+    Running,
+    /// Both phases are done and the server is starting.
+    Complete,
+    /// The restore stopped; `error` says why. The step can run again.
+    Failed,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum SetupRestorePhase {
+    /// Checking the files and copying them.
+    Restoring,
+    /// Migrating the restored data to this release.
+    Upgrading,
+}
+
+/// One frame of `GET /api/setup/restore/progress`, a server-sent event stream. The token goes in
+/// the `X-Holocron-Setup-Token` header. The first frame is the current state.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize, TS, JsonSchema)]
+pub struct SetupRestoreProgress {
+    pub state: SetupRestoreState,
+    /// The running phase.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub phase: Option<SetupRestorePhase>,
+    /// The backup is older than this release, so an upgrade phase follows the restore.
+    #[serde(default)]
+    pub upgrade: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub error: Option<SetupImportError>,
 }

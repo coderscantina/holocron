@@ -2304,7 +2304,7 @@
         "title": "Backup wiederherstellen",
         "description": "Nutze ein Holocron-Backup auf diesem Server, mit seinen Konten."
       },
-      "later": "In diesem Build noch nicht verfügbar."
+      "restoreIncomplete": "Eine Wiederherstellung auf diesem Server wurde unterbrochen. Stelle ein Backup erneut her, um fortzufahren; sie beginnt von vorn."
     },
     "check": {
       "title": "Serverprüfung",
@@ -2428,6 +2428,40 @@
       "action": "Ohne Import fortfahren",
       "hint": "Das entfernt alles Importierte und startet Holocron leer. Dein Admin und der geheime Schlüssel bleiben. Gib zur Bestätigung {name} ein.",
       "confirm": "Verwerfen und fortfahren"
+    },
+    "backup": {
+      "title": "Backup auswählen",
+      "subtitle": "Aus dem Backup-Ordner oder von einem beliebigen Pfad auf diesem Server.",
+      "loading": "Backup-Ordner wird gelesen…",
+      "listLabel": "Backups in {directory}",
+      "details": "{size} · erstellt von Holocron {release}",
+      "none": "Keine Backups in {directory}. Gib unten den Pfad eines Backup-Ordners ein.",
+      "path": "Pfad eines Backups auf diesem Server",
+      "pathHint": "Der vollständige Pfad eines holocron-backup-…-Ordners, etwa /srv/holocron-backups/holocron-backup-20261001T020000Z-ab12cd34. Holocron liest ihn dort, wo es läuft; es gibt keinen Upload.",
+      "refused": "Holocron kann dieses Backup nicht wiederherstellen"
+    },
+    "confirm": {
+      "title": "Dieses Backup wiederherstellen?",
+      "subtitle": "Dieser Server ist leer, es wird nichts überschrieben.",
+      "date": "Erstellt",
+      "size": "Größe",
+      "release": "Release",
+      "path": "Pfad",
+      "upgrade": "Dieses Backup stammt von Holocron {release}, einem älteren Release. Es wird direkt nach der Wiederherstellung aktualisiert; das Backup selbst bleibt unverändert.",
+      "accounts": "Du meldest dich mit einem Konto aus dem Backup an. Das Setup legt kein neues Admin-Konto an.",
+      "start": "Backup wiederherstellen",
+      "other": "Anderes Backup wählen"
+    },
+    "restore": {
+      "title": "Backup wird wiederhergestellt",
+      "subtitle": "Die Erfassung bleibt geschlossen, bis das Setup endet. Du kannst die Seite schließen und später zurückkommen.",
+      "connecting": "Verbinde mit der Wiederherstellung…",
+      "failed": "Die Wiederherstellung wurde angehalten",
+      "retry": "Backup erneut wählen",
+      "phases": {
+        "restoring": "Wiederherstellen",
+        "upgrading": "Aktualisieren"
+      }
     },
     "cutover": {
       "title": "Tracker hierher umstellen",

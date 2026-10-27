@@ -8,6 +8,11 @@ import type { SetupPhase } from "./SetupPhase";
  */
 export type SetupStatus = { phase: SetupPhase, 
 /**
+ * A restore stopped partway and left its directory behind. The wizard offers the restore
+ * step again; running it starts over.
+ */
+restore_incomplete: boolean, 
+/**
  * The signed-in install admin.
  */
 account?: Account, import?: SetupImportStatus, };

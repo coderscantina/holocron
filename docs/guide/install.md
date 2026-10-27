@@ -113,9 +113,10 @@ On an empty data directory `serve` starts in setup mode. It answers only the set
 1. Open the public URL, for example `https://analytics.example.com`. It shows the setup wizard.
 2. Enter the setup token from the server log, from the line with "setup token". It changes at every start; set `HOLOCRON_SETUP_TOKEN` to pin it for scripted installs.
 3. The server check warns about a missing `HOLOCRON_PUBLIC_URL`, an untrusted proxy, low disk or the version. Each warning names the setting that fixes it. You can continue anyway.
-4. Pick Fresh start or Import from Umami. Restore a backup still runs from the shell, see [Operations](operations.md#restore).
-5. Create your admin. Passwords need at least 12 characters.
+4. Pick Fresh start, Import from Umami or Restore a backup.
+5. Fresh start and import: create your admin. Passwords need at least 12 characters.
 6. Fresh start: add the first site in the Default team. The wizard shows its tracking code and turns green when the first pageview arrives. Import from Umami continues as described in [Migrate from Umami](umami-migration.md); "Continue without import" leaves it for a fresh start at any point, discarding what was imported.
+7. Restore a backup: pick one, confirm, wait, then sign in with an account from the backup. There is no new admin. See [Restore in the browser](operations.md#restore-in-the-browser).
 
 Then open Account, then Security, and set up two-factor authentication.
 

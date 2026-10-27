@@ -13,7 +13,10 @@
 # to today and no frozen-clock build is needed. The shell specs that show site pace and findings
 # need a summary round, which runs one minute after the start; the script waits until every site
 # has a row in `site_summaries`. The setup specs start their own servers on empty data
-# directories from the same binary (HOLOCRON_E2E_BINARY).
+# directories from the same binary (HOLOCRON_E2E_BINARY). The restore specs among them restore a
+# `holocron backup` this script takes of the seeded instance (HOLOCRON_E2E_BACKUP_DIR). Set
+# HOLOCRON_E2E_OLD_BACKUP to a backup made by an older release (of the same seeded admin) to
+# run the upgrade spec too. HOLOCRON_E2E_SHOTS=<dir> saves screenshots of the setup steps.
 # Set CARGO_TARGET_DIR to build elsewhere.
 set -eu
 
@@ -88,6 +91,10 @@ while :; do
   waited=$((waited + 2))
 done
 
+# The running server queues the backup as a job and waits for it, as in production.
+backups=$work/backups
+"$holocron" backup --data-dir "$data" --to "$backups" > "$work/backup.json"
+
 cd "$root/apps/web"
 set +e
 HOLOCRON_E2E_URL="http://127.0.0.1:$port" \
@@ -95,6 +102,7 @@ HOLOCRON_E2E_EMAIL="$email" \
 HOLOCRON_E2E_PASSWORD="$password" \
 HOLOCRON_E2E_VIEWER_PASSWORD="$viewer_password" \
 HOLOCRON_E2E_BINARY="$holocron" \
+HOLOCRON_E2E_BACKUP_DIR="$backups" \
 HOLOCRON_E2E_DB="$data/control.sqlite" \
 HOLOCRON_E2E_INSTANCE_NAME="$instance" \
   bun run e2e "$@"

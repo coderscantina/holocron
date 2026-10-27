@@ -11,7 +11,7 @@ use holocron_storage::{Budgets, INBOX_FORMAT, Lane};
 use serde_json::{Value, json};
 
 use super::backup::{self, FILES, Manifest};
-use super::lock::DataLock;
+use super::lock::{DataLock, LOCK_FILE};
 use super::versions;
 use super::{Runtime, internal, storage_failure};
 use crate::clock::Clock;
@@ -42,9 +42,12 @@ pub async fn restore(from: &Path, data_dir: &Path) -> Result<Value, Failure> {
             ),
         ));
     }
-    prepare(data_dir)?;
-    let _lock = DataLock::acquire(data_dir)?;
     let io = |e: io::Error| Failure::storage(data_dir, e);
+    // The lock first: its file is the one thing a new directory may hold, and `prepare` would
+    // otherwise clear leftovers under a running server.
+    fs::create_dir_all(data_dir).map_err(io)?;
+    let _lock = DataLock::acquire(data_dir)?;
+    prepare(data_dir)?;
     fs::write(data_dir.join(IN_PROGRESS_MARKER), b"").map_err(io)?;
     for file in FILES {
         fs::copy(from.join(file), data_dir.join(file)).map_err(io)?;
@@ -78,12 +81,19 @@ pub async fn restore(from: &Path, data_dir: &Path) -> Result<Value, Failure> {
     }))
 }
 
-/// A missing or empty directory, or the leftovers of an interrupted restore.
+/// An empty directory, or the leftovers of an interrupted restore. The lock file belongs to the
+/// holder of the lock, such as setup mode or this restore, so it never counts.
 fn prepare(dir: &Path) -> Result<(), Failure> {
     let io = |e: io::Error| Failure::storage(dir, e);
+    let mut contents = Vec::new();
+    for entry in fs::read_dir(dir).map_err(io)? {
+        let path = entry.map_err(io)?.path();
+        if path.file_name().is_some_and(|name| name != LOCK_FILE) {
+            contents.push(path);
+        }
+    }
     if dir.join(IN_PROGRESS_MARKER).exists() {
-        for entry in fs::read_dir(dir).map_err(io)? {
-            let path = entry.map_err(io)?.path();
+        for path in contents {
             if path.is_dir() {
                 fs::remove_dir_all(&path).map_err(io)?;
             } else {
@@ -92,14 +102,7 @@ fn prepare(dir: &Path) -> Result<(), Failure> {
         }
         return Ok(());
     }
-    let mut entries = match fs::read_dir(dir) {
-        Ok(entries) => entries,
-        Err(e) if e.kind() == io::ErrorKind::NotFound => {
-            return fs::create_dir_all(dir).map_err(io);
-        }
-        Err(e) => return Err(io(e)),
-    };
-    if entries.next().is_none() {
+    if contents.is_empty() {
         return Ok(());
     }
     let code = if dir.join(DONE_MARKER).exists() {

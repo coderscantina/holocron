@@ -113,6 +113,7 @@ impl Harness {
             public_origin: None,
             instance_name: "Test install".into(),
             setup_token: None,
+            backup_dir: "/backups".into(),
             collect,
             disk_reserve_bytes: budgets.disk_reserve_bytes,
         };
