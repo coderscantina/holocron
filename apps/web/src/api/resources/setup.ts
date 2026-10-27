@@ -1,11 +1,16 @@
 import type {
   LoginResult,
   SetupAdminArgs,
+  SetupBackups,
   SetupCheck,
   SetupDiscardArgs,
   SetupImportProgress,
   SetupInspectArgs,
   SetupInspection,
+  SetupRestoreArgs,
+  SetupRestoreInspectArgs,
+  SetupRestoreInspection,
+  SetupRestoreProgress,
   SetupRunArgs,
   SetupSignInArgs,
   SetupStatus,
@@ -37,4 +42,19 @@ export const setupResource = {
   discard: (args: SetupDiscardArgs) => api.post<object>('setup.discard', '/setup/import/discard', args),
   /** Acknowledges the report; the server leaves setup mode right after. */
   finish: () => api.post<object>('setup.finish', '/setup/finish', {}),
+  /** The backups in the server's backup directory, and a restore that already runs. */
+  backups: (args: SetupTokenArgs) => api.post<SetupBackups>('setup.backups', '/setup/restore/backups', args),
+  /** The manifest of the backup at a host path, or why it can't be restored here. */
+  inspectBackup: (args: SetupRestoreInspectArgs) =>
+    api.post<SetupRestoreInspection>('setup.inspectBackup', '/setup/restore/inspect', args),
+  /** Starts the restore; progress follows on [`restoreProgress`]. */
+  restore: (args: SetupRestoreArgs) => api.post<SetupRestoreProgress>('setup.restore', '/setup/restore/start', args),
+  /** Calls `onFrame` with the current restore phase, then with each change. Returns the close function. */
+  restoreProgress: (token: string, onFrame: (frame: SetupRestoreProgress) => void, onEnd: () => void) =>
+    api.stream(
+      '/setup/restore/progress',
+      (data) => onFrame(JSON.parse(data) as SetupRestoreProgress),
+      onEnd,
+      { 'X-Holocron-Setup-Token': token }
+    ),
 }

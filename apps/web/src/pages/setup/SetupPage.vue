@@ -2,16 +2,19 @@
 import { setupResource } from '~/api/resources/setup'
 import SetupStepBar from '~/components/setup/SetupStepBar.vue'
 import { usePageMeta } from '~/composables/usePageMeta'
-import type { SetupCheck, SetupImportReport, SetupInspection, SetupStatus } from '~/generated'
+import type { SetupBackup, SetupCheck, SetupImportReport, SetupInspection, SetupStatus } from '~/generated'
 import { useI18n } from '~/plugins/i18n'
 import { runtimeConfig } from '~/services/runtime-config'
 
 import SetupAdminStep from './SetupAdminStep.vue'
+import SetupBackupStep from './SetupBackupStep.vue'
 import SetupCheckStep from './SetupCheckStep.vue'
+import SetupConfirmStep from './SetupConfirmStep.vue'
 import SetupImportStep from './SetupImportStep.vue'
 import SetupOptionsStep from './SetupOptionsStep.vue'
 import SetupPathStep from './SetupPathStep.vue'
 import SetupReportStep from './SetupReportStep.vue'
+import SetupRestoreStep from './SetupRestoreStep.vue'
 import SetupSignInStep from './SetupSignInStep.vue'
 import SetupSiteStep from './SetupSiteStep.vue'
 import SetupSkipImport from './SetupSkipImport.vue'
@@ -32,10 +35,14 @@ const path = ref<SetupPath>('fresh')
 /** The Umami database URL, never stored or put in the address. A reload asks for it again. */
 const source = ref('')
 const inspection = shallowRef<SetupInspection | null>(null)
+/** The backup the restore path picked. */
+const backup = shallowRef<SetupBackup | null>(null)
 /** The report survives the end of setup mode, for the cutover view. */
 const report = shallowRef<SetupImportReport | null>(null)
 
 const status = shallowRef<SetupStatus | null>(null)
+/** An interrupted restore preselects the restore path once, so the person can still pick another. */
+let restoreOffered = false
 const statusError = shallowRef<unknown>(null)
 async function refresh(): Promise<void> {
   try {
@@ -43,6 +50,10 @@ async function refresh(): Promise<void> {
     statusError.value = null
     report.value = status.value.import?.report ?? report.value
     if (status.value.phase === 'import') path.value = 'import'
+    else if (status.value.restore_incomplete && !restoreOffered) {
+      restoreOffered = true
+      path.value = 'restore'
+    }
   } catch (error) {
     statusError.value = error
   }
@@ -67,7 +78,7 @@ const step = computed<SetupStep | 'signin' | null>(() => {
   }
   const requested = steps.value.find((candidate) => candidate === route.query.step)
   if (!token.value || !check.value || requested === undefined || requested === 'site') return 'token'
-  return requested
+  return requested === 'confirm' && !backup.value ? 'backup' : requested
 })
 
 /** The address follows the server's state, so a reload after setup ends finds the cutover view. */
@@ -95,6 +106,14 @@ async function created(): Promise<void> {
   await refresh()
   await router.replace({ query: { step: 'source' } })
 }
+
+const picked = (value: SetupBackup) => {
+  backup.value = value
+  void go('confirm')
+}
+
+/** The restored accounts sign in on the login page, which the server serves now. */
+const restored = () => router.replace({ name: 'login' })
 
 const inspected = (result: SetupInspection) => {
   inspection.value = result
@@ -139,6 +158,7 @@ async function skipped(): Promise<void> {
     <SetupPathStep
       v-else-if="step === 'path'"
       v-model="path"
+      :restore-incomplete="status?.restore_incomplete ?? false"
       @submit="go(steps[steps.indexOf('path') + 1] ?? 'path')"
     />
     <SetupAdminStep
@@ -146,6 +166,25 @@ async function skipped(): Promise<void> {
       :token="token"
       :path="path"
       @created="created"
+    />
+    <SetupBackupStep
+      v-else-if="step === 'backup'"
+      :token="token"
+      @picked="picked"
+      @running="go('restore')"
+    />
+    <SetupConfirmStep
+      v-else-if="step === 'confirm' && backup"
+      :token="token"
+      :backup="backup"
+      @started="go('restore')"
+      @back="go('backup')"
+    />
+    <SetupRestoreStep
+      v-else-if="step === 'restore'"
+      :token="token"
+      @done="restored"
+      @retry="go('backup')"
     />
     <SetupSignInStep
       v-else-if="step === 'signin'"

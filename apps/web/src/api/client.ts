@@ -200,14 +200,14 @@ export class ApiClient {
     return this.stream(`/subscribe${queryString(params)}`, onData, onEnd)
   }
 
-  /** Reads the server-sent events of `path`, as [`subscribe`] does. */
-  stream(path: string, onData: (data: string) => void, onEnd: () => void): () => void {
+  /** Reads the server-sent events of `path`, as [`subscribe`] does, with `headers` on the request. */
+  stream(path: string, onData: (data: string) => void, onEnd: () => void, headers: HeadersInit = {}): () => void {
     const controller = new AbortController()
     const read = async () => {
       const response = await this.send(`${this.baseUrl()}${path}`, {
         method: 'GET',
         signal: controller.signal,
-        ...this.transport({ Accept: 'text/event-stream' }),
+        ...this.transport({ Accept: 'text/event-stream', ...headers }),
       })
       if (!response.ok || !response.body) return
       const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()

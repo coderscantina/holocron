@@ -2304,7 +2304,7 @@
         "title": "Restore a backup",
         "description": "Use a Holocron backup on this server, with its accounts."
       },
-      "later": "Not in this build yet."
+      "restoreIncomplete": "A restore stopped partway on this server. Restore a backup again to continue; it starts over."
     },
     "check": {
       "title": "Server check",
@@ -2428,6 +2428,40 @@
       "action": "Continue without import",
       "hint": "This removes everything imported and starts Holocron empty. Your admin and the secret key stay. Type {name} to confirm.",
       "confirm": "Discard and continue"
+    },
+    "backup": {
+      "title": "Pick a backup",
+      "subtitle": "From the backup folder, or any path on this server.",
+      "loading": "Reading the backup folder…",
+      "listLabel": "Backups in {directory}",
+      "details": "{size} · made by Holocron {release}",
+      "none": "No backups in {directory}. Enter the path of a backup folder below.",
+      "path": "Path of a backup on this server",
+      "pathHint": "The full path of a holocron-backup-… folder, such as /srv/holocron-backups/holocron-backup-20261001T020000Z-ab12cd34. Holocron reads it where it runs; there is no upload.",
+      "refused": "Holocron can't restore this backup"
+    },
+    "confirm": {
+      "title": "Restore this backup?",
+      "subtitle": "This server is empty, so nothing gets overwritten.",
+      "date": "Made",
+      "size": "Size",
+      "release": "Release",
+      "path": "Path",
+      "upgrade": "This backup comes from Holocron {release}, an older release. It is upgraded right after the restore, and the backup itself stays as it is.",
+      "accounts": "You sign in with an account from the backup. Setup does not create a new admin.",
+      "start": "Restore backup",
+      "other": "Pick another backup"
+    },
+    "restore": {
+      "title": "Restoring the backup",
+      "subtitle": "Collection stays closed until setup ends. You can close this page and come back.",
+      "connecting": "Connecting to the restore…",
+      "failed": "The restore stopped",
+      "retry": "Pick a backup again",
+      "phases": {
+        "restoring": "Restoring",
+        "upgrading": "Upgrading"
+      }
     },
     "cutover": {
       "title": "Point your trackers here",
