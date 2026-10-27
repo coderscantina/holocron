@@ -8,10 +8,11 @@ use std::collections::HashSet;
 use chrono_tz::Tz;
 use holocron_protocol::errors::{ErrorCode, FieldErrorCode};
 use holocron_protocol::exploration::{
-    AttributionReport, Compare, Condition, Conversion, DimensionField, ExplorationState, Field,
-    FunnelReport, GoalDefinition, GoalsReport, Granularity, Group, GroupOp, JourneyReport, Measure,
-    NamedMeasure, Node, Operator, Page, Panel, PropertyScope, REPORT_VERSION, ReportDefinition,
-    RetentionReport, STATE_VERSION, SessionListReport, Sort, SortKey, Value, Visualization,
+    AttributionReport, Compare, Condition, Conversion, DimensionField, ExplorationState,
+    FUNNEL_VERSION, Field, FunnelReport, GoalDefinition, GoalsReport, Granularity, Group, GroupOp,
+    JourneyReport, Measure, NamedMeasure, Node, Operator, Page, Panel, PropertyScope,
+    REPORT_VERSION, ReportDefinition, RetentionReport, STATE_VERSION, SessionListReport, Sort,
+    SortKey, Value, Visualization,
 };
 use holocron_protocol::limits::{
     EXPLORATION_CONDITIONS_MAX, EXPLORATION_DIMENSIONS_MAX, EXPLORATION_FILTER_DEPTH_MAX,
@@ -20,11 +21,31 @@ use holocron_protocol::limits::{
     EXPLORATION_ROWS_MAX, EXPLORATION_SORT_MAX, PAGE_SIZE_MAX, REPORT_ATTRIBUTION_CONVERSIONS_MAX,
     REPORT_ATTRIBUTION_LOOKBACK_DAYS, REPORT_FUNNEL_STEPS_MAX, REPORT_FUNNEL_STEPS_MIN,
     REPORT_FUNNEL_WINDOW_MAX_SECONDS, REPORT_FUNNEL_WINDOW_MIN_SECONDS, REPORT_GOALS_MAX,
-    REPORT_JOURNEY_LENGTH_MAX, REPORT_JOURNEY_LENGTH_MIN, REPORT_RETENTION_DAY_INTERVALS_MAX,
-    REPORT_RETENTION_WEEK_INTERVALS_MAX, REPORT_SESSION_LIST_COLUMNS_MAX,
+    REPORT_JOURNEY_LENGTH_MAX, REPORT_JOURNEY_LENGTH_MIN, REPORT_QUERY_LIST_ITEMS_MAX,
+    REPORT_RETENTION_DAY_INTERVALS_MAX, REPORT_RETENTION_WEEK_INTERVALS_MAX,
+    REPORT_SESSION_LIST_COLUMNS_MAX,
 };
 
+use super::glob::{self, Glob};
 use crate::METRIC_VERSION;
+
+/// Limits that differ between callers of [`validate_with`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct StateLimits {
+    /// Values in one `in` or `not_in` list.
+    pub list_items: usize,
+}
+
+impl StateLimits {
+    /// An exploration state, which lives in URLs (0004 Limits).
+    pub const EXPLORATION: Self = Self {
+        list_items: EXPLORATION_LIST_ITEMS_MAX,
+    };
+    /// A report query (0022).
+    pub const REPORT_QUERY: Self = Self {
+        list_items: REPORT_QUERY_LIST_ITEMS_MAX,
+    };
+}
 
 /// Why a state cannot run, naming the field: `measures`, `filter.f3`, `panels[1].sort`.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -117,6 +138,7 @@ pub enum Test {
     StrContains(String),
     StrStartsWith(String),
     StrIn(Vec<String>),
+    StrMatches(Glob),
     /// Integer fields (`weekday`, `hour`).
     Int(Order, i64),
     IntBetween(i64, i64),
@@ -177,6 +199,13 @@ pub struct CheckedFunnel {
     pub definition: FunnelReport,
     /// One per step, in step order.
     pub steps: Vec<Pred>,
+}
+
+impl CheckedFunnel {
+    /// The field identities are grouped by, version 2 only.
+    pub fn group_by(&self) -> Option<&Field> {
+        self.definition.group_by.as_ref()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -280,8 +309,17 @@ impl Pred {
     }
 }
 
-/// Checks a state and its panels.
+/// Checks a state and its panels with the limits of an exploration state.
 pub fn validate(state: &ExplorationState, panels: &[Panel]) -> Result<Query, Refusal> {
+    validate_with(state, panels, StateLimits::EXPLORATION)
+}
+
+/// [`validate`] with the limits of another caller, such as a report query.
+pub fn validate_with(
+    state: &ExplorationState,
+    panels: &[Panel],
+    limits: StateLimits,
+) -> Result<Query, Refusal> {
     if state.v != STATE_VERSION {
         return Err(Refusal::invalid(
             "v",
@@ -332,7 +370,7 @@ pub fn validate(state: &ExplorationState, panels: &[Panel]) -> Result<Query, Ref
         _ => {}
     }
 
-    let mut trees = Trees::default();
+    let mut trees = Trees::new(limits);
     let filter = state
         .filter
         .as_ref()
@@ -408,7 +446,7 @@ pub fn validate(state: &ExplorationState, panels: &[Panel]) -> Result<Query, Ref
 /// that take the exploration filter, such as replays. Refusals name `filter`. Like report
 /// trees, it matches pageviews and custom events, never performance observations.
 pub fn validate_filter(group: &Group) -> Result<Pred, Refusal> {
-    let pred = Trees::default().check("filter", group)?;
+    let pred = Trees::new(StateLimits::EXPLORATION).check("filter", group)?;
     if let Some(cond) = pred.find(&|c| c.field == PERF_METRIC) {
         return Err(Refusal::invalid(
             format!("filter.{}", cond.id),
@@ -454,7 +492,11 @@ fn report(
                 ));
             }
         };
-    if v != REPORT_VERSION {
+    let known = match definition {
+        ReportDefinition::Funnel(_) => (1..=FUNNEL_VERSION).contains(&v),
+        _ => v == REPORT_VERSION,
+    };
+    if !known {
         return Err(Refusal::new(
             ErrorCode::ReportVersionUnsupported,
             "report.v",
@@ -534,6 +576,23 @@ fn report(
                 .enumerate()
                 .map(|(i, step)| trees.check(&step_path(i), step))
                 .collect::<Result<_, _>>()?;
+            if let Some(field) = &r.group_by {
+                if r.v < 2 {
+                    return Err(unsupported(
+                        "report.group_by",
+                        "grouping a funnel needs funnel version 2",
+                    ));
+                }
+                if let Field::Property(property) = field {
+                    property_key("report.group_by", &property.key)?;
+                }
+                if *field == PERF_METRIC {
+                    return Err(Refusal::invalid(
+                        "report.group_by",
+                        "reports read pageviews and custom events, never performance observations",
+                    ));
+                }
+            }
             Report::Funnel(CheckedFunnel {
                 definition: r.clone(),
                 steps,
@@ -895,13 +954,21 @@ fn property_key(field: &str, key: &str) -> Result<(), Refusal> {
 
 /// Checks the predicate trees of one state: the filter and every report predicate. IDs are
 /// unique and conditions are counted across all trees; depth applies to each tree on its own.
-#[derive(Default)]
 struct Trees {
+    limits: StateLimits,
     ids: HashSet<String>,
     conditions: usize,
 }
 
 impl Trees {
+    fn new(limits: StateLimits) -> Self {
+        Self {
+            limits,
+            ids: HashSet::new(),
+            conditions: 0,
+        }
+    }
+
     /// `path` names the tree in refusals: `filter`, `report.steps.2`.
     fn check(&mut self, path: &str, root: &Group) -> Result<Pred, Refusal> {
         self.group(path, root, 1)
@@ -948,7 +1015,7 @@ impl Trees {
                             "two conditions share this ID",
                         ));
                     }
-                    condition(path, c).map(Pred::Cond)
+                    condition(path, c, self.limits).map(Pred::Cond)
                 }
             })
             .collect::<Result<_, _>>()?;
@@ -966,7 +1033,16 @@ fn valid_id(id: &str) -> bool {
             .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
 }
 
-fn condition(tree: &str, c: &Condition) -> Result<Cond, Refusal> {
+/// Text fields a `matches` glob applies to, besides string properties.
+const GLOB_FIELDS: [DimensionField; 5] = [
+    DimensionField::Path,
+    DimensionField::ReferrerPath,
+    DimensionField::Title,
+    DimensionField::Query,
+    DimensionField::Hostname,
+];
+
+fn condition(tree: &str, c: &Condition, limits: StateLimits) -> Result<Cond, Refusal> {
     let path = format!("{tree}.{}", c.id);
     let refuse = |message: &str| Refusal::invalid(path.clone(), message);
     if let Field::Property(p) = &c.field {
@@ -977,17 +1053,26 @@ fn condition(tree: &str, c: &Condition) -> Result<Cond, Refusal> {
         Operator::NotContains => (Operator::Contains, true),
         Operator::NotIn => (Operator::In, true),
         Operator::IsNotSet => (Operator::IsSet, true),
+        Operator::NotMatches => (Operator::Matches, true),
         other => (other, false),
     };
     let kind = FieldKind::of(&c.field);
     let test = match (op, &c.value) {
+        (Operator::Matches, Some(Value::String(pattern)))
+            if match &c.field {
+                Field::Dimension(d) => GLOB_FIELDS.contains(d),
+                Field::Property(_) => true,
+            } =>
+        {
+            Test::StrMatches(glob::parse(pattern).map_err(refuse)?)
+        }
         (Operator::IsSet, None) => Test::IsSet,
         (Operator::IsNull, None) if kind == FieldKind::Property => Test::IsNull,
         (Operator::IsSet | Operator::IsNull, _) => {
             return Err(refuse("this operator takes no value"));
         }
         (_, None) => return Err(refuse("this operator needs a value")),
-        (op, Some(value)) => test(tree, op, value, kind)
+        (op, Some(value)) => test(tree, op, value, kind, limits)
             .ok_or_else(|| refuse("the operator does not apply to this field and value"))??,
     };
     Ok(Cond {
@@ -1028,7 +1113,13 @@ fn order(op: Operator) -> Option<Order> {
 
 /// `None` when the operator does not fit the field and value types; `Some(Err)` when it fits
 /// but the value does not parse.
-fn test(tree: &str, op: Operator, value: &Value, kind: FieldKind) -> Option<Result<Test, Refusal>> {
+fn test(
+    tree: &str,
+    op: Operator,
+    value: &Value,
+    kind: FieldKind,
+    limits: StateLimits,
+) -> Option<Result<Test, Refusal>> {
     let bad = |message: &str| Some(Err(Refusal::invalid(tree, message)));
     Some(Ok(match (kind, op, value) {
         (FieldKind::Text | FieldKind::Property, Operator::Eq, Value::String(s)) => {
@@ -1043,12 +1134,12 @@ fn test(tree: &str, op: Operator, value: &Value, kind: FieldKind) -> Option<Resu
             Test::StrStartsWith(s.clone())
         }
         (FieldKind::Text | FieldKind::Property, Operator::In, Value::List(items)) => {
-            if items.is_empty() || items.len() > EXPLORATION_LIST_ITEMS_MAX {
+            if items.is_empty() || items.len() > limits.list_items {
                 return Some(Err(Refusal::too_many(
                     ErrorCode::InvalidArguments,
                     tree,
-                    EXPLORATION_LIST_ITEMS_MAX,
-                    "a list holds 1 to 50 values",
+                    limits.list_items,
+                    format!("a list holds 1 to {} values", limits.list_items),
                 )));
             }
             let mut strings = Vec::with_capacity(items.len());

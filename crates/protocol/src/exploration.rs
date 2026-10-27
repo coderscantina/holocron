@@ -15,8 +15,11 @@ use crate::operations::analytics::Freshness;
 /// The only state version this build reads.
 pub const STATE_VERSION: u8 = 1;
 
-/// The only version of each report kind this build reads.
+/// The only version of each report kind this build reads, except funnels.
 pub const REPORT_VERSION: u8 = 1;
+
+/// The newest funnel version this build reads. Version 2 adds `group_by`; version 1 stays valid.
+pub const FUNNEL_VERSION: u8 = 2;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -227,6 +230,10 @@ pub enum Operator {
     IsSet,
     IsNotSet,
     IsNull,
+    /// A glob over the whole value, case-sensitive: `*` any run without `/`, `**` any run,
+    /// `\` escapes the next character. 1 to 500 bytes, at most 8 wildcards.
+    Matches,
+    NotMatches,
 }
 
 /// A typed comparison value.
@@ -240,7 +247,7 @@ pub enum Value {
     /// RFC 3339 instant.
     Date(String),
     Bool(bool),
-    /// For `in`, `not_in` (up to 50 items) and `between` (exactly 2).
+    /// For `in`, `not_in` (up to 50 items, 1,000 in a report query) and `between` (exactly 2).
     List(Vec<Value>),
 }
 
@@ -619,12 +626,17 @@ pub enum PopulationScope {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct FunnelReport {
+    /// 1, or 2 with `group_by`.
     pub v: u8,
     /// 2 to 8 ordered step predicates.
     pub steps: Vec<Group>,
     /// 60 seconds to 30 days from the step-1 event, half-open.
     pub window_seconds: u32,
     pub scope: IdentityScope,
+    /// Version 2: split identities by this field's value on their entering step-1 event.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub group_by: Option<Field>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
@@ -810,6 +822,42 @@ pub struct FunnelResult {
     /// Where the identities dropping after each step went: one per step but the last.
     #[serde(default)]
     pub leaks: Vec<FunnelLeak>,
+    /// One per step but the first, then one from the first step to the last.
+    #[serde(default)]
+    pub durations: Vec<StepDuration>,
+    /// With `group_by`: the top 50 groups by step 1 reached, then by value. Empty otherwise.
+    #[serde(default)]
+    pub groups: Vec<FunnelGroup>,
+    /// More groups entered than `groups` holds.
+    #[serde(default)]
+    pub groups_truncated: bool,
+}
+
+/// The identities whose entering step-1 event carries one value of the funnel's `group_by`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
+pub struct FunnelGroup {
+    pub value: Cell,
+    /// One per step, in step order.
+    pub steps: Vec<FunnelStep>,
+    /// Identities reaching the last step out of those entering step 1.
+    pub conversion: Metric,
+    /// Shaped like the funnel's `durations`.
+    pub durations: Vec<StepDuration>,
+}
+
+/// Time between two step events of the identities reaching `to_step`, from their `from_step`
+/// event. Steps are indexes into `steps`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, TS, JsonSchema)]
+pub struct StepDuration {
+    pub from_step: u8,
+    pub to_step: u8,
+    /// Nearest-rank percentiles in integer milliseconds; unavailable with `no_values` when
+    /// nobody reached `to_step`.
+    pub p25: Metric,
+    pub median: Metric,
+    pub p75: Metric,
+    /// Identities by duration: `< 1 h`, `1–24 h`, `1–7 d`, `7–30 d`, `≥ 30 d`.
+    pub buckets: [i64; 5],
 }
 
 /// The identities that reached a step but not the next, by the page their session showed

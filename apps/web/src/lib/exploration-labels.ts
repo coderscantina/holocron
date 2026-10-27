@@ -132,6 +132,8 @@ export const operatorLabels = {
   is_set: 'explore.operators.is_set',
   is_not_set: 'explore.operators.is_not_set',
   is_null: 'explore.operators.is_null',
+  matches: 'explore.operators.matches',
+  not_matches: 'explore.operators.not_matches',
 } as const satisfies Record<Operator, MessageKey>
 
 export const typeLabels = {

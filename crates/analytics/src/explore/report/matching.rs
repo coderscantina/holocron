@@ -22,6 +22,11 @@ pub struct Matched {
 }
 
 impl Matched {
+    /// The index of a materialized field, which names its columns ([`sql::columns`]).
+    pub fn index(&self, field: &Field) -> Option<usize> {
+        self.fields.iter().position(|f| f == field)
+    }
+
     /// `pred` as a boolean SQL expression over the materialized columns.
     pub fn test(&self, pred: &Pred, sql: &mut Sql) {
         sql::predicate(pred, &self.fields, sql);
@@ -46,6 +51,8 @@ impl Matched {
 pub struct Reads<'a> {
     /// Predicates whose fields become columns.
     pub trees: &'a [&'a Pred],
+    /// More fields that become columns, such as a grouping.
+    pub fields: &'a [Field],
     /// Keep only events matching at least one of `trees`.
     pub narrow: bool,
     /// Also `<prefix>_se`: the members of sessions starting in the span.
@@ -65,6 +72,7 @@ pub fn materialize(
 ) -> duckdb::Result<Matched> {
     let Reads {
         trees,
+        fields: extra,
         narrow,
         sessions,
         revenue,
@@ -79,6 +87,11 @@ pub fn materialize(
     };
     for tree in trees {
         collect(tree, &mut fields);
+    }
+    for field in extra {
+        if !fields.contains(field) {
+            fields.push(field.clone());
+        }
     }
     let tested = fields.len();
     if let Some(filter) = &input.query.filter {

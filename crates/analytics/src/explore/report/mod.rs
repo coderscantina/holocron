@@ -97,6 +97,19 @@ pub(super) fn explore(
         }
     }
 
+    if let Report::Funnel(funnel) = report
+        && let Some(Field::Property(property)) = funnel.group_by()
+        && !property_known(snapshot, ctx.site, property.scope, &property.key)?
+    {
+        return Ok(Err(Refusal::invalid(
+            "report.group_by",
+            format!(
+                "no data on this site carries the property `{}`",
+                property.key
+            ),
+        )));
+    }
+
     let cutoff = ctx.cutoff_ms(&policies);
     let (start, end, retention_start) = run::clip(&span, cutoff);
     // Validation lets only the goals report compare with a typical weekday.

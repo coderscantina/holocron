@@ -475,7 +475,7 @@ async fn report_refusals_name_the_report_field() {
             "report.steps.1.p",
         ),
         (
-            with(funnel.clone(), "/report/v", json!(2)),
+            with(funnel.clone(), "/report/v", json!(3)),
             "report_version_unsupported",
             "report.v",
         ),

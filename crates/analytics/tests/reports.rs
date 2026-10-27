@@ -280,6 +280,30 @@ fn unknown_kinds_and_versions_are_refused() {
 }
 
 #[test]
+fn funnels_group_only_from_version_two() {
+    let v1 = funnel();
+    validate(&parse(&v1), &[]).unwrap();
+    assert_eq!(serde_json::to_value(parse(&v1)).unwrap(), v1);
+    let mut grouped = set(funnel(), "/report/v", json!(2));
+    validate(&parse(&grouped), &[]).unwrap();
+    grouped["report"]["group_by"] = json!({ "scope": "event", "key": "plan" });
+    validate(&parse(&grouped), &[]).unwrap();
+    let mut on_v1 = funnel();
+    on_v1["report"]["group_by"] = json!("country");
+    let mut perf = grouped.clone();
+    perf["report"]["group_by"] = json!("perf_metric");
+    assert_refused(vec![
+        (on_v1, "report_field_unsupported", "report.group_by"),
+        (perf, "invalid_arguments", "report.group_by"),
+        (
+            set(funnel(), "/report/v", json!(3)),
+            "report_version_unsupported",
+            "report.v",
+        ),
+    ]);
+}
+
+#[test]
 fn predicate_ids_are_unique_across_the_filter_and_every_report_tree() {
     let filter = group(vec![cond("s2", "country", "AT")]);
     let funnel_clash = set(funnel(), "/filter", filter);

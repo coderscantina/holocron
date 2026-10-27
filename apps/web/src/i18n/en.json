@@ -892,7 +892,9 @@
       "between": "is between",
       "is_set": "is set",
       "is_not_set": "is not set",
-      "is_null": "is null"
+      "is_null": "is null",
+      "matches": "matches",
+      "not_matches": "does not match"
     },
     "weekdays": {
       "1": "Monday",

@@ -1230,7 +1230,7 @@ fn measure_order(measure: &Measure, aggs: &[Agg], fields: &[Field]) -> String {
 }
 
 /// Cell ordering: values in UTF-8 byte order, then `(null)`, then not set (0004).
-fn cell_order(index: usize, field: &Field, dir: &str) -> Vec<String> {
+pub(super) fn cell_order(index: usize, field: &Field, dir: &str) -> Vec<String> {
     match field {
         Field::Dimension(_) => vec![format!("f{index} {dir} NULLS LAST")],
         Field::Property(_) => {

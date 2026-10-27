@@ -9476,6 +9476,85 @@
           "identities"
         ]
       },
+      "StepDuration": {
+        "type": "object",
+        "properties": {
+          "from_step": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "to_step": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "p25": {
+            "$ref": "#/components/schemas/Metric",
+            "description": "Nearest-rank percentiles in integer milliseconds; unavailable with `no_values` when\nnobody reached `to_step`."
+          },
+          "median": {
+            "$ref": "#/components/schemas/Metric"
+          },
+          "p75": {
+            "$ref": "#/components/schemas/Metric"
+          },
+          "buckets": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "minItems": 5,
+            "maxItems": 5,
+            "description": "Identities by duration: `< 1 h`, `1–24 h`, `1–7 d`, `7–30 d`, `≥ 30 d`."
+          }
+        },
+        "required": [
+          "from_step",
+          "to_step",
+          "p25",
+          "median",
+          "p75",
+          "buckets"
+        ],
+        "description": "Time between two step events of the identities reaching `to_step`, from their `from_step`\nevent. Steps are indexes into `steps`."
+      },
+      "FunnelGroup": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/Cell"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FunnelStep"
+            },
+            "description": "One per step, in step order."
+          },
+          "conversion": {
+            "$ref": "#/components/schemas/Metric",
+            "description": "Identities reaching the last step out of those entering step 1."
+          },
+          "durations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StepDuration"
+            },
+            "description": "Shaped like the funnel's `durations`."
+          }
+        },
+        "required": [
+          "value",
+          "steps",
+          "conversion",
+          "durations"
+        ],
+        "description": "The identities whose entering step-1 event carries one value of the funnel's `group_by`."
+      },
       "FunnelResult": {
         "type": "object",
         "properties": {
@@ -9505,6 +9584,27 @@
             },
             "description": "Where the identities dropping after each step went: one per step but the last.",
             "default": []
+          },
+          "durations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StepDuration"
+            },
+            "description": "One per step but the first, then one from the first step to the last.",
+            "default": []
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FunnelGroup"
+            },
+            "description": "With `group_by`: the top 50 groups by step 1 reached, then by value. Empty otherwise.",
+            "default": []
+          },
+          "groups_truncated": {
+            "type": "boolean",
+            "description": "More groups entered than `groups` holds.",
+            "default": false
           }
         },
         "required": [
@@ -10758,13 +10858,19 @@
               "lte",
               "is_set",
               "is_not_set",
-              "is_null"
+              "is_null",
+              "not_matches"
             ]
           },
           {
             "type": "string",
             "const": "between",
             "description": "Both ends inclusive."
+          },
+          {
+            "type": "string",
+            "const": "matches",
+            "description": "A glob over the whole value, case-sensitive: `*` any run without `/`, `**` any run,\n`\\` escapes the next character. 1 to 500 bytes, at most 8 wildcards."
           }
         ]
       },
@@ -10871,7 +10977,7 @@
               "t",
               "v"
             ],
-            "description": "For `in`, `not_in` (up to 50 items) and `between` (exactly 2)."
+            "description": "For `in`, `not_in` (up to 50 items, 1,000 in a report query) and `between` (exactly 2)."
           }
         ],
         "description": "A typed comparison value."
@@ -10927,7 +11033,8 @@
                 "type": "integer",
                 "format": "uint8",
                 "minimum": 0,
-                "maximum": 255
+                "maximum": 255,
+                "description": "1, or 2 with `group_by`."
               },
               "steps": {
                 "type": "array",
@@ -10944,6 +11051,17 @@
               },
               "scope": {
                 "$ref": "#/components/schemas/IdentityScope"
+              },
+              "group_by": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Field"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Version 2: split identities by this field's value on their entering step-1 event."
               }
             },
             "required": [

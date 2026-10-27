@@ -5,7 +5,9 @@ mod common;
 
 use chrono_tz::Europe::Vienna;
 use common::{Site, Who, correct, ingest, ms, open};
-use holocron_analytics::explore::{Context, Refusal, explore, validate};
+use holocron_analytics::explore::{
+    Context, Refusal, StateLimits, explore, validate, validate_with,
+};
 use holocron_protocol::exploration::{Cell, ExplorationState, ExploreResult, Metric, Panel};
 use holocron_storage::{EventKind, Lane, Record, Storage};
 use serde_json::{Value, json};
@@ -194,6 +196,59 @@ async fn include_and_exclude_partition_the_total_and_repeated_conditions_combine
     )
     .await;
     assert_eq!(count(&combined.main.totals[0]), 3);
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn matches_and_not_matches_partition_the_total() {
+    let (_dir, storage) = loaded().await;
+    let total = |cmp: &str, glob: &str| {
+        let filter = group("and", vec![cond("f1", "path", cmp, Some(glob))]);
+        run(
+            &storage,
+            state(json!(["pageviews"]), json!([]), filter),
+            vec![],
+        )
+    };
+    let matched = count(&total("matches", "/a**").await.main.totals[0]);
+    let rest = count(&total("not_matches", "/a**").await.main.totals[0]);
+    // The pageview without a path is in the complement.
+    assert_eq!((matched, rest), (3, 4));
+}
+
+#[test]
+fn matches_needs_a_glob_field_and_lists_take_the_caller_limit() {
+    let refused = |filter: Value, limits: StateLimits| {
+        let state: ExplorationState =
+            serde_json::from_value(state(json!(["pageviews"]), json!([]), filter)).unwrap();
+        validate_with(&state, &[], limits).map_err(|r| (r.code.as_str().to_owned(), r.field))
+    };
+    let one =
+        |field: &str, glob: &str| group("and", vec![cond("f1", field, "matches", Some(glob))]);
+    let invalid = Err(("invalid_arguments".to_owned(), "filter.f1".to_owned()));
+    assert!(refused(one("title", "*Pricing*"), StateLimits::EXPLORATION).is_ok());
+    let property = json!({ "kind": "group", "op": "and", "items": [{ "kind": "cond", "id": "f1",
+        "field": { "scope": "session", "key": "plan" }, "cmp": "not_matches", "value": { "t": "string", "v": "pro-*" } }] });
+    assert!(refused(property, StateLimits::EXPLORATION).is_ok());
+    assert_eq!(
+        refused(one("event_name", "sign*"), StateLimits::EXPLORATION).map(drop),
+        invalid
+    );
+    assert_eq!(
+        refused(one("path", &"*a".repeat(9)), StateLimits::EXPLORATION).map(drop),
+        invalid
+    );
+
+    let list = |n: usize| {
+        let items: Vec<Value> = (0..n)
+            .map(|i| json!({ "t": "string", "v": format!("/{i}") }))
+            .collect();
+        json!({ "kind": "group", "op": "and", "items": [{ "kind": "cond", "id": "f1", "field": "path",
+            "cmp": "not_in", "value": { "t": "list", "v": items } }] })
+    };
+    assert!(refused(list(50), StateLimits::EXPLORATION).is_ok());
+    assert!(refused(list(51), StateLimits::EXPLORATION).is_err());
+    assert!(refused(list(1_000), StateLimits::REPORT_QUERY).is_ok());
+    assert!(refused(list(1_001), StateLimits::REPORT_QUERY).is_err());
 }
 
 #[tokio::test(flavor = "multi_thread")]

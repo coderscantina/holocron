@@ -9,6 +9,7 @@
 //! ([`rollup`]), with the same result. A state with a report runs its kind in [`report`].
 
 mod baseline;
+mod glob;
 mod report;
 mod resolve;
 pub(crate) mod rollup;
@@ -39,7 +40,7 @@ pub use run::{Plan, decimal, instant, record_plans};
 pub(crate) use sql::session_fields_sql;
 pub use validate::{
     CheckedAttribution, CheckedFunnel, CheckedGoals, DEFAULT_PAGE, Pred, Query, Refusal, Report,
-    validate, validate_filter,
+    StateLimits, validate, validate_filter, validate_with,
 };
 
 /// What a request adds to the state: the site's analytical ID, the application clock, the

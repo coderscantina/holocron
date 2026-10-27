@@ -5,6 +5,7 @@
 use holocron_protocol::exploration::{DimensionField, Field, PropertyScope};
 use holocron_storage::duckdb::types::Value;
 
+use super::glob::Glob;
 use super::validate::{Cond, Order, Pred, Test};
 
 /// SQL text with its positional parameters, in order.
@@ -199,6 +200,22 @@ fn list(items: &[String], sql: &mut Sql) {
     sql.push(")");
 }
 
+/// `starts_with` on the literal prefix lets most rows skip the regular expression.
+fn glob_test(c: &str, glob: &Glob, sql: &mut Sql) {
+    if !glob.prefix.is_empty() {
+        sql.push("starts_with(")
+            .push(c)
+            .push(", ")
+            .bind(glob.prefix.clone())
+            .push(") AND ");
+    }
+    sql.push("regexp_full_match(")
+        .push(c)
+        .push(", ")
+        .bind(glob.regex.clone())
+        .push(")");
+}
+
 fn scalar_test(c: &str, test: &Test, sql: &mut Sql) {
     match test {
         Test::StrEq(v) => sql.push(c).push(" = ").bind(v.clone()),
@@ -217,6 +234,10 @@ fn scalar_test(c: &str, test: &Test, sql: &mut Sql) {
         Test::StrIn(items) => {
             sql.push(c).push(" IN ");
             list(items, sql);
+            sql
+        }
+        Test::StrMatches(glob) => {
+            glob_test(c, glob, sql);
             sql
         }
         Test::Int(order, n) => sql.push(c).push(op(*order)).bind(*n),
@@ -244,6 +265,11 @@ pub fn property_test(p: &str, test: &Test, sql: &mut Sql) {
         Test::StrIn(items) => {
             sql.push(&format!("{p}t = 5 AND {p}s IN "));
             list(items, sql);
+            sql
+        }
+        Test::StrMatches(glob) => {
+            sql.push(&format!("{p}t = 5 AND "));
+            glob_test(&format!("{p}s"), glob, sql);
             sql
         }
         Test::Contains { text, element } => {

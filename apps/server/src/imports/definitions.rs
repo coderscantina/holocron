@@ -263,6 +263,7 @@ pub fn report_state(
                 steps,
                 window_seconds: (minutes * 60.0).round() as u32,
                 scope: IdentityScope::Daily,
+                group_by: None,
             })
         }
         "journey" => {

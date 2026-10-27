@@ -45,6 +45,15 @@ export const EXPLORATION_GROUP_ITEMS_MAX = 32
 /** Values in one `in` or `not_in` list. */
 export const EXPLORATION_LIST_ITEMS_MAX = 50
 
+/** Values in one `in` or `not_in` list of a report query (decision 0022). */
+export const REPORT_QUERY_LIST_ITEMS_MAX = 1000
+
+/** Longest `matches` glob, in bytes. */
+export const GLOB_MAX_BYTES = 500
+
+/** Wildcards (`*` or `**`) in one `matches` glob. */
+export const GLOB_WILDCARDS_MAX = 8
+
 /** Longest property key, in bytes. */
 export const EXPLORATION_PROPERTY_KEY_MAX_BYTES = 500
 
@@ -140,6 +149,9 @@ export const REPORT_FUNNEL_WINDOW_MIN_SECONDS = 60
 
 /** Longest funnel window, in seconds: 30 days. */
 export const REPORT_FUNNEL_WINDOW_MAX_SECONDS = 2592000
+
+/** Groups of a grouped funnel in a result, by step 1 reached. */
+export const REPORT_FUNNEL_GROUPS_MAX = 50
 
 /** Shortest journey length, in steps. */
 export const REPORT_JOURNEY_LENGTH_MIN = 2

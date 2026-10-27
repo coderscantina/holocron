@@ -52,6 +52,12 @@ limits! {
         EXPLORATION_GROUP_ITEMS_MAX: usize = 32;
         /// Values in one `in` or `not_in` list.
         EXPLORATION_LIST_ITEMS_MAX: usize = 50;
+        /// Values in one `in` or `not_in` list of a report query (decision 0022).
+        REPORT_QUERY_LIST_ITEMS_MAX: usize = 1_000;
+        /// Longest `matches` glob, in bytes.
+        GLOB_MAX_BYTES: usize = 500;
+        /// Wildcards (`*` or `**`) in one `matches` glob.
+        GLOB_WILDCARDS_MAX: usize = 8;
         /// Longest property key, in bytes.
         EXPLORATION_PROPERTY_KEY_MAX_BYTES: usize = 500;
         /// Default rows per exploration page.
@@ -116,6 +122,8 @@ limits! {
         REPORT_FUNNEL_WINDOW_MIN_SECONDS: u32 = 60;
         /// Longest funnel window, in seconds: 30 days.
         REPORT_FUNNEL_WINDOW_MAX_SECONDS: u32 = 30 * 86_400;
+        /// Groups of a grouped funnel in a result, by step 1 reached.
+        REPORT_FUNNEL_GROUPS_MAX: usize = 50;
         /// Shortest journey length, in steps.
         REPORT_JOURNEY_LENGTH_MIN: u8 = 2;
         /// Longest journey length, in steps.
