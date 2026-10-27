@@ -33,6 +33,21 @@ export const operatorsFor: Record<FilterKind, Operator[]> = {
   null: ['is_null', 'is_set', 'is_not_set'],
 }
 
+/** Built-in fields that take `matches` and `not_matches` (0022); string properties take them too. */
+const globFields: Field[] = ['path', 'referrer_path', 'title', 'query', 'hostname']
+
+/** Operators a field offers: its kind's, plus the glob pair after `starts_with` where the server allows it. */
+export function operatorsOf(field: Pick<FilterField, 'field' | 'kind'>): Operator[] {
+  const operators = operatorsFor[field.kind]
+  const glob = field.kind === 'string' || (field.kind === 'text' && globFields.includes(field.field))
+  if (!glob) return operators
+  const at = operators.indexOf('starts_with') + 1
+  return [...operators.slice(0, at), 'matches', 'not_matches', ...operators.slice(at)]
+}
+
+/** Whether an operator compares against a glob. */
+export const isGlob = (operator: Operator | null): boolean => operator === 'matches' || operator === 'not_matches'
+
 export const valueless: Operator[] = ['is_set', 'is_not_set', 'is_null']
 
 const kindOfType: Record<PropertyType, FilterKind> = {

@@ -10,6 +10,7 @@ import SecretReveal from '~/components/account/SecretReveal.vue'
 import CheckboxGroup from '~/components/CheckboxGroup.vue'
 import FormField from '~/components/FormField.vue'
 import { Button } from '~/components/ui/button'
+import { Checkbox } from '~/components/ui/checkbox'
 import { Dialog, DialogContent, DialogHeaderCombined } from '~/components/ui/dialog'
 import { Label } from '~/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
@@ -19,7 +20,8 @@ import { useSiteList } from '~/composables/useSiteContext'
 import type { ApiKeyCreated, ApiKeysCreateArgs, KeySites, SiteId } from '~/generated'
 import { keyGrantableCommands } from '~/generated/commands'
 import { LABEL_MAX_CHARS } from '~/generated/limits'
-import { keyGrantableQueries } from '~/generated/queries'
+import { keyGrantableQueries, readAnalyticsPreset } from '~/generated/queries'
+import { isReadAnalyticsPreset } from '~/lib/api-key-preset'
 import CommandAlert from '~/pages/settings/CommandAlert.vue'
 import { useI18n } from '~/plugins/i18n'
 import { queryClient } from '~/plugins/vue-query'
@@ -67,6 +69,11 @@ watch(open, (value) => {
 })
 
 const operations = computed(() => [...reads.value, ...writes.value])
+const presetOn = computed(() => isReadAnalyticsPreset(operations.value))
+const togglePreset = (on: boolean | 'indeterminate') => {
+  reads.value = on === true ? [...readAnalyticsPreset] : []
+  writes.value = []
+}
 const ready = computed(
   () =>
     name.value.trim() !== '' &&
@@ -131,6 +138,17 @@ const error = computed(() => (create.error.value instanceof Error ? create.error
             :error="fieldMessage(error, 'name')"
             required
           />
+          <div class="grid gap-1 rounded-lg border border-border p-3">
+            <label class="flex w-fit items-center gap-2 text-sm font-medium text-primary">
+              <Checkbox
+                :model-value="presetOn"
+                @update:model-value="togglePreset"
+              />
+              {{ t('apiKeys.presetReadAnalytics') }}
+              <span class="text-xs font-normal text-muted">{{ t('apiKeys.recommended') }}</span>
+            </label>
+            <p class="text-xs text-muted">{{ t('apiKeys.presetReadAnalyticsHint') }}</p>
+          </div>
           <CheckboxGroup
             v-model="reads"
             :legend="t('apiKeys.reads')"

@@ -13,8 +13,9 @@ import { queryKeys } from '~/api/query-keys'
 import { explorationsResource } from '~/api/resources/explorations'
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
 import {
+  isGlob,
   kindOf,
-  operatorsFor,
+  operatorsOf,
   parseValue,
   valueless,
   valueText,
@@ -22,8 +23,10 @@ import {
 } from '~/composables/useFilterFields'
 import type { Condition, ExplorationState, Operator } from '~/generated'
 import { conditionCountry, countryCode } from '~/lib/client-looks'
+import { GLOB_MAX_BYTES, GLOB_WILDCARDS_MAX } from '~/generated/limits'
+import { globError, type GlobError } from '~/lib/glob'
 import { operatorLabels, typeLabels } from '~/lib/exploration-labels'
-import { useI18n } from '~/plugins/i18n'
+import { useI18n, type MessageKey } from '~/plugins/i18n'
 import {
   addCondition,
   canonical,
@@ -134,7 +137,7 @@ const items = computed<Item[]>(() => {
   const field = pendingField.value
   if (!field) return []
   if (stage.value === 'operator') {
-    return operatorsFor[field.kind]
+    return operatorsOf(field)
       .map((operator) => ({ key: operator, label: t(operatorLabels[operator]) }))
       .filter((item) => matches(item.label))
   }
@@ -163,6 +166,7 @@ const placeholder = computed(() => {
   const label = pendingField.value?.label ?? ''
   if (stage.value === 'operator') return t('explore.filters.pickOperator', { field: label })
   if (stage.value === 'value') {
+    if (isGlob(pendingOperator.value)) return t('explore.filters.globHint')
     return ['text', 'string', 'bool'].includes(pendingField.value?.kind ?? '')
       ? t('explore.filters.pickValue', { field: label })
       : t('explore.filters.enterValue', { field: label })
@@ -233,11 +237,26 @@ const chooseOperator = (operator: Operator) => {
   focusInput()
 }
 
+const globMessages = {
+  empty: 'explore.filters.globEmpty',
+  too_long: 'explore.filters.globTooLong',
+  too_many: 'explore.filters.globTooMany',
+  trailing_escape: 'explore.filters.globTrailingEscape',
+} as const satisfies Record<GlobError, MessageKey>
+
 const chooseValue = (text?: string) => {
   const field = pendingField.value
   const operator = pendingOperator.value
   if (!field || !operator) return
-  const value = parseValue(field.kind, text ?? input.value)
+  const typed = text ?? input.value
+  if (isGlob(operator)) {
+    const problem = globError(typed)
+    if (problem) {
+      invalid.value = t(globMessages[problem], { max: problem === 'too_long' ? GLOB_MAX_BYTES : GLOB_WILDCARDS_MAX })
+      return
+    }
+  }
+  const value = parseValue(field.kind, typed)
   if (!value) {
     // Keep the half-built condition and say what is missing.
     const type = field.kind === 'number' ? 'decimal' : field.kind === 'date' ? 'date' : 'integer'
@@ -301,7 +320,7 @@ const pick = (index: number) => {
     return
   }
   if (stage.value === 'operator') {
-    const operator = operatorsFor[pendingField.value?.kind ?? 'text'].find((op) => op === item.key)
+    const operator = (pendingField.value ? operatorsOf(pendingField.value) : []).find((op) => op === item.key)
     if (operator) chooseOperator(operator)
     return
   }
@@ -343,7 +362,8 @@ const onKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
     event.preventDefault()
     // Substring operators take the typed text; equality picks the highlighted suggestion.
-    const partial = ['contains', 'not_contains', 'starts_with'].includes(pendingOperator.value ?? '')
+    const partial =
+      isGlob(pendingOperator.value) || ['contains', 'not_contains', 'starts_with'].includes(pendingOperator.value ?? '')
     if (stage.value === 'value' && partial && input.value.trim() !== '') chooseValue()
     else if (open.value && items.value.length > 0) pick(highlighted.value)
     else if (stage.value === 'value') chooseValue()

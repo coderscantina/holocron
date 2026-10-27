@@ -127,6 +127,9 @@ describe('filter URL parameter', () => {
     const empty: Group = { kind: 'group', op: 'and', items: [] }
     expect(decodeFilter(encodeFilter(empty))).toEqual({ ok: false, reason: 'unreadable' })
     expect(decodeFilter(encodeState(acceptance()))).toEqual({ ok: false, reason: 'unreadable' })
+    const glob = addCondition(acceptance(), { field: 'path', cmp: 'matches', value: { t: 'string', v: '/*/events/**' } }).filter
+    if (!glob) throw new Error('the condition was added')
+    expect(decodeFilter(encodeFilter(glob))).toEqual({ ok: true, filter: glob })
     expect(decodeFilter('not base64 json')).toEqual({ ok: false, reason: 'unreadable' })
     expect(decodeFilter('a'.repeat(9000))).toEqual({ ok: false, reason: 'oversize' })
   })
