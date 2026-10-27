@@ -85,10 +85,7 @@ pub fn budget(query: &ReportQuery) -> Result<usize, Refusal> {
             None => 1,
             Some(for_each) => match &for_each.values {
                 ForEachValues::Values(values) => values.len(),
-                ForEachValues::Ref(r) => r
-                    .source
-                    .limit
-                    .map_or(REPORT_QUERY_FOR_EACH_MAX, |limit| limit as usize),
+                ForEachValues::Ref(r) => ref_bound(query, &r.source),
             },
         })
         .sum();
@@ -103,6 +100,26 @@ pub fn budget(query: &ReportQuery) -> Result<usize, Refusal> {
         ));
     }
     Ok(sub_queries)
+}
+
+/// The most values a `for_each` ref can return, known before the referenced block ran: the
+/// ref's `limit`, the rows of a plain cut (its `limit`) or the fan-out cap, whichever is lowest.
+/// The real count never exceeds it, so a request within the budget stays within it once refs
+/// resolve and no recheck is needed.
+fn ref_bound(query: &ReportQuery, source: &RefSource) -> usize {
+    let rows = query
+        .blocks
+        .iter()
+        .find(|b| b.name == source.block)
+        .and_then(|b| match &b.body {
+            BlockBody::Cut(cut) if b.for_each.is_none() && !cut.series => {
+                Some(cut.limit.unwrap_or(REPORT_QUERY_CUT_LIMIT_DEFAULT) as usize)
+            }
+            _ => None,
+        })
+        .unwrap_or(REPORT_QUERY_FOR_EACH_MAX);
+    let declared = source.limit.map_or(usize::MAX, |limit| limit as usize);
+    rows.min(declared).min(REPORT_QUERY_FOR_EACH_MAX)
 }
 
 /// Checks a report query against the sites its blocks read. `sites` holds every block's site.
