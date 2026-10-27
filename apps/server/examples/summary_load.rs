@@ -75,6 +75,7 @@ async fn main() -> anyhow::Result<()> {
         public_origin: None,
         instance_name: "summary-load".into(),
         setup_token: None,
+        backup_dir: "/backups".into(),
         collect: CollectConfig::default(),
         disk_reserve_bytes: budgets.disk_reserve_bytes,
     };

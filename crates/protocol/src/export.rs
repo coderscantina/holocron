@@ -35,7 +35,7 @@ pub struct Output {
 }
 
 /// Types the browser needs that no operation references.
-fn extra_types() -> [TypeInfo; 16] {
+fn extra_types() -> [TypeInfo; 21] {
     [
         TypeInfo::of::<errors::ApiErrorBody>(),
         TypeInfo::of::<envelope::CommandKey>(),
@@ -53,6 +53,11 @@ fn extra_types() -> [TypeInfo; 16] {
         TypeInfo::of::<setup::SetupRunArgs>(),
         TypeInfo::of::<setup::SetupImportProgress>(),
         TypeInfo::of::<setup::SetupDiscardArgs>(),
+        TypeInfo::of::<setup::SetupBackups>(),
+        TypeInfo::of::<setup::SetupRestoreInspectArgs>(),
+        TypeInfo::of::<setup::SetupRestoreInspection>(),
+        TypeInfo::of::<setup::SetupRestoreArgs>(),
+        TypeInfo::of::<setup::SetupRestoreProgress>(),
     ]
 }
 

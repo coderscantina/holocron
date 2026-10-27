@@ -3,14 +3,12 @@
 //! The source URL and the Umami 2FA key live in the job's memory only; resuming after a restart
 //! asks for them again, and the run's fingerprint refuses a different source.
 
-use std::convert::Infallible;
 use std::net::SocketAddr;
 
 use axum::Json;
 use axum::body::Bytes;
 use axum::extract::{ConnectInfo, State};
 use axum::http::{HeaderMap, HeaderValue, header};
-use axum::response::sse::{Event, KeepAlive, Sse};
 use axum::response::{IntoResponse, Response};
 use chrono_tz::Tz;
 use holocron_protocol::errors::{ErrorCode, FieldErrorCode};
@@ -198,27 +196,7 @@ pub(super) async fn progress(
     headers: HeaderMap,
 ) -> Result<Response, ApiError> {
     setup.authorized(&headers, peer).await?;
-    let frames = setup.progress.subscribe();
-    let closing = setup.closing.subscribe();
-    let stream = futures_util::stream::unfold(
-        (frames, closing, true),
-        |(mut frames, mut closing, first)| async move {
-            if !first {
-                tokio::select! {
-                    changed = frames.changed() => changed.ok()?,
-                    _ = closing.wait_for(|closing| *closing) => return None,
-                }
-            }
-            let frame = frames.borrow_and_update().clone();
-            let event = Event::default()
-                .json_data(&frame)
-                .expect("frames serialize");
-            Some((Ok::<_, Infallible>(event), (frames, closing, false)))
-        },
-    );
-    Ok(Sse::new(stream)
-        .keep_alive(KeepAlive::default())
-        .into_response())
+    Ok(super::frames_stream(&setup, setup.progress.subscribe()))
 }
 
 /// The whole manifest of a complete import, as a download.

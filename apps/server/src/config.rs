@@ -39,6 +39,11 @@ pub struct ServeArgs {
     #[arg(long, env = "HOLOCRON_SETUP_TOKEN", hide_env_values = true)]
     pub setup_token: Option<String>,
 
+    /// Directory with `holocron-backup-*` backups that the setup wizard offers to restore. The
+    /// compose files mount the backup storage at `/backups`.
+    #[arg(long, env = "HOLOCRON_BACKUP_DIR", default_value = "/backups")]
+    pub backup_dir: PathBuf,
+
     /// Free space the data volume keeps, in MiB. Below it collection answers 503 so the
     /// server can still shut down cleanly (decision 0008).
     #[arg(long, env = "HOLOCRON_DISK_RESERVE_MIB", default_value_t = 4096)]
@@ -223,6 +228,8 @@ pub struct Config {
     pub public_origin: Option<String>,
     pub instance_name: String,
     pub setup_token: Option<String>,
+    /// Where the setup wizard looks for backups to restore.
+    pub backup_dir: PathBuf,
     pub collect: CollectConfig,
     pub disk_reserve_bytes: u64,
 }
@@ -278,6 +285,7 @@ impl Config {
             public_origin,
             instance_name: args.instance_name,
             setup_token: args.setup_token,
+            backup_dir: args.backup_dir,
             collect,
             disk_reserve_bytes: args.disk_reserve_mib * 1024 * 1024,
         })

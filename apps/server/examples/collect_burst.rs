@@ -266,6 +266,7 @@ async fn start(
         public_origin: None,
         instance_name: "burst".into(),
         setup_token: None,
+        backup_dir: "/backups".into(),
         collect: CollectConfig {
             trusted_proxies: vec![parse_net("127.0.0.1").unwrap()],
             ..CollectConfig::default()

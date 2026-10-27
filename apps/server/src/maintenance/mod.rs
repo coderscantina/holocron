@@ -110,6 +110,7 @@ impl Runtime {
             public_origin: None,
             instance_name: "Holocron".into(),
             setup_token: None,
+            backup_dir: "/backups".into(),
             collect: CollectConfig::default(),
             disk_reserve_bytes: Budgets::default().disk_reserve_bytes,
         }

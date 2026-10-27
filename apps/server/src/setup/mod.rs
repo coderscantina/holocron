@@ -7,8 +7,14 @@
 //! the Umami import runs inside it ([`import`]), authorized by the admin's session, and ends
 //! when the admin acknowledges the report. A directory with an unfinished import, after a
 //! restart or a killed `holocron import run`, starts in that phase again.
+//!
+//! The restore path ([`restore`]) stays in the claim phase, authorized by the token: it restores
+//! a backup into the empty directory with `holocron restore`'s code, upgrades it with
+//! `holocron upgrade`'s code when the backup is older, and ends setup like the fresh path.
+//! A `restore_incomplete` directory starts here too and the wizard offers the step again.
 
 mod import;
+mod restore;
 
 use std::net::SocketAddr;
 use std::path::Path;
@@ -28,8 +34,9 @@ use holocron_protocol::ids::UserId;
 use holocron_protocol::operations::auth::{Account, LoginResult};
 use holocron_protocol::setup::{
     SetupAdminArgs, SetupAdminPath, SetupCheck, SetupImportProgress, SetupImportState, SetupPhase,
-    SetupSignInArgs, SetupStatus, SetupTokenArgs,
+    SetupRestoreProgress, SetupSignInArgs, SetupStatus, SetupTokenArgs,
 };
+use serde::Serialize;
 use serde::de::DeserializeOwned;
 use serde_json::json;
 use tokio::sync::watch;
@@ -69,6 +76,7 @@ struct Setup {
     /// One phase change at a time: the admin step, a discard, the finish.
     phase: tokio::sync::Mutex<Phase>,
     progress: watch::Sender<SetupImportProgress>,
+    restore: watch::Sender<SetupRestoreProgress>,
     done: watch::Sender<bool>,
     /// Set when setup mode stops serving, so open progress streams end.
     closing: watch::Sender<bool>,
@@ -77,6 +85,8 @@ struct Setup {
 enum Phase {
     /// No admin yet.
     Claim,
+    /// A restore runs in the data directory.
+    Restoring,
     /// The admin exists and an import waits for the wizard.
     Import(Installed),
     /// Setup finished; `serve` takes over.
@@ -103,18 +113,27 @@ impl Installed {
 
 type Shared = Arc<Setup>;
 
-/// Whether `serve` has to set up `dir` first: it is missing, empty, an init stopped halfway, or
-/// the wizard's import path has not finished.
+/// Whether `serve` has to set up `dir` first: it is missing, empty, an init or a restore stopped
+/// halfway, or the wizard's import path has not finished.
 pub fn needed(dir: &Path) -> Result<bool, Failure> {
     match init::check_initialized(dir) {
         Ok(()) => Ok(dir.join(init::SETUP_IMPORT_MARKER).exists()),
-        Err(failure) if matches!(&*failure.code, "not_initialized" | "init_incomplete") => {
+        Err(failure)
+            if matches!(
+                &*failure.code,
+                "not_initialized" | "init_incomplete" | "restore_incomplete"
+            ) =>
+        {
             let empty = match std::fs::read_dir(dir) {
-                Ok(mut entries) => entries.next().is_none(),
+                // The lock file is whoever held the directory last, not data.
+                Ok(mut entries) => entries.all(|entry| {
+                    entry
+                        .is_ok_and(|entry| entry.file_name() == crate::maintenance::lock::LOCK_FILE)
+                }),
                 Err(e) if e.kind() == std::io::ErrorKind::NotFound => true,
                 Err(e) => return Err(Failure::storage(dir, e)),
             };
-            if empty || failure.code == "init_incomplete" {
+            if empty || matches!(&*failure.code, "init_incomplete" | "restore_incomplete") {
                 Ok(true)
             } else {
                 Err(failure)
@@ -176,6 +195,15 @@ pub async fn run(
             "setup mode: an Umami import into this data directory has not finished; open the dashboard and sign in as the install admin to continue it"
         );
     } else {
+        if dir
+            .join(crate::maintenance::restore::IN_PROGRESS_MARKER)
+            .exists()
+        {
+            tracing::warn!(
+                dir = %dir.display(),
+                "setup mode: a restore into this data directory stopped partway; open the dashboard to restore the backup again"
+            );
+        }
         if config.setup_token.is_none() {
             // The one place the token appears. The operator copies it from here into the wizard.
             tracing::warn!("setup token: {token}");
@@ -196,6 +224,7 @@ pub async fn run(
         sign_ins: RateLimiter::per_minute(ATTEMPTS_PER_MINUTE),
         phase: tokio::sync::Mutex::new(phase),
         progress: watch::channel(progress).0,
+        restore: watch::channel(SetupRestoreProgress::default()).0,
         done,
         closing: watch::channel(false).0,
     });
@@ -239,6 +268,10 @@ fn router(setup: Shared) -> Router {
         .route("/setup/import/progress", get(import::progress))
         .route("/setup/import/manifest", get(import::manifest))
         .route("/setup/import/discard", post(import::discard))
+        .route("/setup/restore/backups", post(restore::backups))
+        .route("/setup/restore/inspect", post(restore::inspect))
+        .route("/setup/restore/start", post(restore::start))
+        .route("/setup/restore/progress", get(restore::progress))
         .fallback(setup_required);
     let routes = Router::new()
         .route("/health", get(health))
@@ -278,12 +311,18 @@ async fn status(
     headers: HeaderMap,
 ) -> Result<Response, ApiError> {
     let db = match &*setup.phase.lock().await {
-        Phase::Claim => None,
+        Phase::Claim | Phase::Restoring => None,
         Phase::Import(installed) => Some(installed.db.clone()),
         Phase::Done => return Err(ApiError::new(ErrorCode::SetupRequired)),
     };
     let mut status = SetupStatus {
         phase: SetupPhase::Claim,
+        restore_incomplete: db.is_none()
+            && setup
+                .config
+                .data_dir
+                .join(crate::maintenance::restore::IN_PROGRESS_MARKER)
+                .exists(),
         account: None,
         import: None,
     };
@@ -502,7 +541,9 @@ impl Setup {
     async fn installed(&self) -> Result<Db, ApiError> {
         match &*self.phase.lock().await {
             Phase::Import(installed) => Ok(installed.db.clone()),
-            Phase::Claim | Phase::Done => Err(ApiError::new(ErrorCode::SetupRequired)),
+            Phase::Claim | Phase::Restoring | Phase::Done => {
+                Err(ApiError::new(ErrorCode::SetupRequired))
+            }
         }
     }
 
@@ -519,6 +560,37 @@ impl Setup {
             .ok_or_else(|| ApiError::new(ErrorCode::Unauthenticated))?;
         Ok((db, user))
     }
+}
+
+/// A server-sent event stream of `frames`: the current one, then one per change, until setup
+/// mode stops.
+fn frames_stream<T>(setup: &Setup, frames: watch::Receiver<T>) -> Response
+where
+    T: Serialize + Clone + Send + Sync + 'static,
+{
+    let closing = setup.closing.subscribe();
+    let stream = futures_util::stream::unfold(
+        (frames, closing, true),
+        |(mut frames, mut closing, first)| async move {
+            if !first {
+                tokio::select! {
+                    changed = frames.changed() => changed.ok()?,
+                    _ = closing.wait_for(|closing| *closing) => return None,
+                }
+            }
+            let frame = frames.borrow_and_update().clone();
+            let event = axum::response::sse::Event::default()
+                .json_data(&frame)
+                .expect("frames serialize");
+            Some((
+                Ok::<_, std::convert::Infallible>(event),
+                (frames, closing, false),
+            ))
+        },
+    );
+    axum::response::sse::Sse::new(stream)
+        .keep_alive(axum::response::sse::KeepAlive::default())
+        .into_response()
 }
 
 /// Upper case without dashes or spaces, so a token typed by hand still matches.

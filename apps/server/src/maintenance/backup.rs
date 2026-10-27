@@ -29,7 +29,7 @@ use crate::state::AppState;
 
 pub const MANIFEST_FILE: &str = "manifest.json";
 const FORMAT: i64 = 1;
-const PREFIX: &str = "holocron-backup-";
+pub const PREFIX: &str = "holocron-backup-";
 const PARTIAL: &str = ".partial";
 
 /// Files of a backup, named as in the data directory.
@@ -191,8 +191,8 @@ async fn vacuum_into(pool: &sqlx::SqlitePool, path: &Path) -> Result<(), Failure
     Ok(())
 }
 
-/// Reads a backup's manifest and checks every file against it.
-pub async fn verify(dir: &Path) -> Result<Manifest, Failure> {
+/// The manifest of a backup directory, without checking its files.
+pub fn read_manifest(dir: &Path) -> Result<Manifest, Failure> {
     let refused = |code: &'static str, message: String| Failure::new(Exit::Refused, code, message);
     let text = fs::read_to_string(dir.join(MANIFEST_FILE)).map_err(|e| {
         refused(
@@ -212,6 +212,13 @@ pub async fn verify(dir: &Path) -> Result<Manifest, Failure> {
             format!("manifest format {} is not {FORMAT}", manifest.format),
         ));
     }
+    Ok(manifest)
+}
+
+/// Reads a backup's manifest and checks every file against it.
+pub async fn verify(dir: &Path) -> Result<Manifest, Failure> {
+    let refused = |code: &'static str, message: String| Failure::new(Exit::Refused, code, message);
+    let manifest = read_manifest(dir)?;
     let actual = hash_files(dir).await?;
     for name in FILES {
         let listed = manifest.files.iter().find(|f| f.name == name);
