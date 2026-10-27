@@ -1500,11 +1500,11 @@
         "edit": "Schritte bearbeiten"
       },
       "duration": {
-        "under": "unter 1 s",
-        "d": "{value} T",
+        "under": "unter 1 Sek.",
+        "d": "{value} Tg.",
         "h": "{value} Std.",
         "min": "{value} Min.",
-        "s": "{value} s",
+        "s": "{value} Sek.",
         "median": "Median {time}",
         "after": "{time} nach Schritt {step}",
         "gap": "Median {time} von Schritt {from} zu Schritt {to}. Verteilung anzeigen",
@@ -1515,9 +1515,9 @@
         "buckets": {
           "under1h": "Unter 1 Std.",
           "h1to24": "1 bis 24 Std.",
-          "d1to7": "1 bis 7 T",
-          "d7to30": "7 bis 30 T",
-          "d30": "30 T oder mehr"
+          "d1to7": "1 bis 7 Tg.",
+          "d7to30": "7 bis 30 Tg.",
+          "d30": "30 Tg. oder mehr"
         },
         "toConvert": "Zeit bis zur Conversion {median}, die Hälfte binnen {from} bis {to}"
       },
