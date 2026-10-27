@@ -207,15 +207,19 @@ impl SiteManagementHandlers for AppState {
         _args: Empty,
     ) -> Result<Snapshot<SiteList>, ApiError> {
         let user = ctx.person()?;
+        // An install admin's session lists every site; their key lists member sites only
+        // (decision 0012, API keys).
+        let by_key = matches!(ctx.caller(), Caller::Key(_));
         let rows: Vec<(String, String, String, String, String, Option<String>)> = sqlx::query_as(
             "SELECT s.id, s.name, s.domain, w.id, w.name, m.role
              FROM sites s JOIN workspaces w ON w.id = s.workspace_id
              LEFT JOIN memberships m ON m.workspace_id = w.id AND m.user_id = ?
              WHERE m.user_id IS NOT NULL
-                OR (SELECT install_role FROM users WHERE id = ?) = 'install_admin'
+                OR (NOT ? AND (SELECT install_role FROM users WHERE id = ?) = 'install_admin')
              ORDER BY w.name COLLATE NOCASE, w.id, s.name COLLATE NOCASE, s.id",
         )
         .bind(user.as_str())
+        .bind(by_key)
         .bind(user.as_str())
         .fetch_all(ctx.conn())
         .await?;
