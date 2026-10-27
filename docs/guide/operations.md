@@ -166,7 +166,7 @@ export HOLOCRON_API_KEY=...
 holocron query --url https://stats.example.com report.json
 ```
 
-It posts the JSON object in the file (or `-` for stdin) to a running server and prints the answer. It calls `analytics.report`; pass `--operation sites.list` or another name to call a different query. The key must be an API key that holds the operation, and it comes from the environment so it stays out of your shell history. `--url` can also come from `HOLOCRON_URL`. The command never opens the data directory, so it can run on another machine. A refused query prints `error: <error_code>: <message>`, one line per rejected field, and exits 3.
+It posts the JSON object in the file (or `-` for stdin) to a running server and prints the answer. It calls `analytics.report`; pass `--operation sites.list` or another name to call a different query. The key must be an API key that holds the operation, and it comes from the environment so it stays out of your shell history. `--url` can also come from `HOLOCRON_URL`. The command never opens the data directory, so it can run on another machine. A refused query prints `error: <error_code>: <message>`, one line per rejected field, and exits 5.
 
 ## Commands beside a running server
 
@@ -181,5 +181,6 @@ While `serve` runs, `backup`, `retention`, `erase-profile` and `diagnostics` han
 | 2 | Wrong usage, such as a missing flag or a bad value |
 | 3 | Refused by the state of the data directory, such as `upgrade_required` |
 | 4 | Storage unavailable: path not writable, disk full, or another process holds the directory |
+| 5 | `holocron query` only: the server answered with an error envelope |
 
 Errors print as `error: <code>: <message>` on stderr.

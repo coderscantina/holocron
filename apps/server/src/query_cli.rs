@@ -120,7 +120,7 @@ fn refusal(envelope: &Value) -> Failure {
         }
     }
     Failure::new(
-        Exit::Refused,
+        Exit::ServerRefused,
         envelope["error_code"]
             .as_str()
             .unwrap_or("error")

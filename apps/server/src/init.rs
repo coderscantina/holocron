@@ -49,6 +49,8 @@ pub enum Exit {
     Usage = 2,
     Refused = 3,
     StorageUnavailable = 4,
+    /// A running server answered `holocron query` with an error envelope.
+    ServerRefused = 5,
 }
 
 #[derive(Debug)]
