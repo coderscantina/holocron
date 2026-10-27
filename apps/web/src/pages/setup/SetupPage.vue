@@ -67,6 +67,8 @@ const steps = computed<readonly SetupStep[]>(() => setupSteps[path.value])
 
 /** In the import phase the server's state decides the step; before it, the address does. */
 const step = computed<SetupStep | 'signin' | null>(() => {
+  // The restore step stays until it has seen setup end, then sends the person to sign in.
+  if (!runtimeConfig.setup && path.value === 'restore' && route.query.step === 'restore') return 'restore'
   if (!runtimeConfig.setup) return path.value === 'import' || route.query.step === 'report' ? 'report' : 'site'
   if (!status.value) return null
   if (status.value.phase === 'import') {

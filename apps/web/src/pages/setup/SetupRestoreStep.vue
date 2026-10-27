@@ -6,7 +6,7 @@ import { Button } from '~/components/ui/button'
 import { Spinner } from '~/components/ui/spinner'
 import type { SetupRestorePhase, SetupRestoreProgress, SetupStepState } from '~/generated'
 import { type MessageKey, useI18n } from '~/plugins/i18n'
-import { serverStarted } from '~/services/runtime-config'
+import { loadRuntimeConfig, runtimeConfig, serverStarted } from '~/services/runtime-config'
 
 import { restoreRows } from './restore'
 
@@ -52,9 +52,12 @@ function connect(): void {
       progress.value = frame
       if (frame.state === 'complete') void finish()
     },
-    () => {
+    async () => {
       if (progress.value?.state === 'complete') return
-      retry = setTimeout(connect, RECONNECT_MS)
+      // The last frame can be lost as setup mode closes; the server's own state decides then.
+      await loadRuntimeConfig()
+      if (!runtimeConfig.setup) void finish()
+      else retry = setTimeout(connect, RECONNECT_MS)
     }
   )
 }
