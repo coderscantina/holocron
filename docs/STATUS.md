@@ -1,13 +1,19 @@
 # Status
 
-Updated 2026-10-23. Read by agents at the start of a thread; rewrite it before handing back (`project-status` skill). Deployment details, accounts and local processes live in `.demo/NOTES.md`, which git ignores; keep them out of this file.
+Updated 2026-10-27. Read by agents at the start of a thread; rewrite it before handing back (`project-status` skill). Deployment details, accounts and local processes live in `.demo/NOTES.md`, which git ignores; keep them out of this file.
 
 ## Branches
 
-The branch of record is `main`, published to https://github.com/coderscantina/holocron as one initial commit. Release `v26.10.23-4d4c828` is out (2026-10-23), with the image `ghcr.io/coderscantina/holocron:26.10.23` for amd64 and arm64. Milestone 14's fresh and import paths are in it.
+The branch of record is `main`, published to https://github.com/coderscantina/holocron as one initial commit. Release `v26.10.26.2-bf9a44f` is out (2026-10-26), with the image `ghcr.io/coderscantina/holocron:26.10.26.2` for amd64 and arm64: a dependency update on top of 26.10.23.2 (vueuse 15, vitest 5, the held-back Rust majors, current action pins). DuckDB stays on 1.5 by a tilde pin. The tag `v26.10.26-0cc3e13` has no image: its CI failed on DuckDB 2.0. Milestone 14's fresh and import paths are in it.
+
+`feat/revenue-summary-events-board` (unmerged, from `main`): Revenue's globe is replaced by a Summary view (pace with a server estimate, gross/refunds/net, hours, which traffic pays) and Events gets a Board view, both ahead of their Details views ([design](ux-v2/design.md#revenue)). It is 6 commits behind `main`; rebase before merging (`RevenueView.vue` changed on both sides). One commit holds the 0015 amendment for money baselines and projections; the web side, design document and e2e specs are uncommitted in the main checkout. All Rust and web checks and the two touched e2e specs pass.
+
+`feat/agent-query-api` (unmerged, from `main` at `bf9a44f`, worktree `../holocron-agent-query`): milestone 15, report queries for agents ([0022](decisions/0022-agent-report-queries.md), [milestone](milestones/15-agent-query-api.md)). Waves 1 to 3 are merged on it and every Rust and web unit check passes: glob `matches`, funnel v2 `group_by` with step durations, `POST /api/queries/{name}`, `analytics.report` (named blocks on one snapshot), `holocron query`, `/mcp` (Streamable HTTP, tools, schema and guide resources, four recipe prompts), the "Read analytics" key preset and the glob filter in the dashboard. Wave 4, the funnel split-by and duration UI, waits on Mike's pick of the variants in `/tmp/m15-variants/` (not in git; recapture with `bun /tmp/m15-variants/shoot.ts`). e2e not run on it.
 
 ## Waiting on Mike
 
+- Milestone 15: pick the funnel split-by and duration variants (recommended A, ranked group table, with X, medians in the ribbon gaps); mark 0022 Adopted; accept AX-G801 in `fixtures/access/cases.json` becoming allow (a read-only key may list the sites it reaches).
+- Commit and merge `feat/revenue-summary-events-board`; decide whether the Revenue source switch keeps "Page" (it is the page the purchase fired on, usually checkout).
 - Set the `holocron` package to public on GitHub, so it pulls without credentials, and upload `.github/social-preview.png` as the social preview.
 - Decision 0008 is still Proposed, pending the storage gate.
 
@@ -18,3 +24,4 @@ Settled on 2026-10-23: the fresh and import paths ship now, restore through the 
 1. Mike's production move from Umami (`.demo/NOTES.md`), starting with ops01 in setup mode.
 2. The rest of milestone 14: restore and upgrade through the wizard, 0006 and CAP-ACCESS-01, the setup screens' visual acceptance at four widths.
 3. Milestone 13, the integrated release gate ([milestones/README.md](milestones/README.md)), and the 0008 storage gate, about a month after the production move on a rented 2 vCPU / 4 GiB host.
+4. DuckDB 2.0 (duckdb-rs 1.20000) is held back by Mike's call on 2026-10-26: it brings nothing Holocron uses, and the summaries suite ran in 24.8 s against 12.3 s on 1.5 (debug builds). Its test failures have two causes, for a later attempt: a new `async_threads` pool (40 threads per database here) exhausts the process thread limit, fixed by `async_threads = 0` in `analytics::open`; and libduckdb-sys now defines `DEBUG` in debug builds, which slows tests until 60 s test sessions expire, fixed by `debug = false` for libduckdb-sys in the dev profile. 2.0 also writes the latest storage format, so its files do not open in an older release. Check that 1.5 data files open before moving.
