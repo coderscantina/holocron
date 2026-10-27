@@ -1,6 +1,6 @@
 # Implementation milestones
 
-Milestones 01 and 03 are complete; 02 and 04 through 12 are in progress; 13, 14 and 15 are pending. Mark completion only after its acceptance criteria pass and an evidence report is linked here. The [technical briefing](../technical-briefing.md) owns product scope. The [workflow](../development-workflow.md) defines ownership and handoffs.
+Milestones 01, 03 and 15 are complete; 02 and 04 through 12 are in progress; 13 and 14 are pending. Mark completion only after its acceptance criteria pass and an evidence report is linked here. The [technical briefing](../technical-briefing.md) owns product scope. The [workflow](../development-workflow.md) defines ownership and handoffs.
 
 ## Sequence and gates
 
@@ -20,7 +20,7 @@ Milestones 01 and 03 are complete; 02 and 04 through 12 are in progress; 13, 14 
 | 12  | [Operations and recovery](12-operations-and-recovery.md)                       | 04, 05, 09, 10; final import integration after 11 | Storage and operations         | In progress: [evidence](../evidence/m12-operations-and-recovery.md) |
 | 13  | [Integrated release gate](13-integrated-release-gate.md)                       | 01 through 12, 14                                 | Integration                    | Pending |
 | 14  | [Web setup and onboarding](14-web-setup-and-onboarding.md)                     | 11, 12                                            | Server and frontend            | Pending |
-| 15  | [Report queries for agents](15-agent-query-api.md)                             | 06, 07, 08, 10                                    | Analytics, server and frontend | Pending |
+| 15  | [Report queries for agents](15-agent-query-api.md)                             | 06, 07, 08, 10                                    | Analytics, server and frontend | Complete: [evidence](../evidence/m15-agent-query-api.md) |
 
 02 and 03 run in parallel after the source and wire contracts are defined. The early storage gate authorizes the engine design, not a capacity claim for the completed product. A passing minimal experiment must be repeated with real corrections, authentication, recording, and maintenance in 13.
 
