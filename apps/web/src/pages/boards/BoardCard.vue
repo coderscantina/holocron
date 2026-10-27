@@ -199,6 +199,7 @@ const exploreLink = computed(() => ({
         <ReportSummary
           v-else-if="result.report"
           :report="result.report"
+          :split-by="state.report?.kind === 'funnel' ? state.report.group_by : undefined"
         />
         <TrendChart
           v-if="series && result.main.series"

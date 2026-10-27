@@ -17,6 +17,8 @@ const props = defineProps<{
   site: Site
   screen: ReturnType<typeof useExplorationScreen>
   title: string
+  /** What Pin to board stores, when the screen shows part of its state's result. */
+  pinned?: ExplorationState | null
 }>()
 
 defineSlots<{
@@ -50,6 +52,7 @@ const report = computed(() => {
     :refused="screen.refused.value"
     :notice="screen.notice.value"
     :title="title"
+    :pinned="pinned"
     :heading="{ title, description: site.domain }"
     @commit="screen.commit"
     @reset="screen.reset"

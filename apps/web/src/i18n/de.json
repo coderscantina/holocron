@@ -1498,6 +1498,49 @@
         "flowLabel": "{count} hörten nach Schritt {step} auf: {where}. Den Abgang dieses Schritts zeigen",
         "summary": "{steps} Schritte · Fenster {window} · {scope}",
         "edit": "Schritte bearbeiten"
+      },
+      "duration": {
+        "under": "unter 1 s",
+        "d": "{value} T",
+        "h": "{value} Std.",
+        "min": "{value} Min.",
+        "s": "{value} s",
+        "median": "Median {time}",
+        "after": "{time} nach Schritt {step}",
+        "gap": "Median {time} von Schritt {from} zu Schritt {to}. Verteilung anzeigen",
+        "popTitle": "Schritt {from} zu {to} · {count} Besucher",
+        "p25": "Ein Viertel binnen",
+        "p50": "Median",
+        "p75": "Drei Viertel binnen",
+        "buckets": {
+          "under1h": "Unter 1 Std.",
+          "h1to24": "1 bis 24 Std.",
+          "d1to7": "1 bis 7 T",
+          "d7to30": "7 bis 30 T",
+          "d30": "30 T oder mehr"
+        },
+        "toConvert": "Zeit bis zur Conversion {median}, die Hälfte binnen {from} bis {to}"
+      },
+      "split": {
+        "label": "Aufteilen nach",
+        "remove": "Aufteilung nach {field} entfernen",
+        "title": "Nach {field}",
+        "count": "{count} Gruppe | {count} Gruppen",
+        "truncated": "Es gab weitere Gruppen; die Tabelle zeigt die obersten {count}.",
+        "all": "Gesamter Traffic",
+        "entered": "Eingestiegen",
+        "reach": "Erreicht je Schritt",
+        "conversion": "Conversion",
+        "toConvert": "Zeit bis zur Conversion",
+        "showAll": "Alle {count} Gruppen zeigen",
+        "showTop": "Nur die obersten {count}",
+        "pick": "Trichter für {group} zeigen",
+        "reachStep": "Schritt {step}: {share}, gesamter Traffic {overall}",
+        "above": "{points} Punkte über dem gesamten Traffic, {overall}",
+        "below": "{points} Punkte unter dem gesamten Traffic, {overall}",
+        "same": "Wie der gesamte Traffic, {overall}",
+        "detailsCaption": "Trichter nach {field}: Besucher je Schritt, Conversion und Zeit bis zur Conversion",
+        "splitBy": "aufgeteilt nach {field}"
       }
     },
     "journey": {

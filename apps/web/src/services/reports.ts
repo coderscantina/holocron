@@ -1,8 +1,10 @@
 import type {
   AttributionReport,
+  Cell,
   Condition,
   Conversion,
   ExplorationState,
+  Field,
   FunnelReport,
   GoalDefinition,
   Group,
@@ -19,7 +21,7 @@ import {
   REPORT_ATTRIBUTION_CONVERSIONS_MAX,
 } from '~/generated/limits'
 
-import { conditions, defaultState, nextId, renumber } from './exploration'
+import { conditions, defaultState, include, nextId, renumber } from './exploration'
 
 /**
  * The behavioral report states of milestone 07 (0004 Report definitions): funnels, goals,
@@ -29,6 +31,8 @@ import { conditions, defaultState, nextId, renumber } from './exploration'
  */
 
 export const REPORT_VERSION = 1
+/** Funnels that split by a field; without a split they stay version 1, so saved states keep their URLs. */
+const FUNNEL_SPLIT_VERSION = 2
 
 /** A report state over the last 30 days: no measures, dimensions, comparison or sort. */
 function reportState(
@@ -148,6 +152,28 @@ export const goalsOf = (state: ExplorationState): GoalDefinition[] =>
 export function setFunnel(state: ExplorationState, patch: Partial<Pick<FunnelReport, 'window_seconds' | 'scope'>>) {
   const funnel = funnelOf(state)
   return funnel ? setReport(state, { kind: 'funnel', ...funnel, ...patch }) : state
+}
+
+/** Splits the funnel by a field (version 2), or drops the split (back to version 1). */
+export function setSplit(state: ExplorationState, field: Field | null): ExplorationState {
+  const funnel = funnelOf(state)
+  if (!funnel) return state
+  return setReport(state, {
+    kind: 'funnel',
+    ...funnel,
+    v: field ? FUNNEL_SPLIT_VERSION : REPORT_VERSION,
+    group_by: field ?? undefined,
+  })
+}
+
+/**
+ * The funnel of one group of a split: the same steps without the split, filtered to the group's
+ * value on the split field, so every figure of the read is exact for that group. A split
+ * funnel's own state is unchanged; the filter is a new condition with a fresh predicate ID.
+ */
+export function pickGroup(state: ExplorationState, cell: Cell): ExplorationState {
+  const field = funnelOf(state)?.group_by
+  return field ? include(setSplit(state, null), field, cell) : state
 }
 
 /** Appends a step matching all `items`; at most eight. */

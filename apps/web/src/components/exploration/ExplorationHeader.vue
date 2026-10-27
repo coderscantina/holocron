@@ -44,6 +44,8 @@ const props = defineProps<{
   notice: Notice | null
   /** Default card title when pinning. */
   title: string
+  /** What a pin stores when it differs from `state`: a page's view of a part of the result. */
+  pinned?: ExplorationState | null
   heading?: { title: string; description?: string }
 }>()
 
@@ -100,7 +102,7 @@ const onNotice = (text: string, tone: Notice['tone']) => emit('notice', { messag
       />
       <PinDialog
         v-if="state"
-        :state="state"
+        :state="pinned ?? state"
         :workspace="site.workspace"
         :title="title"
         @notice="onNotice"

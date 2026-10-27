@@ -1,28 +1,44 @@
 <script setup lang="ts">
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, useMediaQuery } from '@vueuse/core'
 
+import Icon from '~/components/Icon.vue'
 import StageView from '~/components/stage/StageView.vue'
 import { useExplore } from '~/composables/useExplore'
 import { useExplorationFormat } from '~/composables/useExplorationFormat'
 import { useFormat } from '~/composables/useFormat'
-import type { ExplorationState, FunnelResult, Group, ResolvedRange } from '~/generated'
+import { useStepDuration } from '~/composables/useStepDuration'
+import type { Cell, ExplorationState, Field, FunnelResult, Group, Metric, ResolvedRange } from '~/generated'
 import { previousDays, ribbon, worstLeak, type LeakKind, type RibbonFlow } from '~/lib/funnel-ribbon'
 import { useI18n, type MessageKey } from '~/plugins/i18n'
 import { conditions, encodeState } from '~/services/exploration'
-import { funnelOf, sessionsFor } from '~/services/reports'
+import { funnelOf, sessionsFor, setSplit } from '~/services/reports'
 import { pageOf } from '~/lib/state-pages'
+
+import StepGap from './StepGap.vue'
 
 /**
  * The funnel as a ribbon that narrows at each step, with the visitors who stop peeling off
  * below it by where they went next. The rail holds the conversion with its change against the
  * previous period, the worst step in one sentence, and the leak in focus: where its visitors
- * went and their latest sessions. The worst leak is in focus until another is picked.
+ * went and their latest sessions. The worst leak is in focus until another is picked. The rail
+ * also holds the time to convert, and the median time between steps sits between the columns.
+ * A picked `group` of a split funnel names itself above the conversion and compares with all
+ * traffic; the `below` slot holds the split table.
  */
-const props = defineProps<{ state: ExplorationState; report: FunnelResult; resolved: ResolvedRange }>()
+const props = defineProps<{
+  state: ExplorationState
+  report: FunnelResult
+  resolved: ResolvedRange
+  group?: { field: Field; cell: Cell; overall: Metric }
+}>()
+defineEmits<{ clear: [] }>()
+
+defineSlots<{ below?: () => unknown }>()
 
 const { t, locale } = useI18n()
 const format = useExplorationFormat()
 const numbers = useFormat()
+const duration = useStepDuration()
 
 const points = (value: number) => new Intl.NumberFormat(locale.value, { maximumFractionDigits: 1, signDisplay: 'exceptZero' }).format(value)
 
@@ -30,7 +46,7 @@ const steps = computed(() => funnelOf(props.state)?.steps ?? [])
 const reached = computed(() => props.report.steps.map((step) => step.reached))
 
 /** The same funnel over the previous period, for the change beside the conversion. */
-const previous = useExplore(() => ({ ...props.state, range: previousDays(props.resolved) }))
+const previous = useExplore(() => ({ ...setSplit(props.state, null), range: previousDays(props.resolved) }))
 const change = computed(() => {
   const before = previous.query.data.value?.report
   const now = props.report.conversion
@@ -38,12 +54,33 @@ const change = computed(() => {
   return Math.round((now.v - before.conversion.v) * 1000) / 10
 })
 
+/** Medians between steps; the last duration is step 1 to the last step, shown in the rail. */
+const gaps = computed(() => props.report.durations.slice(0, -1).filter((d) => d.median.t === 'millis'))
+const toConvert = computed(() => {
+  const last = props.report.durations.at(-1)
+  return last?.median.t === 'millis' ? last : null
+})
+const wide = useMediaQuery('(min-width: 768px)')
+/** Room above the columns: below `md` the median sits under each label, so it needs a third line. */
+const headroom = computed(() => (!wide.value && gaps.value.length > 0 ? 76 : 52))
+const gapAt = (index: number) => gaps.value.find((d) => d.from_step === index - 1)
+
+/** Overall conversion against the group's, in points. */
+const againstAll = computed(() => {
+  const own = props.report.conversion
+  const all = props.group?.overall
+  if (!all || own.t !== 'ratio' || all.t !== 'ratio') return null
+  return { points: Math.round((own.v - all.v) * 1000) / 10, overall: format.metric(all) }
+})
+
 const box = useTemplateRef('box')
 const { width, height } = useElementSize(box)
 const drawn = computed(() =>
-  ribbon(reached.value, props.report.leaks, { width: Math.max(0, width.value), height: Math.max(0, height.value) })
+  ribbon(reached.value, props.report.leaks, { width: Math.max(0, width.value), height: Math.max(0, height.value), top: headroom.value })
 )
 const pitch = computed(() => (drawn.value.steps.length > 1 ? drawn.value.steps[1]!.x : drawn.value.width))
+/** A label leaves room for the median tag beside it on wide screens. */
+const labelWidth = computed(() => Math.max(48, wide.value && gaps.value.length > 0 ? pitch.value / 2 - 84 : pitch.value - 12))
 const worst = computed(() => worstLeak(drawn.value.leaks))
 const picked = ref<number | null>(null)
 const focus = computed(() => drawn.value.leaks.find((leak) => leak.step === picked.value) ?? worst.value)
@@ -85,6 +122,22 @@ const leakOf = (step: number) => props.report.leaks[step]
   <StageView :label="t('reports.funnel.title')">
     <template #rail>
       <div class="border-b border-hairline pb-6">
+        <p
+          v-if="group"
+          class="mb-3 flex items-center gap-2 text-sm text-muted"
+        >
+          <span class="min-w-0 truncate">
+            {{ format.fieldLabel(group.field) }}
+            <b class="font-semibold text-primary">{{ format.cellLabel(group.field, group.cell) }}</b>
+          </span>
+          <button
+            type="button"
+            class="ml-auto shrink-0 cursor-pointer rounded-control text-accent-text underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            @click="$emit('clear')"
+          >
+            {{ t('reports.funnel.split.all') }}
+          </button>
+        </p>
         <p class="text-[3.25rem] leading-none font-bold tracking-[-0.025em] text-primary tabular-nums">{{ format.metric(report.conversion) }}</p>
         <p class="mt-3 text-[0.9375rem] text-muted tabular-nums">
           {{
@@ -95,10 +148,43 @@ const leakOf = (step: number) => props.report.leaks[step]
           }}
         </p>
         <p
-          v-if="change !== null"
+          v-if="againstAll"
+          class="mt-1 text-sm text-muted tabular-nums"
+        >
+          {{
+            againstAll.points === 0
+              ? t('reports.funnel.split.same', { overall: againstAll.overall })
+              : t(againstAll.points > 0 ? 'reports.funnel.split.above' : 'reports.funnel.split.below', {
+                  points: Math.abs(againstAll.points),
+                  overall: againstAll.overall,
+                })
+          }}
+        </p>
+        <p
+          v-else-if="change !== null"
           class="mt-1 text-sm text-muted tabular-nums"
         >
           {{ change === 0 ? t('reports.funnel.stage.unchanged') : t('reports.funnel.stage.change', { change: points(change) }) }}
+        </p>
+        <p
+          v-if="toConvert"
+          class="mt-3 flex items-start gap-2 text-sm text-muted tabular-nums"
+        >
+          <Icon
+            name="lucide:clock"
+            size="14"
+            class="mt-0.5 shrink-0"
+            aria-hidden="true"
+          />
+          <span>
+            {{
+              t('reports.funnel.duration.toConvert', {
+                median: duration.metric(toConvert.median) ?? '',
+                from: duration.metric(toConvert.p25) ?? '',
+                to: duration.metric(toConvert.p75) ?? '',
+              })
+            }}
+          </span>
         </p>
       </div>
 
@@ -181,9 +267,10 @@ const leakOf = (step: number) => props.report.leaks[step]
       </section>
     </template>
 
+    <div class="flex min-h-0 flex-col gap-6 lg:h-full lg:overflow-y-auto">
     <figure
       ref="box"
-      class="relative m-0 h-[26rem] w-full lg:h-full"
+      class="relative m-0 h-[26rem] w-full shrink-0 lg:min-h-[26rem] lg:flex-1"
     >
       <figcaption class="sr-only">{{ t('reports.funnel.stage.figure', { steps: reached.length }) }}</figcaption>
       <svg
@@ -233,7 +320,7 @@ const leakOf = (step: number) => props.report.leaks[step]
           :class="index > 0 && index === drawn.steps.length - 1 ? 'text-right' : ''"
           :style="{
             ...(index > 0 && index === drawn.steps.length - 1 ? { right: '0px' } : { left: `${step.x}px` }),
-            maxWidth: `${Math.max(48, pitch - 12)}px`,
+            maxWidth: `${labelWidth}px`,
           }"
           :aria-label="t('reports.funnel.stage.stepLink', { step: index + 1, caption: caption(steps[index]), count: numbers.integer(step.reached) })"
         >
@@ -268,7 +355,28 @@ const leakOf = (step: number) => props.report.leaks[step]
             <span class="tabular-nums">{{ numbers.integer(flow.identities) }}</span>
           </button>
         </template>
+        <div
+          v-for="index in drawn.steps.length - 1"
+          :key="`gap-${index}`"
+          class="absolute"
+          :class="wide ? '-translate-x-1/2' : ''"
+          :style="
+            wide
+              ? { left: `${(drawn.steps[index - 1]!.x + drawn.steps[index - 1]!.width + drawn.steps[index]!.x) / 2}px`, top: '0px' }
+              : index === drawn.steps.length - 1
+                ? { right: '0px', top: '44px' }
+                : { left: `${drawn.steps[index]!.x}px`, top: '44px' }
+          "
+        >
+          <StepGap
+            v-if="gapAt(index)"
+            :duration="gapAt(index)!"
+            :placement="wide ? 'gap' : 'label'"
+          />
+        </div>
       </template>
     </figure>
+    <slot name="below" />
+    </div>
   </StageView>
 </template>
