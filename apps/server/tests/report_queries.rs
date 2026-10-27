@@ -389,6 +389,45 @@ async fn for_each_and_refs_take_values_from_earlier_blocks_and_derive_shares() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+async fn a_cut_over_a_hundred_rows_returns_them_in_one_response() {
+    let harness = harness().await;
+    let site = harness.site("Europe/Vienna").await;
+    for i in 0..150 {
+        send(&harness, &site, "203.0.113.1", 0, &format!("/p{i}"), None).await;
+    }
+    harness.state.collector.storage().drain().await;
+    holocron_analytics::run_until_clean(
+        harness.state.collector.storage(),
+        holocron_analytics::Limits::default(),
+    )
+    .await
+    .unwrap();
+    let key = harness
+        .api_key("p_member", &["analytics.report"], None)
+        .await;
+    let cut = |name: &str, limit: u32| {
+        json!({ "name": name, "site": site, "body": { "kind": "cut", "measures": ["pageviews"],
+            "dimensions": ["path"], "limit": limit } })
+    };
+
+    let answer = ok(&report(
+        &harness,
+        &key,
+        &json!({ "v": 1, "range": range(), "blocks": [cut("wide", 500), cut("default", 100)] }),
+    )
+    .await);
+    let blocks = answer["blocks"].as_array().unwrap();
+    assert_eq!(blocks[0]["rows"].as_array().unwrap().len(), 150);
+    assert_eq!(blocks[1]["rows"].as_array().unwrap().len(), 100);
+    for block in blocks {
+        assert_eq!(
+            block["freshness"]["watermark_sequence"],
+            answer["watermark"]["sequence"]
+        );
+    }
+}
+
+#[tokio::test(flavor = "multi_thread")]
 async fn refusals_name_their_path_before_anything_runs() {
     let harness = harness().await;
     let site = harness.site("Europe/Vienna").await;
