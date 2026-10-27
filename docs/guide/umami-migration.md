@@ -135,6 +135,8 @@ Sign in with an imported account that owns sites. Check a site's overview and op
 
 You can let Holocron collect next to Umami before you switch, without touching the sites. Copy each tracker hit to Holocron at the proxy in front of Umami. Behind CloudFront, [deploy/cloudfront-mirror](../../deploy/cloudfront-mirror/README.md) does that with a Lambda@Edge function. When you cut over, import again into a new data directory, so the history is exact and reconciled.
 
+Before you switch Umami off, [tools/shadow-compare](../../tools/shadow-compare/README.md) checks per site and day that Holocron saw the same traffic: pageviews within 1%, visitors within 5%, and the same top pages and countries. It lists days with no traffic on a side as possible outages. Holocron counts visitor-days and groups sessions by its own rules, so visitors never match Umami's exactly.
+
 ## Cut over the tracker
 
 Point the tracker at Holocron. Either move the Umami host name to Holocron at your proxy or DNS, or change the `src` of the script tags:
