@@ -309,7 +309,7 @@ async fn session_fields_come_from_the_session_and_sessions_split_into_every_cell
 async fn entered() -> (tempfile::TempDir, Storage) {
     let (dir, storage) = open().await;
     let mut site = Site::new(SITE, Vienna);
-    let mut custom = |site: &mut Site, at: &str, who: &'static str, path: &str| {
+    let custom = |site: &mut Site, at: &str, who: &'static str, path: &str| {
         let mut record = site.event(EventKind::CustomEvent, at, Who::Anon(who));
         if let Record::Event(event) = &mut record {
             event.dimensions.path = Some(path.into());
