@@ -139,7 +139,7 @@ test('overview, context switching and menus at every width in both modes', async
   await expect(page.getByRole('button', { name: 'Account menu' })).toBeFocused()
 
   await page.getByRole('button', { name: /\. Switch website$/ }).click()
-  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.at/ })).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.test/ })).toHaveAttribute('aria-checked', 'true')
   await shot(page, 'site-selector-dark')
   await page.keyboard.press('Escape')
 
@@ -343,7 +343,7 @@ test('the site chip and menu show each site pace from the summaries and ask for 
   await expect(chip).toHaveAccessibleName(/^[^,]+\. Switch website$/)
   // The chip words the pace only once the site has a typical weekday; a new site keeps its name alone.
   await expect(chip).toHaveAccessibleDescription(/^$|typical|usual range/)
-  const row = page.getByRole('menuitemradio', { name: /^roadhouse\.at/ })
+  const row = page.getByRole('menuitemradio', { name: /^roadhouse\.test/ })
   for (const width of [1440, 390]) {
     for (const scheme of ['dark', 'light'] as const) {
       await page.setViewportSize({ width, height: width === 390 ? 844 : 900 })
@@ -539,16 +539,17 @@ test('the installation name comes from the server at runtime', async ({ browser 
 })
 
 /**
- * Findings are mocked: seeded traffic may not trigger any. The summaries of the first two
- * sites of the workspace are patched to carry findings, the second one stale.
+ * Findings are mocked: seeded traffic may or may not trigger real ones. The summary of
+ * roadhouse.test is patched to carry findings, and its sibling sites are patched stale, so
+ * none of their own findings show.
  */
 async function mockFindingMarks(page: Page, options: { stale?: boolean } = {}) {
   const answer = await page.request.get('/api/queries/workspaces.list', { headers: { 'x-holocron-request': '1' } })
   const { workspaces }: { workspaces: Array<{ sites: Array<{ id: string; name: string }> }> } = await answer.json()
   const siblings = workspaces.find((workspace) => workspace.sites.some((site) => site.name === 'roadhouse.test'))?.sites ?? []
   const roadhouse = siblings.find((site) => site.name === 'roadhouse.test')
-  const other = siblings.find((site) => site !== roadhouse)
-  if (!roadhouse || !other) throw new Error('seed_demo did not run')
+  const others = siblings.filter((site) => site !== roadhouse).map((site) => site.id)
+  if (!roadhouse || others.length === 0) throw new Error('seed_demo did not run')
 
   await page.route('**/api/queries/summaries.forSites*', async (route) => {
     const response = await route.fetch()
@@ -556,7 +557,7 @@ async function mockFindingMarks(page: Page, options: { stale?: boolean } = {}) {
     const summaries = body.summaries.map((summary) =>
       summary.site === roadhouse.id
         ? { ...summary, stale: options.stale ?? false, finding_count: 4 }
-        : summary.site === other.id
+        : others.includes(summary.site)
           ? { ...summary, stale: true, finding_count: 5 }
           : summary
     )
@@ -656,7 +657,7 @@ test('findings badge the report items they belong to and mark the site in the me
   await page.getByRole('button', { name: 'Toggle sidebar' }).click()
 
   await page.getByRole('button', { name: /\. Switch website$/ }).click()
-  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.at.*4 findings$/ })).toBeVisible()
+  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.test.*4 findings$/ })).toBeVisible()
   await expect(page.getByRole('menuitemradio', { name: /findings?$/ })).toHaveCount(1)
   await shot(page, 'findings-site-menu-dot-1440-dark')
   await page.context().close()
@@ -671,7 +672,7 @@ test('stale findings badge nothing', async ({ browser }) => {
   await expect(sidebar.getByRole('link', { name: 'Goals' })).toHaveAccessibleName('Goals')
   await expect(sidebar.getByRole('link', { name: /findings?$/ })).toHaveCount(0)
   await page.getByRole('button', { name: /\. Switch website$/ }).click()
-  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.at/ })).toBeVisible()
+  await expect(page.getByRole('menuitemradio', { name: /^roadhouse\.test/ })).toBeVisible()
   await expect(page.getByRole('menuitemradio', { name: /findings?$/ })).toHaveCount(0)
   await page.context().close()
 })

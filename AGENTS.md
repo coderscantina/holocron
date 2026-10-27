@@ -21,7 +21,7 @@ Run the checks for the paths you changed:
 - Rust: `cargo fmt --all --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace`, `cargo run -p holocron-protocol --bin export-types -- --check`
 - Web (`apps/web`): `bun run typecheck`, `bun run lint`, `bun run test`, `bun run e2e`
 
-`bun run e2e` drives an already running packaged server (`apps/server/scripts/package.sh`, seeded with `seed_demo`) at `HOLOCRON_E2E_URL`, default `http://127.0.0.1:8093`. It does not rebuild anything: repackage after server or web changes, or the suite tests the old build. When failures appear, run the same specs against a build of `main` before calling them regressions.
+`scripts/e2e.sh` runs the browser journeys: it packages and seeds a throwaway server, waits for the first summary round, runs `bun run e2e` and cleans up. Run it after server or web changes. Running `bun run e2e` by hand drives an already running packaged server at `HOLOCRON_E2E_URL` (default `http://127.0.0.1:8093`) and rebuilds nothing. When failures appear, run the same specs against a build of `main` before calling them regressions.
 
 ## Gotchas
 
