@@ -31,7 +31,7 @@ Operation names are dotted, as in the access fixture: `sites.update`, `auth.logi
 | Command | `POST /api/commands/<name>`, JSON body `CommandKey & Args` | `CommandMeta & Result`: `{ revision, ...result }` |
 | Query | `GET /api/queries/<name>?<args>` | `SnapshotMeta & Result`: `{ revision, cursor, ...result }` |
 | Query with a body | `POST /api/queries/<name>`, JSON body `Args` ([0022](0022-agent-report-queries.md)) | same as `GET` |
-| Error | any | `ApiErrorBody`: `{ error_code, message, errors?, current? }` |
+| Error | any | `ApiErrorBody`: `{ error_code, message, errors?, current?, owned?, expected_origin? }` |
 
 - Wire conventions: snake_case fields, Unix millisecond timestamps, string IDs, absent optional fields left out. `i64` exports as `number`; revisions and timestamps stay below 2^53.
 - Query arguments are query-string values. Arrays repeat the key; absent values are left out.
@@ -41,7 +41,7 @@ Operation names are dotted, as in the access fixture: `sites.update`, `auth.logi
 
 ### Command order
 
-1. Request marker header `x-holocron-request: 1` and an `Origin` equal to `HOLOCRON_PUBLIC_URL`'s origin, or to `http(s)://<Host>` when it is not set. Otherwise 403 `origin_rejected`. Browser collection routes (milestone 04) do not pass through this check.
+1. Request marker header `x-holocron-request: 1` and an `Origin` equal to `HOLOCRON_PUBLIC_URL`'s origin, or to `http(s)://<Host>` when it is not set. Otherwise 403 `origin_rejected`, whose body carries `expected_origin` (the public origin) when `HOLOCRON_PUBLIC_URL` is set, so the sign-in page can say where to open Holocron. Without a public URL the check follows the Host header and there is no single address to name. Browser collection routes (milestone 04) do not pass through this check.
 2. Look up the name. Unknown answers 404 `not_found`, byte-identical to a hidden resource.
 3. Resolve the caller from the session cookie. A `Person` operation without a session answers 401 `unauthenticated`.
 4. Read at most 64 KiB of body (413 `payload_too_large`). Split `idempotency_key` (1 to 128 characters) from the arguments; a missing key or unparsable body is 400 `malformed_request`.

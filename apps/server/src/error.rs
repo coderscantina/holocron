@@ -28,6 +28,7 @@ impl ApiError {
                 errors: None,
                 current: None,
                 owned: None,
+                expected_origin: None,
             },
         }
     }
@@ -47,6 +48,14 @@ impl ApiError {
     pub fn user_owns_resources(owned: Vec<OwnedResource>) -> Self {
         let mut error = Self::new(ErrorCode::UserOwnsResources);
         error.body.owned = Some(owned);
+        error
+    }
+
+    /// A command from the wrong origin. Names the configured public origin so a sign-in page
+    /// can tell where to open Holocron instead.
+    pub fn origin_rejected(expected_origin: Option<&str>) -> Self {
+        let mut error = Self::new(ErrorCode::OriginRejected);
+        error.body.expected_origin = expected_origin.map(Box::from);
         error
     }
 

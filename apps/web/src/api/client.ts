@@ -62,9 +62,10 @@ async function errorBody(response: Response): Promise<ApiErrorBody> {
   try {
     const parsed: unknown = JSON.parse(text)
     if (typeof parsed === 'object' && parsed !== null && 'error_code' in parsed) {
-      const { error_code, message, errors, current, owned } = parsed as Partial<ApiErrorBody>
+      const { error_code, message, errors, current, owned, expected_origin } =
+        parsed as Partial<ApiErrorBody>
       if (isErrorCode(error_code)) {
-        return { error_code, message: message ?? '', errors, current, owned }
+        return { error_code, message: message ?? '', errors, current, owned, expected_origin }
       }
     }
   } catch {

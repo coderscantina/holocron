@@ -231,7 +231,7 @@ pub(crate) async fn read(
 /// Mutations need the request marker and an Origin naming this server, which a cross-site
 /// form, image or plain link cannot produce. Browser collection uses other routes.
 pub(crate) fn check_origin(config: &Config, headers: &HeaderMap) -> Result<(), ApiError> {
-    let rejected = || ApiError::new(ErrorCode::OriginRejected);
+    let rejected = || ApiError::origin_rejected(config.public_origin.as_deref());
     let marker = headers
         .get(REQUEST_MARKER_HEADER)
         .and_then(|v| v.to_str().ok());
@@ -346,4 +346,27 @@ pub(crate) fn no_store(mut response: Response) -> Response {
         .headers_mut()
         .insert(header::CACHE_CONTROL, HeaderValue::from_static("no-store"));
     response
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::maintenance::Runtime;
+
+    fn rejected(public_origin: Option<&str>) -> Option<String> {
+        let mut config = Runtime::config(std::path::Path::new("data"));
+        config.public_origin = public_origin.map(str::to_owned);
+        let error = check_origin(&config, &HeaderMap::new()).unwrap_err();
+        assert_eq!(error.code(), ErrorCode::OriginRejected);
+        error.body().expected_origin.as_deref().map(str::to_owned)
+    }
+
+    #[test]
+    fn a_refused_origin_names_the_public_origin_only_when_one_is_configured() {
+        assert_eq!(
+            rejected(Some("http://127.0.0.1:8100")).as_deref(),
+            Some("http://127.0.0.1:8100")
+        );
+        assert_eq!(rejected(None), None);
+    }
 }

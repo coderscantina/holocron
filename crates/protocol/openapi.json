@@ -10433,6 +10433,13 @@
               "$ref": "#/components/schemas/OwnedResource"
             },
             "description": "What blocks the erasure, for `user_owns_resources`."
+          },
+          "expected_origin": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The address commands are accepted from, for `origin_rejected`. Only sent when\n`HOLOCRON_PUBLIC_URL` is set; without it the check follows the Host header and there is\nno single address."
           }
         },
         "required": [

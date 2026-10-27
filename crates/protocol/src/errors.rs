@@ -141,6 +141,12 @@ pub struct ApiErrorBody {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ts(optional)]
     pub owned: Option<Vec<OwnedResource>>,
+    /// The address commands are accepted from, for `origin_rejected`. Only sent when
+    /// `HOLOCRON_PUBLIC_URL` is set; without it the check follows the Host header and there is
+    /// no single address.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub expected_origin: Option<Box<str>>,
 }
 
 /// A workspace or site that must be transferred or deleted before its owner can be erased.

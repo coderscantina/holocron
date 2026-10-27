@@ -22,4 +22,10 @@ current?: number,
 /**
  * What blocks the erasure, for `user_owns_resources`.
  */
-owned?: Array<OwnedResource>, };
+owned?: Array<OwnedResource>, 
+/**
+ * The address commands are accepted from, for `origin_rejected`. Only sent when
+ * `HOLOCRON_PUBLIC_URL` is set; without it the check follows the Host header and there is
+ * no single address.
+ */
+expected_origin?: string, };

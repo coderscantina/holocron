@@ -47,6 +47,8 @@ async fn commands_need_the_request_marker_and_a_same_origin_origin() {
         let answer = harness.send(request(origin, marker)).await;
         assert_eq!(answer.status, StatusCode::FORBIDDEN);
         assert_eq!(answer.code(), "origin_rejected");
+        // The harness sets no public URL, so there is no single address to name.
+        assert!(answer.json().get("expected_origin").is_none());
     }
     assert_eq!(
         harness

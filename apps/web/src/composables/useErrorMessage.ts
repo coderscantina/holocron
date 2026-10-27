@@ -53,15 +53,28 @@ const fieldMessages: Record<FieldErrorCode, MessageKey> = {
 
 export const errorMessageKey = (code: ErrorCode): MessageKey => errorMessages[code]
 
-/** Translated copy for any thrown value: API codes, network loss, or the unexpected. */
+type Translate = (key: MessageKey, named?: Record<string, unknown>) => string
+
+/**
+ * Copy for any thrown value: API codes, network loss, or the unexpected. A refused origin names
+ * the address to open when the server sent one (it is set only with a public URL); otherwise
+ * the generic hint stays.
+ */
+export function messageFor(error: unknown, t: Translate): string {
+  if (error instanceof ApiError) {
+    const origin = error.body.expected_origin
+    if (error.code === 'origin_rejected' && origin) return t('errors.origin_rejected_at', { origin })
+    return t(errorMessages[error.code])
+  }
+  if (error instanceof NetworkError) return t('errors.network')
+  return t('errors.internal')
+}
+
+/** Translated copy for any thrown value. */
 export function useErrorMessage() {
   const { t } = useI18n()
 
-  const message = (error: unknown): string => {
-    if (error instanceof ApiError) return t(errorMessages[error.code])
-    if (error instanceof NetworkError) return t('errors.network')
-    return t('errors.internal')
-  }
+  const message = (error: unknown): string => messageFor(error, t)
 
   /** The first problem per field, translated, for `invalid_arguments`. */
   const fieldMessage = (error: unknown, field: string): string | null => {
