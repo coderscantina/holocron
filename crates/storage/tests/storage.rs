@@ -392,3 +392,55 @@ async fn a_file_with_one_property_table_moves_values_to_key_partitions() {
     }
     storage.close().await.unwrap();
 }
+
+#[tokio::test(flavor = "multi_thread")]
+async fn a_file_without_entry_paths_fills_them_from_the_stored_members() {
+    let dir = tempfile::tempdir().unwrap();
+    let storage = Storage::open(dir.path(), budgets()).await.unwrap();
+    storage
+        .admit(&[event(1, None), event(2, None), event(3, None)])
+        .await
+        .unwrap();
+    storage.drain().await;
+    // Session 1 holds a custom event and a later pageview, session 3 only a custom event; the
+    // file is as it was at schema 5, without the column.
+    storage
+        .write(|tx| {
+            tx.execute_batch(
+                "DELETE FROM dirty_days;
+                 UPDATE events SET kind = 1, path = '/landing' WHERE id = 2;
+                 INSERT INTO sessions (site, session_id, population, identity, local_day, start_time, last_time,
+                                       ends_at, pageviews, custom_events, policy_version)
+                 SELECT site, seq, 1, 1, local_day, event_time, event_time, event_time, 1, 0, 1
+                 FROM events WHERE id IN (1, 3);
+                 INSERT INTO session_members
+                 SELECT site, seq, CASE WHEN id = 3 THEN seq ELSE (SELECT seq FROM events WHERE id = 1) END,
+                        1, event_time + to_milliseconds(seq) FROM events;
+                 ALTER TABLE sessions DROP COLUMN entry_path;
+                 UPDATE schema_info SET analytics_schema = 5;",
+            )
+        })
+        .await
+        .unwrap();
+    storage.close().await.unwrap();
+
+    holocron_storage::upgrade(dir.path(), &budgets())
+        .await
+        .unwrap();
+    let storage = Storage::open(dir.path(), budgets()).await.unwrap();
+    for (sql, expected) in [
+        (
+            "SELECT count(*) FROM sessions s JOIN events e ON e.seq = s.session_id
+             WHERE e.id = 1 AND s.entry_path = '/landing'",
+            1,
+        ),
+        (
+            "SELECT count(*) FROM sessions s JOIN events e ON e.seq = s.session_id
+             WHERE e.id = 3 AND s.entry_path = '/pricing'",
+            1,
+        ),
+    ] {
+        assert_eq!(count(&storage, sql).await, expected, "{sql}");
+    }
+    storage.close().await.unwrap();
+}

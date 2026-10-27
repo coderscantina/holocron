@@ -74,6 +74,7 @@ pub fn source(field: DimensionField) -> Source {
         Tag => Source::Event("tag"),
         Currency => Source::Event("currency"),
         PerfMetric => Source::PerfMetric,
+        EntryPath => Source::SessionTouch("entry_path"),
         ReferrerDomain => Source::SessionTouch("referrer_domain"),
         ReferrerPath => Source::SessionTouch("referrer_path"),
         UtmSource => Source::SessionTouch("utm_source"),
@@ -98,7 +99,7 @@ pub fn source(field: DimensionField) -> Source {
 
 /// Session-scoped values correction stores on `sessions`: the event column, whether it comes
 /// from the touch (else the first event), and the stored column.
-pub const SESSION_FIELDS: [(&str, bool, &str); 17] = [
+pub const SESSION_FIELDS: [(&str, bool, &str); 18] = [
     ("country", false, "country"),
     ("region", false, "region"),
     ("city", false, "city"),
@@ -117,6 +118,8 @@ pub const SESSION_FIELDS: [(&str, bool, &str); 17] = [
     ("click_id", true, "click_id"),
     // The touch's page query, for `channel`; not the event's own `query` field.
     ("query", true, "touch_query"),
+    // Last, as the column is on `sessions`: older files get it appended by migration.
+    ("path", true, "entry_path"),
 ];
 
 /// Correction SQL selecting every [`SESSION_FIELDS`] value from the session's first event

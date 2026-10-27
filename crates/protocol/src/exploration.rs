@@ -124,6 +124,8 @@ pub enum DimensionField {
     PerfMetric,
     /// ISO 4217 currency of a revenue record.
     Currency,
+    /// The path of the session's touch: its first pageview, else its first eligible event.
+    EntryPath,
     ReferrerDomain,
     ReferrerPath,
     UtmSource,

@@ -223,6 +223,7 @@ const breakdowns: DimensionField[] = [
   'device',
   'browser',
   'path',
+  'entry_path',
   'event_name',
 ]
 const breakdown = computed(() => state.value?.dimensions[1] ?? null)

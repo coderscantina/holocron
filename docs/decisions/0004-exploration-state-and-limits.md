@@ -97,7 +97,7 @@ Each dimension is either per event or per session. Grouping or filtering events 
 | Scope | Fields |
 | --- | --- |
 | Event | `path`, `hostname`, `title`, `query`, `event_name`, `tag`, `perf_metric`, `currency`, `weekday`, `hour`, event-scope properties |
-| Session | `referrer_domain`, `referrer_path`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `click_id`, `channel` (all from the session's touch: its first pageview, or its first eligible event when it has no pageview); `country`, `region`, `city`, `browser`, `os`, `device`, `language`, `screen` (from the session's first eligible event); session-scope properties (0002) |
+| Session | `entry_path` (the path of the session's touch), `referrer_domain`, `referrer_path`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `click_id`, `channel` (all from the session's touch: its first pageview, or its first eligible event when it has no pageview); `country`, `region`, `city`, `browser`, `os`, `device`, `language`, `screen` (from the session's first eligible event); session-scope properties (0002) |
 
 Events without a session (unattached performance, link and pixel hits) take session fields from their own request. Referrer and campaign fields are per session because the tracker reduces same-origin referrers to a path, so per-event referrers are empty after the landing page and would put most custom events in the "not set" cell. A self-referral keeps its stored domain as the cell value; no referrer is the "not set" cell, labeled "(none)" in the UI.
 
@@ -198,6 +198,12 @@ Adopted in [0022](0022-agent-report-queries.md) on 2026-10-27, which holds the f
 - `Funnel` v2 adds `group_by?: Field`: an identity's group is the value of its entering step-1 event, at most 50 groups by step 1 reached, `groups_truncated` beyond that. v1 funnels stay valid.
 - Every funnel result carries step durations: p25, median and p75 milliseconds from the previous step and counts in the buckets `< 1 h`, `1–24 h`, `1–7 d`, `7–30 d`, `≥ 30 d`, plus step 1 to the last step.
 - A report query allows 1,000 items in an `in` or `not_in` list. The 50-item limit below stays for exploration states.
+
+### Amendment: entry page
+
+Adopted by Mike on 2026-10-27.
+
+- `entry_path` is a session-scope field: the path of the session's touch, its first pageview or else its first eligible event, as for `referrer_domain` and the UTM fields. It is stored on `sessions` (analytics schema 6; migration fills older files from the stored members), is available wherever a field is, takes the operators of `path` including `matches` and `not_matches`, and has no rollup. Revenue's "Which traffic pays" offers it in place of the page source.
 
 ### Timestamp conventions
 

@@ -304,6 +304,93 @@ async fn session_fields_come_from_the_session_and_sessions_split_into_every_cell
     assert_eq!(count(&by_path.main.totals[0]), 4);
 }
 
+/// v1 enters on `/de/start` and moves on to `/en/x`; v2 has only a custom event on `/de/promo`;
+/// v3 fires a custom event on `/x` before its first pageview `/y`.
+async fn entered() -> (tempfile::TempDir, Storage) {
+    let (dir, storage) = open().await;
+    let mut site = Site::new(SITE, Vienna);
+    let mut custom = |site: &mut Site, at: &str, who: &'static str, path: &str| {
+        let mut record = site.event(EventKind::CustomEvent, at, Who::Anon(who));
+        if let Record::Event(event) = &mut record {
+            event.dimensions.path = Some(path.into());
+        }
+        record
+    };
+    let records = vec![
+        pageview(
+            &mut site,
+            "2026-09-01T08:00:00Z",
+            Who::Anon("v1"),
+            "/de/start",
+            "AT",
+        ),
+        pageview(
+            &mut site,
+            "2026-09-01T08:05:00Z",
+            Who::Anon("v1"),
+            "/en/x",
+            "AT",
+        ),
+        custom(&mut site, "2026-09-01T09:00:00Z", "v2", "/de/promo"),
+        custom(&mut site, "2026-09-01T10:00:00Z", "v3", "/x"),
+        pageview(
+            &mut site,
+            "2026-09-01T10:05:00Z",
+            Who::Anon("v3"),
+            "/y",
+            "AT",
+        ),
+    ];
+    ingest(&storage, &records).await;
+    correct(&storage).await;
+    (dir, storage)
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn entry_path_is_the_first_pageview_else_the_first_event() {
+    let (_dir, storage) = entered().await;
+    let result = run(
+        &storage,
+        state(json!(["sessions"]), json!(["entry_path"]), Value::Null),
+        vec![],
+    )
+    .await;
+    let cells: Vec<(Cell, i64)> = result
+        .main
+        .rows
+        .iter()
+        .map(|r| (r.key[0].clone(), count(&r.values[0])))
+        .collect();
+    assert_eq!(
+        cells,
+        vec![
+            (Cell::String("/de/promo".into()), 1),
+            (Cell::String("/de/start".into()), 1),
+            (Cell::String("/y".into()), 1)
+        ]
+    );
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn entry_path_takes_glob_filters_and_covers_the_whole_session() {
+    let (_dir, storage) = entered().await;
+    let filter = group(
+        "and",
+        vec![cond("f1", "entry_path", "matches", Some("/de/**"))],
+    );
+    let result = run(
+        &storage,
+        state(json!(["pageviews", "sessions"]), json!([]), filter),
+        vec![],
+    )
+    .await;
+    // v1's second pageview is on `/en/x` but its session entered on `/de/start`.
+    assert_eq!(
+        (count(&result.main.totals[0]), count(&result.main.totals[1])),
+        (2, 2)
+    );
+}
+
 #[tokio::test(flavor = "multi_thread")]
 async fn rows_page_after_sorting_with_ties_broken_by_dimension_values() {
     let (_dir, storage) = loaded().await;

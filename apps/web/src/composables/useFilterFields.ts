@@ -34,7 +34,7 @@ export const operatorsFor: Record<FilterKind, Operator[]> = {
 }
 
 /** Built-in fields that take `matches` and `not_matches` (0022); string properties take them too. */
-const globFields: Field[] = ['path', 'referrer_path', 'title', 'query', 'hostname']
+const globFields: Field[] = ['path', 'entry_path', 'referrer_path', 'title', 'query', 'hostname']
 
 /** Operators a field offers: its kind's, plus the glob pair after `starts_with` where the server allows it. */
 export function operatorsOf(field: Pick<FilterField, 'field' | 'kind'>): Operator[] {

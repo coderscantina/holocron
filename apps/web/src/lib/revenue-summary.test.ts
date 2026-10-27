@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Cell, Row, Series } from '~/generated'
-import { bestPayer, busiest, hourly, pace, traffic } from '~/lib/revenue-summary'
+import { bestPayer, busiest, hourly, pace, sourceOf, traffic, trafficSources } from '~/lib/revenue-summary'
 
 const money = (currency: string, minor: number) => ({
   t: 'money' as const,
@@ -94,5 +94,15 @@ describe('traffic', () => {
     const sources = traffic([paying('Email', 300, 6), paying('Search', 700, 10)], [all('Email', 60), all('Search', 940)], 'EUR', { net: 1000, visitors: 1000 })
     expect(bestPayer(sources, 1)?.key).toEqual({ t: 'string', v: 'Email' })
     expect(bestPayer(sources, 4)).toBeNull()
+  })
+})
+
+describe('sourceOf', () => {
+  it('offers the entry page as a source and sends the retired page link to channel', () => {
+    expect(trafficSources.entry_page).toBe('entry_path')
+    expect(Object.keys(trafficSources)).not.toContain('page')
+    expect(sourceOf('entry_page')).toBe('entry_page')
+    expect(sourceOf('page')).toBe('channel')
+    expect(sourceOf(undefined)).toBe('channel')
   })
 })
