@@ -115,3 +115,12 @@ Not decided here. The chunk format and playback isolation belong to milestone 09
 ## Affected contracts
 
 [Workload and query suite](../contracts/workload-and-query-suite.md) "Choices made here"; workload manifest `clock` and `retention_advance`; [capability matrix](../contracts/capability-matrix.md) CAP-OPS-01, CAP-OPS-05, CAP-OPS-09, CAP-RECORD-04; milestones 02, 09, 11, 12.
+
+## Amendment (0021)
+
+Dated 2026-10-27. Follows [0021](0021-web-setup-and-onboarding.md), adopted by Mike on 2026-10-22. It changes the bootstrap credentials for a container install. The rest of this record stands.
+
+- `holocron serve` on an empty data directory starts in setup mode. The one-time setup token is the bootstrap credential. It is logged at each boot in setup mode, or pinned with `HOLOCRON_SETUP_TOKEN`.
+- The first admin chooses their password in the web setup wizard. That path shows no generated password.
+- `holocron init` stays for the CLI path, with its generated or file-supplied password and the outcomes above.
+- No known default password exists on either path.
