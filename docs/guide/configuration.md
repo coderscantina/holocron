@@ -34,6 +34,7 @@ The last six are covered in [Operations](operations.md). The import and operator
 | `HOLOCRON_BUDGET` | `--budget` | `serve` | `standard` | Host size preset: `small`, `standard` or `large`. Sets engine threads and memory, worker threads and report workers together, see [Host size](../operations/runbook.md#host-size) |
 | `HOLOCRON_WORKER_THREADS` | `--worker-threads` | `serve` | from the budget | Worker threads of the server's runtime. Overrides the budget's value |
 | `HOLOCRON_DISK_RESERVE_MIB` | `--disk-reserve-mib` | `serve`, `import run` | `4096` | Free space the data volume keeps, in MiB. Below it collection answers 503 and an import stops |
+| `HOLOCRON_BACKUP_DIR` | `--backup-dir` | `serve` | `/backups` | The directory whose `holocron-backup-*` backups the setup wizard lists for a restore. The compose files mount the backup storage there. A backup elsewhere on the host is entered by path |
 | `HOLOCRON_RECORDING_CAP_MIB` | `--recording-cap-mib` | `serve` | `25600` | Compressed replay storage, in MiB. Saved replays may use a fifth of it |
 | `HOLOCRON_COLLECT_TRUSTED_PROXIES` | `--collect-trusted-proxies` | `serve` | none | Comma-separated IPs or CIDRs of proxies whose forwarding and location headers are trusted |
 | `HOLOCRON_COLLECT_CLIENT_IP_HEADER` | `--collect-client-ip-header` | `serve` | `x-forwarded-for` | Header a trusted proxy puts the visitor's address in |

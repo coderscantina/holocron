@@ -15,7 +15,7 @@ Decisions behind this: [0006](../decisions/0006-retention-clock-and-operations.m
 
 ## Install
 
-`holocron serve` on an empty data directory starts in setup mode and logs a setup token; the wizard at the public URL creates the admin and the first site, or imports from Umami ([install guide](../guide/install.md#set-up-in-the-browser)). From the shell instead:
+`holocron serve` on an empty data directory starts in setup mode and logs a setup token; the wizard at the public URL creates the admin and the first site, imports from Umami, or restores a backup ([install guide](../guide/install.md#set-up-in-the-browser)). From the shell instead:
 
 ```sh
 holocron init --data-dir /var/lib/holocron --admin-email you@example.com --admin-password-file pw.txt
@@ -83,6 +83,15 @@ holocron serve --data-dir /var/lib/holocron-restored
 - `data_newer_than_binary` (exit 3): install the release that took the backup or a newer one.
 - `state: "upgrade_required"`: the backup is from an older release. Run `holocron upgrade` on the restored directory.
 - An interrupted restore leaves `holocron.restore-in-progress`; `serve` refuses the directory (`restore_incomplete`). Run the same restore again; it starts over.
+
+### Restore in setup mode
+
+An empty data directory can restore from the wizard: Restore a backup lists `holocron-backup-*` in `HOLOCRON_BACKUP_DIR` (`/backups` in the compose files) with date, size and release, and takes any other host path. It runs `restore`, then `upgrade` when the backup is older (the backup it restored from is the pre-upgrade backup, no second one is taken), on one progress stream with the phases `restoring` and `upgrading`. When it finishes, setup spends the token and `serve` starts on the same port without a restart; the restored accounts sign in.
+
+- Refusals use the codes above (`data_newer_than_binary`, `backup_corrupt`, `backup_invalid`, `directory_not_empty`) with a message in the wizard's words; a failed restore leaves setup mode as it was and the person picks again.
+- A lock file from an earlier process does not make the directory non-empty.
+- A directory with `holocron.restore-in-progress` starts in setup mode and the wizard preselects Restore. The step starts over. If the server is killed after the restore and before the upgrade ends, `serve` refuses with `upgrade_required` or `upgrade_interrupted`; run `holocron upgrade` as above.
+- The token guards every restore request. The progress stream takes it in the `X-Holocron-Setup-Token` header.
 
 Never copy single engine files into a data directory. `serve` refuses a mixed directory with `engines_mismatched`; restore a whole backup instead.
 
