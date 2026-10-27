@@ -75,7 +75,7 @@ const onClick = () => {
       align="center"
       :side-offset="6"
       :collision-padding="8"
-      class="pointer-events-none w-72 p-3"
+      class="pointer-events-none w-[26rem] max-w-[calc(100vw-16px)] p-3"
       @open-auto-focus.prevent
       @close-auto-focus.prevent
     >
@@ -96,13 +96,18 @@ const onClick = () => {
           <dd class="text-sm font-semibold text-primary tabular-nums">{{ text.metric(duration.p75) }}</dd>
         </div>
       </dl>
-      <ul class="mt-3 grid gap-1 text-xs">
+      <ul class="mt-3 grid grid-cols-5 gap-2 text-xs">
         <li
           v-for="(count, index) in duration.buckets"
           :key="index"
-          class="grid grid-cols-[5.5rem_1fr_2.5rem] items-center gap-2"
+          class="grid content-start gap-1"
         >
-          <span class="text-muted">{{ t(`reports.funnel.duration.buckets.${DURATION_BUCKETS[index]!}`) }}</span>
+          <span
+            class="tabular-nums"
+            :class="count > 0 ? 'text-primary' : 'text-muted'"
+          >
+            {{ numbers.integer(count) }}
+          </span>
           <span
             class="h-1.5 rounded-full bg-fill-strong"
             aria-hidden="true"
@@ -112,12 +117,7 @@ const onClick = () => {
               :style="{ width: `${(count / peak) * 100}%` }"
             />
           </span>
-          <span
-            class="text-right tabular-nums"
-            :class="count > 0 ? 'text-primary' : 'text-muted'"
-          >
-            {{ numbers.integer(count) }}
-          </span>
+          <span class="leading-tight text-muted">{{ t(`reports.funnel.duration.buckets.${DURATION_BUCKETS[index]!}`) }}</span>
         </li>
       </ul>
     </PopoverContent>

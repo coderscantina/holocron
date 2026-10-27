@@ -59,10 +59,10 @@ test('funnel split: table by country, pick a group, a median between steps, relo
   // The median from step 1 to step 2 sits between the columns and opens the spread.
   const median = page.getByRole('button', { name: /^Median .+ from step 1 to step 2/ })
   await expect(median).toBeVisible()
-  await median.focus()
+  await median.hover()
   await expect(page.getByText(/^Step 1 to 2 · /)).toBeVisible()
   await expect(page.getByText('Under 1 h')).toBeVisible()
-  await page.keyboard.press('Escape')
+  await page.mouse.move(0, 0)
 
   // A row reads that group's own funnel; the split stays in the URL.
   await table.getByRole('button', { name: /^Show the funnel for / }).first().click()
