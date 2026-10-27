@@ -49,6 +49,8 @@ A key acts as its owner with the owner's current role, limited to its operations
 
 Adopted (Mike, 2026-10-06): a key that reaches a site may follow its `analytics:<site>` watermark topic without an operation grant. The topic says only that newer data is visible. The fixture lists `realtime.site` as a grant; that topic does not exist yet and will need one.
 
+Proposed in [0022](0022-agent-report-queries.md): the protocol exports a "Read analytics" preset, the operations an agent key needs: `analytics.report`, `analytics.export`, `fields.catalog`, `fields.values`, `analytics.freshness`, `sites.get` and the workspace site list. The key dialog offers it as one choice. It is a list of grants, not a new kind of key, and it leaves out session timelines, realtime and recordings.
+
 ### Shares
 
 A share stores a copy of the shared state and its limits, so it survives edits to or deletion of the saved exploration and its author. Every share expires, at most 366 days ahead. Limits are named measures, dimensions, properties, `range_max_days` (current plus comparison range), a pinned filter and whether viewers may narrow. Outside a share every refusal is `not_found`, including a missing capability; widening inside it is `share_scope_exceeded`.

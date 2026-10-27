@@ -286,7 +286,7 @@ Fixture rows carry a `status` naming the record that settles them, or `proposed 
 
 | Upstream feature | Source | Decision |
 | --- | --- | --- |
-| MCP server endpoint | `src/app/mcp/route.ts` (`@umami/mcp`) | Deferred; it would sit on the generated API with scoped keys if wanted |
+| MCP server endpoint | `src/app/mcp/route.ts` (`@umami/mcp`) | Planned in milestone 15 ([0022](../decisions/0022-agent-report-queries.md)): `/mcp` on the generated API with scoped keys |
 | SSO token handoff | `src/app/sso`, `api/auth/sso` (requires Redis) | Excluded; depends on Redis, and 10 forbids unexpected external auth dependencies |
 | Cloud subscription status | `api/auth/subscription`, `src/lib/subscription.ts` | Excluded; Umami Cloud billing, not self-hosted behavior |
 | Telemetry script | `api/scripts/telemetry` | Excluded |

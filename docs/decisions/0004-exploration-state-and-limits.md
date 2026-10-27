@@ -190,6 +190,15 @@ How each kind uses the rest of the state. "Default" means the value must be exac
 
 Limits live in the generated protocol as constants so the Vue client can validate before sending.
 
+### Amendment: glob matching and funnel v2
+
+Proposed in [0022](0022-agent-report-queries.md), which holds the full rules.
+
+- String operators gain `matches` and `not_matches` with a glob value: `*` any run without `/`, `**` any run, `\` escapes. Whole value, case-sensitive, 1 to 500 bytes, at most 8 wildcards. `not_matches` is the exact complement of `matches`, like the other negative operators.
+- `Funnel` v2 adds `group_by?: Field`: an identity's group is the value of its entering step-1 event, at most 50 groups by step 1 reached, `groups_truncated` beyond that. v1 funnels stay valid.
+- Every funnel result carries step durations: p25, median and p75 milliseconds from the previous step and counts in the buckets `< 1 h`, `1–24 h`, `1–7 d`, `7–30 d`, `≥ 30 d`, plus step 1 to the last step.
+- A report query allows 1,000 items in an `in` or `not_in` list. The 50-item limit below stays for exploration states.
+
 ### Timestamp conventions
 
 - Storage: UTC instants, millisecond precision, both `event_time` and `receive_time`. Tracker `timestamp` (integer seconds) is multiplied by 1000.
