@@ -35,7 +35,7 @@ Operation names are dotted, as in the access fixture: `sites.update`, `auth.logi
 
 - Wire conventions: snake_case fields, Unix millisecond timestamps, string IDs, absent optional fields left out. `i64` exports as `number`; revisions and timestamps stay below 2^53.
 - Query arguments are query-string values. Arrays repeat the key; absent values are left out.
-- Proposed in [0022](0022-agent-report-queries.md): a query may also be sent as `POST` with its arguments as a JSON object body, at most 1 MiB. It keeps query semantics: read transaction, no idempotency key, no origin check, the same admission and 30 s budget. Every query accepts both forms; `analytics.report` is only practical as `POST`.
+- Proposed in [0022](0022-agent-report-queries.md): a query may also be sent as `POST` with its arguments as a JSON object body, at most 1 MiB. It keeps query semantics: read transaction, no idempotency key, no origin check, the same admission and 30 s budget. Every query accepts both forms; `analytics.report` is only practical as `POST`. Arguments decode by field type, so `analytics.explore` keeps `state` as a JSON string and `panels` as an array of JSON strings in both forms.
 - `revision` of a command is the sequence of the last topic event it recorded, else the head of `installation`. `revision` of a query is the head of the topic the handler names, read in the same read transaction as the data. `cursor` is `<topic>@<revision>` and opaque to the browser.
 - Results are always JSON objects so the envelope fields merge into them.
 

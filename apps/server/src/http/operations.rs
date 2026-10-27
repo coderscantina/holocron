@@ -1,4 +1,5 @@
-//! `POST /api/commands/{name}` and `GET /api/queries/{name}`: the only dashboard entry points.
+//! `POST /api/commands/{name}`, `GET /api/queries/{name}` and `POST /api/queries/{name}`: the
+//! only dashboard entry points. A query answers the same from a query string or a JSON body.
 //!
 //! A command runs: origin check (skipped for API keys), lookup, caller, admission (credential,
 //! key grants, share reach, enrollment-only session), body parse, `BEGIN IMMEDIATE`, idempotency
@@ -17,11 +18,14 @@ use axum::response::{IntoResponse, Response};
 use holocron_protocol::envelope::Topic;
 use holocron_protocol::errors::ErrorCode;
 use holocron_protocol::limits::{
-    COMMAND_BODY_MAX_BYTES, IDEMPOTENCY_KEY_MAX_CHARS, LOGIN_CHALLENGE_MS, QUERY_STRING_MAX_BYTES,
-    REQUEST_MARKER_HEADER, REQUEST_MARKER_VALUE, REQUEST_TIMEOUT_MS, SESSION_LIFETIME_MS,
+    COMMAND_BODY_MAX_BYTES, IDEMPOTENCY_KEY_MAX_CHARS, LOGIN_CHALLENGE_MS, QUERY_BODY_MAX_BYTES,
+    QUERY_STRING_MAX_BYTES, REQUEST_MARKER_HEADER, REQUEST_MARKER_VALUE, REQUEST_TIMEOUT_MS,
+    SESSION_LIFETIME_MS,
 };
 use holocron_protocol::operations;
-use holocron_protocol::registry::{DispatchError, FormArgs, JsonArgs, Kind, Reauth};
+use holocron_protocol::registry::{
+    ArgsSource, DispatchError, FormArgs, JsonArgs, Kind, OperationInfo, Reauth,
+};
 use serde_json::{Map, Value};
 
 use crate::config::Config;
@@ -49,6 +53,17 @@ pub async fn query(
     request: Request,
 ) -> Response {
     match run_query(&state, &name, request).await {
+        Ok(answer) => no_store(Json(Value::Object(answer)).into_response()),
+        Err(error) => error.into_response(),
+    }
+}
+
+pub async fn query_with_body(
+    State(state): State<AppState>,
+    Path(name): Path<String>,
+    request: Request,
+) -> Response {
+    match run_query_with_body(&state, &name, request).await {
         Ok(answer) => no_store(Json(Value::Object(answer)).into_response()),
         Err(error) => error.into_response(),
     }
@@ -162,14 +177,44 @@ async fn run_query(
     }
     let caller = caller(state, &parts).await?;
     caller.admit(op)?;
+    read(state, op, caller, &FormArgs(raw)).await
+}
 
+/// The same query with its arguments as a JSON object body, for reports too big for a URL.
+async fn run_query_with_body(
+    state: &AppState,
+    name: &str,
+    request: Request,
+) -> Result<Map<String, Value>, ApiError> {
+    let op = operations::find(Kind::Query, name).ok_or_else(ApiError::not_found)?;
+    let (parts, body) = request.into_parts();
+    let caller = caller(state, &parts).await?;
+    caller.admit(op)?;
+    let body = axum::body::to_bytes(body, QUERY_BODY_MAX_BYTES)
+        .await
+        .map_err(|_| ApiError::new(ErrorCode::PayloadTooLarge))?;
+    let Ok(args @ Value::Object(_)) = serde_json::from_slice::<Value>(&body) else {
+        return Err(ApiError::with_message(
+            ErrorCode::MalformedRequest,
+            "The body must be a JSON object.",
+        ));
+    };
+    read(state, op, caller, &JsonArgs(args)).await
+}
+
+/// Runs an admitted query in one read transaction within the request budget.
+async fn read(
+    state: &AppState,
+    op: &'static OperationInfo,
+    caller: Caller,
+    args: &impl ArgsSource,
+) -> Result<Map<String, Value>, ApiError> {
     let work = async {
         let tx = state.db.reader.begin().await?;
         let mut ctx = QueryCtx::new(tx, caller);
-        let (mut answer, topic) =
-            operations::dispatch_query(state, &mut ctx, op.name, &FormArgs(raw))
-                .await
-                .map_err(dispatch_error)?;
+        let (mut answer, topic) = operations::dispatch_query(state, &mut ctx, op.name, args)
+            .await
+            .map_err(dispatch_error)?;
         let mut tx = ctx.into_tx();
         let revision = events::head(&mut tx, &topic).await?;
         tx.rollback().await?;

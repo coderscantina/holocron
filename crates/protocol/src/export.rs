@@ -176,6 +176,17 @@ fn operation_map(cfg: &ts_rs::Config, ops: &[&OperationInfo], kind: Kind) -> Str
         "\n/** Operations an API key may hold in its grants. */\nexport const {grantable} = [{}] as const satisfies readonly (keyof {interface})[]",
         keyed.join(", ")
     );
+    if kind == Kind::Query {
+        let preset: Vec<String> = operations::api_keys::READ_ANALYTICS_PRESET
+            .iter()
+            .map(|name| format!("'{name}'"))
+            .collect();
+        let _ = writeln!(
+            out,
+            "\n/** The \"Read analytics\" grants for agent keys. */\nexport const readAnalyticsPreset = [{}] as const satisfies readonly (typeof keyGrantableQueries[number])[]",
+            preset.join(", ")
+        );
+    }
     out
 }
 
@@ -309,13 +320,22 @@ fn openapi(ops: &[&OperationInfo]) -> String {
             ),
             Kind::Query => (
                 format!("/api/queries/{}", op.name),
-                json!({ "get": {
-                    "operationId": op.name,
-                    "description": summary,
-                    "security": security,
-                    "parameters": query_parameters(&generator, &args),
-                    "responses": responses,
-                } }),
+                json!({
+                    "get": {
+                        "operationId": op.name,
+                        "description": summary,
+                        "security": security,
+                        "parameters": query_parameters(&generator, &args),
+                        "responses": responses,
+                    },
+                    "post": {
+                        "operationId": format!("{}.post", op.name),
+                        "description": format!("{summary}\n\nThe same query with its arguments as a JSON object body."),
+                        "security": security,
+                        "requestBody": { "required": true, "content": { "application/json": { "schema": args } } },
+                        "responses": responses,
+                    },
+                }),
             ),
         };
         paths.insert(path, item);

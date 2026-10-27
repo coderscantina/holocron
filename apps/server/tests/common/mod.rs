@@ -360,6 +360,22 @@ impl Harness {
         self.send(request.body(Body::empty()).unwrap()).await
     }
 
+    /// A query sent as `POST` with a raw body and an optional `Authorization` header.
+    pub async fn query_post(
+        &self,
+        authorization: Option<&str>,
+        name: &str,
+        body: Vec<u8>,
+    ) -> Answer {
+        let mut request = Request::post(format!("/api/queries/{name}"))
+            .header(header::HOST, HOST)
+            .header(header::CONTENT_TYPE, "application/json");
+        if let Some(authorization) = authorization {
+            request = request.header(header::AUTHORIZATION, authorization);
+        }
+        self.send(request.body(Body::from(body)).unwrap()).await
+    }
+
     /// A command as a script sends it with an API key: no Origin, no request marker.
     pub async fn command_with(&self, authorization: &str, name: &str, body: Value) -> Answer {
         let request = Request::post(format!("/api/commands/{name}"))

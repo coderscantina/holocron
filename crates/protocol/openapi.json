@@ -112,6 +112,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "account.get.post",
+        "description": "The caller's account. Reachable from an enrollment-only session.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AccountResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/account.preferences": {
@@ -124,6 +172,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Preferences"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "account.preferences.post",
+        "description": "\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -357,6 +453,60 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "analytics.explore.post",
+        "description": "Computes an exploration state and optional panels (other cuts of the same rows and\n range) in one analytical snapshot. Needs `site.read`. Refusals name the field:\n `invalid_arguments`, `duplicate_predicate_id`, `filter_too_deep`,\n `too_many_conditions`, `page_out_of_range`, `report_missing`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExploreArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExploreResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/analytics.export": {
@@ -393,6 +543,60 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExportFile"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "analytics.export.post",
+        "description": "Every row of an exploration (up to 10,000) as a file, with the state, resolved range\n and versions it was computed from. Needs `site.export`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -469,6 +673,60 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Freshness"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "analytics.freshness.post",
+        "description": "What a result over `[start, end)` can claim: the ingestion watermark, whether\n identity days that can change the range still wait for correction, the metric\n version and the session policy versions in effect. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreshnessArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -709,6 +967,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "annotations.list.post",
+        "description": "Annotations with `start <= at < end`, oldest first. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnnotationsListArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AnnotationList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/annotations.update": {
@@ -858,6 +1167,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiKeyList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "apiKeys.list.post",
+        "description": "The caller's keys, newest first, revoked ones included. Never the secret.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -1255,6 +1612,50 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "auth.session.post",
+        "description": "The signed-in account, or `null`. Answers signed-out callers and share viewers too,\n never 401. API keys cannot hold it.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SessionState"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/auth.verifySecondFactor": {
@@ -1514,6 +1915,60 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "boards.get.post",
+        "description": "\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoardResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/boards.list": {
@@ -1538,6 +1993,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoardList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "boards.list.post",
+        "description": "The workspace's boards by name.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardsListArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -1748,6 +2254,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "collection.status.post",
+        "description": "Collection availability, per-route outcomes, inbox depth and age, and the analytical\n watermark. Install admins only; others get `forbidden`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CollectionStatus"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/collectionKeys.create": {
@@ -1836,6 +2390,54 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CollectionKeyList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "collectionKeys.list.post",
+        "description": "The site's collection keys, newest first, revoked ones included. Never the secret.\n Needs `site.configure`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SitesGetArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2063,6 +2665,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "explorations.get.post",
+        "description": "\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExplorationsGetArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SavedExplorationResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/explorations.list": {
@@ -2087,6 +2740,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SavedExplorationList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "explorations.list.post",
+        "description": "The caller's saved explorations of the site, newest first. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiteArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2239,6 +2943,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "fields.catalog.post",
+        "description": "Custom property keys seen on the site, with their value types. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldsCatalogArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FieldCatalog"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/fields.values": {
@@ -2287,6 +3042,60 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FieldValues"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fields.values.post",
+        "description": "The most frequent values of one field over the last 30 days. Needs `site.read`. A\n share viewer gets values of granted fields only, inside the share's pinned filter and\n range limit, with `events` 0 unless the share grants the `events` measure.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldsValuesArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2395,6 +3204,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GeoipSettings"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "geoip.settings.post",
+        "description": "The database lookups use now, where it comes from and the download state. Install\n admins only.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2568,6 +3425,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "goals.get.post",
+        "description": "One version of a goal, archived ones too; the latest without `version`.\n Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalsGetArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SavedGoalResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/goals.list": {
@@ -2592,6 +3500,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SavedGoalList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "goals.list.post",
+        "description": "The site's active goals by name, each at its latest version. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalsListArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2778,6 +3737,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "heatmaps.cells.post",
+        "description": "Click cells and scroll depth of one page and viewport class. Needs\n `site.recordings.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeatmapCellsArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HeatmapCells"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/heatmaps.pages": {
@@ -2820,6 +3830,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HeatmapPages"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "heatmaps.pages.post",
+        "description": "Pages with heatmap interactions in `[start, end)`, most clicked first, at most 100.\n Needs `site.recordings.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeatmapPagesArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3053,6 +4114,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "links.explore.post",
+        "description": "An exploration of a link's hits. The state's `site` is the link. Hits count as\n `events`; the measures are `events`, `visitors` and `visitor_days`, without a report.\n Visitors are counted by UTC day. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExploreArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExploreResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/links.list": {
@@ -3077,6 +4189,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LinkList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "links.list.post",
+        "description": "The workspace's links by name. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourcesListArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3351,6 +4514,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "operator.status.post",
+        "description": "Collection state, readiness problems, disk and recording budgets, the latest\n retention, compaction and backup outcomes, daily storage samples and the forecast\n from the latest one. Install admins only; others get `forbidden`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/OperatorStatus"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/pixels.create": {
@@ -3555,6 +4766,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "pixels.explore.post",
+        "description": "`links.explore` for a pixel.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExploreArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExploreResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/pixels.list": {
@@ -3579,6 +4841,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PixelList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "pixels.list.post",
+        "description": "The workspace's pixels by name. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourcesListArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3702,6 +5015,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RealtimeSnapshot"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "realtime.snapshot.post",
+        "description": "Active visitors, the last 30 minutes and recent events, with the cursor to follow\n changes on `GET /api/subscribe`. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealtimeArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3862,6 +5226,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "recalculations.status.post",
+        "description": "Whether a recalculation has finished. Needs `site.configure`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecalculationsStatusArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecalculationResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/recordings.budget": {
@@ -3886,6 +5301,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordingBudget"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "recordings.budget.post",
+        "description": "Recording storage of the whole installation against its cap. Needs `site.configure`\n on the named site.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordingSiteArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -3962,6 +5428,60 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ReplayPage"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "recordings.get.post",
+        "description": "One page of a replay's events in recording order, at most 4 MiB of event JSON. Pass\n `next` as `after` for the following page. Needs `site.recordings.read`. A replay\n outside a viewer's share is `not_found`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordingsGetArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -4164,6 +5684,60 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "recordings.list.post",
+        "description": "Captured replays received in `[start, end)`, newest first, at most `limit` per page.\n Needs `site.recordings.read`. A share viewer lists only replays inside the share's\n range limit and pinned filter; a page may then hold fewer than `limit` with `next`.\n With `filter`, the session match runs on the report lane with its timeout\n (`query_timeout`); a refused filter answers with the exploration's error codes.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          },
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordingsListArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordingList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/recordings.policy": {
@@ -4188,6 +5762,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RecordingPolicyResult"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "recordings.policy.post",
+        "description": "The recording policy of a site. Needs `site.configure`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordingSiteArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -4477,6 +6102,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "retention.previewDefault.post",
+        "description": "What `retention.updateDefault` with the same arguments would remove, summed over\n the sources that follow the default. Needs `install.admin`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetentionDefaultArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RetentionPreview"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/retention.settings": {
@@ -4489,6 +6162,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RetentionSettings"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "retention.settings.post",
+        "description": "The installation default and whether the caller may change it.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -4597,6 +6318,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SecurityPolicy"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "security.policy.post",
+        "description": "The requirements the caller may see: the installation's, and each team where the\n caller holds `team.manage` (every team for install admins). User-level requirements\n are in `users.list`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -4816,6 +6585,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "segments.list.post",
+        "description": "The site's segments by name. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiteArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SegmentList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/segments.save": {
@@ -4949,6 +6769,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "sessions.get.post",
+        "description": "One session: its fields, its pageviews and custom events in order (up to 500) and\n the latest value of each identified session property. Needs `site.read`; an unknown\n session is `not_found`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionsGetArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SessionDetail"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/sessions.timeline": {
@@ -4984,6 +6855,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SessionTimeline"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "sessions.timeline.post",
+        "description": "The latest sessions starting in the last `hours`, with their pageviews and custom\n events by time, for a timeline. Needs `site.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionsTimelineArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -5152,6 +7074,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "sharing.list.post",
+        "description": "Shares of one site (`site`) or one board (`board`), exactly one of the two, newest\n first, revoked and expired ones included. Same capabilities as `sharing.revoke`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SharingListArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ShareList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/sharing.resolve": {
@@ -5164,6 +7134,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SharedView"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "sharing.resolve.post",
+        "description": "What the caller's share token opens. Without a token, and for unknown, revoked and\n expired tokens, the same `not_found`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "share": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -5514,6 +7532,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "sites.get.post",
+        "description": "One site with the caller's capabilities on it. A hidden site answers like a missing one.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SitesGetArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SiteDetail"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/sites.identityPolicy": {
@@ -5567,18 +7636,123 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "sites.identityPolicy.post",
+        "description": "Whether the site links consented visitors to persistent profiles. Needs `site.configure`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SitesGetArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/IdentityPolicy"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/sites.list": {
       "get": {
         "operationId": "sites.list",
-        "description": "Sites the caller is a member for, by workspace and name. Install admins get every\n site's metadata (name, domain, workspace), with `role` absent where they are not\n members; no analytics (decision 0007).",
+        "description": "Sites the caller is a member for, by workspace and name. Install admins get every\n site's metadata (name, domain, workspace), with `role` absent where they are not\n members; no analytics (decision 0007). An API key sees only the sites it reaches.",
         "security": [
           {
             "session": []
+          },
+          {
+            "apiKey": []
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SiteList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "sites.list.post",
+        "description": "Sites the caller is a member for, by workspace and name. Install admins get every\n site's metadata (name, domain, workspace), with `role` absent where they are not\n members; no analytics (decision 0007). An API key sees only the sites it reaches.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -5753,6 +7927,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "sites.retentionPreview.post",
+        "description": "What `sites.updateRetention` with the same arguments would remove. Needs `site.delete`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SitesUpdateRetentionArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/RetentionPreview"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/sites.trackingCode": {
@@ -5786,6 +8008,54 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TrackingCode"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "sites.trackingCode.post",
+        "description": "The `<script>` tags that put the pinned tracker, and the recorder when the site\n records, on a page. Needs `site.configure`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SitesTrackingCodeArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -6223,6 +8493,57 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "summaries.findings.post",
+        "description": "The site's current findings in rank order, at most `limit`. Needs `site.read`; an\n unreadable site answers `not_found` like an unknown one.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SummariesFindingsArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FindingList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/summaries.forSites": {
@@ -6251,6 +8572,57 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SummaryList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "summaries.forSites.post",
+        "description": "The summaries of up to 100 sites, in request order. Sites the caller cannot read\n (`site.read`), unknown sites and sites without a summary yet are left out, so the\n answer never tells them apart.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SummariesForSitesArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -6464,6 +8836,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "teams.get.post",
+        "description": "One team with its members. Needs `workspace.read`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TeamDetail"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/teams.invitations": {
@@ -6485,6 +8905,54 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InvitationList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "teams.invitations.post",
+        "description": "Pending, used, revoked and expired invitations, newest first. Needs `team.manage`.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamArgs"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -6660,6 +9128,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TeamList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "teams.list.post",
+        "description": "Teams the caller is a member of by name; install admins get every team, with\n `role` absent where they are not members.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -7132,6 +9648,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "twoFactor.status.post",
+        "description": "\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TwoFactorStatus"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/commands/users.create": {
@@ -7316,6 +9880,54 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "users.get.post",
+        "description": "One account with its workspace memberships.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserArgs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UserDetail"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/queries/users.list": {
@@ -7328,6 +9940,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UserList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "users.list.post",
+        "description": "Every account by email.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -7503,6 +10163,54 @@
           }
         ],
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SnapshotMeta"
+                    },
+                    {
+                      "$ref": "#/components/schemas/WorkspaceList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Typed API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorBody"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "workspaces.list.post",
+        "description": "Workspaces the caller is a member of, each with its sites, ordered by name. This is\n the only source of header context options.\n\nThe same query with its arguments as a JSON object body.",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",

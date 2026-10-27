@@ -24,6 +24,7 @@ use uuid::Uuid;
 use super::{add_member, create_site, create_workspace, load, policy, validate};
 use crate::context::{CommandCtx, QueryCtx};
 use crate::error::{ApiError, FieldErrors};
+use crate::identity::Caller;
 use crate::maintenance::jobs::{self, Job};
 use crate::state::AppState;
 
@@ -220,6 +221,10 @@ impl SiteManagementHandlers for AppState {
         .await?;
         let sites = rows
             .into_iter()
+            .filter(|(id, ..)| match ctx.caller() {
+                Caller::Key(key) => key.reaches(&SiteId::new(id.clone())),
+                _ => true,
+            })
             .map(
                 |(id, name, domain, workspace, workspace_name, role)| SiteListItem {
                     id: SiteId::new(id),

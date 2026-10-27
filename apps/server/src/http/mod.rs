@@ -29,7 +29,10 @@ async fn api_not_found() -> ApiError {
 pub fn router(state: AppState) -> Router {
     let api = Router::new()
         .route("/commands/{name}", post(operations::command))
-        .route("/queries/{name}", get(operations::query))
+        .route(
+            "/queries/{name}",
+            get(operations::query).post(operations::query_with_body),
+        )
         .route("/subscribe", get(crate::explorations::live::subscribe))
         .fallback(api_not_found)
         .method_not_allowed_fallback(api_not_found)

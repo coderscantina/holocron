@@ -33,8 +33,8 @@ crate::domain! {
     queries {
         /// Sites the caller is a member for, by workspace and name. Install admins get every
         /// site's metadata (name, domain, workspace), with `role` absent where they are not
-        /// members; no analytics (decision 0007).
-        "sites.list" => sites_list (Person): Empty => SiteList;
+        /// members; no analytics (decision 0007). An API key sees only the sites it reaches.
+        "sites.list" => sites_list (Person, key): Empty => SiteList;
     }
 }
 

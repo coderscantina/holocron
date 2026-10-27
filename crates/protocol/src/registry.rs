@@ -16,7 +16,7 @@ use crate::envelope::Topic;
 pub enum Kind {
     /// `POST /api/commands/<name>`
     Command,
-    /// `GET /api/queries/<name>`
+    /// `GET /api/queries/<name>`, or `POST` with the arguments as a JSON body.
     Query,
 }
 
@@ -183,7 +183,7 @@ pub struct Snapshot<T> {
     pub data: T,
 }
 
-/// Where arguments come from: a JSON body for commands, a query string for queries.
+/// Where arguments come from: a JSON body for commands, a query string or a JSON body for queries.
 pub trait ArgsSource: Sync {
     fn parse<T: DeserializeOwned>(&self) -> Result<T, String>;
 }

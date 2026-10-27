@@ -12,6 +12,9 @@ export const COMMAND_BODY_MAX_BYTES = 65536
 /** Longest query string, in bytes. Matches the 8 KiB exploration URL limit of decision 0004. */
 export const QUERY_STRING_MAX_BYTES = 8192
 
+/** Largest JSON body of a query sent with POST, in bytes. */
+export const QUERY_BODY_MAX_BYTES = 1048576
+
 /** Server-side budget for one API request, in milliseconds. */
 export const REQUEST_TIMEOUT_MS = 30000
 

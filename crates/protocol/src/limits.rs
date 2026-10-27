@@ -30,6 +30,8 @@ limits! {
         COMMAND_BODY_MAX_BYTES: usize = 64 * 1024;
         /// Longest query string, in bytes. Matches the 8 KiB exploration URL limit of decision 0004.
         QUERY_STRING_MAX_BYTES: usize = 8 * 1024;
+        /// Largest JSON body of a query sent with POST, in bytes.
+        QUERY_BODY_MAX_BYTES: usize = 1024 * 1024;
         /// Server-side budget for one API request, in milliseconds.
         REQUEST_TIMEOUT_MS: u64 = 30_000;
         /// Default page size for paged queries.

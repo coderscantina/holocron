@@ -27,6 +27,18 @@ crate::domain! {
     }
 }
 
+/// The "Read analytics" grant preset for agent keys (decision 0012): reports, exports, field
+/// lookups, freshness and site metadata. No session timelines, realtime or recordings.
+/// `analytics.report` joins the list when wave 3 of milestone 15 adds the operation.
+pub const READ_ANALYTICS_PRESET: &[&str] = &[
+    "analytics.export",
+    "fields.catalog",
+    "fields.values",
+    "analytics.freshness",
+    "sites.get",
+    "sites.list",
+];
+
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 pub struct ApiKey {
     pub id: ApiKeyId,
@@ -86,4 +98,19 @@ pub struct ApiKeyResult {
 #[derive(Debug, Clone, Serialize, Deserialize, TS, JsonSchema)]
 pub struct ApiKeyList {
     pub keys: Vec<ApiKey>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::READ_ANALYTICS_PRESET;
+    use crate::operations;
+    use crate::registry::Kind;
+
+    #[test]
+    fn every_preset_operation_is_a_key_grantable_query() {
+        for name in READ_ANALYTICS_PRESET {
+            let op = operations::find(Kind::Query, name).unwrap_or_else(|| panic!("{name}"));
+            assert!(op.policy.key_grantable, "{name} is not key-grantable");
+        }
+    }
 }
