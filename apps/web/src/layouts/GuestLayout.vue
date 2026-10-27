@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import AppBrand from '~/components/app/AppBrand.vue'
+import { useColorMode } from '~/composables/useColorMode'
 import { useI18n } from '~/plugins/i18n'
 import { runtimeConfig } from '~/services/runtime-config'
+
+// No user menu here, so this is what keeps the page in step with the system scheme.
+useColorMode()
 
 const { t } = useI18n()
 
