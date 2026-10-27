@@ -172,7 +172,9 @@ test('revenue: currencies apart, exact amounts, breakdown and export', async ({ 
   const site = await siteId(page, 'commerce')
   await page.goto(`/sites/${site}/revenue`)
   await expect(page.getByRole('heading', { level: 1, name: 'Revenue' })).toBeVisible()
-  // The cards, chart and breakdown live in the details view; the globe opens first.
+  // The summary opens first: pace and the sources that pay; cards, chart and breakdown live in Details.
+  await expect(page.getByRole('heading', { name: 'Which traffic pays' })).toBeVisible()
+  await expect(page.getByRole('radiogroup', { name: 'Source' }).getByRole('radio', { name: 'Channel' })).toHaveAttribute('aria-checked', 'true')
   await page.getByRole('radio', { name: 'Details' }).click()
   // seed_commerce puts its single JPY order anywhere in 45 days; the default 30 days can miss it.
   await page.getByRole('button', { name: /^Scope: / }).click()

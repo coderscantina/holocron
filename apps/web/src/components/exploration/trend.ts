@@ -71,6 +71,13 @@ export function buckets(series: Series, measure: number): Bucket[] {
   })
 }
 
+/** The bucket holding an instant, or -1 outside `[first start, end)`. */
+export function bucketOf(points: readonly { start: number }[], at: number, end: number): number {
+  const first = points[0]
+  if (!first || at < first.start || at >= end) return -1
+  return points.findLastIndex((point) => point.start <= at)
+}
+
 /** A local wall time `YYYY-MM-DDTHH:MM` moved by a duration. */
 export const shiftLocal = (local: string, ms: number) =>
   new Date(Date.parse(`${local}:00Z`) + ms).toISOString().slice(0, 16)

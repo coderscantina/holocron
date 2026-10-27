@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import type { Freshness, Projection, Series } from '~/generated'
 import { composer, type LocaleCode } from '~/plugins/i18n'
 
-import { bucketText, buckets, chartClock, consequences, nowMarker, type Phrase } from './trend'
+import { bucketOf, bucketText, buckets, chartClock, consequences, nowMarker, type Phrase } from './trend'
 
 /** Tuesday 13 October 2026 in Vienna (UTC+2) by the hour, measured up to 15:20 local time. */
 const HOUR = 3_600_000
@@ -37,6 +37,15 @@ const say = (phrase: Phrase | null, locale: LocaleCode = 'en') => {
 
 afterEach(() => {
   composer.locale.value = 'en'
+})
+
+describe('bucketOf', () => {
+  it('finds the bucket holding an instant and nothing outside the range', () => {
+    const points = [{ start: 0 }, { start: 10 }, { start: 20 }]
+    expect(bucketOf(points, 15, 30)).toBe(1)
+    expect(bucketOf(points, 30, 30)).toBe(-1)
+    expect(bucketOf(points, -1, 30)).toBe(-1)
+  })
 })
 
 describe('nowMarker', () => {

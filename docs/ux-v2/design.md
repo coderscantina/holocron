@@ -246,7 +246,7 @@ The globe view has a left column and the globe beside it. Below `lg` the globe i
 - The globe rests facing the region with the most active visitors. An event that arrives while the page is open turns it there with a soft accent halo, and the pin shows "flag, city, path" (the country name at a centroid) for 5 seconds. Dragging turns the globe. Under reduced motion it moves only when dragged or when a pin takes focus.
 - Two icon buttons sit in the globe's corner: sound, off by default and remembered, which plays a soft ping per arriving pageview and two notes per custom event; and full screen for the whole view.
 
-The globe is a shared component (`components/globe/Globe.vue`) taking neutral markers: a flag, an accessible name, two hover lines, an optional badge and an optional accent disc sized by the marker's share. Revenue uses the same globe.
+The globe is a shared component (`components/globe/Globe.vue`) taking neutral markers: a flag, an accessible name, two hover lines, an optional badge and an optional accent disc sized by the marker's share.
 
 ## Retention
 
@@ -304,14 +304,18 @@ In Flow, the step editor folds into one line ("2 steps · 1 hour window · Daily
 
 ## Revenue
 
-`/sites/:site/revenue` has two views of the same state, Globe and Details, picked in the title row beside the currency switch and remembered in the browser. Globe is the default. Details is the earlier page with the measure strip, chart and breakdown. Range, filter and currency apply to both.
+`/sites/:site/revenue` has two views of the same state, Summary and Details, picked in the title row beside the currency switch and remembered in the browser. Summary is the default. Details is the earlier page with the measure strip, chart and breakdown. Range, filter and currency apply to both. The globe was dropped on 2026-10-26: for most shops one or two countries hold the money, so it answered a question nobody asked.
 
-- The rail starts with net revenue in the chosen currency as the large number and its change against the previous period.
-- Below it, 24 bars of net revenue per local hour of the site's timezone. The busiest three consecutive hours are in the accent, the rest neutral. Each bar opens Explore with the same state narrowed to that hour.
-- One sentence says when and where: "Most revenue arrives between 5:00 PM and 8:00 PM, mostly from Vienna." It names the top city when there is one, else the top country.
-- Under a hairline, countries by net revenue, the top one in the accent. Each row opens Explore narrowed to the country, broken down by city. A last line names the top channel and its amount.
-- The globe shows the 12 top countries at their centroids: a flag pin over an accent disc whose area follows the country's revenue. Hover or focus shows the amount and its share; clicking opens the same Explore view as the list.
-- The globe's cuts are separate reads of net revenue by hour, country, city and channel, without comparison. Centroids come from `generated/countries.ts`, exported from the server's table.
+Summary has a left column and a canvas, like the other visual views, but grows with its content instead of filling one screen.
+
+- The column starts with net revenue in the chosen currency as the large number and its change against the comparison.
+- Under a hairline, gross, refunds and net: a bar of net with the refunds hatched in the destructive tone after it, then gross, refunds with their share of gross, and net per record.
+- Under a hairline, 24 bars of net revenue per local hour of the site's timezone. The busiest three consecutive hours are in the accent. Each bar opens Explore narrowed to that hour.
+- One sentence says when the money arrives and, when one source clearly pays best, which: "Most revenue arrives between 7:00 PM and 10:00 PM. Email pays €3.46 per visitor-day, 3 times the site's €1.15." A source is named only with at least 5% of the visitors and 1.5 times the site's rate.
+- The canvas starts with the Pace panel: the running total of net revenue as a solid accent line, the comparison's running total as a gray line over the whole range, and, while the range contains now, the estimate as a dashed line with its band to the server's end-of-range projection ([0015](../decisions/0015-baselines-projections-and-noticed-changes.md) amendment of 2026-10-26). The estimate is shaped by the projected buckets and ends exactly at the projected total. End labels at the right edge name the estimate ("≈ €57.5k") and the comparison's total. Annotations mark their bucket with the accent diamond and a dashed line. One sentence above the chart: how far ahead or behind the comparison the running total is, and the estimate with its band and basis.
+- Below it, "Which traffic pays": sources ranked by net revenue, the top seven and "Other". Each row has an accent bar for its share of net revenue over a gray bar for its share of visitors, on one scale across rows, then net, net per visitor and conversion (visitors with a revenue record over visitors). A source paying 1.5 times its traffic share or more has its shares in the accent, two thirds or less in the destructive tone. A segmented control picks the source: channel (default), UTM campaign, referrer, country or page, kept in the `by` URL parameter. Each named source opens Explore narrowed to it.
+- Visitors here are what the range's visitor measure counts: visitor-days for any range longer than one identity day ([0003](../decisions/0003-metric-formulas.md)), and the labels say so.
+- The summary's cuts are separate reads without comparison: net by currency and hour; net, records and visitors by currency and source over revenue records only; visitors by source over all traffic; and, while the range contains now, the same range under the typical-weekday comparison for the projection.
 
 ## Sessions timeline
 

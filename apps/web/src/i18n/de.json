@@ -1314,23 +1314,6 @@
   },
   "revenue": {
     "title": "Umsatz",
-    "stage": {
-      "view": {
-        "label": "Ansicht",
-        "globe": "Globus",
-        "details": "Details"
-      },
-      "change": "{change} gegenüber dem vorigen Zeitraum",
-      "net": "Nettoumsatz",
-      "byHour": "Nettoumsatz nach Tageszeit",
-      "hour": "{from} bis {until}: {amount}. In Explore öffnen",
-      "takeaway": "Der meiste Umsatz kommt zwischen {from} und {until}, vor allem aus {where}.",
-      "takeawayHours": "Der meiste Umsatz kommt zwischen {from} und {until}.",
-      "places": "Umsatz nach Land",
-      "pin": "{place}: {amount}. In Explore öffnen",
-      "pinDetail": "{amount} · {share} des Umsatzes",
-      "channel": "Stärkster Kanal: {channel}, {amount}"
-    },
     "note": "{records} Umsatzeinträge. Jede Währung bleibt getrennt: Beträge sind exakt und werden nie umgerechnet. Erstattungen sind negative Beträge.",
     "currency": "Währung",
     "chartIn": "{measure}, {currency}",
@@ -1341,7 +1324,42 @@
     "breakdownBy": "Nach Währung und {field}",
     "empty": "Kein Umsatz in diesem Zeitraum",
     "emptyHint": "Umsatz stammt aus eigenen Ereignissen, deren Daten einen Betrag und eine ISO-4217-Währung enthalten.",
-    "breakdownLabel": "Aufschlüsselung: {value}"
+    "breakdownLabel": "Aufschlüsselung: {value}",
+    "view": {
+      "label": "Ansicht",
+      "summary": "Übersicht",
+      "details": "Details"
+    },
+    "summary": {
+      "composition": "Brutto, Erstattungen und netto",
+      "refunds": "Erstattungen, {share} vom Brutto",
+      "perRecord": "{count} Buchungen, netto je Buchung",
+      "byHour": "Nettoumsatz nach Ortszeit",
+      "hour": "{from} bis {until}: {amount}. In Explore öffnen",
+      "when": "Der meiste Umsatz kommt zwischen {from} und {until}.",
+      "bestPayer": "{source} bringt {amount} je Besucher, {times}-mal so viel wie die Website mit {site}.",
+      "bestPayerDay": "{source} bringt {amount} je Besuchertag, {times}-mal so viel wie die Website mit {site}.",
+      "pace": {
+        "title": "Tempo",
+        "label": "Laufende Summe des Nettoumsatzes in {currency}",
+        "actual": "Nettoumsatz bisher",
+        "ahead": "{amount} voraus an diesem Punkt.",
+        "behind": "{amount} zurück an diesem Punkt.",
+        "estimate": "Auf Kurs für etwa {value}, zwischen {low} und {high}."
+      },
+      "traffic": {
+        "title": "Welcher Traffic zahlt",
+        "by": "Quelle",
+        "shares": "Anteil am Umsatz · an Besuchern",
+        "shareOf": "{revenue} · {visitors}",
+        "perVisitor": "Je Besucher",
+        "perVisitorDay": "Je Besuchertag",
+        "conversion": "Conversion",
+        "other": "Andere",
+        "empty": "Kein Umsatz aus diesen Quellen in diesem Zeitraum.",
+        "note": "Akzent: Anteil am Nettoumsatz. Grau: Anteil an Besuchern. Quellen mit dem 1,5-Fachen ihres Traffic-Anteils oder mehr stehen im Akzent, mit zwei Dritteln oder weniger in Rot. Conversion zählt Besucher mit einer Umsatzbuchung."
+      }
+    }
   },
   "performance": {
     "title": "Leistung",

@@ -32,7 +32,7 @@ import { useViewMode } from '~/composables/useViewMode'
 import { useI18n } from '~/plugins/i18n'
 import { baselineOf, defaultState, setGranularity } from '~/services/exploration'
 
-import RevenueStage from './RevenueStage.vue'
+import RevenueSummary from './RevenueSummary.vue'
 
 /**
  * Revenue one currency at a time (0003 Revenue): net, gross, refunds and records with their
@@ -40,8 +40,8 @@ import RevenueStage from './RevenueStage.vue'
  * previous period, and a breakdown that keeps currencies apart. Nothing is converted: with
  * several currencies, a switch beside the title picks the one the strip and chart show. The
  * chart's measure is the `m` parameter, beside the state, as on the overview. Two views of the
- * same state: the globe of when and where money comes in (default) and these details; the
- * choice is remembered in this browser.
+ * same state: the summary of pace and paying sources (default) and these details; the choice is
+ * remembered in this browser.
  */
 const props = defineProps<{ site: Site }>()
 
@@ -67,10 +67,10 @@ const defaults = (): ExplorationState => ({
   visualization: 'bar',
   page: { size: PAGE_SIZE_MAX, index: 0 },
 })
-const view = useViewMode('revenue', ['globe', 'details'])
+const view = useViewMode('revenue', ['summary', 'details'])
 const views = computed(() => [
-  { value: 'globe' as const, label: t('revenue.stage.view.globe') },
-  { value: 'details' as const, label: t('revenue.stage.view.details') },
+  { value: 'summary' as const, label: t('revenue.view.summary') },
+  { value: 'details' as const, label: t('revenue.view.details') },
 ])
 /** With a breakdown, the strip reads the per-currency cut of the same snapshot. */
 const panels = (current: ExplorationState | null): Panel[] =>
@@ -117,6 +117,11 @@ const amount = (measure: Measure) => {
   const money = metric?.t === 'money' ? metric.v[0] : undefined
   return money ? { money, units: Number(money.minor_units) } : null
 }
+/** The chosen currency's revenue records. */
+const stripCount = computed(() => {
+  const count = strip.value?.totals[indexOf('revenue_count')]
+  return count?.t === 'count' ? count.v : 0
+})
 /** Refund rate and net per record, derived from the strip's own amounts. */
 const facts = computed(() => {
   const gross = amount('revenue_gross')
@@ -260,7 +265,7 @@ const onBreakdown = (value: unknown) => {
     <template #context>
       <ChoiceGroup
         v-model="view"
-        :label="t('revenue.stage.view.label')"
+        :label="t('revenue.view.label')"
         :options="views"
       />
       <ChoiceGroup
@@ -299,12 +304,17 @@ const onBreakdown = (value: unknown) => {
         </Button>
       </div>
     </EmptyState>
-    <RevenueStage
-      v-else-if="view === 'globe' && result && currency"
+    <RevenueSummary
+      v-else-if="view === 'summary' && result && currency"
       :state="state"
+      :result="result"
       :currency="currency"
       :net="amount('revenue_net')?.money ?? null"
+      :gross="amount('revenue_gross')?.money ?? null"
+      :refunds="amount('revenue_refunds')?.money ?? null"
+      :records="stripCount"
       :compare="strip?.compare?.[indexOf('revenue_net')]"
+      :annotations="annotations.list.data.value?.annotations ?? []"
     />
     <template v-else>
       <MeasureCards

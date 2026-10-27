@@ -1314,23 +1314,6 @@
   },
   "revenue": {
     "title": "Revenue",
-    "stage": {
-      "view": {
-        "label": "View",
-        "globe": "Globe",
-        "details": "Details"
-      },
-      "change": "{change} against the previous period",
-      "net": "Net revenue",
-      "byHour": "Net revenue by hour of the day",
-      "hour": "{from} to {until}: {amount}. Open in Explore",
-      "takeaway": "Most revenue arrives between {from} and {until}, mostly from {where}.",
-      "takeawayHours": "Most revenue arrives between {from} and {until}.",
-      "places": "Revenue by country",
-      "pin": "{place}: {amount}. Open in Explore",
-      "pinDetail": "{amount} · {share} of revenue",
-      "channel": "Top channel: {channel}, {amount}"
-    },
     "note": "{records} revenue records. Each currency stays separate: amounts are exact and never converted. Refunds are negative amounts.",
     "currency": "Currency",
     "chartIn": "{measure}, {currency}",
@@ -1341,7 +1324,42 @@
     "breakdownBy": "By currency and {field}",
     "empty": "No revenue in this range",
     "emptyHint": "Revenue comes from custom events whose data carries a revenue amount and an ISO 4217 currency.",
-    "breakdownLabel": "Breakdown: {value}"
+    "breakdownLabel": "Breakdown: {value}",
+    "view": {
+      "label": "View",
+      "summary": "Summary",
+      "details": "Details"
+    },
+    "summary": {
+      "composition": "Gross, refunds and net",
+      "refunds": "Refunds, {share} of gross",
+      "perRecord": "{count} records, net per record",
+      "byHour": "Net revenue by local hour",
+      "hour": "{from} to {until}: {amount}. Open in Explore",
+      "when": "Most revenue arrives between {from} and {until}.",
+      "bestPayer": "{source} pays {amount} per visitor, {times} times the site's {site}.",
+      "bestPayerDay": "{source} pays {amount} per visitor-day, {times} times the site's {site}.",
+      "pace": {
+        "title": "Pace",
+        "label": "Running total of net revenue in {currency}",
+        "actual": "Net revenue so far",
+        "ahead": "{amount} ahead at this point.",
+        "behind": "{amount} behind at this point.",
+        "estimate": "On pace for about {value}, between {low} and {high}."
+      },
+      "traffic": {
+        "title": "Which traffic pays",
+        "by": "Source",
+        "shares": "Share of revenue · of visitors",
+        "shareOf": "{revenue} · {visitors}",
+        "perVisitor": "Per visitor",
+        "perVisitorDay": "Per visitor-day",
+        "conversion": "Conversion",
+        "other": "Other",
+        "empty": "No revenue from these sources in this range.",
+        "note": "Accent: share of net revenue. Gray: share of visitors. Sources paying 1.5 times their traffic share or more are in the accent, two thirds or less in red. Conversion counts visitors with a revenue record."
+      }
+    }
   },
   "performance": {
     "title": "Performance",
