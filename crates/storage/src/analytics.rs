@@ -16,8 +16,8 @@ use crate::{Budgets, Error, Mode, Watermark};
 /// Analytical schema version, recorded in every ledger entry and in `schema_info` (0006 Schema
 /// versions). Version 2 added the derived session, policy and aggregate tables; version 3
 /// stores event properties in key partitions; version 4 adds `schema_info` with the pairing ID;
-/// version 5 adds the visitor coordinates to `events`.
-pub const ANALYTICS_SCHEMA: i64 = 5;
+/// version 5 adds the visitor coordinates to `events`; version 6 adds `sessions.entry_path`.
+pub const ANALYTICS_SCHEMA: i64 = 6;
 
 /// What a file without `schema_info` is: it was written before milestone 12.
 const UNVERSIONED_SCHEMA: i64 = 3;
@@ -177,7 +177,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     language VARCHAR, screen VARCHAR,
     referrer_domain VARCHAR, referrer_path VARCHAR,
     utm_source VARCHAR, utm_medium VARCHAR, utm_campaign VARCHAR, utm_content VARCHAR, utm_term VARCHAR,
-    click_id VARCHAR, touch_query VARCHAR
+    click_id VARCHAR, touch_query VARCHAR,
+    -- The touch's path; last, as migration appends it to older files.
+    entry_path VARCHAR
 );
 CREATE TABLE IF NOT EXISTS session_members (
     site UHUGEINT NOT NULL,
@@ -393,6 +395,26 @@ fn migrate(conn: &Connection) -> Result<bool, Error> {
             "DROP TABLE sessions; DROP TABLE session_members; DROP TABLE day_aggregates;
              DROP TABLE IF EXISTS hour_aggregates; DROP TABLE IF EXISTS dimension_aggregates;
              DROP TABLE IF EXISTS visitor_days;",
+        )?;
+    }
+    // Files before schema 6 have no entry path on their sessions. It is the path of the
+    // session's touch (first pageview, else first eligible event), filled from the stored
+    // members so no day has to be rebuilt.
+    let has_entry_path: bool = conn.query_row(
+        "SELECT EXISTS (SELECT 1 FROM duckdb_columns()
+                        WHERE table_name = 'sessions' AND column_name = 'entry_path')",
+        [],
+        |r| r.get(0),
+    )?;
+    if !outdated && !has_entry_path {
+        conn.execute_batch(
+            "ALTER TABLE sessions ADD COLUMN entry_path VARCHAR;
+             UPDATE sessions s SET entry_path = t.path
+             FROM (SELECT m.site, m.session_id,
+                          arg_min(e.path, (e.kind <> 1, m.event_time, m.seq)) AS path
+                   FROM session_members m JOIN events e ON e.site = m.site AND e.seq = m.seq
+                   WHERE m.role = 1 GROUP BY m.site, m.session_id) t
+             WHERE s.site = t.site AND s.session_id = t.session_id;",
         )?;
     }
     Ok(outdated)

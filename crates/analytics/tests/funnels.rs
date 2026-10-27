@@ -191,6 +191,19 @@ async fn groups_split_the_funnel_by_the_entering_event_and_add_up_to_it() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+async fn groups_can_be_the_session_entry_path() {
+    let (_dir, storage) = steps_day().await;
+    let grouped = run(&storage, funnel(three_steps(2, Some("entry_path")))).await;
+    // Every session entered on `/a`, the first step.
+    let groups: Vec<(Cell, Vec<i64>)> = grouped
+        .groups
+        .iter()
+        .map(|g| (g.value.clone(), reached(&g.steps)))
+        .collect();
+    assert_eq!(groups, [(Cell::String("/a".into()), vec![5, 4, 2])]);
+}
+
+#[tokio::test(flavor = "multi_thread")]
 async fn at_most_fifty_groups_are_returned() {
     let (_dir, storage) = open().await;
     let mut site = Site::new(SITE, Vienna);

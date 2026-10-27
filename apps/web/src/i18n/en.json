@@ -820,6 +820,7 @@
       "tag": "Tag",
       "perf_metric": "Performance metric",
       "currency": "Currency",
+      "entry_path": "Entry page",
       "referrer_domain": "Referrer",
       "referrer_path": "Referrer path",
       "utm_source": "UTM source",

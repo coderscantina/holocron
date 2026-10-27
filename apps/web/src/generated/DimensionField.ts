@@ -4,4 +4,4 @@
  * Built-in fields. Event fields come from the event; session fields from the event's session
  * (0004 Field scope).
  */
-export type DimensionField = "path" | "hostname" | "title" | "query" | "event_name" | "tag" | "perf_metric" | "currency" | "referrer_domain" | "referrer_path" | "utm_source" | "utm_medium" | "utm_campaign" | "utm_content" | "utm_term" | "click_id" | "channel" | "country" | "region" | "city" | "browser" | "os" | "device" | "language" | "screen" | "weekday" | "hour";
+export type DimensionField = "path" | "hostname" | "title" | "query" | "event_name" | "tag" | "perf_metric" | "currency" | "entry_path" | "referrer_domain" | "referrer_path" | "utm_source" | "utm_medium" | "utm_campaign" | "utm_content" | "utm_term" | "click_id" | "channel" | "country" | "region" | "city" | "browser" | "os" | "device" | "language" | "screen" | "weekday" | "hour";

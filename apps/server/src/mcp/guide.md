@@ -32,7 +32,7 @@ Ranges:
 A field is a built-in name or a custom property:
 
 - Event fields: `path`, `hostname`, `title`, `query`, `event_name`, `tag`, `perf_metric`, `currency`, `weekday` (1 Monday to 7), `hour` (0 to 23).
-- Session fields: `referrer_domain`, `referrer_path`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `click_id`, `channel`, `country`, `region`, `city`, `browser`, `os`, `device`, `language`, `screen`.
+- Session fields: `entry_path` (the path of the session's first pageview, else first event), `referrer_domain`, `referrer_path`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `click_id`, `channel`, `country`, `region`, `city`, `browser`, `os`, `device`, `language`, `screen`.
 - Properties: `{ "scope": "event", "key": "checkout_id" }` or `{ "scope": "session", "key": "plan" }`. Their column is named `event.checkout_id`. The `catalog` tool lists the keys a site has; `field_values` lists the most frequent values of any field.
 
 Values are typed: `{ "t": "string", "v": "/pricing" }`, `{ "t": "integer", "v": 3 }`, `{ "t": "decimal", "v": "9.5" }`, `{ "t": "bool", "v": true }`, `{ "t": "date", "v": "2026-09-01T00:00:00Z" }`, `{ "t": "list", "v": [ ... ] }`.
@@ -62,7 +62,7 @@ A block's `filter` is a group of conditions:
 - `**` matches any run, including `/`.
 - `\` escapes the next character.
 
-`/*/events/**` matches `/en/events/summer-fest` and `/de/events/2026/opening`, not `/events/x`. Patterns are 1 to 500 bytes with at most 8 wildcards. `matches` works on `path`, `referrer_path`, `title`, `query`, `hostname` and string properties. `not_matches` is its exact complement.
+`/*/events/**` matches `/en/events/summer-fest` and `/de/events/2026/opening`, not `/events/x`. Patterns are 1 to 500 bytes with at most 8 wildcards. `matches` works on `path`, `entry_path`, `referrer_path`, `title`, `query`, `hostname` and string properties. `not_matches` is its exact complement.
 
 ## Cuts
 

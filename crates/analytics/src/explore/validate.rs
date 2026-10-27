@@ -1034,8 +1034,9 @@ fn valid_id(id: &str) -> bool {
 }
 
 /// Text fields a `matches` glob applies to, besides string properties.
-const GLOB_FIELDS: [DimensionField; 5] = [
+const GLOB_FIELDS: [DimensionField; 6] = [
     DimensionField::Path,
+    DimensionField::EntryPath,
     DimensionField::ReferrerPath,
     DimensionField::Title,
     DimensionField::Query,

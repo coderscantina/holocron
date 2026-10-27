@@ -11487,6 +11487,11 @@
           },
           {
             "type": "string",
+            "const": "entry_path",
+            "description": "The path of the session's touch: its first pageview, else its first eligible event."
+          },
+          {
+            "type": "string",
             "const": "weekday",
             "description": "ISO weekday 1 (Monday) to 7, wall clock in the state's timezone."
           },

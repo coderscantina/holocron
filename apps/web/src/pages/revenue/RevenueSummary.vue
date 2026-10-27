@@ -9,7 +9,7 @@ import { useExplore } from '~/composables/useExplore'
 import type { Annotation, Comparison, DimensionField, ExplorationState, ExploreResult, Metric, Money } from '~/generated'
 import { PAGE_SIZE_MAX } from '~/generated/limits'
 import { weekdayLabels } from '~/lib/exploration-labels'
-import { bestPayer, busiest, hourly, pace, traffic, type Source } from '~/lib/revenue-summary'
+import { bestPayer, busiest, hourly, pace, sourceOf, traffic, trafficSources, type Source, type TrafficSource } from '~/lib/revenue-summary'
 import { useI18n } from '~/plugins/i18n'
 import { addCondition, baselineOf, containsNow, encodeState, include } from '~/services/exploration'
 
@@ -54,12 +54,13 @@ const money = computed(() => {
 const amount = (units: number, compact = false) => (compact ? money.value.compact : money.value.exact).format(units / 10 ** exponent.value)
 const units = (value: Money | null) => (value ? Number(value.minor_units) : 0)
 
-const sources = ['channel', 'utm_campaign', 'referrer_domain', 'country', 'path'] as const satisfies readonly DimensionField[]
-type SourceField = (typeof sources)[number]
-const isSource = (value: unknown): value is SourceField => sources.some((field) => field === value)
-const source = computed<SourceField>(() => (isSource(route.query.by) ? route.query.by : 'channel'))
-const sourceOptions = computed(() => sources.map((field) => ({ value: field, label: format.fieldLabel(field) })))
-const chooseSource = (field: SourceField) => void router.push({ query: { ...route.query, by: field === 'channel' ? undefined : field } })
+const sourceKey = computed(() => sourceOf(route.query.by))
+const source = computed(() => trafficSources[sourceKey.value])
+const sourceOptions = (Object.keys(trafficSources) as TrafficSource[]).map((key) => ({
+  value: key,
+  label: format.fieldLabel(trafficSources[key]),
+}))
+const chooseSource = (key: TrafficSource) => void router.push({ query: { ...route.query, by: key === 'channel' ? undefined : key } })
 
 /** The page's state as one more read: every row on one page, without comparison. */
 const read = (patch: Pick<ExplorationState, 'measures' | 'dimensions' | 'sort'>): ExplorationState => ({
@@ -324,7 +325,7 @@ const exploreHour = (hour: number) => {
       <Panel :title="t('revenue.summary.traffic.title')">
         <div class="-mx-4.5 mb-4 overflow-x-auto px-4.5">
           <ChoiceGroup
-            :model-value="source"
+            :model-value="sourceKey"
             :label="t('revenue.summary.traffic.by')"
             :options="sourceOptions"
             @update:model-value="chooseSource"

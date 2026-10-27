@@ -1,10 +1,26 @@
-import type { Cell, Metric, Projection, Row, Series } from '~/generated'
+import type { Cell, DimensionField, Metric, Projection, Row, Series } from '~/generated'
 
 /**
  * Shapes of the revenue summary, always in one currency's minor units: the 24 hours of the day
  * with the busiest stretch, the running total against the comparison with the pace estimate
  * to the end of the range, and the sources ranked by revenue beside their share of visitors.
  */
+
+/** The `by` URL values of "Which traffic pays" and the field each reads. */
+export const trafficSources = {
+  channel: 'channel',
+  utm_campaign: 'utm_campaign',
+  referrer_domain: 'referrer_domain',
+  country: 'country',
+  entry_page: 'entry_path',
+} as const satisfies Record<string, DimensionField>
+
+export type TrafficSource = keyof typeof trafficSources
+
+/** The source a `by` value names; anything else, such as the retired `page`, means channel. */
+export function sourceOf(by: unknown): TrafficSource {
+  return typeof by === 'string' && Object.hasOwn(trafficSources, by) ? (by as TrafficSource) : 'channel'
+}
 
 /** A row's amount in `code`'s minor units, 0 when the row has none in it. */
 export function unitsIn(metric: Metric | undefined, code: string): number {
