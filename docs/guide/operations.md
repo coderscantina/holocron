@@ -159,6 +159,15 @@ holocron diagnostics --data-dir /var/lib/holocron
 
 It prints JSON: versions, file sizes, free disk and the reserve, inbox depth and age, the analytics watermark, transfer failures, correction backlog, the replay budget, collection counters, recent jobs and settings as counts. It holds no addresses, user agents, event data, identify IDs or credentials, so it can go into a bug report. It works with the server running or stopped.
 
+## Query from the command line
+
+```sh
+export HOLOCRON_API_KEY=...
+holocron query --url https://stats.example.com report.json
+```
+
+It posts the JSON object in the file (or `-` for stdin) to a running server and prints the answer. It calls `analytics.report`; pass `--operation sites.list` or another name to call a different query. The key must be an API key that holds the operation, and it comes from the environment so it stays out of your shell history. `--url` can also come from `HOLOCRON_URL`. The command never opens the data directory, so it can run on another machine. A refused query prints `error: <error_code>: <message>`, one line per rejected field, and exits 3.
+
 ## Commands beside a running server
 
 While `serve` runs, `backup`, `retention`, `erase-profile` and `diagnostics` hand their work to it through the control database and wait for the result. Without a server they take the data directory themselves. `restore`, `upgrade` and `import run` need the server stopped. A second process on the same directory exits 4.

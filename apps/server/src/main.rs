@@ -66,6 +66,9 @@ enum Command {
     EraseProfile(EraseProfileArgs),
     /// Prints operational state as JSON, without event data, identity inputs or credentials.
     Diagnostics(DataDir),
+    /// Posts a JSON query to a running server and prints the answer. The API key comes from
+    /// HOLOCRON_API_KEY. Does not open the data directory.
+    Query(holocron_server::query_cli::QueryArgs),
 }
 
 fn main() -> ExitCode {
@@ -82,7 +85,7 @@ fn main() -> ExitCode {
 
     let workers = match &cli.command {
         Command::Serve(args) => args.sizing().worker_threads,
-        Command::Init { .. } | Command::Import { .. } => 1,
+        Command::Init { .. } | Command::Import { .. } | Command::Query(_) => 1,
         _ => 2,
     };
     let runtime = match tokio::runtime::Builder::new_multi_thread()
@@ -110,6 +113,16 @@ fn main() -> ExitCode {
             Command::Retention(args) => print(commands::retention(args).await),
             Command::EraseProfile(args) => print(commands::erase_profile(args).await),
             Command::Diagnostics(args) => print(commands::diagnostics(args).await),
+            Command::Query(args) => {
+                let key = std::env::var(holocron_server::query_cli::KEY_ENV).ok();
+                print(
+                    tokio::task::spawn_blocking(move || {
+                        holocron_server::query_cli::run(&args, key)
+                    })
+                    .await
+                    .expect("the query task does not panic"),
+                )
+            }
         }
     });
     match result {
