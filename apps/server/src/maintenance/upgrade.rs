@@ -31,21 +31,106 @@ enum PreUpgrade<'a> {
     TakeInto(Option<&'a Path>),
     /// A verified backup that exists: the one a restore just copied from.
     Existing(&'a Path),
+    /// `serve --upgrade-on-start`: take one into the backup directory, after checking that it
+    /// is writable and that the volume holds the backup and the disk reserve.
+    OnStart { to: &'a Path, reserve_bytes: u64 },
 }
 
 pub async fn upgrade(data_dir: &Path, backup_to: Option<&Path>) -> Result<Value, Failure> {
-    upgrade_with(data_dir, PreUpgrade::TakeInto(backup_to)).await
+    check_initialized(data_dir)?;
+    let lock = DataLock::acquire(data_dir)?;
+    upgrade_with(data_dir, PreUpgrade::TakeInto(backup_to), &lock).await
 }
 
 /// Upgrades a directory that `backup` was just restored into. The backup is the pre-upgrade
 /// backup: the restore verified it and the data is unchanged, so no second copy is taken.
 pub async fn upgrade_restored(data_dir: &Path, backup: &Path) -> Result<Value, Failure> {
-    upgrade_with(data_dir, PreUpgrade::Existing(backup)).await
+    check_initialized(data_dir)?;
+    let lock = DataLock::acquire(data_dir)?;
+    upgrade_with(data_dir, PreUpgrade::Existing(backup), &lock).await
 }
 
-async fn upgrade_with(data_dir: &Path, pre: PreUpgrade<'_>) -> Result<Value, Failure> {
-    check_initialized(data_dir)?;
-    let _lock = DataLock::acquire(data_dir)?;
+/// `serve --upgrade-on-start` (0006 Amendment): when the data is older than this release or an
+/// upgrade was interrupted, runs the `holocron upgrade` path under the lock `serve` already
+/// holds, so no other process gets in between. Data that is current or newer is left to the
+/// version check.
+pub async fn on_start(
+    data_dir: &Path,
+    backup_dir: &Path,
+    reserve_bytes: u64,
+    lock: &DataLock,
+) -> Result<(), Failure> {
+    match versions::check_dir(data_dir).await {
+        Err(f) if matches!(f.code.as_ref(), "upgrade_required" | "upgrade_interrupted") => {
+            tracing::info!(reason = %f.code, backup_dir = %backup_dir.display(), "upgrading on start");
+        }
+        other => return other,
+    }
+    let pre = PreUpgrade::OnStart {
+        to: backup_dir,
+        reserve_bytes,
+    };
+    let done = upgrade_with(data_dir, pre, lock).await?;
+    tracing::info!(
+        from = %done["from"],
+        to = %done["to"],
+        backup = %done["backup"],
+        "upgrade finished; the pre-upgrade backup is kept, `holocron restore --from` rolls back"
+    );
+    Ok(())
+}
+
+/// Refuses before anything is written: the backup directory must take a file, and its volume
+/// must hold a copy of the data files plus the reserve when it is the data volume.
+fn preflight(data_dir: &Path, to: &Path, reserve_bytes: u64) -> Result<(), Failure> {
+    use std::os::unix::fs::MetadataExt;
+    let unavailable = |why: String| {
+        Failure::new(
+            Exit::Refused,
+            "upgrade_backup_unavailable",
+            format!(
+                "{}: {why}; the upgrade needs a pre-upgrade backup first. Mount writable backup storage at HOLOCRON_BACKUP_DIR or run `holocron upgrade --backup-to <dir>`",
+                to.display()
+            ),
+        )
+    };
+    fs::create_dir_all(to).map_err(|e| unavailable(format!("not writable: {e}")))?;
+    let probe = to.join(".holocron-write-check");
+    fs::write(&probe, b"").map_err(|e| unavailable(format!("not writable: {e}")))?;
+    let _ = fs::remove_file(&probe);
+
+    let needed: u64 = fs::read_dir(data_dir)
+        .map_err(|e| Failure::storage(data_dir, e))?
+        .filter_map(|entry| entry.ok()?.metadata().ok())
+        .filter(|meta| meta.is_file())
+        .map(|meta| meta.len())
+        .sum();
+    let same_volume = fs::metadata(to).map_err(|e| Failure::storage(to, e))?.dev()
+        == fs::metadata(data_dir)
+            .map_err(|e| Failure::storage(data_dir, e))?
+            .dev();
+    let needed = needed + if same_volume { reserve_bytes } else { 0 };
+    let free = holocron_storage::free_bytes(to).map_err(|e| Failure::storage(to, e))?;
+    if free < needed {
+        return Err(unavailable(format!(
+            "{} MiB free, {} MiB needed for the backup{}",
+            free >> 20,
+            needed >> 20,
+            if same_volume {
+                " and the disk reserve"
+            } else {
+                ""
+            }
+        )));
+    }
+    Ok(())
+}
+
+async fn upgrade_with(
+    data_dir: &Path,
+    pre: PreUpgrade<'_>,
+    _lock: &DataLock,
+) -> Result<Value, Failure> {
     let release = versions::release();
     let marker_path = data_dir.join(UPGRADE_MARKER);
     let marker = match fs::read_to_string(&marker_path) {
@@ -84,6 +169,13 @@ async fn upgrade_with(data_dir: &Path, pre: PreUpgrade<'_>) -> Result<Value, Fai
             }
             let backup = match pre {
                 PreUpgrade::Existing(backup) => backup.to_owned(),
+                PreUpgrade::OnStart { to, reserve_bytes } => {
+                    preflight(data_dir, to, reserve_bytes)?;
+                    tracing::info!(to = %to.display(), "taking the pre-upgrade backup");
+                    let backup = backup::take(Source::Stopped(data_dir), to).await?.0;
+                    tracing::info!(backup = %backup.display(), "pre-upgrade backup verified");
+                    backup
+                }
                 PreUpgrade::TakeInto(to) => {
                     let to = to.ok_or_else(|| {
                         Failure::new(

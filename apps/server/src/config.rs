@@ -49,6 +49,12 @@ pub struct ServeArgs {
     #[arg(long, env = "HOLOCRON_DISK_RESERVE_MIB", default_value_t = 4096)]
     pub disk_reserve_mib: u64,
 
+    /// Upgrades data from an older release when the server starts, after a verified backup into
+    /// HOLOCRON_BACKUP_DIR (decision 0006, Amendment). Without it, older data is refused with
+    /// `upgrade_required`. Data from a newer release is always refused.
+    #[arg(long, env = "HOLOCRON_UPGRADE_ON_START", action = clap::ArgAction::SetTrue, value_parser = clap::builder::FalseyValueParser::new())]
+    pub upgrade_on_start: bool,
+
     /// Resource preset for the host size: engine threads and memory, Tokio workers, report
     /// workers and queue, spill and inbox. `small` and `large` are estimates, not measured
     /// (decisions 0008 and 0019). The server never picks one on its own.

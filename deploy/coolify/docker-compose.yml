@@ -19,6 +19,8 @@ services:
       # visitor's address and location.
       HOLOCRON_COLLECT_TRUSTED_PROXIES: ${HOLOCRON_COLLECT_TRUSTED_PROXIES:-10.0.0.0/8,172.16.0.0/12}
       HOLOCRON_COLLECT_CLIENT_IP_HEADER: cloudfront-viewer-address
+      # A new image upgrades older data on start, after a verified backup into /backups.
+      HOLOCRON_UPGRADE_ON_START: "1"
       HOLOCRON_DISK_RESERVE_MIB: ${HOLOCRON_DISK_RESERVE_MIB:-4096}
       HOLOCRON_LOG: ${HOLOCRON_LOG:-info,sqlx=warn}
     healthcheck:

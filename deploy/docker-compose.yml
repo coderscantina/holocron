@@ -13,12 +13,17 @@ services:
       - "127.0.0.1:8080:8080"
     volumes:
       - holocron-data:/data
+      # Where the pre-upgrade backup goes. On other storage than the data volume if the host has
+      # any; the directory must be writable by uid 10001. See docs/guide/install.md.
+      - ${HOLOCRON_BACKUP_DIR:-/srv/holocron-backups}:/backups
     environment:
       HOLOCRON_PUBLIC_URL: ${HOLOCRON_PUBLIC_URL:?set HOLOCRON_PUBLIC_URL, e.g. https://analytics.example.com}
       HOLOCRON_INSTANCE_NAME: ${HOLOCRON_INSTANCE_NAME:-Holocron}
       # A proxy on the host reaches the published port through Docker's bridge, so the peer
       # address is a bridge gateway. Trusting it lets Holocron read X-Forwarded-For.
       HOLOCRON_COLLECT_TRUSTED_PROXIES: ${HOLOCRON_COLLECT_TRUSTED_PROXIES:-172.16.0.0/12}
+      # A new image upgrades older data on start, after a verified backup into /backups.
+      HOLOCRON_UPGRADE_ON_START: "1"
       HOLOCRON_DISK_RESERVE_MIB: ${HOLOCRON_DISK_RESERVE_MIB:-4096}
       HOLOCRON_LOG: ${HOLOCRON_LOG:-info,sqlx=warn}
     healthcheck:

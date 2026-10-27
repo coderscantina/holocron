@@ -12,7 +12,7 @@ use holocron_server::maintenance::commands::{
     self, BackupArgs, DataDir, EraseProfileArgs, RestoreArgs, UpgradeArgs,
 };
 use holocron_server::maintenance::lock::DataLock;
-use holocron_server::maintenance::{Runtime, versions};
+use holocron_server::maintenance::{Runtime, upgrade, versions};
 use holocron_server::router;
 use holocron_server::setup::Outcome;
 use serde_json::Value;
@@ -193,6 +193,7 @@ async fn serve(args: ServeArgs) -> Result<(), Failure> {
     let usage = |e: anyhow::Error| Failure::new(Exit::Usage, "usage", e.to_string());
     let clock = holocron_server::config::clock(args.frozen_clock.as_deref()).map_err(usage)?;
     let sizing = args.sizing();
+    let upgrade_on_start = args.upgrade_on_start;
     let config = Config::from_args(args).map_err(usage)?;
     let dir = config.data_dir.clone();
     let bind = config.bind;
@@ -208,8 +209,18 @@ async fn serve(args: ServeArgs) -> Result<(), Failure> {
         let _ = stop.send(true);
     });
 
+    // Older data is upgraded before anything reads it, under the lock `serve` keeps from here
+    // on. Setup mode takes the lock itself, so it only gets the early one released.
+    let mut held = None;
+    if upgrade_on_start && !holocron_server::setup::needed(&dir)? {
+        let lock = DataLock::acquire(&dir)?;
+        upgrade::on_start(&dir, &config.backup_dir, config.disk_reserve_bytes, &lock).await?;
+        held = Some(lock);
+    }
+
     // An empty directory, or an import the wizard has not finished, starts in setup mode.
     if holocron_server::setup::required(&dir).await? {
+        held = None;
         let listener = socket
             .try_clone()
             .and_then(tokio::net::TcpListener::from_std)
@@ -222,7 +233,10 @@ async fn serve(args: ServeArgs) -> Result<(), Failure> {
         }
     }
     init::check_initialized(&dir)?;
-    let _lock = DataLock::acquire(&dir)?;
+    let _lock = match held {
+        Some(lock) => lock,
+        None => DataLock::acquire(&dir)?,
+    };
     versions::check_dir(&dir).await?;
 
     match &config.web_dir {

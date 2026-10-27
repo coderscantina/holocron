@@ -1249,3 +1249,214 @@ fn the_binary_backs_up_while_serving_and_stops_in_order_on_sigterm() {
     });
     assert_eq!(events, 20);
 }
+
+/// Data as the previous release left it: control without its last migration, analytics at
+/// schema 3.
+async fn older_data(data: &Path) {
+    initialized(data).await;
+    let db = holocron_server::db::Db::open(data).await.unwrap();
+    sqlx::query(
+        "DELETE FROM _sqlx_migrations WHERE version = ?;
+         ALTER TABLE user_preferences DROP COLUMN accent;",
+    )
+    .bind(versions::release().control)
+    .execute(&db.writer)
+    .await
+    .unwrap();
+    db.close().await;
+    set_analytics_schema(data, 3);
+}
+
+fn set_analytics_schema(data: &Path, schema: i64) {
+    let conn = holocron_storage::duckdb::Connection::open(data.join("analytics.duckdb")).unwrap();
+    conn.execute_batch(&format!(
+        "UPDATE schema_info SET analytics_schema = {schema}"
+    ))
+    .unwrap();
+}
+
+/// `holocron serve` with `args` that is expected to exit; returns its status and stderr.
+fn serve_refused(data: &Path, args: &[&str]) -> (Option<i32>, String) {
+    let output = Command::new(BIN)
+        .args(["serve", "--data-dir"])
+        .arg(data)
+        .args(["--bind", &format!("127.0.0.1:{}", free_port())])
+        .args(args)
+        .env("HOLOCRON_LOG", "info")
+        .output()
+        .unwrap();
+    (
+        output.status.code(),
+        String::from_utf8_lossy(&output.stderr).into_owned(),
+    )
+}
+
+fn stop(mut server: Child) {
+    // SAFETY: signals a child process this test started.
+    unsafe { libc::kill(server.id() as i32, libc::SIGTERM) };
+    assert!(server.wait().unwrap().success());
+}
+
+fn kept_backups(backups: &Path) -> Vec<PathBuf> {
+    std::fs::read_dir(backups).map_or_else(
+        |_| Vec::new(),
+        |dir| dir.map(|entry| entry.unwrap().path()).collect(),
+    )
+}
+
+#[test]
+fn upgrade_on_start_upgrades_older_data_after_a_backup_and_serves() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, backups) = (root.path().join("data"), root.path().join("backups"));
+    let runtime = tokio::runtime::Runtime::new().unwrap();
+    runtime.block_on(older_data(&data));
+
+    // Without the flag nothing changes: older data is refused.
+    let (code, stderr) = serve_refused(&data, &["--backup-dir", backups.to_str().unwrap()]);
+    assert_eq!(code, Some(3), "{stderr}");
+    assert!(stderr.contains("upgrade_required"), "{stderr}");
+    assert!(kept_backups(&backups).is_empty());
+
+    let port = free_port();
+    let server = Command::new(BIN)
+        .args(["serve", "--data-dir"])
+        .arg(&data)
+        .args([
+            "--bind",
+            &format!("127.0.0.1:{port}"),
+            "--disk-reserve-mib",
+            "0",
+        ])
+        .env("HOLOCRON_UPGRADE_ON_START", "1")
+        .env("HOLOCRON_BACKUP_DIR", &backups)
+        .env("HOLOCRON_LOG", "error")
+        .stdout(Stdio::null())
+        .stderr(Stdio::inherit())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(60);
+    while http(port, "GET", "/health", "").is_none() {
+        assert!(Instant::now() < deadline, "server did not start");
+        std::thread::sleep(Duration::from_millis(50));
+    }
+    assert_eq!(http(port, "GET", "/health/ready", ""), Some(200));
+    stop(server);
+
+    let kept = kept_backups(&backups);
+    assert_eq!(kept.len(), 1);
+    runtime.block_on(async {
+        let manifest = backup::verify(&kept[0]).await.unwrap();
+        assert_eq!(manifest.versions.analytics, 3);
+        versions::check_dir(&data).await.unwrap();
+    });
+}
+
+#[test]
+fn upgrade_on_start_refuses_without_a_usable_backup_and_leaves_the_data() {
+    let root = tempfile::tempdir().unwrap();
+    let data = root.path().join("data");
+    let runtime = tokio::runtime::Runtime::new().unwrap();
+    runtime.block_on(older_data(&data));
+    let before = runtime.block_on(versions::stored(&data)).unwrap();
+
+    // A file where the backup directory should be.
+    let blocked = root.path().join("blocked");
+    std::fs::write(&blocked, b"").unwrap();
+    let (code, stderr) = serve_refused(
+        &data,
+        &[
+            "--upgrade-on-start",
+            "--backup-dir",
+            blocked.to_str().unwrap(),
+        ],
+    );
+    assert_eq!(code, Some(3), "{stderr}");
+    assert!(stderr.contains("upgrade_backup_unavailable"), "{stderr}");
+
+    // A volume that cannot hold the backup and the reserve.
+    let backups = root.path().join("backups");
+    let (code, stderr) = serve_refused(
+        &data,
+        &[
+            "--upgrade-on-start",
+            "--backup-dir",
+            backups.to_str().unwrap(),
+            "--disk-reserve-mib",
+            "1073741824",
+        ],
+    );
+    assert_eq!(code, Some(3), "{stderr}");
+    assert!(stderr.contains("upgrade_backup_unavailable"), "{stderr}");
+    assert!(kept_backups(&backups).is_empty());
+
+    assert_eq!(runtime.block_on(versions::stored(&data)).unwrap(), before);
+    assert!(!data.join(versions::UPGRADE_MARKER).exists());
+}
+
+#[test]
+fn upgrade_on_start_resumes_an_interrupted_upgrade_without_a_second_backup() {
+    use std::os::unix::fs::PermissionsExt;
+
+    let root = tempfile::tempdir().unwrap();
+    let (data, backups) = (root.path().join("data"), root.path().join("backups"));
+    let runtime = tokio::runtime::Runtime::new().unwrap();
+    runtime.block_on(older_data(&data));
+    let analytics = data.join("analytics.duckdb");
+    std::fs::set_permissions(&analytics, std::fs::Permissions::from_mode(0o444)).unwrap();
+    let failed = runtime
+        .block_on(upgrade::upgrade(&data, Some(&backups)))
+        .unwrap_err();
+    assert_eq!(failed.code, "upgrade_failed");
+    std::fs::set_permissions(&analytics, std::fs::Permissions::from_mode(0o644)).unwrap();
+    assert_eq!(kept_backups(&backups).len(), 1);
+
+    let (code, stderr) = serve_refused(&data, &[]);
+    assert_eq!(code, Some(3), "{stderr}");
+    assert!(stderr.contains("upgrade_interrupted"), "{stderr}");
+
+    let mut server = Command::new(BIN)
+        .args(["serve", "--upgrade-on-start", "--data-dir"])
+        .arg(&data)
+        .args(["--bind", &format!("127.0.0.1:{}", free_port())])
+        .args([
+            "--backup-dir",
+            backups.to_str().unwrap(),
+            "--disk-reserve-mib",
+            "0",
+        ])
+        .env("HOLOCRON_LOG", "error")
+        .stdout(Stdio::null())
+        .stderr(Stdio::inherit())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(60);
+    while data.join(versions::UPGRADE_MARKER).exists() {
+        assert!(Instant::now() < deadline, "upgrade did not finish");
+        std::thread::sleep(Duration::from_millis(50));
+    }
+    // SAFETY: signals a child process this test started.
+    unsafe { libc::kill(server.id() as i32, libc::SIGTERM) };
+    server.wait().unwrap();
+    assert_eq!(kept_backups(&backups).len(), 1);
+    runtime.block_on(versions::check_dir(&data)).unwrap();
+}
+
+#[test]
+fn upgrade_on_start_never_downgrades() {
+    let root = tempfile::tempdir().unwrap();
+    let (data, backups) = (root.path().join("data"), root.path().join("backups"));
+    let runtime = tokio::runtime::Runtime::new().unwrap();
+    runtime.block_on(initialized(&data));
+    set_analytics_schema(&data, 99);
+    let (code, stderr) = serve_refused(
+        &data,
+        &[
+            "--upgrade-on-start",
+            "--backup-dir",
+            backups.to_str().unwrap(),
+        ],
+    );
+    assert_eq!(code, Some(3), "{stderr}");
+    assert!(stderr.contains("data_newer_than_binary"), "{stderr}");
+    assert!(kept_backups(&backups).is_empty());
+}
