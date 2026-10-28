@@ -3,6 +3,65 @@
 All notable changes to Holocron are documented here.
 Commits follow the [Gitmoji](https://gitmoji.dev/) convention.
 
+## 26.10.28
+
+### Features
+
+- ✨ project net revenue per currency under the typical weekday
+- ✨ replace the revenue globe with a summary of pace, refunds and paying traffic
+- ✨ show the top events as a board of daily strips
+- ✨ split funnels by a field, time their steps and match globs
+- ✨ accept queries as post with a json body
+- ✨ answer report queries for agents in named blocks
+- ✨ send report queries from the command line
+- ✨ serve report queries to agents over mcp
+- ✨ offer a read analytics key preset and glob filters
+- ✨ split a funnel by a field and show the time between steps
+- ✨ compare a shadow run of umami and holocron per site and day
+- ✨ add the entry page as a session field and a revenue source
+- ✨ restore a backup in setup mode, with the upgrade as a second phase
+- ✨ add the restore steps to the setup wizard
+- ✨ upgrade on start when the compose file asks for it
+
+### Fixes
+
+- 🐛 count a referenced fan-out by its real values
+- 🐛 keep the step duration popover above the ribbon
+- 🐛 finish the restore step when setup mode closes under it
+- 🐛 let sign-in and setup follow the system color scheme
+
+### Security
+
+- 🔒 list only member sites to an api key
+
+### Interface
+
+- 🌐 write german durations as tg., std., min., sek.
+- 💄 keep the guest bars clear of a wide setup column
+- 💬 tell a refused sign-in where to open holocron
+
+### Other changes
+
+- 📝 record milestone 15 and the revenue and events branch in the status
+- 📝 brief report queries for agents as milestone 15 and decision 0022
+- ✅ let a read-only key list the sites it reaches
+- 📝 adopt report queries for agents and settle the funnel split and duration design
+- ✅ cover report cuts over a hundred rows
+- 🔧 give refused cli queries their own exit code
+- 📝 record milestone 15 as complete and waiting to merge
+- ✅ run the browser journeys with one script
+- 🚨 drop an unneeded mut in the entry page test
+- 📝 record the evidence for milestone 15 and mark it complete
+- 📝 record the cleanup wave and the production state in the status
+- 📝 name the setup token as the bootstrap credential
+- ✅ restore a seeded backup through the setup wizard in e2e
+- 📝 describe restoring a backup in the setup wizard
+- ✅ capture setup screens after the scheme switch settles
+- 📝 record milestone 14 evidence and the restore wave in the status
+- 📝 document upgrade on start and its rollback
+- 📝 record upgrade on start in the status
+- 📝 list agents, restore in the wizard and upgrade on start in the readme
+
 ## 26.10.26.2
 
 Dependency updates for the web app, the server and CI, with DuckDB kept on 1.5. Release 26.10.26 was tagged but never published: its CI failed on DuckDB 2.0, which the update had picked up. This release replaces it and carries its updates.
